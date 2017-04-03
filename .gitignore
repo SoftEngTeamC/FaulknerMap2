@@ -25,3 +25,4 @@ gradle/wrapper/gradle-wrapper.properties
 
 # Derby
 derby.log
+faulknerDatabase

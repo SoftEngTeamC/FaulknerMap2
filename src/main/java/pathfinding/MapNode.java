@@ -29,7 +29,7 @@ public class MapNode {
      * @param otherNode the node to calculate the distance to
      * @return the euclidean distance to otherNode
      */
-    protected double heuristicDistanceTo(MapNode otherNode) {
+     double heuristicDistanceTo(MapNode otherNode) {
         return Math.sqrt(Math.pow(position.x - otherNode.position.x, 2) + Math.pow(position.y - otherNode.position.y, 2));
     }
 
@@ -38,7 +38,7 @@ public class MapNode {
      * @param otherNode a neighboring node
      * @return the distance to otherNode
      */
-    protected double distanceTo(MapNode otherNode) {
+     double distanceTo(MapNode otherNode) {
         return neighbors.get(otherNode);
     }
 }
