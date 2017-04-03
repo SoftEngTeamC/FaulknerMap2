@@ -1,6 +1,6 @@
-##README FOR DATABASE
+## README FOR DATABASE
 
-####Any class in our src file can access the database if these steps are taken:
+#### Any class in our src file can access the database if these steps are taken:
 
 1. Include these imports at the top of the class:
 ```
