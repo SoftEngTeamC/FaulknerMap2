@@ -18,7 +18,7 @@ public class PathFinder {
         nodeCost.put(start, 0.0);
 
         Map<MapNode, Double> heuristicCost = new HashMap<>();
-        heuristicCost.put(start, start.heuristicDistanceTo(destination));
+        heuristicCost.put(start, start.distanceTo(destination));
 
         Map<MapNode, MapNode> cameFrom = new HashMap<>();
 
@@ -30,8 +30,8 @@ public class PathFinder {
                     currentNode = n;
                     continue;
                 }
-                double bestFScore = nodeCost.get(currentNode) + heuristicCost.get(currentNode);
-                double fScore = nodeCost.get(n) + heuristicCost.get(n);
+                double bestFScore = nodeCost.getOrDefault(currentNode, Double.POSITIVE_INFINITY) + heuristicCost.getOrDefault(currentNode, Double.POSITIVE_INFINITY);
+                double fScore = nodeCost.getOrDefault(n, Double.POSITIVE_INFINITY) + heuristicCost.getOrDefault(n, Double.POSITIVE_INFINITY);
                 if (fScore < bestFScore) {
                     currentNode = n;
                 }
@@ -44,15 +44,15 @@ public class PathFinder {
 
             for (MapNode n : currentNode.getNeighbors()) {
                 if (closedSet.contains(n)) continue;
-                double tentativeGScore = heuristicCost.get(currentNode) + currentNode.distanceTo(n);
+                double tentativeGScore = heuristicCost.getOrDefault(currentNode, Double.POSITIVE_INFINITY) + currentNode.distanceTo(n);
                 if (!openSet.contains(n)) {
                     openSet.add(n);
-                } else if (tentativeGScore >= heuristicCost.get(n)) {
+                } else if (tentativeGScore >= heuristicCost.getOrDefault(n, Double.POSITIVE_INFINITY)) {
                     continue;
                 }
                 cameFrom.put(n, currentNode);
                 heuristicCost.put(n, tentativeGScore);
-                nodeCost.put(n, heuristicCost.get(n) + n.distanceTo(destination));
+                nodeCost.put(n, heuristicCost.getOrDefault(n, Double.POSITIVE_INFINITY) + n.distanceTo(destination));
             }
         }
         throw new IllegalArgumentException("Path not found.");

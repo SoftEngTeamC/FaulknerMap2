@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,16 +18,16 @@ public class MapNodeTest {
 
     @Before
     public void setUp() throws Exception {
-        this.loneNode = new MapNode(new Point(0, 0), 1);
+        this.loneNode = new MapNode(new Point2D.Double(0, 0), 1);
 
         // A --- B
         //  \   /
         //   \ /
         //    C --- D
-        this.A = new MapNode(new Point(0, 5), 1);
-        this.B = new MapNode(new Point(3, 4), 1);
-        this.C = new MapNode(new Point(1, 0), 1);
-        this.D = new MapNode(new Point(6, 0), 1);
+        this.A = new MapNode(new Point2D.Double(0, 5), 1);
+        this.B = new MapNode(new Point2D.Double(3, 4), 1);
+        this.C = new MapNode(new Point2D.Double(1, 0), 1);
+        this.D = new MapNode(new Point2D.Double(6, 0), 1);
         this.A.addNeighbor(B);
         this.A.addNeighbor(C);
         this.B.addNeighbor(C);
