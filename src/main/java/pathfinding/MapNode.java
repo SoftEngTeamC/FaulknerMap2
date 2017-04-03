@@ -28,12 +28,16 @@ public class MapNode implements Node<MapNode> {
     }
 
     public Set<MapNode> neighbors() {
-        return null;
+        return this.neighbors;
     }
 
     private double distanceTo(MapNode n) {
         double xDelta = this.location.getX() - n.location.getX();
         double yDelta = this.location.getY() - n.location.getY();
         return Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+    }
+
+    public void addNeighbor(MapNode n) {
+        neighbors.add(n);
     }
 }
