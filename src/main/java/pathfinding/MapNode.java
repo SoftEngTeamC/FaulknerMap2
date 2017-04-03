@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 
-public abstract class MapNode {
+public class MapNode {
     private Point position;
     private int floor;
     private Map<MapNode, Double> neighbors;  // Weighted adjacency list
