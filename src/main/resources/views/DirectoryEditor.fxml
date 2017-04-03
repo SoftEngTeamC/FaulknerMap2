@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--<?import com.gluonhq.charm.glisten.control.TextField?>-->
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.TextField?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="24.0" layoutY="24.0" mnemonicParsing="false" text="Back" />
+      <Text layoutX="214.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <SplitPane dividerPositions="0.1414141414141414" layoutX="126.0" layoutY="76.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="351.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TextField prefHeight="25.0" prefWidth="349.0" promptText="Search" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+        </items>
+      </SplitPane>
+      <Button layoutX="19.0" layoutY="361.0" mnemonicParsing="false" text="Logout" />
+      <Button layoutX="126.0" layoutY="325.0" mnemonicParsing="false" text="Add Person" />
+      <Button layoutX="126.0" layoutY="286.0" mnemonicParsing="false" text="Edit Person" />
+   </children>
+</AnchorPane>

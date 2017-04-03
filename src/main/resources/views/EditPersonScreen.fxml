@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Back" />
+      <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="logout" />
+      <Button layoutX="246.0" layoutY="261.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="98.0" text="Update" textFill="#4ba418" />
+      <TextField layoutX="226.0" layoutY="95.0" />
+      <Text layoutX="147.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Name:" />
+      <TextField layoutX="226.0" layoutY="130.0" />
+      <Text layoutX="188.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" />
+      <Text layoutX="233.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Person">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text layoutX="284.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" visible="false" />
+   </children>
+</AnchorPane>
