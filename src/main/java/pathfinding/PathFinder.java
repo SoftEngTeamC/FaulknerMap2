@@ -3,6 +3,10 @@ package pathfinding;
 
 import java.util.*;
 
+/**
+ * This implementation is based off of Ben Ruijl's gist (https://gist.github.com/benruijl/3385624) and the wikipedia
+ * page https://en.wikipedia.org/wiki/A*_search_algorithm
+ */
 public class PathFinder {
     public static <T extends Node<T>> List<T> shortestPath(T start, T goal) {
         Set<T> closed = new HashSet<>();
@@ -26,19 +30,21 @@ public class PathFinder {
 
             for (T neighbor : currentNode.neighbors()) {
                 if (closed.contains(neighbor)) continue;
+
                 double tentativeG = gScore.get(currentNode) + currentNode.traversalCost(neighbor);
                 boolean onFringe = fringe.contains(neighbor);
                 if (!onFringe || tentativeG < gScore.get(neighbor)) {
                     gScore.put(neighbor, tentativeG);
                     fScore.put(neighbor, tentativeG + neighbor.heuristicCost(goal));
+
                     if (onFringe) fringe.remove(neighbor);
+
                     fringe.offer(neighbor);
                     cameFrom.put(neighbor, currentNode);
                 }
             }
 
         }
-        System.out.println("No path found.");
         return null;
     }
 
