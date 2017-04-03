@@ -55,7 +55,7 @@ public class PathFinder {
                 nodeCost.put(n, heuristicCost.get(n) + n.distanceTo(destination));
             }
         }
-        throw new Exception("Path not found.");
+        throw new IllegalArgumentException("Path not found.");
     }
 
     /**

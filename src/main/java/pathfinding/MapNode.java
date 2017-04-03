@@ -37,10 +37,19 @@ public class MapNode {
     /**
      * Add a neighbor to this node
      * @param n the neighboring node
-     * @param distance the distance to the neighboring node
      */
-    public void addNeighbor(MapNode n, double distance) {
+    public void addNeighbor(MapNode n) {
+        double distance = this.distanceTo(n);
         this.neighbors.put(n, distance);
+        n.neighbors.put(this, distance);
+    }
+
+    /**
+     * Remove the given neighbor
+     * @param n the neighbor
+     */
+    public void removeNeighbor(MapNode n) {
+        this.neighbors.remove(n);
     }
 
     /**
@@ -48,6 +57,13 @@ public class MapNode {
      */
     protected Point getPosition() {
         return position;
+    }
+
+    /**
+     * @return which floor this node is on
+     */
+    public int getFloor() {
+        return floor;
     }
 
     /**
@@ -63,7 +79,8 @@ public class MapNode {
      * @return the euclidean distance to otherNode
      */
      double heuristicDistanceTo(MapNode otherNode) {
-        return Math.sqrt(Math.pow(position.x - otherNode.position.x, 2) + Math.pow(position.y - otherNode.position.y, 2));
+         // TODO: Give a warning if the nodes are on different floors
+         return Math.sqrt(Math.pow(position.x - otherNode.position.x, 2) + Math.pow(position.y - otherNode.position.y, 2));
     }
 
     /**
