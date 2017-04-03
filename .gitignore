@@ -18,7 +18,7 @@
 /build/
 .gradle
 .gradletasknamecache
-gradle/wrapper/gradle-wrapper.properties
+#gradle/wrapper/gradle-wrapper.properties
 
 # File-based project format:
 *.iws
