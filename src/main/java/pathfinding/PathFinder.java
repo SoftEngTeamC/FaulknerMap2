@@ -58,6 +58,12 @@ public class PathFinder {
         throw new Exception("Path not found.");
     }
 
+    /**
+     * Back track from the destination node to the starting node along the shortest path
+     * @param cameFrom a map containing the node prior to each node in the shortest path
+     * @param current the node to backtrack from
+     * @return the shortest path
+     */
     private List<MapNode> backTrack(Map<MapNode, MapNode> cameFrom, MapNode current) {
         List<MapNode> path = new LinkedList<>();
         while (cameFrom.containsKey(current)) {
