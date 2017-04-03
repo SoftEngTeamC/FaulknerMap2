@@ -41,7 +41,7 @@ public class PathFinder {
         return null;
     }
 
-    public static <T extends Node<T>> List<T> reconstructPath(T end, Map<T, T> cameFrom) {
+    private static <T extends Node<T>> List<T> reconstructPath(T end, Map<T, T> cameFrom) {
         LinkedList<T> path = new LinkedList<T>();
         while (end != null) {
             path.addFirst(end);
