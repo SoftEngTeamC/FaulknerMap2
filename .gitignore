@@ -23,3 +23,5 @@ gradle/wrapper/gradle-wrapper.properties
 # File-based project format:
 *.iws
 
+# Derby
+derby.log
