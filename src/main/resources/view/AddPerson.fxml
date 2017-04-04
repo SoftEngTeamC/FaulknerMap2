@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddPersonController">
+   <children>
+      <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backBtnPressed" text="Back" />
+      <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logoutBtnPressed" text="Logout" />
+      <Text layoutX="221.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Person">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Text>
+      <Text layoutX="192.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+      <Text layoutX="179.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" />
+      <Text layoutX="214.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" />
+      <TextField fx:id="nameField" layoutX="226.0" layoutY="102.0" />
+      <TextField fx:id="locationField" layoutX="225.0" layoutY="188.0" />
+      <TextField fx:id="idField" editable="false" layoutX="226.0" layoutY="234.0" />
+      <Button fx:id="addPersonBtn" layoutX="260.0" layoutY="280.0" mnemonicParsing="false" onAction="#setAddPersonBtnPressed" text="Add Person" />
+      <Text fx:id="warningText" fill="RED" layoutX="216.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not enough information added" visible="false" />
+      <TextField fx:id="titleField" layoutX="226.0" layoutY="144.0" />
+      <Text layoutX="203.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" />
+      <Text fx:id="successField" fill="#00ff22" layoutX="208.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successfully added to the database" visible="false" />
+   </children>
+</AnchorPane>

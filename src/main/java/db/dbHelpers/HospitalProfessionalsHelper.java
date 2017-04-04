@@ -1,6 +1,6 @@
-package db.dbHelper;
+package db.dbHelpers;
 
-import db.HospitalProfessional;
+import db.dbClasses.HospitalProfessional;
 import db.HospitalSchema.HospitalProfessionalSchema.*;
 
 import java.sql.*;
@@ -49,14 +49,14 @@ public class HospitalProfessionalsHelper {
             statement = connection.createStatement();
 
             //check if table is empty
-            if (originalList == null) {
+            if (getHospitalProfessionals(null).isEmpty()) {
                 originalList = new ArrayList<>(); //initialize empty array and populate
                 //populate table
                 populateArray();
             }
         } catch (SQLException e) {
-            System.out.println("Constructor error");
-            e.printStackTrace();
+            System.out.println("HospitalProfessional constructor error");
+          //  e.printStackTrace();
         }
     }
 
@@ -70,13 +70,14 @@ public class HospitalProfessionalsHelper {
         //insert HospitalProfessional into table
         String str = "INSERT INTO " + HospitalProfessionalTable.NAME + " VALUES (" +
                 "'" + professional.getId().toString() + "', '" + professional.getName() + "', '" +
-                professional.getTitle() + "', '" + professional.getLocation() + "')";
+                professional.getTitle() + "', '" + professional.getLocation() + "', '" +
+                professional.getNodeId().toString() + "')";
         try {
             statement.executeUpdate(str);
             return true;
         } catch (SQLException e) {
             System.out.println("Could not add HospitalProfessional: " + professional.getName());
-            e.printStackTrace();
+          //  e.printStackTrace();
             return false;
         }
     }
@@ -97,7 +98,8 @@ public class HospitalProfessionalsHelper {
             String str = "UPDATE " + HospitalProfessionalTable.NAME + " SET " + HospitalProfessionalTable.Cols.NAME +
                     " = '" + professional.getName() + "', " + HospitalProfessionalTable.Cols.TITLE +
                     " = '" + professional.getTitle() + "', " + HospitalProfessionalTable.Cols.LOCATION +
-                    " = '" + professional.getLocation() + "' WHERE " + HospitalProfessionalTable.Cols.ID + " = '" +
+                    " = '" + professional.getLocation() + "', " + HospitalProfessionalTable.Cols.NODEID +
+                    " = '" + professional.getNodeId().toString() + "' WHERE " + HospitalProfessionalTable.Cols.ID + " = '" +
                     professional.getId().toString() + "'";
             try {
                 //update was successful
@@ -105,7 +107,7 @@ public class HospitalProfessionalsHelper {
                 return true;
             } catch (SQLException e) {
                 System.out.println("Could not update HospitalProfessional: " + professional.getName());
-                e.printStackTrace();
+              //  e.printStackTrace();
                 return false;
             }
         }
@@ -130,7 +132,7 @@ public class HospitalProfessionalsHelper {
                 return true;
             } catch (SQLException e) {
                 System.out.println("Could not delete HospitalProfessional: " + professional.getName());
-                e.printStackTrace();
+              //  e.printStackTrace();
                 return false;
             }
         }
@@ -153,11 +155,41 @@ public class HospitalProfessionalsHelper {
                 tempProfessional = new HospitalProfessional(resultSet.getString(HospitalProfessionalTable.Cols.NAME),
                         resultSet.getString(HospitalProfessionalTable.Cols.TITLE),
                         resultSet.getString(HospitalProfessionalTable.Cols.LOCATION));
+                tempProfessional.setNodeId(UUID.fromString(resultSet.getString(HospitalProfessionalTable.Cols.NODEID)));
+                tempProfessional.setId(id);
             }
             return tempProfessional;
         } catch (SQLException e) {
             System.out.println("Could not select Hospital Professional with id: " + id.toString());
-            e.printStackTrace();
+        //    e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Function finds a HospitalProfessional by id
+     *
+     * @param name Name of HospitalProfessional
+     * @return the HospitalProfessional found or null if could not be found
+     */
+    public HospitalProfessional getHospitalProfessionalByName(String name) {
+        //query table for specific HospitalProfessional
+        String str = "SELECT * FROM " + HospitalProfessionalTable.NAME + " WHERE " +
+                HospitalProfessionalTable.Cols.NAME + " = '" + name + "'";
+        try {
+            ResultSet resultSet = statement.executeQuery(str);
+            HospitalProfessional tempProfessional = null;
+            while(resultSet.next()){
+                tempProfessional = new HospitalProfessional(name,
+                        resultSet.getString(HospitalProfessionalTable.Cols.TITLE),
+                        resultSet.getString(HospitalProfessionalTable.Cols.LOCATION));
+                tempProfessional.setId(UUID.fromString(resultSet.getString(HospitalProfessionalTable.Cols.ID)));
+                tempProfessional.setNodeId(UUID.fromString(resultSet.getString(HospitalProfessionalTable.Cols.NODEID)));
+            }
+            return tempProfessional;
+        } catch (SQLException e) {
+            System.out.println("Could not select Hospital Professional with name: " + name);
+            //    e.printStackTrace();
         }
         return null;
     }
@@ -167,7 +199,7 @@ public class HospitalProfessionalsHelper {
      * if no order is needed, order gets set to null when called
      * Default sort if of name alphabetical order
      *
-     * @param order
+     * @param order Order By command
      * @return list of HospitalProfessionals
      */
     public ArrayList<HospitalProfessional> getHospitalProfessionals(String order) {
@@ -190,11 +222,14 @@ public class HospitalProfessionalsHelper {
                 HospitalProfessional tempProfessional = new HospitalProfessional(resultSet.getString(HospitalProfessionalTable.Cols.NAME),
                         resultSet.getString(HospitalProfessionalTable.Cols.TITLE),
                         resultSet.getString(HospitalProfessionalTable.Cols.LOCATION));
+                tempProfessional.setNodeId(UUID.fromString(resultSet.getString(HospitalProfessionalTable.Cols.NODEID)));
+                tempProfessional.setId(UUID.fromString(resultSet.getString(HospitalProfessionalTable.Cols.ID)));
                 temp.add(tempProfessional); //add to array
             }
         } catch (Exception e) {
-            System.out.println("Could not get all HospitalProfessionals");
-            e.printStackTrace();
+            System.out.println("No HospitalProfessionals are available to list");
+         //   e.printStackTrace();
+            return temp;
         }
 
         return temp;
@@ -219,6 +254,8 @@ public class HospitalProfessionalsHelper {
         //populate with originalList of professionals
         System.out.println("\nStoring initial Hospital Professionals");
 
+        // floor 4
+        originalList.add(new HospitalProfessional("Ash, Samuel", "MD", "4G"));
         originalList.add(new HospitalProfessional("Bachman, William", "MD", "4G"));
         originalList.add(new HospitalProfessional("Bernstein, Carolyn", "MD", "4H"));
         originalList.add(new HospitalProfessional("Bhasin, Shalender", "MD", "4N"));
@@ -294,6 +331,116 @@ public class HospitalProfessionalsHelper {
         originalList.add(new HospitalProfessional("Whitman, Gregory", "MD", "4C"));
         originalList.add(new HospitalProfessional("Wickner, Paige", "MD", "4G"));
 
+        // floor 5
+        originalList.add(new HospitalProfessional("Alqueza, Arnold", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Altschul, Nomee", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Andromalos, Laura ", "RD, LDN", "5D"));
+        originalList.add(new HospitalProfessional("Angell, Trevor", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Angell, Trevor", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Ariagno, Meghan", "RD, LDN", "5D"));
+        originalList.add(new HospitalProfessional("Balash, Eva", "MD", "5G"));
+        originalList.add(new HospitalProfessional("Barr, Joseph Jr.", "MD", "5C"));
+        originalList.add(new HospitalProfessional("Batool-Anwar, Salma", "MD, MPH", "4K"));
+        originalList.add(new HospitalProfessional("Belkin, Michael", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Berman, Stephanie", "MD", "5J"));
+        originalList.add(new HospitalProfessional("Bhattacharyya, Shamik", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Blazar, Phil", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Bluman, Eric", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Boatwright, Giuseppina", "MS, RD, LDN", "5K"));
+        originalList.add(new HospitalProfessional("Bono, Christopher", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Brick, Gregory", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Budhiraja, Rohit", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Butler, Matthew", "MD", "5C"));
+        originalList.add(new HospitalProfessional("Cahan, David", "MD", "5I"));
+        originalList.add(new HospitalProfessional("Carleen, Mary Anne", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Chahal, Katie", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Chiodo, Christopher", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Davidson, Paul", "PhD", "5D"));
+        originalList.add(new HospitalProfessional("Dawson, Courtney", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Divito, Sherrie", "MD, PhD", "5G"));
+        originalList.add(new HospitalProfessional("Drew, Michael", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Dyer, George", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Earp, Brandon", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Epstein, Lawrence", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Ermann, Joerg", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Fitz, Wolfgang", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Frangos, Jason", "MD", "5G"));
+        originalList.add(new HospitalProfessional("Groden, Joseph", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Groff, Michael", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Halperin, Florencia", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Harris, Mitchel", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Hartigan, Joseph", "DPM", "5 South"));
+        originalList.add(new HospitalProfessional("Hartman, Katy", "MS, RD, LDN", "5D"));
+        originalList.add(new HospitalProfessional("Healey, Michael", "MD", "5J"));
+        originalList.add(new HospitalProfessional("Higgins, Laurence", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Hinton, Nadia", "RDN, LDN", "5A"));
+        originalList.add(new HospitalProfessional("Horowitz, Sandra", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Innis, William", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Irani, Jennifer", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Isaac, Zacharia", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Isom, Kellene", "MS, RN, LDN", "5D"));
+        originalList.add(new HospitalProfessional("Issa, Mohammed", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Javaheri, Sogol", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Johnsen, Jami", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Joyce, Eileen", "LICSW", "5H"));
+        originalList.add(new HospitalProfessional("Kenney, Pardon", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Kessler, Joshua", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Khaodhiar, Lalita", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Kleifield, Allison", "PA-C", "5D"));
+        originalList.add(new HospitalProfessional("Kornack, Fulton", "MD", "5C"));
+        originalList.add(new HospitalProfessional("Kramer, Justine", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Laskowski, Karl", "MD", "5J"));
+        originalList.add(new HospitalProfessional("Lu, Yi", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Mason, William", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Matthews, Robert", "PA-C", "5D"));
+        originalList.add(new HospitalProfessional("Matzkin, Elizabeth", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("McCarthy, Rita", "NP", "5K"));
+        originalList.add(new HospitalProfessional("McDonnell, Marie", "MD", "5K"));
+        originalList.add(new HospitalProfessional("McKenna, Robert", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("McKitrick, Charles", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Melnitchouk, Neyla", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Miatto, Orietta", "MD", "5J"));
+        originalList.add(new HospitalProfessional("Monaghan, Colleen", "MD", "5H"));
+        originalList.add(new HospitalProfessional("Nehs, Matthew", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Nelson, Ehren", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Nuspl, Kristen", "PA-C", "5J"));
+        originalList.add(new HospitalProfessional("O'Hare, Kitty", "MD", "5H"));
+        originalList.add(new HospitalProfessional("Oliveira, Nancy", "MS, RDN, LDN", "5A"));
+        originalList.add(new HospitalProfessional("Omobomi, Olabimpe", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Palermo, Nadine", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Paperno, Halie", "Au.D, CCC-A", "5B"));
+        originalList.add(new HospitalProfessional("Pavlova, Milena", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Pingeton, Mallory", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Quan, Stuart", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Rangel, Erika", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Reil, Erin", "RD, LDN", "5D"));
+        originalList.add(new HospitalProfessional("Robinson, Malcolm", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Samara, Mariah", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Savage, Robert", "MD", "5C"));
+        originalList.add(new HospitalProfessional("Schoenfeld, Andrew", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Sharma, Niraj", "MD", "5H"));
+        originalList.add(new HospitalProfessional("Sheu, Eric", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Shoji, Brent", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Smith, Colleen", "NP", "5K"));
+        originalList.add(new HospitalProfessional("Smith, Jeremy", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Spector, David", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Stephens, Kelly", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Stone, Rebecca", "MD", "5B"));
+        originalList.add(new HospitalProfessional("Tavakkoli, Ali", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Taylor, Cristin", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Tenforde, Adam", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Vernon, Ashley", "MD", "5D"));
+        originalList.add(new HospitalProfessional("Vigneau, Shari", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Wagle, Neil", "MD", "5J"));
+        originalList.add(new HospitalProfessional("Warth, James", "MD", "5F"));
+        originalList.add(new HospitalProfessional("Warth, Maria", "MD", "5F"));
+        originalList.add(new HospitalProfessional("Webber, Anthony", "MD", "5C"));
+        originalList.add(new HospitalProfessional("Wellman, David", "MD", "5K"));
+        originalList.add(new HospitalProfessional("White, David", "MD", "5K"));
+        originalList.add(new HospitalProfessional("Whitlock, Kaitlyn", "PA-C", "5 South"));
+        originalList.add(new HospitalProfessional("Yong, Jason", "MD", "5 South"));
+        originalList.add(new HospitalProfessional("Zampini, Jay", "MD", "5 South"));
+
         populateTable(originalList); //put array in database now
     }
 
@@ -322,17 +469,19 @@ public class HospitalProfessionalsHelper {
                 String str = "DROP TABLE " + HospitalProfessionalTable.NAME;
                 statement.execute(str); //check HospitalProfessionals table
                 System.out.println("HospitalProfessionals table dropped.");
-            } catch (SQLException ex) {
+            } catch (SQLException e) {
+                System.out.println("No HospitalProfessional Table to drop");
+            //    e.printStackTrace();
                 //Table did not exist
             }
         } catch (SQLException e) {
-            System.out.println("Could not drop HospitalProfessionals table");
-            e.printStackTrace();
+            System.out.println("Could not create statement in HospitalProfessional Table");
+         //   e.printStackTrace();
         }
     }
 
     /**
-     * This is the function that will create all tables in our database
+     * This is the function that will create this table in our database
      */
     private void buildTable() {
         try {
@@ -340,17 +489,18 @@ public class HospitalProfessionalsHelper {
 
             // Create HospitalProfessional table.
             String str = "CREATE TABLE " + HospitalProfessionalTable.NAME + "(" +
-                    HospitalProfessionalTable.Cols.ID + " CHAR(100) NOT NULL PRIMARY KEY, " +
+                    HospitalProfessionalTable.Cols.ID + " VARCHAR(100) NOT NULL PRIMARY KEY, " +
                     HospitalProfessionalTable.Cols.NAME + " VARCHAR(50) NOT NULL, " +
                     HospitalProfessionalTable.Cols.TITLE + " VARCHAR(50) NOT NULL, " +
-                    HospitalProfessionalTable.Cols.LOCATION + " VARCHAR(20) )";
+                    HospitalProfessionalTable.Cols.LOCATION + " VARCHAR(20), " +
+                    HospitalProfessionalTable.Cols.NODEID + " VARCHAR(100))";
 
             statement.execute(str);
 
             System.out.println("HospitalProfessional table created.");
         } catch (SQLException e) {
             System.out.println("Could not build HospitalProfessional table");
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
     }
 }

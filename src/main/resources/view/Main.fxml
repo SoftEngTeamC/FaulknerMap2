@@ -36,7 +36,7 @@
                      <children>
                         <ImageView fitHeight="324.0" fitWidth="515.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="../images/3_thethirdfloor.png" />
+                              <Image url="@../../../../Desktop/3_thethirdfloor.png" />
                            </image>
                         </ImageView>
                      </children>
