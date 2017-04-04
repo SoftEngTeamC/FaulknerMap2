@@ -29,3 +29,14 @@ jfx {
     // minimal requirement for jfxNative-task
     vendor = 'SoftEngTeamC'
 }
+
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
