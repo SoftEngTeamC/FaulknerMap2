@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="derby">
+        <class>model.HospitalProfessional</class>
+        <class>model.Coordinate</class>
+        <class>model.Edge</class>
+        <class>model.Node</class>
+        <class>model.HospitalService</class>
+
+        <properties>
+            <property name="hibernate.archive.autodetection" value="class" />
+            <!--<property name="hibernate.dialect" value="com.mysema.query.jpa.support.ExtendedDerbyDialect" />-->
+            <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
+            <property name="hibernate.connection.url" value="jdbc:derby:target/derbydb;create=true" />
+            <!-- <property name="hibernate.show_sql" value="true"/> -->
+            <property name="hibernate.flushMode" value="FLUSH_AUTO" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+        </properties>
+    </persistence-unit>
+</persistence>

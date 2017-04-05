@@ -1,3 +1,5 @@
+package controller;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +23,7 @@ import javax.swing.text.html.ImageView;
 /**
  * Created by jack on 3/30/17.
  */
-public class MapEditorController implements AdminController {
+public class MapEditorController {
 
     // Currently selected node and edge
     private Node selectedNode;
