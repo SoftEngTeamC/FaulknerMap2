@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ENTITIES")
+@Table(name = "COORDINATES")
 public class Coordinate {
     private Long id;
 
