@@ -11,8 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static db.dbHelpers.HospitalProfessionalsHelper.*;
-import static db.dbHelpers.HospitalServicesHelper.*;
+import static db.dbHelpers.HospitalProfessionalsHelper.getHospitalProfessionalByName;
+import static db.dbHelpers.HospitalProfessionalsHelper.updateHospitalProfessional;
+import static db.dbHelpers.HospitalServicesHelper.getHospitalServiceByName;
 
 /**
  * Created by Gina on 3/31/17.

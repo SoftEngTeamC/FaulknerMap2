@@ -6,16 +6,15 @@ import db.dbHelpers.HospitalServicesHelper;
 import db.dbHelpers.NodesHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Created by Gina on 3/27/17.
- */
+
 public class Driver extends Application{
 
     private static HospitalServicesHelper hospitalServicesHelper;

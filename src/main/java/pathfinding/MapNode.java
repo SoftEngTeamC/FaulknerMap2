@@ -1,8 +1,9 @@
 package pathfinding;
 
+import model.Coordinate;
+
 import java.util.HashSet;
 import java.util.Set;
-import model.Coordinate;
 
 
 public class MapNode implements Node<MapNode> {

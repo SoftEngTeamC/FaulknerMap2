@@ -11,11 +11,9 @@ import model.Coordinate;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by sam on 4/4/17.
- */
 public class CustomMapATests {
-    MapNode A, B, C, D, E, F, G;
+    // TODO: Merge all of these tests into the PathFinderTest class
+    private MapNode A, B, C, D, E, F, G;
 
     @Before
     public void setUp() throws Exception {

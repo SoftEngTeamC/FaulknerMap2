@@ -23,7 +23,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -24,7 +24,10 @@ import javafx.stage.Stage;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 public class MainController{
     @FXML
