@@ -4,7 +4,11 @@ import db.dbHelpers.EdgesHelper;
 import db.dbHelpers.HospitalProfessionalsHelper;
 import db.dbHelpers.HospitalServicesHelper;
 import db.dbHelpers.NodesHelper;
-
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,16 +16,27 @@ import java.sql.SQLException;
 /**
  * Created by Gina on 3/27/17.
  */
-public class Driver {
+public class Driver extends Application{
 
     private static HospitalServicesHelper hospitalServicesHelper;
     private static HospitalProfessionalsHelper hospitalProfessionalsHelper;
     private static NodesHelper nodesHelper;
     private static EdgesHelper edgesHelper;
 
+    // Override the application start method
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        primaryStage.setTitle("Faulkner Kiosk");
+        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.show();
+
+    }
+
     public static void main(String[] args) {
         registerDriver(true);
         runDatabase(true);
+        launch(args);
     }
 
     public static void registerDriver(boolean print){
@@ -53,7 +68,7 @@ public class Driver {
         Connection connection = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:derby:faulknerDatabase;create=True");
+            connection = DriverManager.getConnection("jdbc:derby:faulknerDatabase;create=true");
 
         } catch (SQLException e) {
             if(print) {

@@ -15,7 +15,7 @@ public class HospitalProfessionalsHelper {
     private static HospitalProfessionalsHelper hospitalProfessionalsHelper;
 
     private Connection connection;
-    private Statement statement;
+    private static Statement statement;
     private ArrayList<HospitalProfessional> originalList;
 
     /**
@@ -87,7 +87,7 @@ public class HospitalProfessionalsHelper {
      * @param professional HospitalProfessional being updated
      * @return success
      */
-    public boolean updateHospitalProfessional(HospitalProfessional professional) {
+    public static boolean updateHospitalProfessional(HospitalProfessional professional) {
         //check table to make sure professional is already there
         HospitalProfessional temp = getHospitalProfessional(professional.getId());
         if (temp == null) { //could not find HospitalProfessional to edit
@@ -144,7 +144,7 @@ public class HospitalProfessionalsHelper {
      * @param id ID of HospitalProfessional
      * @return the HospitalProfessional found or null if could not be found
      */
-    public HospitalProfessional getHospitalProfessional(UUID id) {
+    public static HospitalProfessional getHospitalProfessional(UUID id) {
         //query table for specific HospitalProfessional
         String str = "SELECT * FROM " + HospitalProfessionalTable.NAME + " WHERE " +
                 HospitalProfessionalTable.Cols.ID + " = '" + id.toString() + "'";
@@ -172,7 +172,7 @@ public class HospitalProfessionalsHelper {
      * @param name Name of HospitalProfessional
      * @return the HospitalProfessional found or null if could not be found
      */
-    public HospitalProfessional getHospitalProfessionalByName(String name) {
+    public static HospitalProfessional getHospitalProfessionalByName(String name) {
         //query table for specific HospitalProfessional
         String str = "SELECT * FROM " + HospitalProfessionalTable.NAME + " WHERE " +
                 HospitalProfessionalTable.Cols.NAME + " = '" + name + "'";
@@ -340,7 +340,7 @@ public class HospitalProfessionalsHelper {
         originalList.add(new HospitalProfessional("Ariagno, Meghan", "RD, LDN", "5D"));
         originalList.add(new HospitalProfessional("Balash, Eva", "MD", "5G"));
         originalList.add(new HospitalProfessional("Barr, Joseph Jr.", "MD", "5C"));
-        originalList.add(new HospitalProfessional("Batool-Anwar, Salma", "MD, MPH", "4K"));
+        originalList.add(new HospitalProfessional("Batool-Anwar, Salma", "MD, MPH", "5K"));
         originalList.add(new HospitalProfessional("Belkin, Michael", "MD", "5D"));
         originalList.add(new HospitalProfessional("Berman, Stephanie", "MD", "5J"));
         originalList.add(new HospitalProfessional("Bhattacharyya, Shamik", "MD", "5 South"));
@@ -404,7 +404,7 @@ public class HospitalProfessionalsHelper {
         originalList.add(new HospitalProfessional("Nehs, Matthew", "MD", "5D"));
         originalList.add(new HospitalProfessional("Nelson, Ehren", "MD", "5 South"));
         originalList.add(new HospitalProfessional("Nuspl, Kristen", "PA-C", "5J"));
-        originalList.add(new HospitalProfessional("O'Hare, Kitty", "MD", "5H"));
+        originalList.add(new HospitalProfessional("O''Hare, Kitty", "MD", "5H"));
         originalList.add(new HospitalProfessional("Oliveira, Nancy", "MS, RDN, LDN", "5A"));
         originalList.add(new HospitalProfessional("Omobomi, Olabimpe", "MD", "5K"));
         originalList.add(new HospitalProfessional("Palermo, Nadine", "MD", "5K"));

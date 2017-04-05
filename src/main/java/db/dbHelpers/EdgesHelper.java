@@ -1,7 +1,7 @@
 package db.dbHelpers;
 
 
-import db.HospitalSchema.EdgeSchema.*;
+import db.HospitalSchema.EdgeSchema.EdgeTable;
 import db.dbClasses.Edge;
 import db.dbClasses.Node;
 
@@ -46,7 +46,7 @@ public class EdgesHelper {
      * @param connection
      */
     private EdgesHelper(Connection connection) {
-        this.connection = connection;
+        EdgesHelper.connection = connection;
 
         try {
             statement = connection.createStatement();
@@ -81,7 +81,7 @@ public class EdgesHelper {
             return true;
         } catch (SQLException e) {
             System.out.println("Could not add Edge: " + edge.toString());
-            //  e.printStackTrace();
+              e.printStackTrace();
             return false;
         }
     }
@@ -134,11 +134,12 @@ public class EdgesHelper {
             String str = "DELETE FROM " + EdgeTable.NAME + " WHERE " +
                     EdgeTable.Cols.ID + " = '" + edge.getId().toString() + "'";
             try {
+                System.out.println("Deleted Edge: " + edge.toString());
                 statement.execute(str);
                 return true;
             } catch (SQLException e) {
                 System.out.println("Could not delete Edge: " + edge.toString());
-                //   e.printStackTrace();
+                   e.printStackTrace();
                 return false;
             }
         }
@@ -166,13 +167,13 @@ public class EdgesHelper {
             return tempEdge;
         } catch (SQLException e) {
             System.out.println("Could not select edge with id: " + id.toString());
-            //  e.printStackTrace();
+              e.printStackTrace();
         }
         return null;
     }
 
 
-    public ArrayList<Node> getNeighbors(Node node) {
+    public static ArrayList<Node> getNeighbors(Node node) {
         ArrayList<Node> temp = new ArrayList<>();
         try {
             String str;
@@ -186,16 +187,53 @@ public class EdgesHelper {
             while (resultSet.next()) {
                 //get neighbor Nodes from resultSet
                 Node neighbor = NodesHelper.getNodeByID(UUID.fromString(resultSet.getString(EdgeTable.Cols.TO_NODE)));
-                temp.add(neighbor); //add to array
+                if(!neighbor.getId().equals(node.getId())){
+                    temp.add(neighbor); //add to array
+                }
             }
+
+            str = "SELECT * FROM " + EdgeTable.NAME + " WHERE " +
+                    EdgeTable.Cols.TO_NODE + " = '" + node.getId().toString() + "'";
+
+            resultSet = statement.executeQuery(str);
+
+            //iterate through result
+            while (resultSet.next()) {
+                //get neighbor Nodes from resultSet
+                Node neighbor = NodesHelper.getNodeByID(UUID.fromString(resultSet.getString(EdgeTable.Cols.FROM_NODE)));
+                if(!neighbor.getId().equals(node.getId())){
+                    temp.add(neighbor); //add to array
+                }
+            }
+
         } catch (Exception e) {
-            System.out.println("No neighbors where found for node : " + node.toString());
+            //System.out.println("No neighbors where found for node : " + node.toString());
             //  e.printStackTrace();
             return temp;
         }
 
         return temp;
 
+    }
+
+    public ArrayList<Edge> getEdgeByNode(Node from, Node to){
+        ArrayList<Edge> temp = getEdges(null);
+        ArrayList<Edge> edges = new ArrayList<>();
+
+        for(int i = 0; i < temp.size(); i++){
+            try {
+                if (temp.get(i).getFrom().getId().toString().equals(from.getId().toString()) &&
+                        temp.get(i).getTo().getId().toString().equals(to.getId().toString())) {
+                    edges.add(temp.get(i));
+                }
+                if (temp.get(i).getFrom().getId().equals(to.getId()) && temp.get(i).getTo().getId().equals(from.getId())) {
+                    edges.add(temp.get(i));
+                }
+            } catch (Exception e){
+
+            }
+        }
+        return edges;
     }
 
 
@@ -263,13 +301,12 @@ public class EdgesHelper {
     /**
      * This function populates the database table from the array
      */
-    public void populateTable(ArrayList<Edge> list) {
+    public static void populateTable(ArrayList<Edge> list) {
         dropTable();
         buildTable();
 
         for (Edge edge : list) {
             addEdge(edge);
-
         }
     }
 
@@ -287,12 +324,12 @@ public class EdgesHelper {
                 System.out.println("Edge table dropped.");
             } catch (SQLException e) {
                 System.out.println("No Edge table to drop");
-                //   e.printStackTrace();
+                 //  e.printStackTrace();
                 //Table did not exist
             }
         } catch (SQLException e) {
             System.out.println("Could not create statement in Edge Table");
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 

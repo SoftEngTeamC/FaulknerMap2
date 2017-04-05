@@ -15,7 +15,7 @@ public class HospitalServicesHelper {
     private static HospitalServicesHelper hospitalServicesHelper;
 
     private Connection connection;
-    private Statement statement;
+    private static Statement statement;
     private ArrayList<HospitalService> originalList;
 
     /**
@@ -85,7 +85,7 @@ public class HospitalServicesHelper {
      * @param service
      * @return success
      */
-    public boolean updateHospitalService(HospitalService service) {
+    public static boolean updateHospitalService(HospitalService service) {
         //check table to make sure service is already there
         HospitalService temp = getHospitalService(service.getId());
         if (temp == null) { //could not find oldService to edit
@@ -141,7 +141,7 @@ public class HospitalServicesHelper {
      * @param id
      * @return the HospitalService found or null if could not be found
      */
-    public HospitalService getHospitalService(UUID id) {
+    public static HospitalService getHospitalService(UUID id) {
         //query table for specific HospitalService
         String str = "SELECT * FROM " + HospitalServiceTable.NAME + " WHERE " +
                 HospitalServiceTable.Cols.ID + " = '" + id.toString() + "'";
@@ -168,10 +168,10 @@ public class HospitalServicesHelper {
      * @param name Name of HospitalService
      * @return the HospitalService found or null if could not be found
      */
-    public HospitalService getHospitalServiceByName(String name) {
+    public static HospitalService getHospitalServiceByName(String name) {
         //query table for specific HospitalService
         String str = "SELECT * FROM " + HospitalServiceTable.NAME + " WHERE " +
-                HospitalServiceTable.Cols.ID + " = '" + name + "'";
+                HospitalServiceTable.Cols.NAME + " = '" + name + "'";
         try {
             ResultSet resultSet = statement.executeQuery(str);
             HospitalService tempService = null;
@@ -184,7 +184,7 @@ public class HospitalServicesHelper {
             return tempService;
         } catch (SQLException e) {
             System.out.println("Could not select Hospital Service with name: " + name);
-            //   e.printStackTrace();
+               e.printStackTrace();
         }
         return null;
     }

@@ -2,6 +2,9 @@ package db.dbClasses;
 
 import java.util.UUID;
 
+/**
+ * Created by wangyaofeng on 3/31/17.
+ */
 public class HospitalProfessional {
 
     private String name;

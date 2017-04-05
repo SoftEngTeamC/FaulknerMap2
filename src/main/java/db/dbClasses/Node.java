@@ -1,5 +1,8 @@
 package db.dbClasses;
 
+import db.Driver;
+import db.dbHelpers.EdgesHelper;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +57,18 @@ public class Node {
 
     public String toString(){
         return "Node " + name + ": " + position.toString();
+    }
+
+    public void addEdge(Node from){
+        EdgesHelper eh = Driver.getEdgesHelper();
+        float length = (float)Math.sqrt((Math.pow(this.position.getXpos() - from.position.getXpos(),2)+
+                        (Math.pow(this.position.getYpos() - from.position.getYpos(),2))));
+
+        Edge edge1 = new Edge(this, from, length);
+      //  Edge edge2 = new Edge( from, this, length);
+
+        eh.addEdge(edge1);
+    //    eh.addEdge(edge2);
     }
 
 }
