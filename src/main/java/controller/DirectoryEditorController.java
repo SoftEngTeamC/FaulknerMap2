@@ -34,13 +34,10 @@ public class DirectoryEditorController {
     private ListView<String> searchList;
 
     // database helpers
-    HospitalProfessionalsHelper hospitalProfessionalsHelper;
 
     @FXML
     public void initialize() {
 
-        // get our helper
-        hospitalProfessionalsHelper = Driver.getHospitalProfessionalHelper();
     }
 
     @FXML
@@ -72,7 +69,7 @@ public class DirectoryEditorController {
     public void editPersonBtnPressed() throws Exception {
         // get the current hospital professional that is selected in the list
         String selectedName = searchList.getSelectionModel().getSelectedItem();
-        HospitalProfessional selectedPerson = hospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
+        HospitalProfessional selectedPerson = HospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
 
         // pass it to the next screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
@@ -113,9 +110,9 @@ public class DirectoryEditorController {
         // populate the list with the database
         ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
         ArrayList<String> nameList = new ArrayList<String>();
-        personList = hospitalProfessionalsHelper.getHospitalProfessionals(null);
-        for(int i = 0; i < personList.size(); i++){
-            nameList.add(personList.get(i).getName());
+        personList = HospitalProfessionalsHelper.getHospitalProfessionals(null);
+        for (HospitalProfessional aPersonList : personList) {
+            nameList.add(aPersonList.getName());
 
         }
 

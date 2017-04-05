@@ -205,7 +205,7 @@ public class HospitalProfessionalsHelper {
      * @param order Order By command
      * @return list of HospitalProfessionals
      */
-    public ArrayList<HospitalProfessional> getHospitalProfessionals(String order) {
+    public static ArrayList<HospitalProfessional> getHospitalProfessionals(String order) {
         ArrayList<HospitalProfessional> temp = new ArrayList<>();
         try {
             String str;

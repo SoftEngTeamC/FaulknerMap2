@@ -6,11 +6,8 @@ import db.dbClasses.Edge;
 import db.dbClasses.Node;
 import db.dbHelpers.EdgesHelper;
 import db.dbHelpers.NodesHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -28,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by jack on 3/30/17.
- */
 public class MapEditorController {
 
     // Currently selected node and edge
@@ -97,14 +90,14 @@ public class MapEditorController {
     private AnchorPane anchorPane;
 
     // Images
-    Image floor4Image;
+    private Image floor4Image;
 
     // database helper
-    NodesHelper nodesHelper;
+    private NodesHelper nodesHelper;
 
     // arraylist of search terms
     private ArrayList<String> searchList;
-    EdgesHelper edgesHelper;
+    private EdgesHelper edgesHelper;
 
 
     public void initialize(){
@@ -116,15 +109,13 @@ public class MapEditorController {
         imageView = new ImageView(floor4Image);
 
         //mouse clicked handler, send x,y data to function
-        anchorPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // get the coordinates
-                double x = event.getX();
-                double y = event.getY();
-                // send to function
-                mouseClicked(x,y);
-            }});
+        anchorPane.setOnMouseClicked(event -> {
+            // get the coordinates
+            double x = event.getX();
+            double y = event.getY();
+            // send to function
+            mouseClicked(x,y);
+        });
 
         // Make database helpers
         nodesHelper = Driver.getNodesHelper();
@@ -134,8 +125,6 @@ public class MapEditorController {
     }
 
     /**
-     * @author Paul
-     *
      * Back button action event handler. Opens the Admin page
      *
      */
@@ -152,8 +141,6 @@ public class MapEditorController {
     }
 
     /**
-     * @author Paul
-     *
      * Action event handler for logout button being pressed. Goes to main screen.
      *
      */
@@ -172,8 +159,6 @@ public class MapEditorController {
     // Methods for the remove node tab
 
     /**
-     * @author Feng
-     *
      * remove node tab: search button event handler
      *
      */
@@ -185,8 +170,8 @@ public class MapEditorController {
                 ArrayList<Node> allNode = NodesHelper.getNodes("NAME");
                 this.searchList = new ArrayList<>();
 
-                for(int i=0; i<allNode.size(); i++){
-                    this.searchList.add(allNode.get(i).getName());
+                for (Node anAllNode : allNode) {
+                    this.searchList.add(anAllNode.getName());
                 }
                 ObservableList<String> allOList = FXCollections.observableArrayList(this.searchList);
                 removeNode_searchList.setItems(allOList);
@@ -210,8 +195,6 @@ public class MapEditorController {
     }
 
     /**
-     * @author Feng
-     *
      * remove node tab: remove button event handler
      *
      */
@@ -243,12 +226,7 @@ public class MapEditorController {
 //
 //    }
 
-    /**
-     * @author Feng
-     *
-     * add node tab: create node button event handler
-     *
-     */
+
     public void addNode_createNodeBtnPressed(){
 
         float x = Float.parseFloat(addNode_xPos.getText());
@@ -259,14 +237,8 @@ public class MapEditorController {
 
     // methods for the edit node tab
 
-    /**
-     * @author Paul
-     *
-     * edit node tab: search button event handler
-     *
-     */
     public void editNode_searchBtnPressed(){
-        List<Node> list = nodesHelper.getNodes(null);
+        List<Node> list = NodesHelper.getNodes(null);
         ArrayList<String> nameList = new ArrayList<>();
         for(Node node: list){
             nameList.add(node.getName());
@@ -276,36 +248,25 @@ public class MapEditorController {
 
         editNode_searchResultsList.setItems(obList);
 
-        editNode_searchResultsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Node selectedNode = nodesHelper.getNodeByName(newValue);
-                currNodes[0] = selectedNode;
-                ArrayList<Node> neighbors = edgesHelper.getNeighbors(selectedNode);
-                ArrayList<String> neighborsS = new ArrayList<>();
-                for(Node node: neighbors){
-                    neighborsS.add(node.getName());
-                }
-                ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
-                editNode_neighborsList.setItems(nList);
+        editNode_searchResultsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Node selectedNode = NodesHelper.getNodeByName(newValue);
+            currNodes[0] = selectedNode;
+            ArrayList<Node> neighbors = EdgesHelper.getNeighbors(selectedNode);
+            ArrayList<String> neighborsS = new ArrayList<>();
+            for(Node node: neighbors){
+                neighborsS.add(node.getName());
             }
+            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+            editNode_neighborsList.setItems(nList);
         });
 
-        editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Node selectedNode = nodesHelper.getNodeByName(newValue);
-                currNodes[1] = selectedNode;
-            }
+        editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Node selectedNode = NodesHelper.getNodeByName(newValue);
+            currNodes[1] = selectedNode;
         });
     }
 
-    /**
-     * @author Paul
-     *
-     * edit node tab: remove neighbor button event handler
-     *
-     */
+
     public void editNode_removeNeighborBtnPressed(){
 
         ArrayList<Edge> currEdges = edgesHelper.getEdgeByNode(currNodes[0], currNodes[1]);
@@ -314,7 +275,7 @@ public class MapEditorController {
             edgesHelper.deleteEdge(curr);
         }
 
-        ArrayList<Node> neighbors = edgesHelper.getNeighbors(currNodes[0]);
+        ArrayList<Node> neighbors = EdgesHelper.getNeighbors(currNodes[0]);
         ArrayList<String> neighborsS = new ArrayList<>();
         for(Node node: neighbors){
             neighborsS.add(node.getName());
@@ -324,19 +285,14 @@ public class MapEditorController {
 
     }
 
-    /**
-     * @author Paul
-     *
-     * edit node tab: Add node button event handler
-     *
-     */
+
     public void editNode_addBtnPressed(){
 
-        Node newNode = nodesHelper.getNodeByName(editNode_addField.getText());
+        Node newNode = NodesHelper.getNodeByName(editNode_addField.getText());
         if (newNode != null){
             currNodes[0].addEdge(newNode);
 
-            ArrayList<Node> neighbors = edgesHelper.getNeighbors(currNodes[0]);
+            ArrayList<Node> neighbors = EdgesHelper.getNeighbors(currNodes[0]);
             ArrayList<String> neighborsS = new ArrayList<>();
             for(Node node: neighbors){
                 neighborsS.add(node.getName());
@@ -348,22 +304,11 @@ public class MapEditorController {
     }
 
 
-
-    // methods for the image and anchor pane
-
-    /**
-     * @author Paul
-     *
-     * Mouse click on image event handler.
-     *
-     */
     public void imageClicked(){
 
     }
 
     /**
-     * @author Paul
-     *
      * Handles what happens when mouse is clicked
      *
      * @param x value
@@ -373,13 +318,4 @@ public class MapEditorController {
     private void mouseClicked(double x, double y){
 
     }
-
-
-
-
-    public Node addNode(){return null;}
-    public Edge addEdge(){return null;}
-    public void removeNode(){}
-    public void removeEdge(){}
-
 }

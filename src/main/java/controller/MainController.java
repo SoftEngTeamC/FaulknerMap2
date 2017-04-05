@@ -122,22 +122,17 @@ public class MainController{
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
     public void handleClickedOnSearchResult() {
-        HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
-        ArrayList<HospitalProfessional> Professionals = hs.getHospitalProfessionals(null);
-        ObservableList<String> names = FXCollections.observableArrayList();
         System.out.println("clicked on " + SearchResults.getSelectionModel().getSelectedItem());
-        PopulateInformationDisplay(hs.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
-        FindandDisplayPath(hs.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
+        PopulateInformationDisplay(HospitalProfessionalsHelper.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
+        FindandDisplayPath(HospitalProfessionalsHelper.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
     }
 
     public void FindandDisplayPath(HospitalProfessional HP){
-        HospitalProfessionalsHelper hph = Driver.getHospitalProfessionalHelper();
-        NodesHelper NH = Driver.getNodesHelper();
-        pathfinding.Map map = new pathfinding.Map(NH.getNodes(null));
+        pathfinding.Map map = new pathfinding.Map(NodesHelper.getNodes(null));
        // System.out.println(leHP);
         UUID nId = HP.getNodeId();
       //  System.out.println(nId);
-        MapNode start = map.getNode(NH.getNodeByName("UROLOGY").getId());
+        MapNode start = map.getNode(NodesHelper.getNodeByName("UROLOGY").getId());
         MapNode dest = map.getNode(nId);
         List<MapNode> path = PathFinder.shortestPath(start, dest);
         DisplayMap(path);
@@ -153,7 +148,7 @@ public class MainController{
 
     public void PopulateSearchResults(String S) {
         HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
-        ArrayList<HospitalProfessional> Professionals = hs.getHospitalProfessionals(null);
+        ArrayList<HospitalProfessional> Professionals = HospitalProfessionalsHelper.getHospitalProfessionals(null);
         ObservableList<String> names = FXCollections.observableArrayList();
         if(S == null)
         {
