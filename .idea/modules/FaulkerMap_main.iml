@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="derby" />
+          <factory-entry name="derby" value="c8141f1a-425d-44bc-bc21-f5620b026cef" />
           <factory-entry name="noname-persistance.xml@330" value="ae2acb29-c7b0-4cf1-ab53-fd7eb3581dd4" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/../../src/main/resources/META-INF/persistence.xml" />
