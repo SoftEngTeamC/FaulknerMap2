@@ -19,7 +19,7 @@ apply plugin: 'javafx-gradle-plugin'
 
 jfx {
     // minimal requirement for jfxJar-task
-    mainClass = 'HelloWorld'
+    mainClass = 'db.Driver'
 
     // minimal requirement for jfxNative-task
     vendor = 'SoftEngTeamC'

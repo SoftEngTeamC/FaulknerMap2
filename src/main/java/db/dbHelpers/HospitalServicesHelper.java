@@ -243,10 +243,10 @@ public class HospitalServicesHelper {
     }
 
     /**
-     * This function populates the originalList array of all services from the Excel sheet on the 4th floor
+     * This function populates the originalList array of all service from the Excel sheet on the 4th floor
      */
     private void populateArray() {
-        //populate with originalList of services
+        //populate with originalList of service
         System.out.println("\nStoring initial Hospital Services");
 
         originalList.add(new HospitalService("Arthritis Center", "4D"));

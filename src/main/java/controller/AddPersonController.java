@@ -44,8 +44,6 @@ public class AddPersonController {
     }
 
     /**
-     * @author Paul
-     * <p>
      * handler for the back button being pressed. Brings it back to the directory editor screen.
      */
     public void backBtnPressed() {
@@ -63,8 +61,6 @@ public class AddPersonController {
     }
 
     /**
-     * @author Paul
-     * <p>
      * Handler for the logout button. Switches back to the main screen.
      */
     public void logoutBtnPressed() {
@@ -81,8 +77,6 @@ public class AddPersonController {
     }
 
     /**
-     * @author Paul
-     * <p>
      * handler for the add person button. Adds to the hospital professional database if possible.
      */
     public void setAddPersonBtnPressed() {
