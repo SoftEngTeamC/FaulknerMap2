@@ -1,12 +1,12 @@
 package pathfinding;
 
+import model.Coordinate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.HashSet;
-import model.Coordinate;
 
 import static org.junit.Assert.assertEquals;
 

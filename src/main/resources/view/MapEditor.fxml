@@ -78,7 +78,7 @@
                            <children>
                               <ImageView fitHeight="562.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor1.png" />
+                                    <Image url="@../images/floor1.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -91,7 +91,7 @@
                            <children>
                               <ImageView fitHeight="565.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor2.png" />
+                                    <Image url="@../images/floor2.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -104,7 +104,7 @@
                            <children>
                               <ImageView fitHeight="562.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor3.png" />
+                                    <Image url="@../images/floor3.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -117,7 +117,7 @@
                            <children>
                               <ImageView fitHeight="563.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor4.png" />
+                                    <Image url="@../images/floor4.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -130,7 +130,7 @@
                            <children>
                               <ImageView fitHeight="561.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor5.png" />
+                                    <Image url="@../images/floor5.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -143,7 +143,7 @@
                            <children>
                               <ImageView fitHeight="561.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor6.png" />
+                                    <Image url="@../images/floor6.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -156,7 +156,7 @@
                            <children>
                               <ImageView fitHeight="562.0" fitWidth="724.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="../images/floor7.png" />
+                                    <Image url="@../images/floor7.png" />
                                  </image></ImageView>
                            </children>
                         </AnchorPane>

@@ -55,7 +55,7 @@ public class MainController{
     public void DisplayMap(List<MapNode> nodes){
         MapAnchor.getChildren().clear();
         ImageView mapPic = new ImageView();
-        Image floorImage = new Image("Resources/floor4.png");
+        Image floorImage = new Image("images/floor4.png");
         mapPic.setImage(floorImage);
         mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
         mapPic.setPreserveRatio(true);
