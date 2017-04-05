@@ -1,3 +1,5 @@
+package controller;
+
 import db.Driver;
 import db.dbClasses.HospitalProfessional;
 import db.dbClasses.Node;
@@ -12,9 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-/**
- * Created by Paul on 4/2/2017.
- */
+
 public class AddPersonController {
 
     @FXML
@@ -92,7 +92,7 @@ public class AddPersonController {
             // Display error text
             warningText.setText("Not enough information added");
             warningText.setVisible(true);
-        } else if (nh.getNodeByName(locationField.getText()) == null) {
+        } else if (NodesHelper.getNodeByName(locationField.getText()) == null) {
             warningText.setText("Location not found");
             warningText.setVisible(true);
         } else {
@@ -103,7 +103,7 @@ public class AddPersonController {
                     locationField.getText()
             );
 
-            Node newNode = nh.getNodeByName(locationField.getText());
+            Node newNode = NodesHelper.getNodeByName(locationField.getText());
             newProfessional.setNodeId(newNode.getId());
             professionalHelper.addHospitalProfessional(newProfessional);
 

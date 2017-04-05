@@ -1,35 +1,30 @@
+package controller;
+
 import db.Driver;
-import db.HospitalSchema;
 import db.dbClasses.HospitalProfessional;
-import db.dbClasses.Node;
 import db.dbHelpers.HospitalProfessionalsHelper;
 import db.dbHelpers.NodesHelper;
-import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.*;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.ListView;
-import javafx.scene.paint.Color;
 import javafx.scene.control.TextArea;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import pathfinding.Coordinate;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
+
+import java.util.*;
 
 public class MainController{
     @FXML
@@ -135,7 +130,7 @@ public class MainController{
     public void FindandDisplayPath(HospitalProfessional HP){
         HospitalProfessionalsHelper hph = Driver.getHospitalProfessionalHelper();
         NodesHelper NH = Driver.getNodesHelper();
-        Map map = new Map(NH.getNodes(null));
+        pathfinding.Map map = new pathfinding.Map(NH.getNodes(null));
        // System.out.println(leHP);
         UUID nId = HP.getNodeId();
       //  System.out.println(nId);

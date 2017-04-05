@@ -1,3 +1,5 @@
+package controller;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +19,7 @@ public class HoursEditorController {
     private Button backBtn;
 
     @FXML
-    public void back() throws Exception{
+    public void back() throws Exception {
         Stage stage = (Stage) backBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AdminToolMenu.fxml"));
         stage.setTitle("Directory Editor");
@@ -26,7 +28,7 @@ public class HoursEditorController {
     }
 
     @FXML
-    public void logout()throws Exception {
+    public void logout() throws Exception {
         Stage stage = (Stage) logoutBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
         stage.setTitle("Main");

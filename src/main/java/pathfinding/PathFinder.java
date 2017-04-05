@@ -61,7 +61,8 @@ public class PathFinder {
         return path;
     }
 
-    public static double getPixels(List<MapNode> myPath){
+    public static double getPixels(List<MapNode> myPath) {
+        // TODO: This method doesn't belong in this class
         int totalDistance = 0;
         for(int i = 0; i < myPath.size()-2;i++){ //Go until 1 before the end
             totalDistance += myPath.get(i).distanceTo(myPath.get(i+1));

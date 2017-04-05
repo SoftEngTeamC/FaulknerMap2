@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Collection;
 import java.util.HashSet;
+import model.Coordinate;
 
 import static org.junit.Assert.assertEquals;
 
