@@ -22,7 +22,7 @@ public class AdminToolController {
 
     public void editMap() throws Exception{
             Stage stage = (Stage) mapEditorBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("MapEditor.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/MapEditor.fxml"));
             stage.setTitle("Map Editor");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -30,7 +30,7 @@ public class AdminToolController {
     @FXML
     public void editHours()throws Exception{
         Stage stage = (Stage) editHoursBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("HoursEditorScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/HoursEditorScreen.fxml"));
         stage.setTitle("Directory Editor");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();;
@@ -38,7 +38,7 @@ public class AdminToolController {
     @FXML
     public void editDirectory() throws Exception{
         Stage stage = (Stage) editDirectoryBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("DirectoryEditor.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/DirectoryEditor.fxml"));
         stage.setTitle("Directory Editor");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();;
@@ -48,7 +48,7 @@ public class AdminToolController {
     @FXML
     public void logout() throws Exception{
         Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
         stage.setTitle("Directory Editor");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();;

@@ -142,7 +142,7 @@ public class MapEditorController {
     public void back(){
         try {
             Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("AdminToolMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("view/AdminToolMenu.fxml"));
             stage.setTitle("Directory Editor");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -160,7 +160,7 @@ public class MapEditorController {
     public void logout(){
         try {
             Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"));
             stage.setTitle("Main");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();

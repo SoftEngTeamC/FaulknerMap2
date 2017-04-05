@@ -21,7 +21,7 @@ public class HoursEditorController {
     @FXML
     public void back() throws Exception {
         Stage stage = (Stage) backBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AdminToolMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
         stage.setTitle("Directory Editor");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
@@ -30,7 +30,7 @@ public class HoursEditorController {
     @FXML
     public void logout() throws Exception {
         Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
         stage.setTitle("Main");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();

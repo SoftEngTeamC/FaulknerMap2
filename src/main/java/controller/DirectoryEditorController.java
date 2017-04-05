@@ -46,7 +46,7 @@ public class DirectoryEditorController {
     @FXML
     public void back() throws Exception {
         Stage stage = (Stage) backBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AdminToolMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
         stage.setTitle("Admin Tool");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
@@ -55,7 +55,7 @@ public class DirectoryEditorController {
     @FXML
     public void logout() throws Exception {
         Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
         stage.setTitle("Main");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
@@ -75,7 +75,7 @@ public class DirectoryEditorController {
         HospitalProfessional selectedPerson = hospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
 
         // pass it to the next screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EditPersonScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane)loader.load()));
         EditPersonController controller = loader.<EditPersonController>getController();
@@ -93,7 +93,7 @@ public class DirectoryEditorController {
     @FXML
     public void addPersonBtnCPressed() throws Exception {
         Stage stage = (Stage) addPrsnBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AddPerson.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AddPerson.fxml"));
         stage.setTitle("Add Person");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();

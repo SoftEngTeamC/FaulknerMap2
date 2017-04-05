@@ -55,7 +55,7 @@ public class MainController{
     public void DisplayMap(List<MapNode> nodes){
         MapAnchor.getChildren().clear();
         ImageView mapPic = new ImageView();
-        Image floorImage = new Image("Resources/floor4.png");
+        Image floorImage = new Image("images/floor4.png");
         mapPic.setImage(floorImage);
         mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
         mapPic.setPreserveRatio(true);
@@ -194,7 +194,7 @@ public class MainController{
     public void OpenAdminTool() throws Exception {
         // goto genres screen
         Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("AdminToolMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
         stage.setTitle("AdminToolMenu");
         stage.setScene(new Scene(root, 600, 400));
         stage.show();
