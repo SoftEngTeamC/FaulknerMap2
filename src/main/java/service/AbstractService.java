@@ -2,9 +2,8 @@ package service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.io.Serializable;
 
-public abstract class AbstractService<T extends Serializable> implements Service<T> {
+public abstract class AbstractService<T> implements Service<T> {
     protected EntityManagerFactory managerFactory;
 
     public AbstractService(EntityManagerFactory emf) {

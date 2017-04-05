@@ -1,8 +1,6 @@
 package service;
 
-import java.io.Serializable;
-
-public interface Service<T extends Serializable> {
+public interface Service<T> {
     T find(Long id);
     void remove(T item);
     void persist(T item);
