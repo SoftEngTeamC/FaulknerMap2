@@ -1,9 +1,6 @@
 package controller;
 
-import db.Driver;
-import db.dbClasses.HospitalProfessional;
-import db.dbHelpers.HospitalProfessionalsHelper;
-import db.dbHelpers.NodesHelper;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -48,7 +45,7 @@ public class MainController{
     public void initialize() {
         //the bind function locks an element property to another elements property
         FourthFloor.fitWidthProperty().bind(MapAnchor.widthProperty());
-        PopulateSearchResults(null);
+//        PopulateSearchResults(null);
     }
 
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
@@ -118,66 +115,61 @@ public class MainController{
         data.addAll(results);
         SearchResults.setItems(data);
     }
+//
+//    //This function is called when the user clicks on a Search Result.
+//    //Information unique to the ListView Item can be accessed
+//    public void handleClickedOnSearchResult() {
+//        System.out.println("clicked on " + SearchResults.getSelectionModel().getSelectedItem());
+//        PopulateInformationDisplay(HospitalProfessionalsHelper.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
+//        FindandDisplayPath(HospitalProfessionalsHelper.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
+//    }
+//
+//    public void FindandDisplayPath(HospitalProfessional HP){
+//        pathfinding.Map map = new pathfinding.Map(NodesHelper.getNodes(null));
+//       // System.out.println(leHP);
+//        UUID nId = HP.getNodeId();
+//      //  System.out.println(nId);
+//        MapNode start = map.getNode(NodesHelper.getNodeByName("UROLOGY").getId());
+//        MapNode dest = map.getNode(nId);
+//        List<MapNode> path = PathFinder.shortestPath(start, dest);
+//        DisplayMap(path);
+//    }
+//
+//    //triggered on key release in SearchBar
+//    //runs PopulateSearchResults with the Search input
+//    public void Search(){
+//        System.out.println("Searching");
+//        System.out.println(SearchBar.getText().toString());
+//        PopulateSearchResults(SearchBar.getText().toString());
+//    }
+//
+//    public void PopulateSearchResults(String S) {
+//        HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
+//        ArrayList<HospitalProfessional> Professionals = HospitalProfessionalsHelper.getHospitalProfessionals(null);
+//        ObservableList<String> names = FXCollections.observableArrayList();
+//        if(S == null)
+//        {
+//            System.out.println("null case");
+//            for(HospitalProfessional HP : Professionals){
+//                names.add(HP.getName());
+//            }
+//            SearchResults.setItems(names);
+//        }
+//        else{
+//            for(HospitalProfessional HP : Professionals){
+//                if(HP.getName().contains(S)) {
+//                    names.add(HP.getName());
+//                }
+//            }
+//            SearchResults.setItems(names);
+//        }
+//    }
 
-    //This function is called when the user clicks on a Search Result.
-    //Information unique to the ListView Item can be accessed
-    public void handleClickedOnSearchResult() {
-        HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
-        ArrayList<HospitalProfessional> Professionals = hs.getHospitalProfessionals(null);
-        ObservableList<String> names = FXCollections.observableArrayList();
-        System.out.println("clicked on " + SearchResults.getSelectionModel().getSelectedItem());
-        PopulateInformationDisplay(hs.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
-        FindandDisplayPath(hs.getHospitalProfessionalByName(SearchResults.getSelectionModel().getSelectedItem().toString()));
-    }
-
-    public void FindandDisplayPath(HospitalProfessional HP){
-        HospitalProfessionalsHelper hph = Driver.getHospitalProfessionalHelper();
-        NodesHelper NH = Driver.getNodesHelper();
-        pathfinding.Map map = new pathfinding.Map(NH.getNodes(null));
-       // System.out.println(leHP);
-        UUID nId = HP.getNodeId();
-      //  System.out.println(nId);
-        MapNode start = map.getNode(NH.getNodeByName("UROLOGY").getId());
-        MapNode dest = map.getNode(nId);
-        List<MapNode> path = PathFinder.shortestPath(start, dest);
-        DisplayMap(path);
-    }
-
-    //triggered on key release in SearchBar
-    //runs PopulateSearchResults with the Search input
-    public void Search(){
-        System.out.println("Searching");
-        System.out.println(SearchBar.getText().toString());
-        PopulateSearchResults(SearchBar.getText().toString());
-    }
-
-    public void PopulateSearchResults(String S) {
-        HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
-        ArrayList<HospitalProfessional> Professionals = hs.getHospitalProfessionals(null);
-        ObservableList<String> names = FXCollections.observableArrayList();
-        if(S == null)
-        {
-            System.out.println("null case");
-            for(HospitalProfessional HP : Professionals){
-                names.add(HP.getName());
-            }
-            SearchResults.setItems(names);
-        }
-        else{
-            for(HospitalProfessional HP : Professionals){
-                if(HP.getName().contains(S)) {
-                    names.add(HP.getName());
-                }
-            }
-            SearchResults.setItems(names);
-        }
-    }
-
-    //This function takes a HospitalProfessional edits the DisplayInformation TextArea
-    //with all the HP's associated information
-    public void PopulateInformationDisplay(HospitalProfessional HP){
-        DisplayInformation.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+HP.getLocation());
-    }
+//    //This function takes a HospitalProfessional edits the DisplayInformation TextArea
+//    //with all the HP's associated information
+//    public void PopulateInformationDisplay(HospitalProfessional HP){
+//        DisplayInformation.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+HP.getLocation());
+//    }
 
     //function for Help Button
     public void HandleHelpButton(){

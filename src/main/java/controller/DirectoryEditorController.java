@@ -1,8 +1,5 @@
 package controller;
 
-import db.Driver;
-import db.dbClasses.HospitalProfessional;
-import db.dbHelpers.HospitalProfessionalsHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 
 
 public class DirectoryEditorController {
-    HospitalProfessionalsHelper hs = Driver.getHospitalProfessionalHelper();
     @FXML
     private Button logoutBtn;
     @FXML
@@ -34,13 +30,10 @@ public class DirectoryEditorController {
     private ListView<String> searchList;
 
     // database helpers
-    HospitalProfessionalsHelper hospitalProfessionalsHelper;
 
     @FXML
     public void initialize() {
 
-        // get our helper
-        hospitalProfessionalsHelper = Driver.getHospitalProfessionalHelper();
     }
 
     @FXML
@@ -72,14 +65,14 @@ public class DirectoryEditorController {
     public void editPersonBtnPressed() throws Exception {
         // get the current hospital professional that is selected in the list
         String selectedName = searchList.getSelectionModel().getSelectedItem();
-        HospitalProfessional selectedPerson = hospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
+//        HospitalProfessional selectedPerson = HospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
 
         // pass it to the next screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene((Pane)loader.load()));
         EditPersonController controller = loader.<EditPersonController>getController();
-        controller.setSelectedUser(selectedPerson);
+//        controller.setSelectedUser(selectedPerson);
         stage.show();
 
     }
@@ -99,30 +92,30 @@ public class DirectoryEditorController {
         stage.show();
     }
 
-
-    /**
-     * @author Paul
-     *
-     * search field entery event handler
-     * for now, it just populates the list
-     * <TODO> query the database and populate list with actual results </TODO>
-     */
-    @FXML
-    public void searchFieldEntered() {
-
-        // populate the list with the database
-        ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
-        ArrayList<String> nameList = new ArrayList<String>();
-        personList = hospitalProfessionalsHelper.getHospitalProfessionals(null);
-        for(int i = 0; i < personList.size(); i++){
-            nameList.add(personList.get(i).getName());
-
-        }
-
-        // load into the list
-        ObservableList<String> oList = FXCollections.observableArrayList(nameList);
-        searchList.setItems(oList);
-
-    }
+//
+//    /**
+//     * @author Paul
+//     *
+//     * search field entery event handler
+//     * for now, it just populates the list
+//     * <TODO> query the database and populate list with actual results </TODO>
+//     */
+//    @FXML
+//    public void searchFieldEntered() {
+//
+//        // populate the list with the database
+//        ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
+//        ArrayList<String> nameList = new ArrayList<String>();
+//        personList = HospitalProfessionalsHelper.getHospitalProfessionals(null);
+//        for (HospitalProfessional aPersonList : personList) {
+//            nameList.add(aPersonList.getName());
+//
+//        }
+//
+//        // load into the list
+//        ObservableList<String> oList = FXCollections.observableArrayList(nameList);
+//        searchList.setItems(oList);
+//
+//    }
 
 }

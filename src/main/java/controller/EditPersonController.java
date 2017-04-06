@@ -1,8 +1,6 @@
 package controller;
 
-import db.Driver;
-import db.dbClasses.HospitalProfessional;
-import db.dbHelpers.HospitalProfessionalsHelper;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,10 +11,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class EditPersonController {
-
-    //hospital professional on which we are editing
-    private HospitalProfessional hp;
-    private HospitalProfessionalsHelper hph;
 
     @FXML
     private Button logoutBtn;
@@ -38,9 +32,7 @@ public class EditPersonController {
 
     @FXML
     public void initialize() {
-        hph = Driver.getHospitalProfessionalHelper();
-
-
+//        hph = Driver.getHospitalProfessionalHelper();
     }
 
     @FXML
@@ -61,30 +53,30 @@ public class EditPersonController {
         stage.show();
     }
 
-
-    public void setSelectedUser(HospitalProfessional hp) {
-
-        this.hp = hp;
-        nameField.setText(this.hp.getName());
-        titleField.setText(this.hp.getTitle());
-        locationField.setText(this.hp.getLocation());
-        idField.setText(this.hp.getId().toString());
-
-    }
-
-    public void updateBtnPressed() {
-        // push to database
-        hp.setName(nameField.getText());
-        hp.setTitle(titleField.getText());
-        hp.setLocation(locationField.getText());
-        hph.updateHospitalProfessional(hp);
-    }
-
-    public void deleteBtnPressed() {
-        // push to database
-        hph.deleteHospitalProfessional(hp);
-        warningText.setVisible(true);
-    }
+//
+//    public void setSelectedUser(HospitalProfessional hp) {
+//
+//        this.hp = hp;
+//        nameField.setText(this.hp.getName());
+//        titleField.setText(this.hp.getTitle());
+//        locationField.setText(this.hp.getLocation());
+//        idField.setText(this.hp.getId().toString());
+//
+//    }
+//
+//    public void updateBtnPressed() {
+//        // push to database
+//        hp.setName(nameField.getText());
+//        hp.setTitle(titleField.getText());
+//        hp.setLocation(locationField.getText());
+//        hph.updateHospitalProfessional(hp);
+//    }
+//
+//    public void deleteBtnPressed() {
+//        // push to database
+//        hph.deleteHospitalProfessional(hp);
+//        warningText.setVisible(true);
+//    }
 
 }
 

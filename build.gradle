@@ -19,7 +19,7 @@ apply plugin: 'javafx-gradle-plugin'
 
 jfx {
     // minimal requirement for jfxJar-task
-    mainClass = 'HelloWorld'
+    mainClass = 'db.Driver'
 
     // minimal requirement for jfxNative-task
     vendor = 'SoftEngTeamC'
@@ -39,8 +39,8 @@ check.dependsOn jacocoTestReport
 dependencies {
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
     compile 'org.apache.derby:derby:10.13.1.1'
-    compile 'org.dbunit:dbunit:2.5.3'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'com.univocity:univocity-parsers:2.4.1'
+    testCompile 'junit:junit:4.11'
 }
 
 

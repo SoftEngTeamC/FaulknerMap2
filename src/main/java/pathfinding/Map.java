@@ -1,24 +1,21 @@
 package pathfinding;
 
-import db.dbClasses.Node;
-import db.dbHelpers.EdgesHelper;
-import db.dbHelpers.NodesHelper;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
+import model.*;
+
+import java.util.*;
 
 public class Map {
-    private java.util.Map<UUID, MapNode> nodeMap;
+    private java.util.Map<Long, MapNode> nodeMap;
 
-    public Map(Collection<Node> dbNodes) {
+    public Map(Collection<model.Node> nodes) {
         nodeMap = new HashMap<>();
-        for (Node n : dbNodes) {
+        for (model.Node n : nodes) {
             nodeMap.put(n.getId(), new MapNode(n));
         }
-        for (UUID id : nodeMap.keySet()) {
-        //    System.out.println(id);
-            for (Node n : EdgesHelper.getNeighbors(NodesHelper.getNodeByID(id))) {
+        for (Long id : nodeMap.keySet()) {
+            Set<model.Node> neighbors = new HashSet<>();
+            for (model.Node n : neighbors) {
                 if (n == null) continue;
                 MapNode neighbor = nodeMap.get(n.getId());
                 MapNode currentNode = nodeMap.get(id);
@@ -28,7 +25,7 @@ public class Map {
         }
     }
 
-    public MapNode getNode(UUID id) {
+    public MapNode getNode(Long id) {
         return nodeMap.get(id);
     }
 }
