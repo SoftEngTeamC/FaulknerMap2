@@ -20,11 +20,6 @@ public class MapNode implements Node<MapNode> {
         this.neighbors = neighbors;
     }
 
-    public MapNode(db.dbClasses.Node dbNode) {
-        db.dbClasses.Coordinate c = dbNode.getPosition();
-        this.location = new Coordinate(c.getXpos(), c.getYpos(), c.getZpos());
-        this.neighbors = new HashSet<>();
-    }
 
     public MapNode(model.Node n) {
         this.location = n.getLocation();

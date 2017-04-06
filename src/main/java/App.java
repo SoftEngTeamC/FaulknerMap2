@@ -4,14 +4,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.net.URL;
 
 public class App extends Application {
-    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "derby" );
 
-    // Override the application start method
     @Override
     public void start(Stage primaryStage) throws Exception{
         URL mainView = getClass().getClassLoader().getResource("view/Main.fxml");
@@ -27,5 +23,10 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // TODO: Clean up entity manager
     }
 }

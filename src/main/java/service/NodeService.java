@@ -18,7 +18,7 @@ public class NodeService  extends AbstractService<Node> {
         return manager.find(Node.class, id);
     }
 
-    public List<Node> neighbors() {
+    private List<Node> neighbors() {
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.createQuery("from Node", Node.class).getResultList();
     }
