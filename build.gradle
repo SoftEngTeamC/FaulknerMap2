@@ -39,7 +39,7 @@ check.dependsOn jacocoTestReport
 dependencies {
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
     compile 'org.apache.derby:derby:10.13.1.1'
-    compile 'org.dbunit:dbunit:2.5.3'
+    compile 'com.univocity:univocity-parsers:jar:2.4.1'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
