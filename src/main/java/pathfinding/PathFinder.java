@@ -8,9 +8,6 @@ import java.util.*;
  * page https://en.wikipedia.org/wiki/A*_search_algorithm
  */
 public class PathFinder {
-    private static double FEET_PER_PIXEL = 0.2902;
-    private static double SECONDS_PER_FOOT = 0.2975;
-    private static double STEPS_PER_FOOT = 0.5157;
 
     public static <T extends Node<T>> List<T> shortestPath(T start, T goal) {
         Set<T> closed = new HashSet<>();
@@ -61,21 +58,4 @@ public class PathFinder {
         return path;
     }
 
-    public static double getPixels(List<MapNode> myPath) {
-        // TODO: This method doesn't belong in this class
-        int totalDistance = 0;
-        for(int i = 0; i < myPath.size()-2;i++){ //Go until 1 before the end
-            totalDistance += myPath.get(i).distanceTo(myPath.get(i+1));
-        }
-        return totalDistance;
-    }
-    public static double getFeet(List<MapNode> myPath){
-        return getPixels(myPath)*FEET_PER_PIXEL;
-    }
-    public static double getSeconds(List<MapNode> myPath){
-        return getFeet(myPath) * SECONDS_PER_FOOT;
-    }
-    public static double getSteps(List<MapNode> myPath){
-        return getFeet(myPath) * STEPS_PER_FOOT;
-    }
 }
