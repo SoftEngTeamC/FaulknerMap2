@@ -16,7 +16,7 @@ public class DataLoader {
     public static void main(String[] args) {
         EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
-            loadLocations(emf, "data/locations.tsv");
+            loadLocations(emf, "data/floor4/locations.tsv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
