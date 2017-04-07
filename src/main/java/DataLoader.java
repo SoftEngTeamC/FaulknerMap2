@@ -7,14 +7,13 @@ import service.HospitalProfessionalService;
 import service.NodeService;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
 public class DataLoader {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory( "derby" );
+        EntityManagerFactory emf = EMFHelper.getInstance().getEMFactory();
         try {
             loadLocations(emf, "data/locations.tsv");
         } catch (FileNotFoundException e) {
