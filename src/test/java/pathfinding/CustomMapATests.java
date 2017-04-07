@@ -93,12 +93,7 @@ public class CustomMapATests {
     @Test
     //test the path when no path is possible
     public void goToIsolated() throws Exception {
-        List<MapNode> path = new LinkedList<>();
-        path.add(C);
-        path.add(A);
-        path.add(D);
-        path.add(B);
-        assertNull(PathFinder.shortestPath(C, B));
+        assertNull(PathFinder.shortestPath(C, F));
     }
 
     @Test
@@ -118,7 +113,6 @@ public class CustomMapATests {
     //is also the destination
     public void goToSelf() throws Exception {
         List<MapNode> path = new LinkedList<>();
-        path.add(D);
         path.add(D);
         assertEquals(path, PathFinder.shortestPath(D, D));
     }

@@ -100,9 +100,9 @@ public class CustomMapBTests {
     public void testHeuristicsPathChoice() throws Exception {
         List<MapNode> path = new LinkedList<>();
         path.add(F);
-        path.add(G);
-        path.add(A);
-        path.add(B);
+        path.add(E);
+        path.add(D);
+        path.add(C);
         path.add(J);
         assertEquals(PathFinder.shortestPath(F, J), path);
     }

@@ -74,5 +74,7 @@ public class MapNode implements Node<MapNode> {
 
     public void addNeighbor(MapNode n) {
         neighbors.add(n);
+        n.neighbors.add(this);
     }
+
 }
