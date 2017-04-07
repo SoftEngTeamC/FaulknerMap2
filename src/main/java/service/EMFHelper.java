@@ -1,9 +1,9 @@
+package service;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- * Created by Gina on 4/6/17.
- */
+
 public class EMFHelper {
 
     private static EMFHelper myHelper = new EMFHelper();

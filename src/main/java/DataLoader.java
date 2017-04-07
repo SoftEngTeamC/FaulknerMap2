@@ -3,6 +3,7 @@ import com.univocity.parsers.tsv.TsvParserSettings;
 import model.Coordinate;
 import model.Node;
 import service.CoordinateService;
+import service.EMFHelper;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
@@ -24,8 +25,8 @@ public class DataLoader {
     }
 
     private static void loadLocations(EntityManagerFactory emf, String locationsFilePath) throws FileNotFoundException {
-        NodeService nodeService = new NodeService(emf);
-        CoordinateService coordinateService = new CoordinateService(emf);
+        NodeService nodeService = new NodeService();
+        CoordinateService coordinateService = new CoordinateService();
 
 
         // Create all the nodes
@@ -50,7 +51,7 @@ public class DataLoader {
     }
 
     private static void loadPeople(EntityManagerFactory emf, String peopleFilePath) throws FileNotFoundException {
-        HospitalProfessionalService professionalService = new HospitalProfessionalService(emf);
+        HospitalProfessionalService professionalService = new HospitalProfessionalService();
 
         TsvParserSettings parserSettings = new TsvParserSettings();
         TsvParser parser = new TsvParser(parserSettings);

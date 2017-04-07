@@ -6,8 +6,8 @@ import javax.persistence.EntityManagerFactory;
 public abstract class AbstractService<T> implements Service<T> {
     protected EntityManagerFactory managerFactory;
 
-    public AbstractService(EntityManagerFactory emf) {
-        this.managerFactory = emf;
+    public AbstractService() {
+        this.managerFactory = EMFHelper.getInstance().getEMFactory();
     }
 
     @Override
