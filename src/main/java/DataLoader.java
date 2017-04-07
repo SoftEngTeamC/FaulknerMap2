@@ -3,7 +3,7 @@ import com.univocity.parsers.tsv.TsvParserSettings;
 import model.Coordinate;
 import model.Node;
 import service.CoordinateService;
-import service.EMFHelper;
+import service.EMFProvider;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DataLoader {
     public static void main(String[] args) {
-        EntityManagerFactory emf = EMFHelper.getInstance().getEMFactory();
+        EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
             loadLocations(emf, "data/locations.tsv");
         } catch (FileNotFoundException e) {

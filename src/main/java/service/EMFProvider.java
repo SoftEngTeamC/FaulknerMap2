@@ -4,9 +4,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 
-public class EMFHelper {
+public class EMFProvider {
 
-    private static EMFHelper myHelper = new EMFHelper();
+    private static EMFProvider myHelper = new EMFProvider();
     private static EntityManagerFactory emf = null;
 
 
@@ -28,9 +28,9 @@ public class EMFHelper {
      *
      * @return
      */
-    public static EMFHelper getInstance() {
+    public static EMFProvider getInstance() {
         if (myHelper == null) {
-            myHelper = new EMFHelper();
+            myHelper = new EMFProvider();
         }
         return myHelper;
     }

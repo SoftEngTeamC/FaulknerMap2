@@ -7,7 +7,7 @@ public abstract class AbstractService<T> implements Service<T> {
     protected EntityManagerFactory managerFactory;
 
     public AbstractService() {
-        this.managerFactory = EMFHelper.getInstance().getEMFactory();
+        this.managerFactory = EMFProvider.getInstance().getEMFactory();
     }
 
     @Override
