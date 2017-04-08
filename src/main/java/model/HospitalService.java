@@ -3,21 +3,30 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "SERVICES")
 public class HospitalService {
-    private Long id;
+    @Id
+    @Column(name="ID")
+    private long id;
 
-    private Node location;
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(
+            name="SERVICES_NODES",
+            joinColumns=@JoinColumn(name="SERVICES_ID", referencedColumnName="ID"),
+            inverseJoinColumns=@JoinColumn(name="NODES_ID", referencedColumnName="ID"))
+    private List<Node> locations;
+
     private String name;
 
     public HospitalService() {
         // This is left empty for hibernate
     }
 
-    public HospitalService(Node location, String name) {
-        this.location = location;
+    public HospitalService(List<Node> locations, String name) {
+        this.locations = locations;
         this.name = name;
     }
 
@@ -32,14 +41,14 @@ public class HospitalService {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "SERVICE_NODES")
-    public Node getLocation() {
-        return location;
+    public List<Node> getLocation() {
+        return locations;
     }
 
-    public void setLocation(Node location) {
-        this.location = location;
+    public void setLocation(List<Node> location) {
+        this.locations = locations;
     }
 
     @Column(name = "SERVICE_NAME")
