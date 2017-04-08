@@ -3,6 +3,7 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "ENTITIES")
@@ -10,6 +11,7 @@ public class Tag {
     private Long id;
 
     private String name;
+    private List<Node> nodes;
 
     public Tag() {
         // This is kept empty for hibernate
@@ -37,5 +39,14 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @ManyToMany(mappedBy = "tags")
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<Node> nodes) {
+        this.nodes = nodes;
     }
 }

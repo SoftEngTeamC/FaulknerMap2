@@ -3,6 +3,7 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table( name = "NODES" )
@@ -11,6 +12,8 @@ public class Node {
 
     private Coordinate location;
     private String name;
+    private List<Tag> tags;
+
 
     public Node() {
         // This is kept empty for hibernate
@@ -49,5 +52,17 @@ public class Node {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "NODE_TAG",
+            joinColumns = @JoinColumn(name = "NODE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
