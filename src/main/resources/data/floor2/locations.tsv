@@ -1,24 +1,24 @@
 name	x	y
-2A 2392 1156
-hallway 2456 1165
+2A - 2433 - 1171
+hallway - 2456 - 1165
 
-2B 2663 1155
-hallway 2614 1147
+2B - 2629 - 1147
+hallway - 2614 - 1147
 
-Phisical_Therapy 2756 1737
-hallway 2700 1738
+Physical Therapy - 2715 - 1737
+hallway - 2700 - 1738
 
-Out_Patient_Psych 2629 2116
-hallway 2466 2072
+Outpatient Psych - 2773 - 2100
+hallway - 2771 - 2072
 
-intersection 2521 1140
-intersection 2615 1142
-intersection 2519 1332
-intersection 2616 1336
-intersection 2617 1361
-intersection 2697 1364
-intersection 2700 2071
-intersection 2469 2067
+intersection - 2521 - 1140
+intersection - 2615 - 1142
+intersection - 2519 - 1332
+intersection - 2616 - 1336
+intersection - 2617 - 1361
+intersection - 2697 - 1364
+intersection - 2700 - 2071
+intersection - 2469 - 2067
 
 
 

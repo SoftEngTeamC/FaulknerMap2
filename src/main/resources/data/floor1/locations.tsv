@@ -1,34 +1,32 @@
 name	x	y
-GI_Endoscopy 2215 1722
-hallway 2200 1723
+GI Endoscopy - 2497 - 1807
+hallway - 2515 - 1805
 
-Day_Surgery 2716 1670
-hallway 2262 1627
+Day Surgery - 2680 - 1628
+hallway - 2662 - 1627
 
-Radiology 2728 1416
-hallway 2734 1375
+Radiology - 2735 - 1396
+hallway - 2734 - 1375
 
-Preop_Eval 2559 1442
-hallway 2516 1409
+Preoperation Evaluation - 2534 - 1413
+hallway - 2516 - 1409
 
-Blood_Draw 2385 1431
-hallway 2372 1374
+Blood Draw - 2373 - 1387
+hallway - 2372 - 1374
 
-Patient_Registration 2269 1314
-hallway 2261 1374
+Patient Registration - 2269 - 1314
+hallway - 2261 - 1374
 
-Emergency 2106 1406
-hallway 2151 1375
+Emergency - 2106 - 1447
+hallway - 2151 - 1375
 
-Audiology
-
-intersection 2200 1689
-intersection 2200 1690
-intersection 2200 1683
-intersection 2662 1683
-intersection 2662 1690
-intersection 2200 1861
-intersection 2521 1092
+intersection - 2200 - 1689
+intersection - 2200 - 1690
+intersection - 2200 - 1683
+intersection - 2662 - 1683
+intersection - 2662 - 1690
+intersection - 2200 - 1861
+intersection - 2521 - 1092
 
 
 

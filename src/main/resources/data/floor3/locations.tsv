@@ -1,20 +1,20 @@
 name	x	y
-3A 2469 1053
-hallway 2517 1144
+3A - 2513 - 1126
+hallway - 2517 - 1144
 
-3B 2581 1048
-hallway 2584 1151
+3B - 2581 - 1134
+hallway - 2584 - 1151
 
-3C 2715 1123
-hallway 2619 1163
+3C - 2622 - 1153
+hallway - 2619 - 1163
 
-intersection 2412 1167
-intersection 2622 1164
-intersection 2622 1337
-intersection 2411 1337
-intersection 2520 1337
-intersection 2520 1259
-intersection 1474 1549
+intersection - 2412 - 1167
+intersection - 2622 - 1164
+intersection - 2622 - 1337
+intersection - 2411 - 1337
+intersection - 2520 - 1337
+intersection - 2520 - 1259
+intersection - 1474 - 1549
 
 
 
