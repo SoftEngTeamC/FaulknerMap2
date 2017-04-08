@@ -1,4 +1,15 @@
 name	x	y
+Audiology	1st Floor
+Cardiac Rehabilitation	1st Floor
+Laboratory	1st Floor
+Special Testing	1st Floor
+Information	1st and 3rd Floors
+Admitting/Registration	1st Floor
+Atrium Café	1st Floor
+Patient Financial Services	1st Floor
+Taiclet Family Center	1st Floor
+Valet Parking	1st Floor
+
 GI Endoscopy - 2497 - 1807
 hallway - 2515 - 1805
 
@@ -8,7 +19,7 @@ hallway - 2662 - 1627
 Radiology - 2735 - 1396
 hallway - 2734 - 1375
 
-Preoperation Evaluation - 2534 - 1413
+Center for Preoperative Evaluation - 2534 - 1413
 hallway - 2516 - 1409
 
 Blood Draw - 2373 - 1387
@@ -17,7 +28,7 @@ hallway - 2372 - 1374
 Patient Registration - 2269 - 1314
 hallway - 2261 - 1374
 
-Emergency - 2106 - 1447
+Emergency Department - 2106 - 1447
 hallway - 2151 - 1375
 
 intersection - 2200 - 1689
