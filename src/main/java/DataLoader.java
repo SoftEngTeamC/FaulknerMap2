@@ -144,6 +144,7 @@ public class DataLoader {
 
                 serviceService.persist(new HospitalService(nodes, name));
 
+
             }
         }
     }

@@ -1,6 +1,7 @@
 package service;
 
 
+import model.HospitalService;
 import model.Node;
 
 import javax.persistence.EntityManager;
@@ -21,9 +22,9 @@ public class NodeService  extends AbstractService<Node> {
 
     public Node findNodeByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        String sql = "SELECT n FROM Node n where n.name = :name";
-        TypedQuery<Node> query = (TypedQuery<Node>) manager.createQuery(sql);
-        query.setParameter("name", name);
-        return query.getSingleResult();
+        return (Node) manager.createQuery(
+                "SELECT n FROM Node n WHERE n.name LIKE :name")
+                .setParameter("name", name)
+                .setMaxResults(1).getSingleResult();
     }
 }
