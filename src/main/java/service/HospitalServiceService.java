@@ -22,4 +22,10 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
     }
+
+    public List<HospitalService> getAllServices() {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        return manager.createQuery("from HospitalService", HospitalService.class)
+                .getResultList();
+    }
 }
