@@ -236,7 +236,7 @@ public class MainController{
     @FXML
     public void toEnglish() throws Exception {
         Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_EN.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
         stage.setTitle("Faulkner Kiosk");
         stage.setScene(new Scene(root, 600, 400));
         stage.setMaximized(true);
