@@ -55,6 +55,8 @@ public class MainController{
     private Button HelpButton;
     @FXML
     private TabPane FloorViewsTabPane;
+    @FXML
+    private MenuButton languageMenuButton;
 
 
     //INTIALIZE
@@ -231,6 +233,45 @@ public class MainController{
         DisplayInformationTextArea.setText("Don't Panic");
     }
 
+    @FXML
+    public void toEnglish() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_EN.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+    @FXML
+    public void toSpanish() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_SP.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+    @FXML
+    public void toChinese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_CN.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+    @FXML
+    public void toFrench() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_FR.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+    }
 
 }
 
