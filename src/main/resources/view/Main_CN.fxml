@@ -18,7 +18,7 @@
             <children>
                 <TextField fx:id="SearchBar" layoutX="6.0" layoutY="4.0" onKeyReleased="#Search" prefHeight="25.0" prefWidth="227.0" promptText="搜索" />
                 <ListView fx:id="SearchResults" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
-                <TextArea fx:id="DisplayInformation" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="This is where the information goes&#10;Here is even more information, now on two lines&#10;" />
+                <TextArea fx:id="DisplayInformation" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="信息将在这里显示&#10;这里将有更多信息&#10;" />
                 <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                     <children>
                         <Button fx:id="PanicButton" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="救命" />
