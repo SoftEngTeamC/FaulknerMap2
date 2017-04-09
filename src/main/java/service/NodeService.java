@@ -35,6 +35,14 @@ public class NodeService  extends AbstractService<Node> {
                 .setMaxResults(1).getSingleResult();
     }
 
+    public List<Node> findNodeIntersectionByFloor(int floor) {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        return  manager.createQuery(
+                "SELECT n FROM Node n WHERE n.name LIKE :name")
+                .setParameter("name", "intersection" + floor + "%")
+                .getResultList();
+    }
+
     public List<Node> getAllNodes() {
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.createQuery("from Node", Node.class)
