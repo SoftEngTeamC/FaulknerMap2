@@ -27,4 +27,10 @@ public class NodeService  extends AbstractService<Node> {
                 .setParameter("name", name)
                 .setMaxResults(1).getSingleResult();
     }
+
+    public List<Node> getAllNodes() {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        return manager.createQuery("from Node", Node.class)
+                .getResultList();
+    }
 }
