@@ -1,10 +1,12 @@
 package service;
 
 
+import model.HospitalProfessional;
 import model.HospitalService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class HospitalServiceService extends AbstractService<HospitalService> {
     @Override
@@ -15,9 +17,15 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
 
     public HospitalService findHospitalServiceByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        String sql = "SELECT s FROM HospitalService s where s.name = :name";
-        TypedQuery<HospitalService> query = (TypedQuery<HospitalService>) manager.createQuery(sql);
-        query.setParameter("name", name);
-        return query.getSingleResult();
+            return (HospitalService) manager.createQuery(
+                    "SELECT s FROM HospitalService s WHERE s.name LIKE :name")
+                    .setParameter("name", name)
+                    .setMaxResults(1).getSingleResult();
+    }
+
+    public List<HospitalService> getAllServices() {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        return manager.createQuery("from HospitalService", HospitalService.class)
+                .getResultList();
     }
 }
