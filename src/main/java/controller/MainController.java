@@ -186,10 +186,11 @@ public class MainController{
     @FXML
     public void OpenAdminTool() throws Exception {
         // goto genres screen
+        System.out.println("HERE WE ARE");
         Stage stage = (Stage) AdminToolButton.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
         stage.setTitle("AdminToolMenu");
-        stage.setMaximized(true);
+        stage.setScene(new Scene(root, 300, 300));
         stage.show();
     }
 
