@@ -18,7 +18,7 @@ public class EdgeService extends AbstractService<Edge> {
         for(int i = 1; i < 8; i ++){
             List<Node> floor = ns.findNodeIntersectionByFloor(i);
             for(int j = 0; j < floor.size(); j ++){
-                Edge tempEdge = new Edge(floor.get(i), floor.get(i+1), 0);
+                Edge tempEdge = new Edge(floor.get(j), floor.get(j+1), 0);
                 persist(tempEdge);
             }
         }

@@ -11,14 +11,21 @@ hallway - 2700 - 1738
 Outpatient Psych - 2773 - 2100
 hallway - 2771 - 2072
 
-intersection - 2521 - 1140
-intersection - 2615 - 1142
-intersection - 2519 - 1332
-intersection - 2616 - 1336
-intersection - 2617 - 1361
-intersection - 2697 - 1364
-intersection - 2700 - 2071
-intersection - 2469 - 2067
+
+
+intersection21 - 2472 - 2070
+intersection22 - 2708 - 2070
+intersection23 - 2700 - 1364
+intersection24 - 2618 - 1364
+intersection25 - 2618 - 1334
+intersection26 - 2518 - 1334
+intersection27 - 2518 - 1276
+intersection28 - 2518 - 1177
+intersection29 - 2518 - 1145
+intersection210 - 2618 - 1145
+intersection211 - 2618 - 1334
+
+
 
 
 
