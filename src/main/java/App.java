@@ -17,6 +17,7 @@ public class App extends Application {
         Parent root = FXMLLoader.load(mainView);
         primaryStage.setTitle("Faulkner Kiosk");
         primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
     }
