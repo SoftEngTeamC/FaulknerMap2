@@ -1,10 +1,13 @@
 package controller;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
@@ -28,8 +32,13 @@ import java.util.UUID;
 
 public class MainController{
     //ImageView Objects
+
     @FXML
-    private ImageView FirstFloorImage;
+    private ScrollPane FirstFloorScrollPane;
+    @FXML
+    private AnchorPane FirstFloorTabAnchorPane;
+    @FXML
+    private Slider FirstFloorSlider;
     @FXML
     private ImageView SecondFloorImage;
     @FXML
@@ -60,7 +69,20 @@ public class MainController{
     //INTIALIZE
     public void initialize() {
         //the bind function locks an element property to another elements property
-        FirstFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FirstFloorImageView = new ImageView();
+        Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
+        FirstFloorImageView.setImage(FirstFloorMapPic);
+        FirstFloorImageView.setPreserveRatio(true);
+        FirstFloorScrollPane.setContent(FirstFloorImageView);
+        FirstFloorScrollPane.setPannable(true);
+        FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        //Slider FirstFloorSlider = new Slider();
+        //FirstFloorSlider.setOrientation(Orientation.VERTICAL);
+
+
         SecondFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
         ThirdFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FourthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
@@ -68,7 +90,29 @@ public class MainController{
         SixthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
 
-//        PopulateSearchResults(null);
+        FirstFloorSlider.setMax(FirstFloorMapPic.getWidth());
+        FirstFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        //FirstFloorImageView.fitWidthProperty().bind(FirstFloorSlider.valueProperty());
+        FirstFloorSlider.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+                System.out.println(FirstFloorSlider.getValue());
+                FirstFloorImageView.setFitWidth(FirstFloorSlider.getValue());
+                System.out.println("arg0: "+arg0); //entire new object
+                System.out.println("arg1: "+arg1); //old value
+                System.out.println("arg2: "+arg2); //new value
+            }
+        });
+        FirstFloorScrollPane.vvalueProperty().addListener(new ChangeListener(){
+           @Override
+           public void changed(ObservableValue arg0, Object arg1, Object arg2){
+               System.out.println(FirstFloorScrollPane.getVvalue());
+               //arg1 = old position
+               //FirstFloorScrollPane.setVvalue();
+           }
+        });
+
+        PopulateSearchResults(null);
     }
 
 
@@ -137,6 +181,7 @@ public class MainController{
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results){
+
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
@@ -178,7 +223,11 @@ public class MainController{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-        //DisplayInformation.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+HP.getLocation());
+        String offices = "Offices:\n";
+        for(Node n : HP.getOffice()){
+            offices = offices + n.getName() + "\n";
+        }
+        DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
     }
 
@@ -196,6 +245,10 @@ public class MainController{
 
     // EVENT HANDLERS
 
+    public void handleFirstFloorZoomSlider(){
+        System.out.println(FirstFloorSlider.getValue());
+    }
+
 
 
     //This function is called when the user clicks on a Search Result.
@@ -204,7 +257,7 @@ public class MainController{
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
-        FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
+        //FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
     }
 
     /**
