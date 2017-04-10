@@ -64,16 +64,16 @@ public class DirectoryEditorController {
     @FXML
     public void editPersonBtnPressed() throws Exception {
         // get the current hospital professional that is selected in the list
-        String selectedName = searchList.getSelectionModel().getSelectedItem();
+       // String selectedName = searchList.getSelectionModel().getSelectedItem();
 //        HospitalProfessional selectedPerson = HospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
 
-        // pass it to the next screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
-        Stage stage = new Stage();
-        stage.setScene(new Scene((Pane)loader.load()));
-        EditPersonController controller = loader.<EditPersonController>getController();
-//        controller.setSelectedUser(selectedPerson);
-        stage.show();
+//        // pass it to the next screen
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
+//        Stage stage = new Stage();
+//        stage.setScene(new Scene((Pane)loader.load()));
+//        EditPersonController controller = loader.<EditPersonController>getController();
+////        controller.setSelectedUser(selectedPerson);
+//        stage.show();
 
     }
 
@@ -101,16 +101,16 @@ public class DirectoryEditorController {
 //     * <TODO> query the database and populate list with actual results </TODO>
 //     */
 //    @FXML
-//    public void searchFieldEntered() {
-//
+    public void searchFieldEntered() {
+
 //        // populate the list with the database
 //        ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
 //        ArrayList<String> nameList = new ArrayList<String>();
 //        personList = HospitalProfessionalsHelper.getHospitalProfessionals(null);
 //        for (HospitalProfessional aPersonList : personList) {
 //            nameList.add(aPersonList.getName());
-//
-//        }
+
+        }
 //
 //        // load into the list
 //        ObservableList<String> oList = FXCollections.observableArrayList(nameList);

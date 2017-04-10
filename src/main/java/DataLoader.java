@@ -40,6 +40,7 @@ public class DataLoader {
             loadService(emf, "data/floor6/services.tsv");
             loadService(emf, "data/floor7/services.tsv");
 
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -143,6 +144,7 @@ public class DataLoader {
                 HospitalService hs = new HospitalService(nodes, name);
 
                 serviceService.persist(new HospitalService(nodes, name));
+
 
             }
         }
