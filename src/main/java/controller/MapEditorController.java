@@ -89,7 +89,6 @@ public class MapEditorController {
     public void initialize(){
 
         // Set the image view to populate the image
-        System.out.println("we're in this");
         floor4Image = new Image("file:../Resources/floor4.png");
         //floor4Image.widthProperty().bind(anchorPane.widthProperty());
         imageView = new ImageView(floor4Image);
@@ -112,7 +111,7 @@ public class MapEditorController {
     public void back(){
         try {
             Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("view/AdminToolMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
             stage.setTitle("Directory Editor");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -128,7 +127,7 @@ public class MapEditorController {
     public void logout(){
         try {
             Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
             stage.setTitle("Main");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -143,7 +142,7 @@ public class MapEditorController {
      * remove node tab: search button event handler
      *
      */
-//    public void removeNode_searchBtnPressed(){
+    public void removeNode_searchBtnPressed(){
 //        try {
 //            String searchField = removeNode_searchField.getText();
 //            System.out.println("searchField is: " + searchField);
@@ -173,14 +172,14 @@ public class MapEditorController {
 //            System.out.println("Searching Error");
 //            E.printStackTrace();
 //        }
-//    }
+    }
 //
 //    /**
 //     * remove node tab: remove button event handler
 //     *
 //     */
-//    public void removeNode_removeBtnPressed(){
-//
+    public void removeNode_removeBtnPressed(){
+
 //        String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
 //        System.out.println(selectedItem);
 //        Node selectNode = NodesHelper.getNodeByName(selectedItem);
@@ -191,9 +190,9 @@ public class MapEditorController {
 //        ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
 //        System.out.println("We got to this point in the code");
 //        removeNode_searchList.setItems(OList);
-//
-//
-//    }
+
+
+    }
 //
 //    // Methods for the add node tab
 //
@@ -203,27 +202,27 @@ public class MapEditorController {
 ////     * add node tab: remove button event handler
 ////     *
 ////     */
-////    public void addNode_connectToNodeBtnPressed(){
-////
-////    }
+    public void addNode_connectToNodeBtnPressed(){
+
+    }
 //
 //
-//    public void addNode_createNodeBtnPressed(){
-//
+    public void addNode_createNodeBtnPressed(){
+
 //        float x = Float.parseFloat(addNode_xPos.getText());
 //        float y = Float.parseFloat(addNode_yPos.getText());
 //        Node newNode = new Node(null, new Coordinate(x, y, 4), addNode_nameField.getText());
 //        nodesHelper.addNode(newNode);
-//    }
+    }
 //
 //    // methods for the edit node tab
 //
-//    public void editNode_searchBtnPressed(){
+    public void editNode_searchBtnPressed(){
 //        List<Node> list = NodesHelper.getNodes(null);
 //        ArrayList<String> nameList = new ArrayList<>();
 //        for(Node node: list){
 //            nameList.add(node.getName());
-//        }
+        }
 //
 //        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 //
@@ -248,8 +247,8 @@ public class MapEditorController {
 //    }
 //
 //
-//    public void editNode_removeNeighborBtnPressed(){
-//
+    public void editNode_removeNeighborBtnPressed(){
+
 //        ArrayList<Edge> currEdges = edgesHelper.getEdgeByNode(currNodes[0], currNodes[1]);
 //
 //        for(Edge curr : currEdges){
@@ -263,12 +262,12 @@ public class MapEditorController {
 //        }
 //        ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
 //        editNode_neighborsList.setItems(nList);
+
+    }
 //
-//    }
 //
-//
-//    public void editNode_addBtnPressed(){
-//
+    public void editNode_addBtnPressed(){
+
 //        Node newNode = NodesHelper.getNodeByName(editNode_addField.getText());
 //        if (newNode != null){
 //            currNodes[0].addEdge(newNode);
@@ -281,8 +280,8 @@ public class MapEditorController {
 //            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
 //            editNode_neighborsList.setItems(nList);
 //        }
-//
-//    }
+
+    }
 
 
     public void imageClicked(){

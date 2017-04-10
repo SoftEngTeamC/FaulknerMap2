@@ -46,7 +46,7 @@ public class AddPersonController {
         // goto genres screen
         try {
             Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("view/DirectoryEditor.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/DirectoryEditor.fxml"));
             stage.setTitle("Directory Editor");
             stage.setScene(new Scene(root, 600, 400));
             stage.show();
@@ -74,8 +74,8 @@ public class AddPersonController {
     /**
      * handler for the add person button. Adds to the hospital professional database if possible.
      */
-//    public void setAddPersonBtnPressed() {
-//        // check if fields are entered
+    public void setAddPersonBtnPressed() {
+        // check if fields are entered
 //        if (nameField.getText().isEmpty() || locationField.getText().isEmpty()) {
 //            // Display error text
 //            warningText.setText("Not enough information added");
@@ -104,11 +104,11 @@ public class AddPersonController {
 //            //professionalHelper.printAllProfessionalRows();
 //
 //        }
-//
-//        // check if not already in existence??
-//
-//
-//    }
+
+        // check if not already in existence??
+
+
+    }
 
 
 }

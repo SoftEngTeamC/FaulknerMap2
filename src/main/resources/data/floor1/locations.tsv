@@ -1,15 +1,4 @@
 name	x	y
-Audiology	1st Floor
-Cardiac Rehabilitation	1st Floor
-Laboratory	1st Floor
-Special Testing	1st Floor
-Information	1st and 3rd Floors
-Admitting/Registration	1st Floor
-Atrium Café	1st Floor
-Patient Financial Services	1st Floor
-Taiclet Family Center	1st Floor
-Valet Parking	1st Floor
-
 GI Endoscopy - 2497 - 1807
 hallway10 - 2515 - 1805
 
@@ -25,16 +14,22 @@ hallway13 - 2516 - 1409
 Blood Draw - 2373 - 1387
 hallway14 - 2372 - 1374
 
-Patient Registration - 2269 - 1314
+Patient Registration - 2325 - 1281
 hallway15 - 2261 - 1374
 
 Emergency Department - 2106 - 1447
 hallway16 - 2151 - 1375
 
-intersection - 2200 - 1689
-intersection - 2200 - 1690
-intersection - 2200 - 1683
-intersection - 2662 - 1683
-intersection - 2662 - 1690
-intersection - 2200 - 1861
-intersection - 2521 - 1092
+Cafe - 2304 - 1112
+
+Family Center - 2208 - 1341
+
+Info - 2576 - 1107
+
+intersection11 - 2200 - 1689
+intersection12 - 2200 - 1690
+intersection13 - 2200 - 1683
+intersection14 - 2662 - 1683
+intersection15 - 2662 - 1690
+intersection16 - 2200 - 1861
+intersection17 - 2521 - 1092
