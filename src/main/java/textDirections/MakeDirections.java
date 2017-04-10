@@ -31,10 +31,10 @@ public class MakeDirections {
             angleShift = getAngleShift(currentAngle, nextAngle);
             direction = getDirection(currentAngle);
 
-            if(direction == "horizontal") {
+            if(direction.equals("horizontal")) {
                 totalDistance += xDistance(currentNode, nextNode);
             }
-            else if(direction == "vertical") {
+            else if(direction.equals("vertical")) {
                 totalDistance += yDistance(currentNode, nextNode);
             }
             else {
@@ -67,7 +67,7 @@ public class MakeDirections {
                 }
             }
         }
-        if(output == "") {
+        if(output.equals("")) {
             output.concat("Move forward " + totalDistance + " pixels");
         }
         return output;
