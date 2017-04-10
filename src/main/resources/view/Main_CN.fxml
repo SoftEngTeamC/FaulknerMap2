@@ -24,9 +24,9 @@
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox>
             <children>
-                <TextField fx:id="SearchBar" layoutX="6.0" layoutY="4.0" onKeyReleased="#SearchBarTextField_keyReleased" prefHeight="25.0" prefWidth="227.0" promptText="搜索" />
-                <ListView fx:id="SearchResults" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
-                <TextArea fx:id="DisplayInformation" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="信息将在这里显示&#10;这里将有更多信息&#10;" />
+                <TextField fx:id="SearchBarTextField" layoutX="6.0" layoutY="4.0" onKeyReleased="#SearchBarTextField_keyReleased" prefHeight="25.0" prefWidth="227.0"  promptText="搜索" />
+                <ListView fx:id="SearchResultsListView" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
+                <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="信息将在这里显示&#10;这里将有更多信息&#10;" />
                 <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                     <children>
                         <Button fx:id="PanicButton" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="救命" />

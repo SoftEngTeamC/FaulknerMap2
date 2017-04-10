@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class MainController{
+public class MainController {
     //ImageView Objects
     @FXML
     private ImageView FirstFloorImage;
@@ -58,6 +58,8 @@ public class MainController{
     @FXML
     private MenuButton languageMenuButton;
 
+    private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+
 
     //INTIALIZE
     public void initialize() {
@@ -70,6 +72,10 @@ public class MainController{
         SixthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
 
+        //default is english
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 1;
+
 //        PopulateSearchResults(null);
     }
 
@@ -77,7 +83,7 @@ public class MainController{
     //PROXY FUNCTIONS
 
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-    public void DisplayMap(List<MapNode> nodes){
+    public void DisplayMap(List<MapNode> nodes) {
         //MapAnchor.getChildren().clear();
         ImageView mapPic = new ImageView();
         Image floorImage = new Image("images/floor4.png");
@@ -91,13 +97,13 @@ public class MainController{
             System.out.println("There is no path.");
             return;
         }
-       for(int i=0;i<nodes.size();i++){
-           MakeCircle(nodes.get(i).getLocation().getX(),nodes.get(i).getLocation().getY());
-            if(i>0){
-                MakeLine(nodes.get(i-1).getLocation().getX(),
-                         nodes.get(i-1).getLocation().getY(),
-                         nodes.get(i).getLocation().getX(),
-                         nodes.get(i).getLocation().getY());
+        for (int i = 0; i < nodes.size(); i++) {
+            MakeCircle(nodes.get(i).getLocation().getX(), nodes.get(i).getLocation().getY());
+            if (i > 0) {
+                MakeLine(nodes.get(i - 1).getLocation().getX(),
+                        nodes.get(i - 1).getLocation().getY(),
+                        nodes.get(i).getLocation().getX(),
+                        nodes.get(i).getLocation().getY());
             }
         }
     }
@@ -138,16 +144,16 @@ public class MainController{
     }
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
-    public void UpdateSearchResults(LinkedList<String> results){
+    public void UpdateSearchResults(LinkedList<String> results) {
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
     }
 
-    public void FindandDisplayPath(HospitalProfessional HP){
+    public void FindandDisplayPath(HospitalProfessional HP) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
-        MapNode start = map.getNode(NS.findNodeByName("UROLOGY").getId());
+        MapNode start = map.getNode(NS.findNodeByName("Radiology").getId());
         MapNode dest = map.getNode(HP.getId());
         List<MapNode> path = PathFinder.shortestPath(start, dest);
         DisplayMap(path);
@@ -157,19 +163,17 @@ public class MainController{
         System.out.println("Populate Search String");
         HospitalProfessionalService HS = new HospitalProfessionalService();
         List<HospitalProfessional> Professionals = HS.getAllProfessionals();
-        System.out.println(Professionals);
+        System.out.println(Professionals.size());
         ObservableList<String> names = FXCollections.observableArrayList();
-        if(S == null)
-        {
+        if (S == null) {
             System.out.println("null case");
-            for(HospitalProfessional HP : Professionals){
+            for (HospitalProfessional HP : Professionals) {
                 names.add(HP.getName());
             }
             SearchResultsListView.setItems(names);
-        }
-        else{
-            for(HospitalProfessional HP : Professionals){
-                if(HP.getName().contains(S)) {
+        } else {
+            for (HospitalProfessional HP : Professionals) {
+                if (HP.getName().contains(S)) {
                     names.add(HP.getName());
                 }
             }
@@ -179,7 +183,7 @@ public class MainController{
 
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
-    public void PopulateInformationDisplay(HospitalProfessional HP){
+    public void PopulateInformationDisplay(HospitalProfessional HP) {
         //DisplayInformation.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+HP.getLocation());
         System.out.println("trying to populate information area");
     }
@@ -199,10 +203,9 @@ public class MainController{
     // EVENT HANDLERS
 
 
-
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
-    public void handleClickedOnSearchResult(){
+    public void handleClickedOnSearchResult() {
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
@@ -211,26 +214,75 @@ public class MainController{
 
     /**
      * @author JVB
-     *
-     *  Method is called when the search bar has a key pressed.
-     *  Populates the search ListView with search results from what's in the textfield
-     *
+     * <p>
+     * Method is called when the search bar has a key pressed.
+     * Populates the search ListView with search results from what's in the textfield
      */
-    public void SearchBarTextField_keyReleased(){
+    public void SearchBarTextField_keyReleased() {
         System.out.println("Searching");
         System.out.println(SearchBarTextField.getText().toString());
         PopulateSearchResults(SearchBarTextField.getText().toString());
     }
 
     //function for Help Button
-    public void HandleHelpButton(){
+    public void HandleHelpButton() {
         System.out.println("HELP");
-        DisplayInformationTextArea.setText("To contact a hospital worker\nplease call 774-278-8517");
+        System.out.println(language);
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        //TODO: change once we set what text will actually be shown here
+        switch (language) {
+            case 1: //english
+                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                        "please call 774-278-8517");
+                break;
+            case 2: //spanish
+                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                        "please call 774-278-8517" +
+                        "\n WILL CHANGE TO SPANISH SOON");
+                break;
+            case 3: //chinese
+                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                        "please call 774-278-8517" +
+                        "\n WILL CHANGE TO CHINESE SOON");
+                break;
+            case 4: //french
+                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                        "please call 774-278-8517" +
+                        "\n WILL CHANGE TO FRENCH SOON");
+                break;
+            default:
+                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                        "please call 774-278-8517");
+                language = 1;
+        }
     }
 
     //function for Panic Button
-    public void HandlePanicButton(){
+    public void HandlePanicButton() {
+        System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        //TODO: change once we set what text will actually be shown here
+        switch (language) {
+            case 1: //english
+                DisplayInformationTextArea.setText("Don't Panic");
+                break;
+            case 2: //spanish
+                DisplayInformationTextArea.setText("Don't Panic" +
+                        "\n WILL CHANGE TO SPANISH SOON");
+                break;
+            case 3: //chinese
+                DisplayInformationTextArea.setText("Don't Panic" +
+                        "\n WILL CHANGE TO CHINESE SOON");
+                break;
+            case 4: //french
+                DisplayInformationTextArea.setText("Don't Panic" +
+                        "\n WILL CHANGE TO FRENCH SOON");
+                break;
+            default:
+                DisplayInformationTextArea.setText("Don't Panic");
+                language = 1;
+        }
     }
 
     @FXML
@@ -241,6 +293,8 @@ public class MainController{
         stage.setScene(new Scene(root, 600, 400));
         stage.setMaximized(true);
         stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 1;
     }
 
     @FXML
@@ -251,6 +305,8 @@ public class MainController{
         stage.setScene(new Scene(root, 600, 400));
         stage.setMaximized(true);
         stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 2;
     }
 
     @FXML
@@ -261,6 +317,8 @@ public class MainController{
         stage.setScene(new Scene(root, 600, 400));
         stage.setMaximized(true);
         stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 3;
     }
 
     @FXML
@@ -271,6 +329,8 @@ public class MainController{
         stage.setScene(new Scene(root, 600, 400));
         stage.setMaximized(true);
         stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 4;
     }
 
 }

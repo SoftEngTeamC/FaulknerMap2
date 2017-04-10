@@ -142,7 +142,7 @@ public class DataLoader {
 
                 List<Node> nodes = new ArrayList<>();
                 nodes.add(nodeService.findNodeByName(split[1]));
-                System.out.println(split[1]);
+            //    System.out.println(split[1]);
 
                 HospitalService hs = new HospitalService(nodes, name);
 
