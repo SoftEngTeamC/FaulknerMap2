@@ -36,7 +36,7 @@
         </VBox>
         <TabPane fx:id="FloorViewsTabPane" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Floor 1">
+                <Tab text="Étage 1">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -49,7 +49,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 2">
+                <Tab text="Étage 2">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -62,7 +62,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 3">
+                <Tab text="Étage 3">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -75,7 +75,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 4">
+                <Tab text="Étage 4">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -88,7 +88,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 5">
+                <Tab text="Étage 5">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -101,7 +101,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 6">
+                <Tab text="Étage 6">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -114,7 +114,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 7">
+                <Tab text="Étage 7">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
