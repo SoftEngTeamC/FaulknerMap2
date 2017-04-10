@@ -5,6 +5,7 @@ import model.Edge;
 import model.Node;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Set;
@@ -29,10 +30,14 @@ public class NodeService  extends AbstractService<Node> {
 
     public Node findNodeByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return (Node) manager.createQuery(
-                "SELECT n FROM Node n WHERE n.name LIKE :name")
-                .setParameter("name", name)
-                .setMaxResults(1).getSingleResult();
+        try {
+            return (Node) manager.createQuery(
+                    "SELECT n FROM Node n WHERE n.name LIKE :name")
+                    .setParameter("name", name)
+                    .setMaxResults(1).getSingleResult();
+        } catch (NoResultException e){
+            return null;
+        }
     }
 
     public List<Node> findNodeIntersectionByFloor(int floor) {

@@ -5,6 +5,7 @@ import model.HospitalProfessional;
 import model.HospitalService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -17,10 +18,14 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
 
     public HospitalService findHospitalServiceByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
+        try {
             return (HospitalService) manager.createQuery(
                     "SELECT s FROM HospitalService s WHERE s.name LIKE :name")
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List<HospitalService> getAllServices() {

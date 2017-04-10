@@ -16,7 +16,7 @@ public class DataLoader {
     public static void main(String[] args) {
         EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
-            loadLocations(emf, "data/belkinHouse/locations.tsv");
+       //     loadLocations(emf, "data/belkinHouse/locations.tsv");
             loadLocations(emf, "data/floor1/locations.tsv");
             loadLocations(emf, "data/floor2/locations.tsv");
             loadLocations(emf, "data/floor3/locations.tsv");
@@ -25,13 +25,13 @@ public class DataLoader {
             loadLocations(emf, "data/floor6/locations.tsv");
             loadLocations(emf, "data/floor7/locations.tsv");
 
-            loadPeople(emf, "data/belkinHouse/people.tsv");
+        //    loadPeople(emf, "data/belkinHouse/people.tsv");
             loadPeople(emf, "data/floor2/people.tsv");
             loadPeople(emf, "data/floor3/people.tsv");
             loadPeople(emf, "data/floor4/people.tsv");
             loadPeople(emf, "data/floor5/people.tsv");
 
-            loadService(emf, "data/belkinHouse/services.tsv");
+        //    loadService(emf, "data/belkinHouse/services.tsv");
             loadService(emf, "data/floor1/services.tsv");
             loadService(emf, "data/floor2/services.tsv");
             loadService(emf, "data/floor3/services.tsv");
@@ -107,7 +107,9 @@ public class DataLoader {
                 String name =split[0];
                 String title = split[1];
 
-                List<Node> nodes = new ArrayList<>();//= nodeService.findNodeByName(split[2]);
+                List<Node> nodes = new ArrayList<>();
+                //System.out.println(split[2]);
+                nodes.add(nodeService.findNodeByName(split[2]));
                 HospitalProfessional hp = new HospitalProfessional(name, title, nodes);
 
                 professionalService.persist(new HospitalProfessional(name, title, nodes));
@@ -138,9 +140,10 @@ public class DataLoader {
 
                 String name =split[0];
 
-
                 List<Node> nodes = new ArrayList<>();
-               //= nodeService.findNodeByName(split[2]);
+                nodes.add(nodeService.findNodeByName(split[1]));
+                System.out.println(split[1]);
+
                 HospitalService hs = new HospitalService(nodes, name);
 
                 serviceService.persist(new HospitalService(nodes, name));
