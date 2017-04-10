@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -17,6 +18,16 @@ public class HoursEditorController {
     private Button logoutBtn;
     @FXML
     private Button backBtn;
+    @FXML
+    private Button submitbtn;
+    @FXML
+    private TextField morninghrs1;
+    @FXML
+    private TextField morninghrs2;
+    @FXML
+    private TextField eveninghrs1;
+    @FXML
+    private TextField eveninghrs2;
 
     @FXML
     public void back() throws Exception {
@@ -36,8 +47,10 @@ public class HoursEditorController {
         stage.show();
     }
     @FXML
-    public void update(){}
+    public void SubmitChanges(){
+
+    }
 
 
-    public void saveHours(){}
+
 }
