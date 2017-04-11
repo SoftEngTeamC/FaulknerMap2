@@ -119,11 +119,9 @@ public class MapEditorController extends Controller{
     }
 
     // Methods for the remove node tab
-
     /**
-     * @throws Exception
      * @author Samuel Coache
-     * <p>
+     *
      * event handler for RemoveNode when the search button is pressed
      *
      */
@@ -162,7 +160,6 @@ public class MapEditorController extends Controller{
     }
 
     /**
-     *
      * @author Samuel Coache
      * <p>
      * remove node tab: remove button event handler
@@ -174,34 +171,37 @@ public class MapEditorController extends Controller{
         System.out.println(selectedItem);
         Node selectNode = (NS.findNodeByName(selectedItem));
         this.searchList.remove(selectNode.getName());
-        NS.deleteNode(selectNode);
+        NS.remove(selectNode);
 
         //repopulate the search list
         ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
         removeNode_searchList.setItems(OList);
 
     }
-//
-//    // Methods for the add node tab
-//
-////    /**
-////     * @author Paul
-////     *
-////     * add node tab: remove button event handler
-////     *
-////     */
+
+    /**
+     * @author Samuel Coache
+     *
+     * add node tab: remove button event handler
+     *
+     */
     public void addNode_connectToNodeBtnPressed(){
 
     }
 
-
+    /**
+     * @author Samuel Coache
+     *
+     * add node tab: remove button event handler
+     *
+     */
     public void addNode_createNodeBtnPressed(){
-
 //        float x = Float.parseFloat(addNode_xPos.getText());
 //        float y = Float.parseFloat(addNode_yPos.getText());
 //        Node newNode = new Node(null, new Coordinate(x, y, 4), addNode_nameField.getText());
 //        nodesHelper.addNode(newNode);
     }
+
 //
 //    // methods for the edit node tab
 //
