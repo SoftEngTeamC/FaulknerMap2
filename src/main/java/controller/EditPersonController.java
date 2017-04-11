@@ -243,7 +243,6 @@ public class EditPersonController extends Controller{
 
         // populate listview
         locationsList.setItems(FXCollections.observableList(nameList));
-        locationsList.refresh();
 
     }
 
