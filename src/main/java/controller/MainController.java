@@ -1,22 +1,15 @@
 package controller;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
 import model.Node;
@@ -25,11 +18,12 @@ import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import java.util.UUID;
 public class MainController extends Controller{
+
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -451,6 +445,41 @@ public class MainController extends Controller{
         language = 4;
     }
 
+    @FXML
+    public void toItalian() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_IT.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 5;
+    }
+
+    @FXML
+    public void toJapanese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_JP.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 6;
+    }
+
+    @FXML
+    public void toPortuguese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_PG.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 7;
+    }
 }
 
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
