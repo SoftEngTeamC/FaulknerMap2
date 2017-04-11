@@ -2,18 +2,18 @@ package model;
 
 
 public class Hours {
-    private int hours1;
-    private int minutes1;
-    private String ampm1;
-    private int hours2;
-    private int minutes2;
-    private String ampm2;
-    private int hours3;
-    private int minutes3;
-    private String ampm3;
-    private int hours4;
-    private int minutes4;
-    private String ampm4;
+    public int hours1;
+    public int minutes1;
+    public String ampm1;
+    public int hours2;
+    public int minutes2;
+    public String ampm2;
+    public int hours3;
+    public int minutes3;
+    public String ampm3;
+    public int hours4;
+    public int minutes4;
+    public String ampm4;
 
     public Hours(int hours1, int hours2, int hours3, int hours4, int minutes1, int minutes2, int minutes3, int minutes4, String ampm1, String ampm2, String ampm3, String ampm4){
         this.hours1=hours1;
