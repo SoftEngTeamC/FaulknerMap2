@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
-import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
@@ -20,8 +19,6 @@ import service.NodeService;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import java.util.UUID;
 public class MainController extends Controller{
 
     //ImageView Objects
@@ -191,7 +188,7 @@ public class MainController extends Controller{
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
         HospitalProfessionalService hs = new HospitalProfessionalService();
-        String offices = "\nOffices:\n" + hs.getOffice(HP.getId()).getName();
+        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffice().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
     }
