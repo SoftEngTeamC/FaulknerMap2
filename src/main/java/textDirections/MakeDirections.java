@@ -1,6 +1,6 @@
 package textDirections;
 
-import org.junit.Test;
+//import org.junit.Test;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.NodeService;
@@ -126,17 +126,17 @@ public class MakeDirections {
         }
     }
 
-    @Test
-    public void printDirectionsTest1() {
-        Map map = new Map(NS.getAllNodes());
-        PathFinder pf = new PathFinder();
-        Node testNode1 = NS.findNodeByName("Day Surgery");
-        Node testNode2 = NS.findNodeByName("Blood Draw");
-
-        MapNode mNode1 = map.getNode(testNode1.getId());
-        MapNode mNode2 = map.getNode(testNode2.getId());
-
-        String directions = getText(pf.shortestPath(mNode1, mNode2));
-        System.out.print(directions);
-    }
+//    @Test
+//    public void printDirectionsTest1() {
+//        Map map = new Map(NS.getAllNodes());
+//        PathFinder pf = new PathFinder();
+//        Node testNode1 = NS.findNodeByName("Day Surgery");
+//        Node testNode2 = NS.findNodeByName("Blood Draw");
+//
+//        MapNode mNode1 = map.getNode(testNode1.getId());
+//        MapNode mNode2 = map.getNode(testNode2.getId());
+//
+//        String directions = getText(pf.shortestPath(mNode1, mNode2));
+//        System.out.print(directions);
+//    }
 }
