@@ -193,6 +193,7 @@ public class DataLoader {
                 }
 
                 edgeService.persist(new Edge(start, end, 0));
+                edgeService.persist(new Edge(end, start, 0));
             }
         }
     }
@@ -203,8 +204,9 @@ public class DataLoader {
         for(int i = 1; i < 8; i ++){
             List<Node> floor = nodeService.findNodeIntersectionByFloor(i);
             for(int j = 0; j < floor.size()-1; j ++){
-                Edge tempEdge = new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1)));
-                edgeService.persist(tempEdge);
+                edgeService.persist(new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1))));
+                edgeService.persist(new Edge(floor.get(j+1), floor.get(j), getEdgeLength(floor.get(j+1), floor.get(j))));
+
             }
         }
     }
