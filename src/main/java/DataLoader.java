@@ -1,9 +1,6 @@
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
-import model.Coordinate;
-import model.HospitalProfessional;
-import model.HospitalService;
-import model.Node;
+import model.*;
 import service.*;
 
 import javax.persistence.EntityManagerFactory;
@@ -40,6 +37,14 @@ public class DataLoader {
             loadService(emf, "data/floor6/services.tsv");
             loadService(emf, "data/floor7/services.tsv");
 
+           // loadEdges(emf, "data/belkinHouse/edges.tsv");
+            loadEdges(emf, "data/floor1/edges.tsv");
+            loadEdges(emf, "data/floor2/edges.tsv");
+            loadEdges(emf, "data/floor3/edges.tsv");
+            loadEdges(emf, "data/floor4/edges.tsv");
+            loadEdges(emf, "data/floor5/edges.tsv");
+            loadEdges(emf, "data/floor6/edges.tsv");
+            loadEdges(emf, "data/floor7/edges.tsv");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -149,6 +154,43 @@ public class DataLoader {
                 serviceService.persist(new HospitalService(nodes, name));
 
 
+            }
+        }
+    }
+
+    private static void loadEdges(EntityManagerFactory emf, String locationsFilePath) throws FileNotFoundException {
+        EdgeService edgeService = new EdgeService();
+        NodeService nodeService = new NodeService();
+
+        // Create all the edges
+        TsvParserSettings parserSettings = new TsvParserSettings();
+        TsvParser parser = new TsvParser(parserSettings);
+
+        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
+        for (String[] row : allRows.subList(1, allRows.size())) {
+            if (Arrays.asList(row).contains(null)) continue;  // Test for blank line or value
+
+            String[] split = row[0].split("\\s+\\-\\s+");
+            if(split.length < 2){
+                System.out.print("Could not add ");
+                for(int i = 0; i < split.length; i++){
+                    System.out.print(split[i]);
+                }
+                System.out.println("");
+            } else {
+
+                Node start = nodeService.findNodeByName(split[0]);
+                Node end = nodeService.findNodeByName(split[1]);
+
+                if(start == null){
+                    System.out.println("could not add edge " + split[0]);
+                }
+
+                if(end == null){
+                    System.out.println("could not add edge " + split[1]);
+                }
+
+                edgeService.persist(new Edge(start, end, 0));
             }
         }
     }

@@ -9,13 +9,15 @@ import java.util.List;
 @Entity
 @Table(name = "PROFESSIONALS")
 public class HospitalProfessional {
+    @Id
+    @Column(name="ID")
     private Long id;
 
     private String name;
 
     @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
-            name="SERVICES_NODES",
+            name="PROFESSIONALS_NODES",
             joinColumns=@JoinColumn(name="PROFESSIONALS_ID", referencedColumnName="ID"),
             inverseJoinColumns=@JoinColumn(name="NODES_ID", referencedColumnName="ID"))
     private List<Node> offices;
