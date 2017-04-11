@@ -1,42 +1,45 @@
 name	x	y
 4A - 2486 - 11027
-hallway - 2487 - 1141
+hallway40 - 2487 - 1141
 
 4B - 2563 - 1129
-hallway - 2561 - 1140
+hallway41 - 2561 - 1140
 
 4C - 2634 - 1195
-hallway - 2623 - 1197
+hallway42 - 2623 - 1197
 
 4D - 2634 - 1291
-hallway - 2621 - 1289
+hallway43 - 2621 - 1289
 
 4F - 2531 - 1387
-hallway - 2516 - 1389
+hallway44 - 2516 - 1389
 
 4G - 2500 - 1497
-hallway - 2515 - 1467
+hallway45 - 2515 - 1467
 
 4H - 2531 - 1498
-hallway - 2517 - 1500
+hallway46 - 2517 - 1500
 
 4I - 2535 - 1623
-hallway - 2516 - 1625
+hallway47 - 2516 - 1625
 
 4J - 2495 - 1855
-hallway - 2518 - 1854
+hallway48 - 2518 - 1854
 
 4N - 1855 - 2070
-hallway - 1846 - 2075
+hallway49 - 1846 - 2075
 
 4S - 2848 - 2092
-hallway - 2703 - 2073
+hallway410 - 2703 - 2073
 
 Atrium Elevators - 2478 - 1268
+hallway411 - 2515 - 1216
 
 Hillside Elevators 1 - 2443 - 2000
+hallway412 - 2514 - 2010
 
 Hillside Elevators 2 - 2590 - 2000
+hallway413 - 2514 - 2010
 
 intersection41 - 2517 - 1141
 intersection42 - 2517 - 1338

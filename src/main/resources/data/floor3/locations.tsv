@@ -1,30 +1,39 @@
 name	x	y
 3A - 2513 - 1126
-hallway - 2517 - 1144
+hallway30 - 2517 - 1144
 
 3B - 2581 - 1134
-hallway - 2584 - 1151
+hallway31 - 2584 - 1151
 
 3C - 2622 - 1153
-hallway - 2619 - 1163
+hallway32 - 2619 - 1163
 
 Cafeteria - 2535 - 1645
+hallway33 - 2510 - 1645
 
 Chapel - 2391 - 2062
+hallway34 - 2475 - 2062
 
 Gift Shop - 2500 - 1837
+hallway35 - 2515 - 1837
 
 Auditorium - 2414 - 1577
+hallway36 - 2414 - 1551
 
 Patient Relations - 2432 - 1360
+hallway37 - 2470 - 1360
 
 Volunteer - 2642 - 2178
+hallway38 - 2540 - 2178
 
 Atrium Elevators - 2478 - 1268
+hallway39 - 2515 - 1216
 
 Hillside Elevators 1 - 2443 - 2000
+hallway310 - 2514 - 2010
 
 Hillside Elevators 2 - 2590 - 2000
+hallway311 - 2514 - 2010
 
 
 intersection31 - 2554 - 2166
