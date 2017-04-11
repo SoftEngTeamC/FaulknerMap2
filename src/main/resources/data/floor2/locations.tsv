@@ -1,18 +1,28 @@
 name	x	y
 2A - 2433 - 1171
-hallway - 2456 - 1165
+hallway20 - 2456 - 1165
 
 2B - 2629 - 1147
-hallway - 2614 - 1147
+hallway21 - 2614 - 1147
 
 Physical Therapy - 2715 - 1737
-hallway - 2700 - 1738
+hallway22 - 2700 - 1738
 
 Outpatient Psych - 2773 - 2100
-hallway - 2771 - 2072
+hallway23 - 2771 - 2072
 
 
 Inpatient Psych - 2807 - 2072
+hallway24 - 2772 - 2072
+
+Atrium Elevators - 2478 - 1268
+hallway25 - 2515 - 1216
+
+Hillside Elevators 1 - 2443 - 2000
+hallway26 - 2470 - 2010
+
+Hillside Elevators 2 - 2590 - 2000
+hallway27 - 2680 - 2010
 
 intersection20 - 2521 - 1140
 intersection21 - 2615 - 1142
@@ -22,5 +32,6 @@ intersection24 - 2617 - 1361
 intersection25 - 2697 - 1364
 intersection26 - 2700 - 2071
 intersection27 - 2469 - 2067
+intersection28 - 2685 - 2070
 
 

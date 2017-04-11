@@ -1,12 +1,11 @@
 package controller;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -14,24 +13,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
-import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
 import service.NodeService;
 import sun.plugin.javascript.navig.Anchor;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
-public class MainController {
+public class MainController extends Controller{
+
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -267,14 +260,18 @@ public class MainController {
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-        String offices = "Offices:\n";
-        System.out.println("num: " + HP.getOffice().size());
-        for(Node n : HP.getOffice()){
-            offices = offices + n.getName() + "\n";
-        }
+
+        HospitalProfessionalService hs = new HospitalProfessionalService();
+        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
-        System.out.println(offices);
+    }
+
+    //SCREEN CHANGING FUNCTIONS
+    @FXML
+    public void OpenAdminTool() throws Exception {
+        // goto genres screen
+        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
     }
 
     // EVENT HANDLERS
@@ -420,7 +417,7 @@ public class MainController {
         FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FourthFloorImageView = new ImageView();
-        Image FourthFloorMapPic = new Image("images/4_theFourthfloor.png");
+        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
         FourthFloorImageView.setImage(FourthFloorMapPic);
         FourthFloorImageView.setPreserveRatio(true);
         Group FourthFloorGroup = new Group();
@@ -436,7 +433,7 @@ public class MainController {
         FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FifthFloorImageView = new ImageView();
-        Image FifthFloorMapPic = new Image("images/5_theFifthfloor.png");
+        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
         FifthFloorImageView.setImage(FifthFloorMapPic);
         FifthFloorImageView.setPreserveRatio(true);
         Group FifthFloorGroup = new Group();
@@ -452,7 +449,7 @@ public class MainController {
         SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SixthFloorImageView = new ImageView();
-        Image SixthFloorMapPic = new Image("images/6_theSixthfloor.png");
+        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
         SixthFloorImageView.setImage(SixthFloorMapPic);
         SixthFloorImageView.setPreserveRatio(true);
         Group SixthFloorGroup = new Group();
@@ -468,7 +465,7 @@ public class MainController {
         SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SeventhFloorImageView = new ImageView();
-        Image SeventhFloorMapPic = new Image("images/7_theSeventhfloor.png");
+        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
         SeventhFloorImageView.setImage(SeventhFloorMapPic);
         SeventhFloorImageView.setPreserveRatio(true);
         Group SeventhFloorGroup = new Group();
@@ -542,6 +539,41 @@ public class MainController {
         language = 4;
     }
 
+    @FXML
+    public void toItalian() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_IT.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 5;
+    }
+
+    @FXML
+    public void toJapanese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_JP.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 6;
+    }
+
+    @FXML
+    public void toPortuguese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_PG.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 7;
+    }
 }
 
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
