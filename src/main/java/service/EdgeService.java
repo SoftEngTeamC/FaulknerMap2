@@ -19,9 +19,15 @@ public class EdgeService extends AbstractService<Edge> {
             List<Node> floor = ns.findNodeIntersectionByFloor(i);
             for(int j = 0; j < floor.size()-1; j ++){
                 Edge tempEdge = new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1)));
-                persist(tempEdge);
+                this.persist(tempEdge);
             }
         }
+    }
+
+    private static double getEdgeLength(Node from, Node end){
+        double yLen = from.getLocation().getY() - end.getLocation().getY();
+        double xLen = from.getLocation().getX() - end.getLocation().getX();
+        return Math.sqrt(yLen * yLen + xLen * xLen);
     }
 
     public List<Edge> getAllEdges() {
@@ -30,17 +36,4 @@ public class EdgeService extends AbstractService<Edge> {
                 .getResultList();
     }
 
-    public double getEdgeLength(Node from, Node end){
-        if(from.getLocation().getX() == end.getLocation().getX()){
-            return Math.abs(from.getLocation().getY()-end.getLocation().getY());
-        }
-        else if(from.getLocation().getY() == end.getLocation().getY()){
-            return Math.abs(from.getLocation().getX()-end.getLocation().getX());
-        }
-        else {
-            double yLen = Math.abs(from.getLocation().getY()-end.getLocation().getY());
-            double xLen = Math.abs(from.getLocation().getX()-end.getLocation().getX());
-            return Math.sqrt(yLen * yLen + xLen * xLen);
-        }
-    }
 }
