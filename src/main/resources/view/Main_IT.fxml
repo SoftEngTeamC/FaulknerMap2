@@ -19,28 +19,29 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.MenuButton?>
 
-<SplitPane dividerPositions="0.362876254180602" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane dividerPositions="0.362876254180602" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox>
             <children>
-                <TextField fx:id="SearchBarTextField" layoutX="6.0" layoutY="4.0" onKeyReleased="#SearchBarTextField_keyReleased" prefHeight="25.0" prefWidth="227.0" promptText="Recherche" />
-                <ListView fx:id="SearchResultsListView" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />                <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="C'est là l'information apparaît&#10;Ensuite, il y aura plus d'informations lorsque la recherche commence &#10;" />
+                <TextField fx:id="SearchBarTextField" layoutX="6.0" layoutY="4.0" onKeyReleased="#SearchBarTextField_keyReleased" prefHeight="25.0" prefWidth="227.0" promptText="Ricerca" />
+                <ListView fx:id="SearchResultsListView" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
+                <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="Questo è dove le informazioni va&#10;Ecco ulteriori informazioni&#10;" />
                 <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                     <children>
-                        <Button fx:id="PanicButton" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="Panique" />
+                        <Button fx:id="PanicButton" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="Panico" />
                         <Button fx:id="AdminToolButton" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Tool" />
-                        <Button fx:id="HelpButton" mnemonicParsing="false" onAction="#HandleHelpButton" text="M'aider" />
+                        <Button fx:id="HelpButton" mnemonicParsing="false" onAction="#HandleHelpButton" text="Aiuto" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                     <children>
-                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Langue">
+                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" text="Français" />
-                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
+                                <MenuItem fx:id="italian_button" mnemonicParsing="false" text="Italiano" />
                                 <MenuItem fx:id="english_button" mnemonicParsing="false" onAction="#toEnglish" text="English" />
-                                <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
+                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
+                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
                                 <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
                                 <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />
                                 <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Español" />
@@ -53,7 +54,7 @@
         </VBox>
         <TabPane fx:id="FloorViewsTabPane" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Étage 1">
+                <Tab text="Piano 1">
                     <content>
                         <AnchorPane fx:id="FirstFloorTabAnchorPane" minHeight="0.0" minWidth="0.0">
                             <children>
@@ -67,7 +68,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 2">
+                <Tab text="Piano 2">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -81,7 +82,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 3">
+                <Tab text="Piano 3">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -95,7 +96,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 4">
+                <Tab text="Piano 4">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -109,7 +110,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 5">
+                <Tab text="Piano 5">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -123,7 +124,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 6">
+                <Tab text="FlPianooor 6">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -137,7 +138,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Étage 7">
+                <Tab text="Piano 7">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
