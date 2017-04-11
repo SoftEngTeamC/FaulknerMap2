@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class AdminToolController {
+public class AdminToolController extends Controller{
 
     @FXML
     private Button logoutBtn;
@@ -21,37 +21,20 @@ public class AdminToolController {
 
 
     public void editMap() throws Exception{
-            Stage stage = (Stage) mapEditorBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/MapEditor.fxml"));
-            stage.setTitle("Map Editor");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
+        switchScreen("view/MapEditor.fxml", "Map Editor", mapEditorBtn);
     }
     @FXML
     public void editHours()throws Exception{
-        Stage stage = (Stage) editHoursBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/HoursEditorScreen.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
+        switchScreen("view/HoursEditorScreen.fxml", "Directory Editor", editHoursBtn);
     }
     @FXML
     public void editDirectory() throws Exception{
-        Stage stage = (Stage) editDirectoryBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/DirectoryEditor.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
-
+        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", editDirectoryBtn);
     }
 
     @FXML
     public void logout() throws Exception{
-        Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
+        switchScreen("view/Main.fxml", "Directory Editor", logoutBtn);
     }
 
 }
