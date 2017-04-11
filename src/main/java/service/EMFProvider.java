@@ -9,9 +9,6 @@ public class EMFProvider {
     private static EMFProvider myHelper = new EMFProvider();
     private static EntityManagerFactory emf = null;
 
-
-    //statically check if emf has been created yet
-    //only needs to happen once since singleton
     static {
         if (emf == null) {
             try {
@@ -23,11 +20,6 @@ public class EMFProvider {
         }
     }
 
-    /**
-     * Static Accessor Method
-     *
-     * @return
-     */
     public static EMFProvider getInstance() {
         if (myHelper == null) {
             myHelper = new EMFProvider();
@@ -35,11 +27,6 @@ public class EMFProvider {
         return myHelper;
     }
 
-
-    /**
-     * get Entity Manager Factory
-     * @return
-     */
     public EntityManagerFactory getEMFactory() {
         return emf;
     }

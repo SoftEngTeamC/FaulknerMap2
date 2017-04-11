@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
@@ -16,10 +14,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.MenuButton?>
 
-<SplitPane dividerPositions="0.362876254180602" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane dividerPositions="0.362876254180602" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox>
@@ -39,9 +35,12 @@
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="english_button" mnemonicParsing="false" text="English" />
-                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Spanish" />
-                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="Chinese" />
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="French" />
+                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
+                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
+                                <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
+                                <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
+                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />
+                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Español" />
                             </items>
                         </MenuButton>
                     </children>
@@ -53,11 +52,11 @@
         <tabs>
             <Tab text="Floor 1">
               <content>
-                <AnchorPane fx:id="FirstFloorTabAnchorPane" minHeight="0.0" minWidth="0.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ScrollPane fx:id="FirstFloorScrollPane" hmax="100.0" prefHeight="200.0" prefWidth="200.0" vmax="100.0">
+                        <ScrollPane fx:id="FirstFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="Map1AnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                           </content>
                         </ScrollPane>
                         <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />

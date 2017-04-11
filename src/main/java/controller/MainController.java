@@ -1,13 +1,13 @@
 package controller;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,17 +19,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
-import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 public class MainController extends Controller{
+
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -61,6 +59,8 @@ public class MainController extends Controller{
     private Slider SeventhFloorSlider;
     //---------------------------------------------------
     @FXML
+    private AnchorPane Map1AnchorPane;
+    @FXML
     private Button AdminToolButton;
     @FXML
     private TextField SearchBarTextField;
@@ -78,10 +78,13 @@ public class MainController extends Controller{
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
 
-    //INTIALIZE
+    //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
         InitializeMapViews();
         PopulateSearchResults(null);
+
+        MakeCircle(1000,1000,4);
+        MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
@@ -92,7 +95,7 @@ public class MainController extends Controller{
 
     //PROXY FUNCTIONS
 
-
+//-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
 //    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
 //    public void DisplayMap(List<MapNode> nodes){
 //        //MapAnchor.getChildren().clear();
@@ -119,40 +122,104 @@ public class MainController extends Controller{
 //        }
 //    }
 
-//    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
-//    //It locks the points to their position on the image,
-//    //Resizing the image does not effect the relative position of the nodes and the image
-//    public void MakeCircle(double x, double y) {
-//        // initial size of image and the image ratior
-//        double ImgW = FourthFloorImage.getImage().getWidth();
-//        double ImgH = FourthFloorImage.getImage().getHeight();
-//        double ImgR = ImgH / ImgW;
-//
-//        Circle circle = new Circle();
-//        //These bind the center positions relative to the width property of the image
-//        //the new center is calculated using the initial ratios
-//        circle.centerXProperty().bind(FourthFloorImage.fitWidthProperty().multiply(x / ImgW));
-//        circle.centerYProperty().bind(FourthFloorImage.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-//        circle.setRadius(3);
-//        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
-//        //MapAnchor.getChildren().add(circle);
-//    }
-//
-//    //MakeLine take 2 points (effectively) and draws a line from point to point
-//    //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-//    public void MakeLine(double x1, double y1, double x2, double y2) {
-//        double ImgW = FourthFloorImage.getImage().getWidth();
-//        double ImgH = FourthFloorImage.getImage().getHeight();
-//        double ImgR = ImgH / ImgW;
-//
-//        Line edge = new Line();
-//        //the points are bound to the fit width property of the image and scaled by the initial image ratio
-//        edge.startXProperty().bind(FourthFloorImage.fitWidthProperty().multiply((x1 / ImgW)));
-//        edge.startYProperty().bind(FourthFloorImage.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-//        edge.endXProperty().bind(FourthFloorImage.fitWidthProperty().multiply((x2 / ImgW)));
-//        edge.endYProperty().bind(FourthFloorImage.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-//        //MapAnchor.getChildren().add(edge);
-//    }
+    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
+    //It locks the points to their position on the image,
+    //Resizing the image does not effect the relative position of the nodes and the image
+    public void MakeCircle(double x, double y, int z) {
+        // initial size of image and the image ratior
+        ScrollPane Scrolly = null;
+        switch(z){
+            case 1:
+                Scrolly = FirstFloorScrollPane;
+                break;
+            case 2:
+                Scrolly = SecondFloorScrollPane;
+                break;
+            case 3:
+                Scrolly = ThirdFloorScrollPane;
+                break;
+            case 4:
+                Scrolly = FourthFloorScrollPane;
+                break;
+            case 5:
+                Scrolly = FifthFloorScrollPane;
+                break;
+            case 6:
+                Scrolly = SixthFloorScrollPane;
+                break;
+            case 7:
+                Scrolly = SeventhFloorScrollPane;
+                break;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
+                break;
+        }
+        Group group1 = (Group)Scrolly.getContent();
+        ImageView Map1 = (ImageView)group1.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Circle circle = new Circle();
+        //These bind the center positions relative to the width property of the image
+        //the new center is calculated using the initial ratios
+        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
+        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
+        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
+        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+        group1.getChildren().add(circle);
+    }
+
+    //MakeLine take 2 points (effectively) and draws a line from point to point
+    //this line is bounded to the image such that resizing does not effect the relative position of the line and image
+    public void MakeLine(double x1, double y1, double x2, double y2, int z){
+        ScrollPane Scrolly = null;
+        switch(z){
+            case 1:
+                Scrolly = FirstFloorScrollPane;
+                break;
+            case 2:
+                Scrolly = SecondFloorScrollPane;
+                break;
+            case 3:
+                Scrolly = ThirdFloorScrollPane;
+                break;
+            case 4:
+                Scrolly = FourthFloorScrollPane;
+                break;
+            case 5:
+                Scrolly = FifthFloorScrollPane;
+                break;
+            case 6:
+                Scrolly = SixthFloorScrollPane;
+                break;
+            case 7:
+                Scrolly = SeventhFloorScrollPane;
+                break;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
+                break;
+        }
+        Group group1 = (Group)Scrolly.getContent();
+        ImageView Map1 = (ImageView)group1.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Line edge = new Line();
+        //the points are bound to the fit width property of the image and scaled by the initial image ratio
+        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+        group1.getChildren().add(edge);
+    }
+
+
+
+    //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results) {
@@ -196,19 +263,11 @@ public class MainController extends Controller{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-        String offices = "Offices:\n";
-        for(Node n : HP.getOffice()){
-            offices = offices + n.getName() + "\n";
-        }
+
+        HospitalProfessionalService hs = new HospitalProfessionalService();
+        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
-    }
-
-    //SCREEN CHANGING FUNCTIONS
-    @FXML
-    public void OpenAdminTool() throws Exception {
-        // goto genres screen
-        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
     }
 
     // EVENT HANDLERS
@@ -300,19 +359,6 @@ public class MainController extends Controller{
         }
     }
 
-    @FXML
-    public void toEnglish() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
-        language = 1;
-    }
-
-
     //----------------------------------Build Zoomable Maps----------------------------------------------
     public void InitializeMapViews(){
         //FIRST FLOOR
@@ -322,7 +368,9 @@ public class MainController extends Controller{
         Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
         FirstFloorImageView.setImage(FirstFloorMapPic);
         FirstFloorImageView.setPreserveRatio(true);
-        FirstFloorScrollPane.setContent(FirstFloorImageView);
+        Group FirstFloorGroup = new Group();
+        FirstFloorGroup.getChildren().add(FirstFloorImageView);
+        FirstFloorScrollPane.setContent(FirstFloorGroup);
         FirstFloorScrollPane.setPannable(true);
         FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -336,7 +384,9 @@ public class MainController extends Controller{
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
         SecondFloorImageView.setImage(FirstFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
-        SecondFloorScrollPane.setContent(SecondFloorImageView);
+        Group SecondFloorGroup = new Group();
+        SecondFloorGroup.getChildren().add(SecondFloorImageView);
+        SecondFloorScrollPane.setContent(SecondFloorGroup);
         SecondFloorScrollPane.setPannable(true);
         SecondFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         SecondFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -347,10 +397,12 @@ public class MainController extends Controller{
         ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView ThirdFloorImageView = new ImageView();
-        Image ThirdFloorMapPic = new Image("images/3_theThirdfloor.png");
+        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
         ThirdFloorImageView.setImage(ThirdFloorMapPic);
         ThirdFloorImageView.setPreserveRatio(true);
-        ThirdFloorScrollPane.setContent(ThirdFloorImageView);
+        Group ThirdFloorGroup = new Group();
+        ThirdFloorGroup.getChildren().add(ThirdFloorImageView);
+        ThirdFloorScrollPane.setContent(ThirdFloorGroup);
         ThirdFloorScrollPane.setPannable(true);
         ThirdFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         ThirdFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -361,10 +413,12 @@ public class MainController extends Controller{
         FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FourthFloorImageView = new ImageView();
-        Image FourthFloorMapPic = new Image("images/4_theFourthfloor.png");
+        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
         FourthFloorImageView.setImage(FourthFloorMapPic);
         FourthFloorImageView.setPreserveRatio(true);
-        FourthFloorScrollPane.setContent(FourthFloorImageView);
+        Group FourthFloorGroup = new Group();
+        FourthFloorGroup.getChildren().add(FourthFloorImageView);
+        FourthFloorScrollPane.setContent(FourthFloorGroup);
         FourthFloorScrollPane.setPannable(true);
         FourthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         FourthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -375,10 +429,12 @@ public class MainController extends Controller{
         FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FifthFloorImageView = new ImageView();
-        Image FifthFloorMapPic = new Image("images/5_theFifthfloor.png");
+        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
         FifthFloorImageView.setImage(FifthFloorMapPic);
         FifthFloorImageView.setPreserveRatio(true);
-        FifthFloorScrollPane.setContent(FifthFloorImageView);
+        Group FifthFloorGroup = new Group();
+        FifthFloorGroup.getChildren().add(FifthFloorImageView);
+        FifthFloorScrollPane.setContent(FifthFloorGroup);
         FifthFloorScrollPane.setPannable(true);
         FifthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         FifthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -389,10 +445,12 @@ public class MainController extends Controller{
         SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SixthFloorImageView = new ImageView();
-        Image SixthFloorMapPic = new Image("images/6_theSixthfloor.png");
+        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
         SixthFloorImageView.setImage(SixthFloorMapPic);
         SixthFloorImageView.setPreserveRatio(true);
-        SixthFloorScrollPane.setContent(SixthFloorImageView);
+        Group SixthFloorGroup = new Group();
+        SixthFloorGroup.getChildren().add(SixthFloorImageView);
+        SixthFloorScrollPane.setContent(SixthFloorGroup);
         SixthFloorScrollPane.setPannable(true);
         SixthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         SixthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -403,16 +461,49 @@ public class MainController extends Controller{
         SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SeventhFloorImageView = new ImageView();
-        Image SeventhFloorMapPic = new Image("images/7_theSeventhfloor.png");
+        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
         SeventhFloorImageView.setImage(SeventhFloorMapPic);
         SeventhFloorImageView.setPreserveRatio(true);
-        SeventhFloorScrollPane.setContent(SeventhFloorImageView);
+        Group SeventhFloorGroup = new Group();
+        SeventhFloorGroup.getChildren().add(SeventhFloorImageView);
+        SeventhFloorScrollPane.setContent(SeventhFloorGroup);
         SeventhFloorScrollPane.setPannable(true);
         SeventhFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         SeventhFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         SeventhFloorSlider.setMax(SeventhFloorMapPic.getWidth());
         SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
+    }
+
+    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
+    @FXML
+    public void OpenAdminTool() throws Exception {
+        // goto genres screen
+        System.out.println("HERE WE ARE");
+        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
+        stage.setTitle("AdminToolMenu");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+    }
+    //SCREEN CHANGING FUNCTIONS
+//    @FXML
+//    public void OpenAdminTool() throws Exception {
+//        // goto genres screen
+//        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
+//    }
+
+
+    @FXML
+    public void toEnglish() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 1;
     }
 
     @FXML
@@ -451,6 +542,41 @@ public class MainController extends Controller{
         language = 4;
     }
 
+    @FXML
+    public void toItalian() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_IT.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 5;
+    }
+
+    @FXML
+    public void toJapanese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_JP.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 6;
+    }
+
+    @FXML
+    public void toPortuguese() throws Exception {
+        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_PG.fxml"));
+        stage.setTitle("Faulkner Kiosk");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.setMaximized(true);
+        stage.show();
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        language = 7;
+    }
 }
 
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM

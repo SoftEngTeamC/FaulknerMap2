@@ -2,6 +2,7 @@ package service;
 
 
 import model.HospitalProfessional;
+import model.Node;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

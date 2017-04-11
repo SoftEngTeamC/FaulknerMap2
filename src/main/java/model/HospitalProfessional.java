@@ -9,15 +9,11 @@ import java.util.List;
 @Entity
 @Table(name = "PROFESSIONALS")
 public class HospitalProfessional {
+
     private Long id;
 
     private String name;
 
-    @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(
-            name="SERVICES_NODES",
-            joinColumns=@JoinColumn(name="PROFESSIONALS_ID", referencedColumnName="ID"),
-            inverseJoinColumns=@JoinColumn(name="NODES_ID", referencedColumnName="ID"))
     private List<Node> offices;
 
     private String title;
@@ -62,12 +58,14 @@ public class HospitalProfessional {
     }
 
     @ManyToMany
-    @JoinColumn(name = "PROF_OFFICES")
-    public List<Node> getOffice() {
+    @JoinTable(name = "PROFESSIONAL_OFFICE",
+            joinColumns = @JoinColumn(name = "PROFESSIONAL_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "OFFICE_ID", referencedColumnName = "ID"))
+    public List<Node> getOffices() {
         return offices;
     }
 
-    public void setOffice(List<Node> offices) {
+    public void setOffices(List<Node> offices) {
         this.offices = offices;
     }
 }
