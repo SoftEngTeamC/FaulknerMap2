@@ -31,8 +31,8 @@ public class NodeService  extends AbstractService<Node> {
     public Node findNodeByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            return (Node) manager.createQuery(
-                    "SELECT n FROM Node n WHERE n.name LIKE :name")
+            return manager.createQuery(
+                    "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
         } catch (NoResultException e){
@@ -42,8 +42,8 @@ public class NodeService  extends AbstractService<Node> {
 
     public List<Node> findNodeIntersectionByFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return  manager.createQuery(
-                "SELECT n FROM Node n WHERE n.name LIKE :name")
+        return manager.createQuery(
+                "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                 .setParameter("name", "intersection" + floor + "%")
                 .getResultList();
     }
