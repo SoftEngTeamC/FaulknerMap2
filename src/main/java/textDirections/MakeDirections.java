@@ -1,7 +1,13 @@
 package textDirections;
 
+import org.junit.Test;
 import pathfinding.MapNode;
+import pathfinding.PathFinder;
+import service.NodeService;
+import pathfinding.Map;
+import model.Node;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static java.lang.Math.atan2;
@@ -10,6 +16,8 @@ import static java.lang.Math.atan2;
  * Created by Alex on 4/9/2017.
  */
 public class MakeDirections {
+    private NodeService NS = new NodeService();
+    private PathFinder pf = new PathFinder();
     public static String getText(List<MapNode> myPath){
         String output = "";
         String direction;
@@ -116,5 +124,19 @@ public class MakeDirections {
         else {
             return "diagonal";
         }
+    }
+
+    @Test
+    public void printDirectionsTest1() {
+        Map map = new Map(NS.getAllNodes());
+        PathFinder pf = new PathFinder();
+        Node testNode1 = NS.findNodeByName("Day Surgery");
+        Node testNode2 = NS.findNodeByName("Blood Draw");
+
+        MapNode mNode1 = map.getNode(testNode1.getId());
+        MapNode mNode2 = map.getNode(testNode2.getId());
+
+        String directions = getText(pf.shortestPath(mNode1, mNode2));
+        System.out.print(directions);
     }
 }
