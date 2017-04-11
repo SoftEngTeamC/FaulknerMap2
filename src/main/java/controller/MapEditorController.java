@@ -1,25 +1,28 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Node;
+import service.NodeService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
-public class MapEditorController extends Controller{
+public class MapEditorController extends Controller {
 
     // Back and logout buttons
     @FXML
@@ -70,7 +73,8 @@ public class MapEditorController extends Controller{
     @FXML
     private Button editNode_addBtn;
 
-
+    @FXML
+    protected TabPane tabPane;
 
     // Map imageview and anchorpane
     @FXML
@@ -86,8 +90,12 @@ public class MapEditorController extends Controller{
     // arraylist of search terms
     private ArrayList<String> searchList;
 
+    private Node[] currNodes = new Node[2];
 
-    public void initialize(){
+    private int currFloor;
+
+
+    public void initialize() {
 
         // Set the image view to populate the image
         floor4Image = new Image("file:../Resources/floor4.png");
@@ -100,14 +108,61 @@ public class MapEditorController extends Controller{
             double x = event.getX();
             double y = event.getY();
             // send to function
-            mouseClicked(x,y);
+            mouseClicked(x, y);
         });
 
+        tabPaneListen();
+        removeNeighborListen();
+
+    }
+
+    public void tabPaneListen(){
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<Tab>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                        System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
+                        NodeService ns = new NodeService();
+                        currFloor = Integer.parseInt(t1.getText().charAt(0) + "");
+                        ArrayList<String> nameList = new ArrayList<>();
+                        for (Node n : ns.getNodesByFloor(currFloor)) {
+                            nameList.add(n.getName());
+                        }
+                        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
+
+                        editNode_searchResultsList.setItems(obList);
+                    }
+                }
+        );
+
+    }
+
+    public void removeNeighborListen(){
+        editNode_searchResultsList.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+            NodeService ns = new NodeService();
+            Node selectedNode = ns.findNodeByName(newValue);
+
+            currNodes[0] = selectedNode;
+
+            Set<Node> neighbors = ns.neighbors(selectedNode.getId());
+            ArrayList<String> neighborsS = new ArrayList<>();
+            for (Node node : neighbors) {
+                neighborsS.add(node.getName());
+            }
+            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+            editNode_neighborsList.setItems(nList);
+        });
+
+        editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            NodeService ns = new NodeService();
+            Node selectedNode = ns.findNodeByName(newValue);
+            currNodes[1] = selectedNode;
+        });
     }
 
     /**
      * Back button action event handler. Opens the Admin page
-     *
      */
     public void back() throws IOException {
         switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
@@ -115,7 +170,6 @@ public class MapEditorController extends Controller{
 
     /**
      * Action event handler for logout button being pressed. Goes to main screen.
-     *
      */
     public void logout() throws IOException {
         switchScreen("view/Main.fxml", "Main", logoutBtn);
@@ -125,9 +179,8 @@ public class MapEditorController extends Controller{
 
     /**
      * remove node tab: search button event handler
-     *
      */
-    public void removeNode_searchBtnPressed(){
+    public void removeNode_searchBtnPressed() {
 //        try {
 //            String searchField = removeNode_searchField.getText();
 //            System.out.println("searchField is: " + searchField);
@@ -158,12 +211,13 @@ public class MapEditorController extends Controller{
 //            E.printStackTrace();
 //        }
     }
-//
+
+    //
 //    /**
 //     * remove node tab: remove button event handler
 //     *
 //     */
-    public void removeNode_removeBtnPressed(){
+    public void removeNode_removeBtnPressed() {
 
 //        String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
 //        System.out.println(selectedItem);
@@ -178,7 +232,8 @@ public class MapEditorController extends Controller{
 
 
     }
-//
+
+    //
 //    // Methods for the add node tab
 //
 ////    /**
@@ -187,52 +242,27 @@ public class MapEditorController extends Controller{
 ////     * add node tab: remove button event handler
 ////     *
 ////     */
-    public void addNode_connectToNodeBtnPressed(){
+    public void addNode_connectToNodeBtnPressed() {
 
     }
+
+    //
 //
-//
-    public void addNode_createNodeBtnPressed(){
+    public void addNode_createNodeBtnPressed() {
 
 //        float x = Float.parseFloat(addNode_xPos.getText());
 //        float y = Float.parseFloat(addNode_yPos.getText());
 //        Node newNode = new Node(null, new Coordinate(x, y, 4), addNode_nameField.getText());
 //        nodesHelper.addNode(newNode);
     }
-//
+
+    //
 //    // methods for the edit node tab
 //
-    public void editNode_searchBtnPressed(){
-//        List<Node> list = NodesHelper.getNodes(null);
-//        ArrayList<String> nameList = new ArrayList<>();
-//        for(Node node: list){
-//            nameList.add(node.getName());
-        }
-//
-//        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
-//
-//        editNode_searchResultsList.setItems(obList);
-//
-//        editNode_searchResultsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            Node selectedNode = NodesHelper.getNodeByName(newValue);
-//            currNodes[0] = selectedNode;
-//            ArrayList<Node> neighbors = EdgesHelper.getNeighbors(selectedNode);
-//            ArrayList<String> neighborsS = new ArrayList<>();
-//            for(Node node: neighbors){
-//                neighborsS.add(node.getName());
-//            }
-//            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
-//            editNode_neighborsList.setItems(nList);
-//        });
-//
-//        editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            Node selectedNode = NodesHelper.getNodeByName(newValue);
-//            currNodes[1] = selectedNode;
-//        });
-//    }
-//
-//
-    public void editNode_removeNeighborBtnPressed(){
+    public void editNode_searchBtnPressed() {
+    }
+
+    public void editNode_removeNeighborBtnPressed() {
 
 //        ArrayList<Edge> currEdges = edgesHelper.getEdgeByNode(currNodes[0], currNodes[1]);
 //
@@ -249,9 +279,11 @@ public class MapEditorController extends Controller{
 //        editNode_neighborsList.setItems(nList);
 
     }
+
+    //
 //
-//
-    public void editNode_addBtnPressed(){
+    public void editNode_addBtnPressed() {
+
 
 //        Node newNode = NodesHelper.getNodeByName(editNode_addField.getText());
 //        if (newNode != null){
@@ -269,7 +301,7 @@ public class MapEditorController extends Controller{
     }
 
 
-    public void imageClicked(){
+    public void imageClicked() {
 
     }
 
@@ -278,9 +310,8 @@ public class MapEditorController extends Controller{
      *
      * @param x value
      * @param y value
-     *
      */
-    private void mouseClicked(double x, double y){
+    private void mouseClicked(double x, double y) {
 
     }
 }
