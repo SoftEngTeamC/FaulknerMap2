@@ -35,25 +35,25 @@
       <Text layoutX="342.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" />
       <TextField fx:id="eveninghrs1" layoutX="389.0" layoutY="232.0" prefHeight="25.0" prefWidth="86.0" text=":" />
       <TextField fx:id="eveninghrs2" layoutX="389.0" layoutY="281.0" prefHeight="25.0" prefWidth="86.0" text=":" />
-      <SplitMenuButton layoutX="481.0" layoutY="107.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="AM">
+      <SplitMenuButton fx:id="ampm1" layoutX="481.0" layoutY="107.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="AM">
         <items>
           <MenuItem mnemonicParsing="false" text="AM" />
             <MenuItem mnemonicParsing="false" text="PM" />
         </items>
       </SplitMenuButton>
-      <SplitMenuButton layoutX="481.0" layoutY="154.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="PM">
+      <SplitMenuButton fx:id="ampm2" layoutX="481.0" layoutY="154.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="PM">
          <items>
             <MenuItem mnemonicParsing="false" text="PM" />
             <MenuItem mnemonicParsing="false" text="AM" />
          </items>
       </SplitMenuButton>
-      <SplitMenuButton layoutX="481.0" layoutY="232.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="AM">
+      <SplitMenuButton fx:id="ampm3" layoutX="481.0" layoutY="232.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="AM">
          <items>
             <MenuItem mnemonicParsing="false" text="AM" />
             <MenuItem mnemonicParsing="false" text="PM" />
          </items>
       </SplitMenuButton>
-      <SplitMenuButton layoutX="481.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="PM">
+      <SplitMenuButton fx:id="ampm4" layoutX="481.0" layoutY="281.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="PM">
          <items>
             <MenuItem mnemonicParsing="false" text="PM" />
             <MenuItem mnemonicParsing="false" text="AM" />
