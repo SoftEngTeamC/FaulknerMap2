@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -53,13 +53,14 @@
         <tabs>
             <Tab text="Floor 1">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane fx:id="FirstFloorTabAnchorPane" minHeight="0.0" minWidth="0.0">
                      <children>
-                        <ImageView fx:id="FirstFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor1.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="FirstFloorScrollPane" hmax="100.0" prefHeight="200.0" prefWidth="200.0" vmax="100.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -68,11 +69,12 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                            <ImageView fx:id="SecondFloorImage" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@../images/floor2.png" />
-                                </image>
-                            </ImageView>
+                        <ScrollPane fx:id="SecondFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="SecondFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -81,11 +83,12 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="ThirdFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor3.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="ThirdFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="ThirdFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -94,11 +97,12 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="FourthFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor4.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="FourthFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="FourthFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -107,11 +111,12 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="FifthFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor5.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="FifthFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="FifthFloorSlider" layoutX="350.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -120,11 +125,12 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="SixthFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor6.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="SixthFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="SixthFloorSlider" layoutX="342.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -133,11 +139,12 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="SeventhFloorImage" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/floor7.png" />
-                           </image>
-                        </ImageView>
+                        <ScrollPane fx:id="SeventhFloorScrollPane" prefHeight="200.0" prefWidth="200.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Slider fx:id="SeventhFloorSlider" layoutX="331.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
