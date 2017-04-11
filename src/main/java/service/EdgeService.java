@@ -1,7 +1,6 @@
 package service;
 
 import model.Edge;
-import model.Node;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,5 +17,4 @@ public class EdgeService extends AbstractService<Edge> {
         return manager.createQuery("from Edge ", Edge.class)
                 .getResultList();
     }
-
 }
