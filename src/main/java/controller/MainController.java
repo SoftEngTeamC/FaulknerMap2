@@ -188,7 +188,7 @@ public class MainController extends Controller{
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
         HospitalProfessionalService hs = new HospitalProfessionalService();
-        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffice().get(0).getName();
+        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
     }

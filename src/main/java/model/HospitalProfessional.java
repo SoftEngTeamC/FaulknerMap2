@@ -61,11 +61,11 @@ public class HospitalProfessional {
     @JoinTable(name = "PROFESSIONAL_OFFICE",
             joinColumns = @JoinColumn(name = "PROFESSIONAL_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "OFFICE_ID", referencedColumnName = "ID"))
-    public List<Node> getOffice() {
+    public List<Node> getOffices() {
         return offices;
     }
 
-    public void setOffice(List<Node> offices) {
+    public void setOffices(List<Node> offices) {
         this.offices = offices;
     }
 }
