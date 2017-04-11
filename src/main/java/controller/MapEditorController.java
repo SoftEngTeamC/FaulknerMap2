@@ -14,11 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapEditorController {
+public class MapEditorController extends Controller{
 
     // Back and logout buttons
     @FXML
@@ -108,32 +109,16 @@ public class MapEditorController {
      * Back button action event handler. Opens the Admin page
      *
      */
-    public void back(){
-        try {
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-            stage.setTitle("Directory Editor");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
-        } catch (Exception E){
-            System.out.println("Couldn't switch scenes");
-        }
+    public void back() throws IOException {
+        switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
     }
 
     /**
      * Action event handler for logout button being pressed. Goes to main screen.
      *
      */
-    public void logout(){
-        try {
-            Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-            stage.setTitle("Main");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
-        } catch (Exception E){
-            System.out.println("Couldn't switch scenes");
-        }
+    public void logout() throws IOException {
+        switchScreen("view/Main.fxml", "Main", logoutBtn);
     }
 
     // Methods for the remove node tab

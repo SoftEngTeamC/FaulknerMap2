@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-public class MainController {
+public class MainController extends Controller{
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -208,12 +208,7 @@ public class MainController {
     @FXML
     public void OpenAdminTool() throws Exception {
         // goto genres screen
-        System.out.println("HERE WE ARE");
-        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("AdminToolMenu");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
     }
 
     // EVENT HANDLERS
