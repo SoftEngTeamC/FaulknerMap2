@@ -3,6 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import service.EMFProvider;
 
 import java.net.URL;
 
@@ -28,6 +29,6 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
-        // TODO: Clean up entity manager
+        EMFProvider.getInstance().getEMFactory().close();
     }
 }

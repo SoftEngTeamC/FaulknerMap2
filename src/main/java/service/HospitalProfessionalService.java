@@ -32,8 +32,4 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
         return manager.createQuery("from HospitalProfessional", HospitalProfessional.class)
                 .getResultList();
     }
-
-    public Node getOffice(Long id) {
-        return find(id).getOffice().get(0);
-    }
 }
