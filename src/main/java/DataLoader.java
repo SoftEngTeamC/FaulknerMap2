@@ -46,8 +46,7 @@ public class DataLoader {
             loadEdges(emf, "data/floor6/edges.tsv");
             loadEdges(emf, "data/floor7/edges.tsv");
 
-            EdgeService es = new EdgeService();
-            es.addEdgeIntersections();
+            addEdgeIntersections();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -196,5 +195,23 @@ public class DataLoader {
                 edgeService.persist(new Edge(start, end, 0));
             }
         }
+    }
+
+    private static void addEdgeIntersections(){
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
+        for(int i = 1; i < 8; i ++){
+            List<Node> floor = nodeService.findNodeIntersectionByFloor(i);
+            for(int j = 0; j < floor.size()-1; j ++){
+                Edge tempEdge = new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1)));
+                edgeService.persist(tempEdge);
+            }
+        }
+    }
+
+    private static double getEdgeLength(Node from, Node end){
+        double yLen = from.getLocation().getY() - end.getLocation().getY();
+        double xLen = from.getLocation().getX() - end.getLocation().getX();
+        return Math.sqrt(yLen * yLen + xLen * xLen);
     }
 }
