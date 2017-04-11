@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditPersonController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditPersonController">
    <children>
 
 
 
       <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Text layoutX="147.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Name:" />
-      <TextField fx:id="nameField" layoutX="226.0" layoutY="95.0" />
-      <Text layoutX="164.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" textAlignment="CENTER" />
-      <TextField fx:id="titleField" layoutX="226.0" layoutY="133.0" />
-      <Text layoutX="155.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" />
-      <TextField fx:id="locationField" layoutX="226.0" layoutY="173.0" />
-      <Text layoutX="183.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" />
-      <TextField fx:id="idField" layoutX="226.0" layoutY="217.0" />
+      <TextField fx:id="nameField" layoutX="301.0" layoutY="95.0" />
+      <Text layoutX="176.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" textAlignment="CENTER" />
+      <TextField fx:id="titleField" layoutX="300.0" layoutY="134.0" />
+      <Text layoutX="145.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location(s):" />
+      <Text layoutX="182.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" />
+      <TextField fx:id="idField" disable="true" layoutX="300.0" layoutY="315.0" />
 
-      <Button fx:id="updateBtn" layoutX="190.0" layoutY="261.0" mnemonicParsing="false" onAction="#updateBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Update" textFill="#4ba418" />
-      <Button fx:id="deleteBtn" layoutX="310.0" layoutY="261.0" mnemonicParsing="false" onAction="#deleteBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Delete" textFill="#4ba418" />
-      <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" text="logout" />
-      <Text fx:id="warningText" fill="RED" layoutX="216.0" layoutY="350.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deleted Professional" visible="false" />
-      <Text layoutX="233.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Person">
+      <Button fx:id="updateBtn" layoutX="327.0" layoutY="402.0" mnemonicParsing="false" onAction="#updateBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Update" textFill="#4ba418" />
+      <Button fx:id="deleteBtn" layoutX="326.0" layoutY="482.0" mnemonicParsing="false" onAction="#deleteBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Delete" textFill="#4ba418" />
+      <Button fx:id="logoutBtn" layoutX="14.0" layoutY="504.0" mnemonicParsing="false" onAction="#logout" text="logout" />
+      <Text layoutX="313.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Person">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="284.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" visible="false" />
+      <ListView fx:id="locationsList" layoutX="301.0" layoutY="175.0" prefHeight="66.0" prefWidth="149.0" />
+      <Button fx:id="removeNodeBtn" layoutX="463.0" layoutY="216.0" mnemonicParsing="false" onAction="#removeNodeBtnAction" text="Remove node --&gt;" />
+      <Button fx:id="addNodeBtn" layoutX="473.0" layoutY="182.0" mnemonicParsing="false" onAction="#addNodeBtnAction" text="&lt;-- Add node" />
+      <ListView fx:id="availableLocationsList" layoutX="582.0" layoutY="175.0" prefHeight="66.0" prefWidth="149.0" />
+      <Text layoutX="606.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Available locations:" />
+      <Text fx:id="deletedText" fill="RED" layoutX="295.0" layoutY="469.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Person deleted from database" />
+      <Text fx:id="updateText" fill="LIME" layoutX="323.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Changes submitted." />
    </children>
 </AnchorPane>
