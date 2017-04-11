@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import model.Coordinate;
 import model.Node;
 import service.NodeService;
 
@@ -182,7 +183,7 @@ public class MapEditorController extends Controller{
     /**
      * @author Samuel Coache
      *
-     * add node tab: remove button event handler
+     * add node tab: connect button event handler
      *
      */
     public void addNode_connectToNodeBtnPressed(){
@@ -192,14 +193,19 @@ public class MapEditorController extends Controller{
     /**
      * @author Samuel Coache
      *
-     * add node tab: remove button event handler
+     * add node tab: create button event handler
      *
      */
     public void addNode_createNodeBtnPressed(){
-//        float x = Float.parseFloat(addNode_xPos.getText());
-//        float y = Float.parseFloat(addNode_yPos.getText());
-//        Node newNode = new Node(null, new Coordinate(x, y, 4), addNode_nameField.getText());
-//        nodesHelper.addNode(newNode);
+        NodeService NS = new NodeService();
+        float x = Float.parseFloat(addNode_xPos.getText());
+        float y = Float.parseFloat(addNode_yPos.getText());
+        //TODO get floor information
+        //float floor = Float.parseFloat(addNode_floor.getText());
+        Coordinate addCoord = new Coordinate(x, y, 4);
+        Node newNode = new Node(addCoord, addNode_nameField.getText());
+        //TODO get add node function
+        //NS.addNode(newNode);
     }
 
 //
