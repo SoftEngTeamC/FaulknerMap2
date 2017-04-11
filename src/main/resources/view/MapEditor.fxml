@@ -70,7 +70,7 @@
       </AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="516.0" prefWidth="648.0">
          <children>
-            <TabPane layoutX="2.0" prefHeight="592.0" prefWidth="724.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutX="2.0" prefHeight="592.0" prefWidth="724.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="1st Floor">
                   <content>

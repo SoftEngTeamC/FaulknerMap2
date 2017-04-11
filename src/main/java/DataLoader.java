@@ -14,13 +14,13 @@ public class DataLoader {
         EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
        //     loadLocations(emf, "data/belkinHouse/locations.tsv");
-            loadLocations(emf, "data/floor1/locations.tsv");
-            loadLocations(emf, "data/floor2/locations.tsv");
-            loadLocations(emf, "data/floor3/locations.tsv");
-            loadLocations(emf, "data/floor4/locations.tsv");
-            loadLocations(emf, "data/floor5/locations.tsv");
-            loadLocations(emf, "data/floor6/locations.tsv");
-            loadLocations(emf, "data/floor7/locations.tsv");
+            loadLocations(emf, "data/floor1/locations.tsv", 1);
+            loadLocations(emf, "data/floor2/locations.tsv", 2);
+            loadLocations(emf, "data/floor3/locations.tsv", 3);
+            loadLocations(emf, "data/floor4/locations.tsv", 4);
+            loadLocations(emf, "data/floor5/locations.tsv", 5);
+            loadLocations(emf, "data/floor6/locations.tsv", 6);
+            loadLocations(emf, "data/floor7/locations.tsv", 7);
 
         //    loadPeople(emf, "data/belkinHouse/people.tsv");
             loadPeople(emf, "data/floor2/people.tsv");
@@ -55,7 +55,7 @@ public class DataLoader {
         }
     }
 
-    private static void loadLocations(EntityManagerFactory emf, String locationsFilePath) throws FileNotFoundException {
+    private static void loadLocations(EntityManagerFactory emf, String locationsFilePath, int floor) throws FileNotFoundException {
         NodeService nodeService = new NodeService();
         CoordinateService coordinateService = new CoordinateService();
 
@@ -80,7 +80,7 @@ public class DataLoader {
                 // Parse the Coordinate
                 double x = Double.parseDouble(split[1]);
                 double y = Double.parseDouble(split[2]);
-                Coordinate location = new Coordinate(x, y, 4);
+                Coordinate location = new Coordinate(x, y, floor);
 
                 coordinateService.persist(location);
 
