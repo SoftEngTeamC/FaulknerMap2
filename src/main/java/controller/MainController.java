@@ -13,13 +13,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
 import service.NodeService;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -267,13 +270,6 @@ public class MainController extends Controller{
         System.out.println("trying to populate information area");
     }
 
-    //SCREEN CHANGING FUNCTIONS
-    @FXML
-    public void OpenAdminTool() throws Exception {
-        // goto genres screen
-        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
-    }
-
     // EVENT HANDLERS
 
     public void handleFirstFloorZoomSlider(){
@@ -490,6 +486,13 @@ public class MainController extends Controller{
         stage.setScene(new Scene(root, 300, 300));
         stage.show();
     }
+    //SCREEN CHANGING FUNCTIONS
+//    @FXML
+//    public void OpenAdminTool() throws Exception {
+//        // goto genres screen
+//        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
+//    }
+
 
     @FXML
     public void toEnglish() throws Exception {
