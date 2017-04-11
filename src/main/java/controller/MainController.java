@@ -14,6 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -24,6 +27,8 @@ import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
@@ -74,6 +79,10 @@ public class MainController extends Controller{
     private TabPane FloorViewsTabPane;
     @FXML
     private MenuButton languageMenuButton;
+    @FXML
+    private VBox MainVbox;
+    @FXML
+    private HBox CheckBoxesHBox;
 
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
@@ -82,6 +91,12 @@ public class MainController extends Controller{
     public void initialize() {
         InitializeMapViews();
         PopulateSearchResults(null);
+        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.3));
+        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        CheckBoxesHBox.setPrefHeight(30);
+
+
 
         MakeCircle(1000,1000,4);
         MakeLine(1000,1000,2000,2000,2);
@@ -92,35 +107,40 @@ public class MainController extends Controller{
 
     }
 
-
-    //PROXY FUNCTIONS
-
 //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
-//    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-//    public void DisplayMap(List<MapNode> nodes){
-//        //MapAnchor.getChildren().clear();
-//        ImageView mapPic = new ImageView();
-//        Image floorImage = new Image("images/floor4.png");
-//        mapPic.setImage(floorImage);
-//        //mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
-//        mapPic.setPreserveRatio(true);
-//        mapPic.setPickOnBounds(true);
-//        //MapAnchor.getChildren().add(mapPic);
-//
-//        if (nodes == null) {
-//            System.out.println("There is no path.");
-//            return;
-//        }
-//       for(int i=0;i<nodes.size();i++){
-//           MakeCircle(nodes.get(i).getLocation().getX(),nodes.get(i).getLocation().getY());
-//            if(i>0){
-//                MakeLine(nodes.get(i-1).getLocation().getX(),
-//                         nodes.get(i-1).getLocation().getY(),
-//                         nodes.get(i).getLocation().getX(),
-//                         nodes.get(i).getLocation().getY());
-//            }
-//        }
-//    }
+    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
+    public void DisplayMap(List<MapNode> nodes){
+        //Clear any old Content
+        Group group1 = (Group) FirstFloorScrollPane.getContent();
+        group1.getChildren().remove(1,group1.getChildren().size());
+        Group group2 = (Group) SecondFloorScrollPane.getContent();
+        group2.getChildren().remove(1,group2.getChildren().size());
+        Group group3 = (Group) ThirdFloorScrollPane.getContent();
+        group3.getChildren().remove(1,group3.getChildren().size());
+        Group group4 = (Group) FourthFloorScrollPane.getContent();
+        group4.getChildren().remove(1,group4.getChildren().size());
+        Group group5 = (Group) FifthFloorScrollPane.getContent();
+        group5.getChildren().remove(1,group5.getChildren().size());
+        Group group6 = (Group) SixthFloorScrollPane.getContent();
+        group6.getChildren().remove(1,group6.getChildren().size());
+        Group group7 = (Group) SeventhFloorScrollPane.getContent();
+        group7.getChildren().remove(1,group7.getChildren().size());
+
+        if (nodes == null) {System.out.println("There is no path.");return;}
+
+        for(int i=0;i<nodes.size();i++){
+            MakeCircle(nodes.get(i).getLocation().getX(),
+                        nodes.get(i).getLocation().getY(),
+                        nodes.get(i).getLocation().getFloor());
+            if((i>0) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
+                MakeLine(nodes.get(i-1).getLocation().getX(), //
+                         nodes.get(i-1).getLocation().getY(),
+                         nodes.get(i).getLocation().getX(),
+                         nodes.get(i).getLocation().getY(),
+                         nodes.get(i).getLocation().getFloor());
+            }
+        }
+    }
 
     //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
     //It locks the points to their position on the image,
@@ -217,13 +237,10 @@ public class MainController extends Controller{
         group1.getChildren().add(edge);
     }
 
-
-
     //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results) {
-
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
@@ -235,7 +252,7 @@ public class MainController extends Controller{
         MapNode start = map.getNode(NS.findNodeByName("Radiology").getId());
         MapNode dest = map.getNode(HP.getId());
         List<MapNode> path = PathFinder.shortestPath(start, dest);
-        //DisplayMap(path);
+        DisplayMap(path);
     }
 
     public void PopulateSearchResults(String S) {
@@ -263,19 +280,13 @@ public class MainController extends Controller{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-
         HospitalProfessionalService hs = new HospitalProfessionalService();
+        //System.out.println(hs.find(HP.getId()).getOffices());
         String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
-        System.out.println("trying to populate information area");
     }
 
-    // EVENT HANDLERS
-
-    public void handleFirstFloorZoomSlider(){
-        System.out.println(FirstFloorSlider.getValue());
-    }
-
+    //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
@@ -283,15 +294,9 @@ public class MainController extends Controller{
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
-        //FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
+        FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
     }
 
-    /**
-     * @author JVB
-     * <p>
-     * Method is called when the search bar has a key pressed.
-     * Populates the search ListView with search results from what's in the textfield
-     */
     public void SearchBarTextField_keyReleased() {
         System.out.println("Searching");
         System.out.println(SearchBarTextField.getText().toString());
