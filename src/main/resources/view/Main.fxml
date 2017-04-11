@@ -39,9 +39,12 @@
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="english_button" mnemonicParsing="false" text="English" />
-                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Spanish" />
-                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="Chinese" />
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="French" />
+                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
+                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
+                                <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
+                                <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
+                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />
+                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Español" />
                             </items>
                         </MenuButton>
                     </children>
