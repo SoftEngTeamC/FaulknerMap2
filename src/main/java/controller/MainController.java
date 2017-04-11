@@ -21,7 +21,9 @@ import service.NodeService;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainController {
+import java.util.UUID;
+public class MainController extends Controller{
+
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -200,12 +202,7 @@ public class MainController {
     @FXML
     public void OpenAdminTool() throws Exception {
         // goto genres screen
-        System.out.println("HERE WE ARE");
-        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("AdminToolMenu");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
     }
 
     // EVENT HANDLERS
@@ -344,7 +341,7 @@ public class MainController {
         ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView ThirdFloorImageView = new ImageView();
-        Image ThirdFloorMapPic = new Image("images/3_theThirdfloor.png");
+        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
         ThirdFloorImageView.setImage(ThirdFloorMapPic);
         ThirdFloorImageView.setPreserveRatio(true);
         ThirdFloorScrollPane.setContent(ThirdFloorImageView);
@@ -358,7 +355,7 @@ public class MainController {
         FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FourthFloorImageView = new ImageView();
-        Image FourthFloorMapPic = new Image("images/4_theFourthfloor.png");
+        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
         FourthFloorImageView.setImage(FourthFloorMapPic);
         FourthFloorImageView.setPreserveRatio(true);
         FourthFloorScrollPane.setContent(FourthFloorImageView);
@@ -372,7 +369,7 @@ public class MainController {
         FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FifthFloorImageView = new ImageView();
-        Image FifthFloorMapPic = new Image("images/5_theFifthfloor.png");
+        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
         FifthFloorImageView.setImage(FifthFloorMapPic);
         FifthFloorImageView.setPreserveRatio(true);
         FifthFloorScrollPane.setContent(FifthFloorImageView);
@@ -386,7 +383,7 @@ public class MainController {
         SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SixthFloorImageView = new ImageView();
-        Image SixthFloorMapPic = new Image("images/6_theSixthfloor.png");
+        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
         SixthFloorImageView.setImage(SixthFloorMapPic);
         SixthFloorImageView.setPreserveRatio(true);
         SixthFloorScrollPane.setContent(SixthFloorImageView);
@@ -400,7 +397,7 @@ public class MainController {
         SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SeventhFloorImageView = new ImageView();
-        Image SeventhFloorMapPic = new Image("images/7_theSeventhfloor.png");
+        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
         SeventhFloorImageView.setImage(SeventhFloorMapPic);
         SeventhFloorImageView.setPreserveRatio(true);
         SeventhFloorScrollPane.setContent(SeventhFloorImageView);
