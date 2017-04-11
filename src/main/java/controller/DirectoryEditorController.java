@@ -2,6 +2,7 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,13 +10,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.HospitalProfessional;
+import model.Node;
+import service.HospitalProfessionalService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class DirectoryEditorController {
+public class DirectoryEditorController extends Controller{
     @FXML
     private Button logoutBtn;
     @FXML
@@ -30,28 +36,51 @@ public class DirectoryEditorController {
     private ListView<String> searchList;
 
     // database helpers
+    HospitalProfessionalService hps;
+
+    // Arraylist of search results
+    ArrayList<String> searchResults;
+
+    // List of all hospital people
+    List<HospitalProfessional> people;
 
     @FXML
     public void initialize() {
 
+        //init hps
+        hps = new HospitalProfessionalService();
+
+        // init search results empty list, hospital professionals list
+        people = hps.getAllProfessionals();
+        searchResults = new ArrayList<>();
+
+        // disable the edit person button
+        editPrsnBtn.setDisable(true);
+
+        // add a listener to the listview
+        searchList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            /**
+             * @author paul
+             * enables the edit person button
+             */
+            public void handle(MouseEvent event) {
+                editPrsnBtn.setDisable(false);
+            }});
     }
 
     @FXML
     public void back() throws Exception {
-        Stage stage = (Stage) backBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("Admin Tool");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
+
     }
 
     @FXML
     public void logout() throws Exception {
-        Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Main");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+
+        switchScreen("view/Main.fxml", "Main screen", logoutBtn);
+
     }
 
     /**
@@ -63,17 +92,22 @@ public class DirectoryEditorController {
      */
     @FXML
     public void editPersonBtnPressed() throws Exception {
-        // get the current hospital professional that is selected in the list
-       // String selectedName = searchList.getSelectionModel().getSelectedItem();
-//        HospitalProfessional selectedPerson = HospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
 
-//        // pass it to the next screen
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
-//        Stage stage = new Stage();
-//        stage.setScene(new Scene((Pane)loader.load()));
-//        EditPersonController controller = loader.<EditPersonController>getController();
-////        controller.setSelectedUser(selectedPerson);
-//        stage.show();
+        // get the current hospital professional that is selected in the list
+        String selectedName = searchList.getSelectionModel().getSelectedItem();
+        HospitalProfessional hp = hps.findHospitalProfessionalByName(selectedName);
+
+        // pass it to the next screen
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("view/EditPersonScreen.fxml"));
+        loader.load();
+        Parent p = loader.getRoot();
+        Stage stage = (Stage) logoutBtn.getScene().getWindow();
+        stage.setScene(new Scene(p));
+        EditPersonController controller = loader.getController();
+        controller.setSelectedUser(hp);
+        stage.setFullScreen(true);
+        stage.show();
 
     }
 
@@ -85,37 +119,39 @@ public class DirectoryEditorController {
      */
     @FXML
     public void addPersonBtnCPressed() throws Exception {
-        Stage stage = (Stage) addPrsnBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AddPerson.fxml"));
-        stage.setTitle("Add Person");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+
+        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+
     }
 
-//
-//    /**
-//     * @author Paul
-//     *
-//     * search field entery event handler
-//     * for now, it just populates the list
-//     * <TODO> query the database and populate list with actual results </TODO>
-//     */
-//    @FXML
-    public void searchFieldEntered() {
 
-//        // populate the list with the database
-//        ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
-//        ArrayList<String> nameList = new ArrayList<String>();
-//        personList = HospitalProfessionalsHelper.getHospitalProfessionals(null);
-//        for (HospitalProfessional aPersonList : personList) {
-//            nameList.add(aPersonList.getName());
+    /**
+     * @author Paul
+     *
+     * search field key press event handler
+     * queries database for results, populates list
+     *
+     */
+    @FXML
+    public void searchFieldKeyPressed() {
 
+        // get the query from the search field
+        String query = searchField.getText();
+
+        // reset list
+        searchResults.removeAll(searchResults);
+
+        // add search results
+        for(HospitalProfessional p : people){
+            if(p.getName().toLowerCase().contains(query.toLowerCase())){
+                searchResults.add(p.getName());
+            }
         }
-//
-//        // load into the list
-//        ObservableList<String> oList = FXCollections.observableArrayList(nameList);
-//        searchList.setItems(oList);
-//
-//    }
+
+        // display the list
+        searchList.setItems(FXCollections.observableList(searchResults));
+
+
+    }
 
 }

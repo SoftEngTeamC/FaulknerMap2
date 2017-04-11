@@ -17,7 +17,6 @@ hallway - 2516 - 1389
 4G - 2500 - 1497
 hallway - 2515 - 1467
 
-
 4H - 2531 - 1498
 hallway - 2517 - 1500
 
@@ -33,11 +32,24 @@ hallway - 1846 - 2075
 4S - 2848 - 2092
 hallway - 2703 - 2073
 
-intersection - 2515 - 1141
-intersection - 2515 - 1338
-intersection - 2413 - 1340
-intersection - 2624 - 1340
-intersection - 2623 - 1164
-intersection - 2412 - 1167
-intersection - 2514 - 2067
+Atrium Elevators - 2478 - 1268
+
+Hillside Elevators 1 - 2443 - 2000
+
+Hillside Elevators 2 - 2590 - 2000
+
+intersection41 - 2517 - 1141
+intersection42 - 2517 - 1338
+intersection43 - 2413 - 1338
+intersection44 - 2413 - 1170
+intersection45 - 2429 - 1170
+intersection46 - 2463 - 1142
+intersection47 - 2517 - 1141
+intersection48 - 2563 - 1142
+intersection49 - 2601 - 1154
+intersection410 - 2621 - 1170
+intersection411 - 2621 - 1336
+intersection412 - 2515 - 1336
+intersection413 - 2515 - 2070
+
 
