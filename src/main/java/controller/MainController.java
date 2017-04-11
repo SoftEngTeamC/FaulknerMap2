@@ -29,13 +29,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
-<<<<<<< HEAD
-public class MainController{
-=======
 public class MainController {
     //ImageView Objects
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
     @FXML
     private ScrollPane FirstFloorScrollPane;
     @FXML
@@ -85,31 +80,19 @@ public class MainController {
 
     //INTIALIZE
     public void initialize() {
-<<<<<<< HEAD
         InitializeMapViews();
         PopulateSearchResults(null);
-=======
-        //the bind function locks an element property to another elements property
-        FirstFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SecondFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        ThirdFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FourthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FifthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SixthFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SeventhFloorImage.fitWidthProperty().bind(FloorViewsTabPane.widthProperty());
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
-//        PopulateSearchResults(null);
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
     }
 
 
     //PROXY FUNCTIONS
 
-<<<<<<< HEAD
+
 //    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
 //    public void DisplayMap(List<MapNode> nodes){
 //        //MapAnchor.getChildren().clear();
@@ -135,33 +118,6 @@ public class MainController {
 //            }
 //        }
 //    }
-=======
-    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-    public void DisplayMap(List<MapNode> nodes) {
-        //MapAnchor.getChildren().clear();
-        ImageView mapPic = new ImageView();
-        Image floorImage = new Image("images/floor4.png");
-        mapPic.setImage(floorImage);
-        //mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
-        mapPic.setPreserveRatio(true);
-        mapPic.setPickOnBounds(true);
-        //MapAnchor.getChildren().add(mapPic);
-
-        if (nodes == null) {
-            System.out.println("There is no path.");
-            return;
-        }
-        for (int i = 0; i < nodes.size(); i++) {
-            MakeCircle(nodes.get(i).getLocation().getX(), nodes.get(i).getLocation().getY());
-            if (i > 0) {
-                MakeLine(nodes.get(i - 1).getLocation().getX(),
-                        nodes.get(i - 1).getLocation().getY(),
-                        nodes.get(i).getLocation().getX(),
-                        nodes.get(i).getLocation().getY());
-            }
-        }
-    }
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
 
 //    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
 //    //It locks the points to their position on the image,
@@ -199,12 +155,8 @@ public class MainController {
 //    }
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
-<<<<<<< HEAD
-    public void UpdateSearchResults(LinkedList<String> results){
-
-=======
     public void UpdateSearchResults(LinkedList<String> results) {
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
+
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
@@ -243,17 +195,12 @@ public class MainController {
 
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
-<<<<<<< HEAD
     public void PopulateInformationDisplay(HospitalProfessional HP){
         String offices = "Offices:\n";
         for(Node n : HP.getOffice()){
             offices = offices + n.getName() + "\n";
         }
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
-=======
-    public void PopulateInformationDisplay(HospitalProfessional HP) {
-        //DisplayInformation.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+HP.getLocation());
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
         System.out.println("trying to populate information area");
     }
 
@@ -370,7 +317,7 @@ public class MainController {
         language = 1;
     }
 
-<<<<<<< HEAD
+
     //----------------------------------Build Zoomable Maps----------------------------------------------
     public void InitializeMapViews(){
         //FIRST FLOOR
@@ -472,7 +419,7 @@ public class MainController {
         SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
         SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
-=======
+
     @FXML
     public void toSpanish() throws Exception {
         Stage stage = (Stage) languageMenuButton.getScene().getWindow();
@@ -509,7 +456,6 @@ public class MainController {
         language = 4;
     }
 
->>>>>>> 08001b796aa160d768169565ae673bb5e5b763e7
 }
 
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
