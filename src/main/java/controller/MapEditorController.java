@@ -15,6 +15,7 @@ import service.NodeService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapEditorController extends Controller{
@@ -83,6 +84,8 @@ public class MapEditorController extends Controller{
 
     // arraylist of search terms
     private ArrayList<String> searchList;
+    private ArrayList<String> nodeList;
+    private NodeService NS;
 
 
     public void initialize(){
@@ -91,6 +94,13 @@ public class MapEditorController extends Controller{
         floor4Image = new Image("file:../Resources/floor4.png");
         //floor4Image.widthProperty().bind(anchorPane.widthProperty());
         imageView = new ImageView(floor4Image);
+
+        //Populate the list of all nodes
+        this.NS = new NodeService();
+        ArrayList<Node> allNode = new ArrayList<Node>(NS.getAllNodes());
+        for (Node aNode : allNode) {
+            this.nodeList.add(aNode.getName());
+        }
 
         //mouse clicked handler, send x,y data to function
         anchorPane.setOnMouseClicked(event -> {
@@ -129,27 +139,19 @@ public class MapEditorController extends Controller{
     public void removeNode_searchBtnPressed(){
         try {
             String searchField = removeNode_searchField.getText();
-            System.out.println("searchField is: " + searchField);
+            //System.out.println("searchField is: " + searchField);
+
             if(searchField.equals("")){
-                NodeService NS = new NodeService();
-                ArrayList<Node> allNode = new ArrayList<Node>(NS.getAllNodes());
-                this.searchList = new ArrayList<>();
-
-                for (Node anAllNode : allNode) {
-                    this.searchList.add(anAllNode.getName());
-                }
-
-                ObservableList<String> allOList = FXCollections.observableArrayList(this.searchList);
+                ObservableList<String> allOList = FXCollections.observableArrayList(this.nodeList);
                 removeNode_searchList.setItems(allOList);
-            } else {
-                NodeService NS = new NodeService();
-                String selectedName = (NS.findNodeByName(searchField)).getName();
-                System.out.println("selectName is: " + selectedName);
-                ArrayList<String> nodeName = new ArrayList<>();
-                nodeName.add(selectedName);
-                System.out.println("nodeName is: " + nodeName);
-                ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
-                removeNode_searchList.setItems(OList);
+            //} else {
+                //String selectedName = (this.NS.findNodeByName(searchField)).getName();
+                //System.out.println("selectName is: " + selectedName);
+                //ArrayList<String> nodeName = new ArrayList<>();
+                //nodeName.add(selectedName);
+                //System.out.println("nodeName is: " + nodeName);
+                //ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
+                //removeNode_searchList.setItems(OList);
             }
 
         }
@@ -167,17 +169,32 @@ public class MapEditorController extends Controller{
      *
      */
     public void removeNode_removeBtnPressed(){
-        NodeService NS = new NodeService();
         String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
         System.out.println(selectedItem);
-        Node selectNode = (NS.findNodeByName(selectedItem));
+        Node selectNode = (this.NS.findNodeByName(selectedItem));
         this.searchList.remove(selectNode.getName());
-        NS.remove(selectNode);
+        this.NS.remove(selectNode);
 
         //repopulate the search list
         ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
         removeNode_searchList.setItems(OList);
+    }
 
+    /**
+     * method that populates the search results with the search query
+     */
+    public void removeNode_searchFieldKeyPressed(){
+        // get the query from the field
+        String query = removeNode_searchField.getText();
+        ArrayList<String> queryList = new ArrayList<>();
+        // add each query to the list
+        List<Node> nodeList = this.NS.getAllNodes();
+        for(Node n: nodeList){
+            if (n.getName().contains(query))
+                queryList.add(n.getName());
+        }
+        // Make the list view show the results
+        removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
     }
 
     /**
@@ -197,15 +214,13 @@ public class MapEditorController extends Controller{
      *
      */
     public void addNode_createNodeBtnPressed(){
-        NodeService NS = new NodeService();
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         //TODO get floor information
         //float floor = Float.parseFloat(addNode_floor.getText());
         Coordinate addCoord = new Coordinate(x, y, 4);
         Node newNode = new Node(addCoord, addNode_nameField.getText());
-        //TODO get add node function
-        //NS.addNode(newNode);
+        this.NS.merge(newNode);
     }
 
 //
