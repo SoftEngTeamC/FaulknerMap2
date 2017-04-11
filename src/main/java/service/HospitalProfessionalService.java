@@ -2,6 +2,7 @@ package service;
 
 
 import model.HospitalProfessional;
+import model.Node;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,5 +31,9 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.createQuery("from HospitalProfessional", HospitalProfessional.class)
                 .getResultList();
+    }
+
+    public Node getOffice(Long id) {
+        return find(id).getOffice().get(0);
     }
 }
