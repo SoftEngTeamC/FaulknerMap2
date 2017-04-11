@@ -38,11 +38,21 @@ public class DirectoryEditorController extends Controller{
     // database helpers
     HospitalProfessionalService hps;
 
+    // Arraylist of search results
+    ArrayList<String> searchResults;
+
+    // List of all hospital people
+    List<HospitalProfessional> people;
+
     @FXML
     public void initialize() {
 
         //init hps
         hps = new HospitalProfessionalService();
+
+        // init search results empty list, hospital professionals list
+        people = hps.getAllProfessionals();
+        searchResults = new ArrayList<>();
 
         // disable the edit person button
         editPrsnBtn.setDisable(true);
@@ -83,19 +93,20 @@ public class DirectoryEditorController extends Controller{
     @FXML
     public void editPersonBtnPressed() throws Exception {
 
-        // Instantiate a database helper
-        HospitalProfessionalService hps = new HospitalProfessionalService();
-
         // get the current hospital professional that is selected in the list
         String selectedName = searchList.getSelectionModel().getSelectedItem();
         HospitalProfessional hp = hps.findHospitalProfessionalByName(selectedName);
 
         // pass it to the next screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
-        Stage stage = new Stage();
-        stage.setScene(new Scene((Pane)loader.load()));
-        EditPersonController controller = loader.<EditPersonController>getController();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("view/EditPersonScreen.fxml"));
+        loader.load();
+        Parent p = loader.getRoot();
+        Stage stage = (Stage) logoutBtn.getScene().getWindow();
+        stage.setScene(new Scene(p));
+        EditPersonController controller = loader.getController();
         controller.setSelectedUser(hp);
+        stage.setFullScreen(true);
         stage.show();
 
     }
@@ -108,11 +119,9 @@ public class DirectoryEditorController extends Controller{
      */
     @FXML
     public void addPersonBtnCPressed() throws Exception {
-        Stage stage = (Stage) addPrsnBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AddPerson.fxml"));
-        stage.setTitle("Add Person");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+
+        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+
     }
 
 
@@ -126,20 +135,21 @@ public class DirectoryEditorController extends Controller{
     @FXML
     public void searchFieldKeyPressed() {
 
-        // get the query from the searchfield
+        // get the query from the search field
         String query = searchField.getText();
 
-        // make and populate list with the names of hospital professionals containing query
-        ArrayList<String> names = new ArrayList<>();
-        List<HospitalProfessional> people = hps.getAllProfessionals();
+        // reset list
+        searchResults.removeAll(searchResults);
+
+        // add search results
         for(HospitalProfessional p : people){
-            if(p.getName().contains(query)){
-                names.add(p.getName());
+            if(p.getName().toLowerCase().contains(query.toLowerCase())){
+                searchResults.add(p.getName());
             }
         }
 
-        // set the list to contain the queried strings
-        searchList.setItems(FXCollections.observableList(names));
+        // display the list
+        searchList.setItems(FXCollections.observableList(searchResults));
 
 
     }

@@ -17,10 +17,11 @@ import model.HospitalProfessional;
 import model.Node;
 import service.HospitalProfessionalService;
 import service.NodeService;
-
 import java.util.*;
 
 public class EditPersonController extends Controller{
+
+    // ~~~~~~~~~FXML Objects~~~~~~~~~~
 
     @FXML
     private Button logoutBtn;
@@ -47,7 +48,7 @@ public class EditPersonController extends Controller{
     @FXML
     private Text deletedText;
 
-    // database helpers
+    // ~~~~~database helpers~~~~~
     NodeService ns;
     HospitalProfessionalService hps;
 
@@ -61,8 +62,6 @@ public class EditPersonController extends Controller{
     List<Node> currentNodeList;
 
 
-
-
     @FXML
     public void initialize() {
 
@@ -74,28 +73,14 @@ public class EditPersonController extends Controller{
         ns = new NodeService();
         hps = new HospitalProfessionalService();
 
-        // set the name, title, and ID field
-        nameField.setText(this.hp.getName());
-        titleField.setText(this.hp.getTitle());
-        idField.setText(this.hp.getId().toString());
-
-        //remove node button shouldn't be clickable yet
+        // disable remove node button
         removeNodeBtn.setDisable(true);
 
-        // update button shouldn't do anything until something is changed
+        // disable update button
         updateBtn.setDisable(true);
 
-        // Add node not enabled yet
+        // disable add node button
         addNodeBtn.setDisable(true);
-
-        // available nodes list is populated
-        // initialize the private field list
-        availableNodeList = ns.getAllNodes();
-        // make it the set - the person's set of nodes
-        updateAvailableNodesList();
-        // populate the locations listview
-        currentNodeList = hp.getOffice();
-        setListItems(currentNodeList, locationsList);
 
         // add event handlers for when an item is clicked in both lists
         locationsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -115,9 +100,9 @@ public class EditPersonController extends Controller{
                 addNodeBtn.setDisable(false);
             }});
 
-
     }
 
+    // ~~~~~~ Event handlers ~~~~~~~~~
 
     @FXML
     /**
@@ -126,7 +111,7 @@ public class EditPersonController extends Controller{
      */
     public void back() throws Exception {
 
-        switchScreen("view/AdminToolMenu.fxml","Admin tool menu",backBtn);
+        switchScreen("view/DirectoryEditor.fxml","Directory Editor",backBtn);
 
     }
 
@@ -147,7 +132,7 @@ public class EditPersonController extends Controller{
      *
      * Event handler for when the remove node button is clicked.
      * gets node from database, removes a node, edits database,
-     * refreshes list, disables remove node button.
+     * refreshes list, disables remove node button, enables update button
      *
      */
     public void removeNodeBtnAction(){
@@ -155,19 +140,19 @@ public class EditPersonController extends Controller{
         // Get the selected string
         String selected = locationsList.getSelectionModel().getSelectedItem();
 
-        // remove the selected node from this persons list.
+        // remove the selected node from the current nodes list.
         removeNode(selected);
 
-        // refresh the lists
-        setListItems(hp.getOffice(), locationsList);
-
+        // refresh both visible lists
+        updateListView(locationsList, currentNodeList);
+        updateListView(availableLocationsList, availableNodeList);
 
         // disable remove node button
         removeNodeBtn.setDisable(true);
 
+        //enable update button
+        updateBtn.setDisable(false);
     }
-
-
 
     @FXML
     /**
@@ -175,7 +160,7 @@ public class EditPersonController extends Controller{
      *
      * event handler for when the add node butotn is clicked.
      * gets node from database, edits the person's data in database, refreshes both lists
-     * disables the add node button
+     * disables the add node button, enables update button
      *
      */
     public void addNodeBtnAction(){
@@ -183,18 +168,174 @@ public class EditPersonController extends Controller{
         // get referenced node string
         String selected = availableLocationsList.getSelectionModel().getSelectedItem();
 
-        // edit this person's data in database
+        // Add and remove node from respective lists
         addNode(selected);
 
-        // refresh the list
-        setListItems(hp.getOffice(), locationsList);
-
-        // refresh available list
-        updateAvailableNodesList();
+        // refresh the lists
+        updateListView(locationsList,currentNodeList);
+        updateListView(availableLocationsList, availableNodeList);
 
         // disable add node button
         addNodeBtn.setDisable(true);
 
+        //enable update button
+        updateBtn.setDisable(false);
+
+    }
+
+    /**
+     * @author paul
+     *
+     * event handler for the update button being pressed. Updates person in database,
+     * sets the update text to visible
+     */
+    public void updateBtnPressed() {
+
+        // push to database
+        hp.setName(nameField.getText());
+        hp.setTitle(titleField.getText());
+        hp.setOffice(currentNodeList);
+
+        // remove old, insert new
+        HospitalProfessional old = hps.find(hp.getId());
+        hps.remove(old);
+        hps.merge(hp);
+
+        // alert user
+        updateText.setVisible(true);
+
+    }
+
+    /**
+     * @author paul
+     *
+     * deletes person from database, sets deleted text field to visible.
+     *
+     *
+     */
+    public void deleteBtnPressed() {
+
+        //remove person
+        hps.remove(hp);
+
+        // indicate to user
+        deletedText.setVisible(true);
+
+    }
+
+    // ~~~~~~~~~ helpers ~~~~~~~~~
+
+    /**
+     * @author paul
+     * sets the listview to contain the names of the nodes in given nodelist
+     * @param locationsList
+     * @param nodeList
+     */
+    private void updateListView(ListView<String> locationsList, List<Node> nodeList) {
+
+        // make list of names (string)
+        ArrayList<String> nameList = new ArrayList<>();
+
+        // populate nameslist
+        for(Node n: nodeList){
+            nameList.add(n.getName());
+        }
+
+        // populate listview
+        locationsList.setItems(FXCollections.observableList(nameList));
+        locationsList.refresh();
+
+    }
+
+    /**
+     * @author Paul
+     * Used by the set function to initialize the availale nodes list to not include the nodes in location list
+     */
+    private void updateAvailableNodesList() {
+
+        // Make iterator to go through the available nodes
+        Iterator<Node> iter = availableNodeList.iterator();
+
+        // Average case is Big Theta (n*m)
+        while(iter.hasNext()){
+            // name (string) of current node
+            String currentName = iter.next().getName();
+            // go through current nodes, if it has the same name, remove
+            for(Node n: currentNodeList){
+                if(n.getName().equals(currentName))
+                    iter.remove();
+            }
+        }
+    }
+
+    /**
+     * @author paul
+     *
+     * removes a node from the currentNodeList, adds it to availableNodesList
+     *
+     * @param selected
+     */
+    private void removeNode(String selected) {
+
+        // get the node referenced by string
+        Node n = ns.findNodeByName(selected);
+
+        // remove from current
+        deleteNode(n, currentNodeList);
+
+        // add it to available
+        availableNodeList.add(n);
+
+    }
+    /**
+     * @author paul
+     *
+     * adds given node to list of current nodes, removes from available nodes
+     *
+     *
+     * @param selected
+     *
+     */
+    private void addNode(String selected){
+
+        // find the node referenced by string
+        Node n = ns.findNodeByName(selected);
+        System.out.println("Node ID: " + n.getId().toString());
+
+        // add to this list
+        System.out.println("~~~~~~~~~~~~~~        ahhhhhhhhh       ~~~~~~~~~");
+        System.out.println(currentNodeList.add(n));
+
+        // remove it from available list
+        System.out.println("~~~~~~~~~~~~~~        ahhhhhhhhh       ~~~~~~~~~");
+        System.out.println(deleteNode(n, availableNodeList));
+
+    }
+
+    /**
+     * @author paul
+     *
+     * Function that safely deletes a node from a list of nodes
+     * @param n
+     * @param nodeList
+     */
+    private boolean deleteNode(Node n, List<Node> nodeList) {
+
+        // Name (string) of node to remove
+        String selected = n.getName();
+
+        // create iterator
+        Iterator<Node> iter = nodeList.iterator();
+
+        // go through whole list, remove the one with the same name.
+        while(iter.hasNext()){
+            String currentName = iter.next().getName();
+            if (currentName.equals(selected)) {
+                iter.remove();
+                return true;
+            }
+        }
+        return false;
 
     }
 
@@ -209,110 +350,24 @@ public class EditPersonController extends Controller{
 
         this.hp = hp;
 
-    }
+        // set the name, title, and ID field
+        nameField.setText(this.hp.getName());
+        titleField.setText(this.hp.getTitle());
+        idField.setText(this.hp.getId().toString());
 
-    /**
-     * @author paul
-     *
-     * event handler for the update button being pressed. Updates person in database,
-     * sets the update text to visible
-     */
-    public void updateBtnPressed() {
-        // push to database
-        hp.setName(nameField.getText());
-        hp.setTitle(titleField.getText());
-        hp.setOffice(currentNodeList);
-        // remove old, insert new
-        HospitalProfessional old = hps.find(hp.getId());
-        hps.remove(old);
-        hps.merge(hp);
-        // alert user
-        updateText.setVisible(true);
+        // set the current node list
+        currentNodeList = this.hp.getOffice();
 
-    }
+        // set the available node list
+        availableNodeList = ns.getAllNodes();
 
-    /**
-     * @author paul
-     *
-     * deletes person from database, sets deleted text field to visible.
-     *
-     *
-     */
-    public void deleteBtnPressed() {
-        //remove person
-        hps.remove(hp);
-        // indicate to user
-        deletedText.setVisible(true);
-    }
+        // make it the set of all nodes - the person's set of nodes
+        updateAvailableNodesList();
 
-    // ~~~~~~~~~ helpers ~~~~~~~~~
+        // populate the locations listview
+        updateListView(locationsList,currentNodeList);
+        updateListView(availableLocationsList, availableNodeList);
 
-    /**
-     * Updates the local list, then refreshes the available list
-     */
-    private void updateAvailableNodesList() {
-        // remove from the nodeList the elements in the person's office list, if contained
-        for(Node n : hp.getOffice()){
-            if (availableNodeList.contains(n)){ // if contained, remove
-                availableNodeList.remove(n);
-            }
-        }
-        // refresh the list in the view
-        setListItems(availableNodeList, availableLocationsList);
-    }
-
-    /**
-     * @author paul
-     *
-     * Refreshes a given listview given a list of nodes
-     *
-     * @param nodeList list of nodes
-     * @param lv listview to populate
-     */
-    private void setListItems(List<Node> nodeList, ListView lv) {
-        // private list of node names
-        ArrayList<String> names = new ArrayList<>();
-        // loop through nodes, get name and add to list
-        for(Node n : nodeList){
-            names.add(n.getName());
-        }
-        // create FX compatible list and set the LV to this list
-        lv.setItems(FXCollections.observableArrayList(names));
-    }
-
-    /**
-     * @author paul
-     *
-     * removes a node from this person's locations list in database
-     *
-     * @param selected
-     */
-    private void removeNode(String selected) {
-
-        // find the node referenced by string
-        Node n = ns.findNodeByName(selected);
-
-        // edit this list of locations by removing it, then set his offices to updated list
-        currentNodeList.remove(n);
-        hp.setOffice(currentNodeList);
-
-    }
-    /**
-     * @author paul
-     *
-     * adds given node to person's locations list in database
-     *
-     * @param selected
-     *
-     */
-    private void addNode(String selected){
-
-        // find the node referenced by string
-        Node n = ns.findNodeByName(selected);
-
-        // add to this list
-        currentNodeList.add(n);
-        hp.setOffice(currentNodeList);
     }
 
 }
