@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-public class AddPersonController {
+public class AddPersonController extends Controller{
 
     @FXML
     private Button backBtn;
@@ -35,77 +35,33 @@ public class AddPersonController {
 
     @FXML
     public void initialize() {
-//        professionalHelper = Driver.getHospitalProfessionalHelper();
+
     }
 
     /**
      * handler for the back button being pressed. Brings it back to the directory editor screen.
      */
-    public void backBtnPressed() {
+    public void backBtnPressed() throws java.io.IOException{
+
         // switch screens to directory editor
-        // goto genres screen
-        try {
-            Stage stage = (Stage) backBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/DirectoryEditor.fxml"));
-            stage.setTitle("Directory Editor");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
-        } catch (Exception E) {
-            System.out.println("Couldn't switch scenes");
-        }
+        switchScreen("view/DirectoryEditor.fxml", "Directory editor", backBtn);
     }
 
     /**
      * Handler for the logout button. Switches back to the main screen.
      */
-    public void logoutBtnPressed() {
+    public void logoutBtnPressed() throws java.io.IOException{
+
         // switch screens to main
-        try {
-            Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"));
-            stage.setTitle("Main");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
-        } catch (Exception E) {
-            System.out.println("Couldn't switch scenes");
-        }
+        switchScreen("view/Main.fxml", "Main screen", logoutBtn);
+
     }
 
     /**
+     * @author Paul
      * handler for the add person button. Adds to the hospital professional database if possible.
      */
     public void setAddPersonBtnPressed() {
-        // check if fields are entered
-//        if (nameField.getText().isEmpty() || locationField.getText().isEmpty()) {
-//            // Display error text
-//            warningText.setText("Not enough information added");
-//            warningText.setVisible(true);
-//        } else if (NodesHelper.getNodeByName(locationField.getText()) == null) {
-//            warningText.setText("Location not found");
-//            warningText.setVisible(true);
-//        } else {
-//            // create a new professional and add to database
-//            HospitalProfessional newProfessional = new HospitalProfessional(
-//                    nameField.getText(),
-//                    titleField.getText(),
-//                    locationField.getText()
-//            );
-//
-//            Node newNode = NodesHelper.getNodeByName(locationField.getText());
-//            newProfessional.setNodeId(newNode.getId());
-//            professionalHelper.addHospitalProfessional(newProfessional);
-//
-//
-//            // put the ID in the ID field
-//            idField.setText(newProfessional.getId().toString());
-//            // indicate success
-//            warningText.setVisible(false);
-//            successField.setVisible(true);
-//            //professionalHelper.printAllProfessionalRows();
-//
-//        }
-
-        // check if not already in existence??
 
 
     }

@@ -65,4 +65,5 @@ public class Node {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+
 }

@@ -8,15 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "SERVICES")
 public class HospitalService {
-    @Id
-    @Column(name="ID")
     private long id;
 
-    @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(
-            name="SERVICES_NODES",
-            joinColumns=@JoinColumn(name="SERVICES_ID", referencedColumnName="ID"),
-            inverseJoinColumns=@JoinColumn(name="NODES_ID", referencedColumnName="ID"))
     private List<Node> locations;
 
     private String name;
@@ -42,12 +35,14 @@ public class HospitalService {
     }
 
     @ManyToMany
-    @JoinColumn(name = "SERVICE_NODES")
-    public List<Node> getLocation() {
+    @JoinTable(name = "SERVICE_LOCATION",
+            joinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "NODE_ID", referencedColumnName = "ID"))
+    public List<Node> getLocations() {
         return locations;
     }
 
-    public void setLocation(List<Node> location) {
+    public void setLocations(List<Node> locations) {
         this.locations = locations;
     }
 

@@ -1,7 +1,37 @@
-2A  hallway20
+2A - hallway20
 
-2B  hallway21
+2B - hallway21
 
-Physical Therapy    hallway22
+Physical Therapy - hallway22
 
-Outpatient Psych    hallway23
+Outpatient Psych - hallway23
+
+Inpatient Psych - hallway24
+
+Atrium Elevators - hallway24
+
+Hillside Elevators 1 - hallway25
+
+Hillside Elevators 2 - hallway26
+
+hallway20 - intersection20
+
+hallway21 - intersection21
+
+hallway22 - intersection25
+
+hallway22 - intersection26
+
+hallway23 - intersection26
+
+hallway24 - intersection26
+
+hallway25 - intersection22
+
+hallway25 - intersection20
+
+hallway26 - intersection27
+
+hallway27 - intersection25
+
+hallway27 - intersection28

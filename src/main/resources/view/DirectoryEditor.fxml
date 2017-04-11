@@ -2,10 +2,14 @@
 
 <!--<?import com.gluonhq.charm.glisten.control.TextField?>-->
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
     <children>
         <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" text="Back" />
@@ -18,7 +22,7 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
-                        <TextField fx:id="searchField" onAction="#searchFieldEntered" prefHeight="25.0" prefWidth="349.0" promptText="Search" />
+                        <TextField fx:id="searchField" onKeyPressed="#searchFieldKeyPressed" prefHeight="25.0" prefWidth="349.0" promptText="Search" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

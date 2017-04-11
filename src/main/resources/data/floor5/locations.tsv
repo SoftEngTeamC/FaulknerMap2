@@ -1,60 +1,73 @@
 name	x	y
 5A - 2391 - 1294
-hallway - 2409 - 1293
+<<<<<<< HEAD
+hallway51 - 2409 - 1293
 
 5B - 2402 - 1150
-hallway - 2450 - 1146
+hallway52 - 2450 - 1146
 
 5C - 2509 - 1119
-hallway - 2511 - 1133
+hallway53 - 2511 - 1133
 
 5D - 2609 - 1139
-hallway - 2599 - 1151
+hallway54 - 2599 - 1151
 
 5E - 2640 - 1296
-hallway - 2620 - 1296
+hallway55 - 2620 - 1296
 
 5F - 2536 - 1390
-hallway - 2516 - 1389
+hallway56 - 2516 - 1389
 
 5G - 2497 - 1388
-hallway - 2516 - 1389
+hallway57 - 2516 - 1389
 
 5H - 2537 - 1468
-hallway - 2517 - 1467
+hallway58 - 2517 - 1467
 
 5I - 2496 - 1466
-hallway - 2517 - 1467
+hallway59 - 2517 - 1467
 
 5J - 2497 - 1624
-hallway - 2514 - 1627
+hallway510 - 2514 - 1627
 
 5K - 2536 - 1631
-hallway - 2514 - 1627
+hallway511 - 2514 - 1627
 
 5L - 2555 - 1846
-hallway - 2555 - 1831
+hallway512 - 2555 - 1831
 
 5N - 2158 - 2085
-hallway - 2157 - 2070
+hallway513 - 2157 - 2070
 
 5M - 2519 - 2086
-hallway - 2517 - 2067
+hallway514 - 2517 - 2067
 
 5 South - 2596 - 2072
-hallway - 2563 - 2069
+hallway515 - 2563 - 2069
 
 5 North - 1879 - 2072
-hallway - 1908 - 2070
+hallway516 - 1908 - 2070
+
+Atrium Elevators - 2478 - 1268
+hallway517 - 2515 - 1216
+
+Hillside Elevators 1 - 2443 - 2000
+hallway518 - 2514 - 2010
+
+intersection51 - 1941 - 2072
+intersection52 - 2476 - 2072
+intersection53 - 2476 - 1968
+intersection54 - 2515 - 1968
+intersection55 - 2515 - 1934
+intersection56 - 2515 - 1336
+intersection57 - 2403 - 1336
+intersection58 - 2403 - 1164
+intersection59 - 2515 - 1140
+intersection510 - 2515 - 1336
+intersection511 - 2624 - 1336
+intersection512 - 2624 - 1167
+intersection513 - 2515 - 1140
+intersection514 - 2515 - 1830
 
 
-intersection - 2623 - 1164
-intersection - 2514 - 1141
-intersection - 2411 - 1161
-intersection - 2410 - 1334
-intersection - 2621 - 1337
-intersection - 2515 - 1337
-intersection - 2514 - 1962
-intersection - 2563 - 1962
-intersection - 2561 - 2069
-intersection - 2468 - 2072
+
