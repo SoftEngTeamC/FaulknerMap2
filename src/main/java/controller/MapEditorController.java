@@ -3,20 +3,17 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import model.Node;
+import service.NodeService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MapEditorController extends Controller{
@@ -124,58 +121,64 @@ public class MapEditorController extends Controller{
     // Methods for the remove node tab
 
     /**
-     * remove node tab: search button event handler
+     * @throws Exception
+     * @author Samuel Coache
+     * <p>
+     * event handler for RemoveNode when the search button is pressed
      *
      */
     public void removeNode_searchBtnPressed(){
-//        try {
-//            String searchField = removeNode_searchField.getText();
-//            System.out.println("searchField is: " + searchField);
-//            if(searchField.equals("")){
-//                ArrayList<Node> allNode = NodesHelper.getNodes("NAME");
-//                this.searchList = new ArrayList<>();
-//
-//                for (Node anAllNode : allNode) {
-//                    this.searchList.add(anAllNode.getName());
-//                }
-//                ObservableList<String> allOList = FXCollections.observableArrayList(this.searchList);
-//                removeNode_searchList.setItems(allOList);
-//
-//            }
-//            else {
-//                String selectedName = NodesHelper.getNodeByName(searchField).getName();
-//                System.out.println("selectName is: " + selectedName);
-//                ArrayList<String> nodeName = new ArrayList<>();
-//                nodeName.add(selectedName);
-//                System.out.println("nodeName is: " + nodeName);
-//                ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
-//                removeNode_searchList.setItems(OList);
-//            }
-//
-//        }
-//        catch (Exception E){
-//            System.out.println("Searching Error");
-//            E.printStackTrace();
-//        }
+        try {
+            String searchField = removeNode_searchField.getText();
+            System.out.println("searchField is: " + searchField);
+            if(searchField.equals("")){
+                NodeService NS = new NodeService();
+                ArrayList<Node> allNode = new ArrayList<Node>(NS.getAllNodes());
+                this.searchList = new ArrayList<>();
+
+                for (Node anAllNode : allNode) {
+                    this.searchList.add(anAllNode.getName());
+                }
+
+                ObservableList<String> allOList = FXCollections.observableArrayList(this.searchList);
+                removeNode_searchList.setItems(allOList);
+            } else {
+                NodeService NS = new NodeService();
+                String selectedName = (NS.findNodeByName(searchField)).getName();
+                System.out.println("selectName is: " + selectedName);
+                ArrayList<String> nodeName = new ArrayList<>();
+                nodeName.add(selectedName);
+                System.out.println("nodeName is: " + nodeName);
+                ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
+                removeNode_searchList.setItems(OList);
+            }
+
+        }
+        catch (Exception E){
+            System.out.println("Searching Error");
+            E.printStackTrace();
+        }
+
     }
-//
-//    /**
-//     * remove node tab: remove button event handler
-//     *
-//     */
+
+    /**
+     *
+     * @author Samuel Coache
+     * <p>
+     * remove node tab: remove button event handler
+     *
+     */
     public void removeNode_removeBtnPressed(){
+        NodeService NS = new NodeService();
+        String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
+        System.out.println(selectedItem);
+        Node selectNode = (NS.findNodeByName(selectedItem));
+        this.searchList.remove(selectNode.getName());
+        NS.deleteNode(selectNode);
 
-//        String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
-//        System.out.println(selectedItem);
-//        Node selectNode = NodesHelper.getNodeByName(selectedItem);
-//        this.searchList.remove(selectNode.getName());
-//        NodesHelper.deleteNode(selectNode);
-//
-//        //repopulate the search list
-//        ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
-//        System.out.println("We got to this point in the code");
-//        removeNode_searchList.setItems(OList);
-
+        //repopulate the search list
+        ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
+        removeNode_searchList.setItems(OList);
 
     }
 //
@@ -190,8 +193,8 @@ public class MapEditorController extends Controller{
     public void addNode_connectToNodeBtnPressed(){
 
     }
-//
-//
+
+
     public void addNode_createNodeBtnPressed(){
 
 //        float x = Float.parseFloat(addNode_xPos.getText());
