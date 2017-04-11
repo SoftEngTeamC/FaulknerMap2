@@ -190,10 +190,8 @@ public class MainController extends Controller{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-        String offices = "Offices:\n";
-        for(Node n : HP.getOffice()){
-            offices = offices + n.getName() + "\n";
-        }
+        HospitalProfessionalService hs = new HospitalProfessionalService();
+        String offices = "\nOffices:\n" + hs.getOffice(HP.getId()).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
         System.out.println("trying to populate information area");
     }
