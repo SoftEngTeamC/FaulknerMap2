@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="MainSplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
@@ -51,7 +51,7 @@
                   </Button>
                     </children>
                 </HBox>
-                <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased" promptText="Search" />
+                <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased" promptText="Search" stylesheets="@generalStyles.css"/>
                 <HBox fx:id="CheckBoxesHBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <CheckBox mnemonicParsing="false" text="Rooms">
@@ -133,10 +133,14 @@
                         </Button>
                         <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#HandleHelpButton" text="Help">
                             <HBox.margin>
-                                <Insets bottom="5.0" right="5.0" top="5.0" />
+                                <Insets bottom="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
-                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="100.0" text="Language">
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
+                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
                                 <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
