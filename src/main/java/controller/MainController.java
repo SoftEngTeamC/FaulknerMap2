@@ -23,28 +23,23 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import model.Edge;
 import model.HospitalProfessional;
-<<<<<<< HEAD
+
 import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.EdgeService;
-=======
+
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.EMFProvider;
->>>>>>> 18fae244230f30eff7aaa085b9bd76e6562672b2
 import service.HospitalProfessionalService;
 import service.NodeService;
 import model.Hours;
 
-
-<<<<<<< HEAD
 import java.awt.event.MouseEvent;
 import java.util.Collections;
-=======
-import javax.xml.soap.Text;
->>>>>>> 18fae244230f30eff7aaa085b9bd76e6562672b2
+
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
@@ -163,28 +158,28 @@ public class MainController extends Controller{
         LogoImageView.setPreserveRatio(true);
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
-        MakeCircle(1000,1000,4);
+        MakeCircle(1000,1000,4, "");
         MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
-        NodeService ns = new NodeService();
-        List<Node> temp = ns.getNodesByFloor(1);
-        for(Node n: temp){
-            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
-        }
-        EdgeService es = new EdgeService();
-        List<Edge> edges = es.getAllEdges();
-        for(Edge e: edges){
-            if(e.getStart().getLocation().getFloor() == 1){
-                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
-                TextField text = new TextField();
-
-            }
-        }
+//        NodeService ns = new NodeService();
+//        List<Node> temp = ns.getNodesByFloor(1);
+//        for(Node n: temp){
+//            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
+//        }
+//        EdgeService es = new EdgeService();
+//        List<Edge> edges = es.getAllEdges();
+//        for(Edge e: edges){
+//            if(e.getStart().getLocation().getFloor() == 1){
+//                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+//                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
+//                TextField text = new TextField();
+//
+//            }
+//        }
 
     }
 
