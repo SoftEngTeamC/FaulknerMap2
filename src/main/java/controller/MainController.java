@@ -105,7 +105,7 @@ public class MainController extends Controller{
         DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
         CheckBoxesHBox.setPrefHeight(30);
 
-        PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.05));
+        PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
 
 
