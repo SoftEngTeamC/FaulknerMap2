@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
+import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
@@ -94,6 +95,7 @@ public class MainController extends Controller{
     private Button getPathButton;
     
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+    private NodeService NS;
 
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
@@ -373,6 +375,10 @@ public class MainController extends Controller{
         System.out.println("HELP");
         System.out.println(language);
         // 1: english, 2: spanish, 3: chinese, 4: french
+        //TODO: change once we set what te public void HandleHelpButton() {
+        System.out.println("HELP");
+        System.out.println(language);
+        // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
@@ -380,17 +386,26 @@ public class MainController extends Controller{
                         "please call 774-278-8517");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
-                        "porfavor llame 774-278-8517");
+                DisplayInformationTextArea.setText("Para comunicarse con un empleado\n" +
+                        "porfavor llame al 774-278-8517");
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO CHINESE SOON");
+                DisplayInformationTextArea.setText("拨打电话：774-278-8517 呼叫医院工作人员\n");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
-                        "appelez s'il vous plaît\n 774-278-8517");
+                DisplayInformationTextArea.setText("Pour contacter un employé de l'hôpital\n" +
+                        "appelez le 774-278-8517");
+                break;
+            case 5: //Italian
+                DisplayInformationTextArea.setText("Per contattare un dipendente dell'ospedale\n" +
+                        "chiamare 774-278-8517");
+                break;
+            case 6: //Japanese
+                DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n");
+                break;
+            case 7: //Portuguese
+                DisplayInformationTextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
+                        "ligue para 774-278-8517");
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -401,28 +416,40 @@ public class MainController extends Controller{
 
     //function for Panic Button
     public void HandlePanicButton() {
+        NS = new NodeService();
         System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
+        pathfinding.Map map = new Map(NS.getAllNodes());
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
-                DisplayInformationTextArea.setText("Don't Panic");
+                DisplayInformationTextArea.setText("Don't Panic! Call 774-278-8517!");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("No se asuste");
+
+                DisplayInformationTextArea.setText("No se preocupe");
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO CHINESE SOON");
+                DisplayInformationTextArea.setText("不要惊慌");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Ne panique pas");
+                DisplayInformationTextArea.setText("Ne paniquez pas");
+                break;
+            case 5: //Italian
+                DisplayInformationTextArea.setText("Non fatevi prendere dal panico");
+                break;
+            case 6: //Japanese
+                DisplayInformationTextArea.setText("パニックしないでください");
+                break;
+            case 7: //Portuguese
+                DisplayInformationTextArea.setText("Não entre em pânico");
                 break;
             default:
                 DisplayInformationTextArea.setText("Don't Panic");
                 language = 1;
         }
+        DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
     }
 
     //----------------------------------Build Zoomable Maps----------------------------------------------
