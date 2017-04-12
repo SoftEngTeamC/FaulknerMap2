@@ -1,3 +1,5 @@
+import com.univocity.parsers.common.ParsingContext;
+import com.univocity.parsers.common.processor.ObjectRowProcessor;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 import model.*;
@@ -117,31 +119,40 @@ public class DataLoader {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
-        // Create all the edges
         TsvParserSettings parserSettings = new TsvParserSettings();
+        parserSettings.setHeaderExtractionEnabled(true);
+
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 2) {
+                    return;
+                }
+
+                String startName = (String) row[0];
+                String endName = (String) row[1];
+                Node start = nodeService.findNodeByName(startName);
+                Node end = nodeService.findNodeByName(endName);
+
+                if (start == null) {
+                    System.err.println("Couldn't find a node with name " + startName + " while parsing the following line:");
+                    System.err.println(context.currentLine());
+                    return;
+                }
+
+                if (end == null) {
+                    System.err.println("Couldn't find a node with name " + endName + " while parsing the following line:");
+                    System.err.println(context.currentLine());
+                    return;
+                }
+
+                edgeService.persist(new Edge(start, end, 0));
+                edgeService.persist(new Edge(end, start, 0));
+            }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
         TsvParser parser = new TsvParser(parserSettings);
-
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null) || row.length < 2) continue;  // Test for blank line or value
-
-            String startName = row[0];
-            String endName = row[1];
-            Node start = nodeService.findNodeByName(startName);
-            Node end = nodeService.findNodeByName(endName);
-
-            if(start == null){
-                // TODO: Make these errors more helpful
-                System.out.println("could not add edge " + startName + endName);
-            }
-
-            if(end == null){
-                System.out.println("could not add edge " + startName + endName);
-            }
-
-            edgeService.persist(new Edge(start, end, 0));
-            edgeService.persist(new Edge(end, start, 0));
-        }
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
     }
 
     private static void addEdgeIntersections(){
