@@ -3,7 +3,6 @@ import com.univocity.parsers.tsv.TsvParserSettings;
 import model.*;
 import service.*;
 
-import javax.persistence.EntityManagerFactory;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,51 +10,43 @@ import java.util.List;
 
 public class DataLoader {
     public static void main(String[] args) {
-        EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
-       //     loadLocations(emf, "data/belkinHouse/locations.tsv");
-            loadLocations(emf, "data/floor1/locations.tsv", 1);
-            loadLocations(emf, "data/floor2/locations.tsv", 2);
-            loadLocations(emf, "data/floor3/locations.tsv", 3);
-            loadLocations(emf, "data/floor4/locations.tsv", 4);
-            loadLocations(emf, "data/floor5/locations.tsv", 5);
-            loadLocations(emf, "data/floor6/locations.tsv", 6);
-            loadLocations(emf, "data/floor7/locations.tsv", 7);
+            loadLocations("data/floor1/locations.tsv", 1);
+            loadLocations("data/floor2/locations.tsv", 2);
+            loadLocations("data/floor3/locations.tsv", 3);
+            loadLocations("data/floor4/locations.tsv", 4);
+            loadLocations("data/floor5/locations.tsv", 5);
+            loadLocations("data/floor6/locations.tsv", 6);
+            loadLocations("data/floor7/locations.tsv", 7);
 
-        //    loadPeople(emf, "data/belkinHouse/people.tsv");
-            loadPeople(emf, "data/floor2/people.tsv");
-            loadPeople(emf, "data/floor3/people.tsv");
-            loadPeople(emf, "data/floor4/people.tsv");
-            loadPeople(emf, "data/floor5/people.tsv");
+            loadPeople("data/floor2/people.tsv");
+            loadPeople("data/floor3/people.tsv");
+            loadPeople("data/floor4/people.tsv");
+            loadPeople("data/floor5/people.tsv");
 
-        //    loadService(emf, "data/belkinHouse/services.tsv");
-            loadService(emf, "data/floor1/services.tsv");
-            loadService(emf, "data/floor2/services.tsv");
-            loadService(emf, "data/floor3/services.tsv");
-            loadService(emf, "data/floor4/services.tsv");
-            loadService(emf, "data/floor5/services.tsv");
-            loadService(emf, "data/floor6/services.tsv");
-            loadService(emf, "data/floor7/services.tsv");
+            loadService("data/floor1/services.tsv");
+            loadService("data/floor2/services.tsv");
+            loadService("data/floor3/services.tsv");
+            loadService("data/floor4/services.tsv");
+            loadService("data/floor5/services.tsv");
+            loadService("data/floor6/services.tsv");
+            loadService("data/floor7/services.tsv");
 
-           // loadEdges(emf, "data/belkinHouse/edges.tsv");
-            loadEdges(emf, "data/floor1/edges.tsv");
-            loadEdges(emf, "data/floor2/edges.tsv");
-            loadEdges(emf, "data/floor3/edges.tsv");
-            loadEdges(emf, "data/floor4/edges.tsv");
-            loadEdges(emf, "data/floor5/edges.tsv");
-            loadEdges(emf, "data/floor6/edges.tsv");
-            loadEdges(emf, "data/floor7/edges.tsv");
-
-            //addEdgeIntersections();
-
+            loadEdges("data/floor1/edges.tsv");
+            loadEdges("data/floor2/edges.tsv");
+            loadEdges("data/floor3/edges.tsv");
+            loadEdges("data/floor4/edges.tsv");
+            loadEdges("data/floor5/edges.tsv");
+            loadEdges("data/floor6/edges.tsv");
+            loadEdges("data/floor7/edges.tsv");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            emf.close();
+            EMFProvider.getInstance().getEMFactory().close();
         }
     }
 
-    private static void loadLocations(EntityManagerFactory emf, String locationsFilePath, int floor) throws FileNotFoundException {
+    private static void loadLocations(String locationsFilePath, int floor) throws FileNotFoundException {
         NodeService nodeService = new NodeService();
         CoordinateService coordinateService = new CoordinateService();
 
@@ -66,32 +57,22 @@ public class DataLoader {
 
         List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
         for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;  // Test for blank line or value
+            if (Arrays.asList(row).contains(null) || row.length < 3) continue;  // Test for blank line or value
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 3){
-                System.out.print("Could not add location ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
+            double x = Double.parseDouble(row[1]);
+            double y = Double.parseDouble(row[2]);
+            Coordinate location = new Coordinate(x, y, floor);
 
-                // Parse the Coordinate
-                double x = Double.parseDouble(split[1]);
-                double y = Double.parseDouble(split[2]);
-                Coordinate location = new Coordinate(x, y, floor);
+            coordinateService.persist(location);
 
-                coordinateService.persist(location);
+            String name = row[0];
 
-                String name = split[0];
+            nodeService.persist(new Node(name, location));
 
-                nodeService.persist(new Node(location, name));
-            }
         }
     }
 
-    private static void loadPeople(EntityManagerFactory emf, String peopleFilePath) throws FileNotFoundException {
+    private static void loadPeople(String peopleFilePath) throws FileNotFoundException {
         HospitalProfessionalService professionalService = new HospitalProfessionalService();
         NodeService nodeService = new NodeService();
 
@@ -100,32 +81,19 @@ public class DataLoader {
 
         List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
         for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;
+            if (Arrays.asList(row).contains(null) || row.length < 3) continue;
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 3){
-                System.out.print("Could not add professional");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
+            String name = row[0];
+            String title = row[1];
 
-                String name =split[0];
-                String title = split[1];
+            List<Node> nodes = new ArrayList<>();
+            nodes.add(nodeService.findNodeByName(row[2]));
 
-                List<Node> nodes = new ArrayList<>();
-                //System.out.println(split[2]);
-                nodes.add(nodeService.findNodeByName(split[2]));
-                HospitalProfessional hp = new HospitalProfessional(name, title, nodes);
-
-                professionalService.persist(new HospitalProfessional(name, title, nodes));
-
-            }
+            professionalService.persist(new HospitalProfessional(name, title, nodes));
         }
     }
 
-    private static void loadService(EntityManagerFactory emf, String serviceFilePath) throws FileNotFoundException {
+    private static void loadService(String serviceFilePath) throws FileNotFoundException {
         HospitalServiceService serviceService = new HospitalServiceService();
         NodeService nodeService = new NodeService();
 
@@ -134,33 +102,18 @@ public class DataLoader {
 
         List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
         for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;
+            if (Arrays.asList(row).contains(null) || row.length < 2) continue;
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 2){
-                System.out.print("Could not add service ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
+            String name = row[0];
 
-                String name =split[0];
+            List<Node> nodes = new ArrayList<>();
+            nodes.add(nodeService.findNodeByName(row[1]));
 
-                List<Node> nodes = new ArrayList<>();
-                nodes.add(nodeService.findNodeByName(split[1]));
-            //    System.out.println(split[1]);
-
-                HospitalService hs = new HospitalService(nodes, name);
-
-                serviceService.persist(new HospitalService(nodes, name));
-
-
-            }
+            serviceService.persist(new HospitalService(name, nodes));
         }
     }
 
-    private static void loadEdges(EntityManagerFactory emf, String locationsFilePath) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
@@ -170,31 +123,24 @@ public class DataLoader {
 
         List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
         for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;  // Test for blank line or value
+            if (Arrays.asList(row).contains(null) || row.length < 2) continue;  // Test for blank line or value
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 2){
-                System.out.print("Could not add ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
+            String startName = row[0];
+            String endName = row[1];
+            Node start = nodeService.findNodeByName(startName);
+            Node end = nodeService.findNodeByName(endName);
 
-                Node start = nodeService.findNodeByName(split[0]);
-                Node end = nodeService.findNodeByName(split[1]);
-
-                if(start == null){
-                    System.out.println("could not add edge " + split[0]);
-                }
-
-                if(end == null){
-                    System.out.println("could not add edge " + split[1]);
-                }
-
-                edgeService.persist(new Edge(start, end, 0));
-                edgeService.persist(new Edge(end, start, 0));
+            if(start == null){
+                // TODO: Make these errors more helpful
+                System.out.println("could not add edge " + startName + endName);
             }
+
+            if(end == null){
+                System.out.println("could not add edge " + startName + endName);
+            }
+
+            edgeService.persist(new Edge(start, end, 0));
+            edgeService.persist(new Edge(end, start, 0));
         }
     }
 
