@@ -46,7 +46,7 @@ public class DataLoader {
             loadEdges(emf, "data/floor6/edges.tsv");
             loadEdges(emf, "data/floor7/edges.tsv");
 
-            addEdgeIntersections();
+            //addEdgeIntersections();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

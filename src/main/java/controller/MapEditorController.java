@@ -16,11 +16,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.text.*;
 
 
 import javafx.scene.layout.VBox;
@@ -176,8 +177,9 @@ public class MapEditorController extends Controller {
 
 
     public void initialize() {
-       // editNode_addField = new AutocompletionlTextField();
         NodeService ns = new NodeService();
+       // editNode_addField = new AutocompletionlTextField();
+
         List<Node> nodes = ns.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for(Node n: nodes){
@@ -220,13 +222,143 @@ public class MapEditorController extends Controller {
         for (Node n : ns.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
         }
+        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
         editNode_searchResultsList.setItems(obList);
 
         tabPaneListen();
         removeNeighborListen();
+
+        List<Node> temp = ns.getNodesByFloor(currFloor);
+        for(Node n: temp){
+            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
+        }
+        EdgeService es = new EdgeService();
+        List<Edge> edges = es.getAllEdges();
+        for(Edge e: edges){
+            if(e.getStart().getLocation().getFloor() == currFloor){
+                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
+                        e.getStart().getLocation().getFloor());
+                TextField text = new TextField();
+
+            }
+        }
     }
+
+    public void MakeCircle(double x, double y, int z, String name) {
+        // initial size of image and the image ratior
+        ScrollPane Scrolly = null;
+        switch(z){
+            case 1:
+                Scrolly = FirstFloorScrollPane;
+                break;
+            case 2:
+                Scrolly = SecondFloorScrollPane;
+                break;
+            case 3:
+                Scrolly = ThirdFloorScrollPane;
+                break;
+            case 4:
+                Scrolly = FourthFloorScrollPane;
+                break;
+            case 5:
+                Scrolly = FifthFloorScrollPane;
+                break;
+            case 6:
+                Scrolly = SixthFloorScrollPane;
+                break;
+            case 7:
+                Scrolly = SeventhFloorScrollPane;
+                break;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
+                break;
+        }
+      //  System.out.println(Scrolly.getContent());
+        Group group1 = (Group) Scrolly.getContent();
+
+        ImageView Map1 = (ImageView)group1.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Circle circle = new Circle();
+        //These bind the center positions relative to the width property of the image
+        //the new center is calculated using the initial ratios
+        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
+        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
+        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
+        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+
+
+        Text text = new Text(x,y
+                , name);
+
+        text.setBoundsType(TextBoundsType.VISUAL);
+        StackPane stack = new StackPane();
+        stack.getChildren().addAll(text);
+
+        group1.getChildren().addAll(circle);
+
+      //  group1.getChildren().addAll(circle);
+
+        group1.setOnMouseClicked(event -> {
+            System.out.print(event.getSceneX() + " ");
+            System.out.println(event.getSceneY());
+        });
+
+
+    }
+
+    //MakeLine take 2 points (effectively) and draws a line from point to point
+    //this line is bounded to the image such that resizing does not effect the relative position of the line and image
+    public void MakeLine(double x1, double y1, double x2, double y2, int z){
+        ScrollPane Scrolly = null;
+        switch(z){
+            case 1:
+                Scrolly = FirstFloorScrollPane;
+                break;
+            case 2:
+                Scrolly = SecondFloorScrollPane;
+                break;
+            case 3:
+                Scrolly = ThirdFloorScrollPane;
+                break;
+            case 4:
+                Scrolly = FourthFloorScrollPane;
+                break;
+            case 5:
+                Scrolly = FifthFloorScrollPane;
+                break;
+            case 6:
+                Scrolly = SixthFloorScrollPane;
+                break;
+            case 7:
+                Scrolly = SeventhFloorScrollPane;
+                break;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
+                break;
+        }
+        Group group1 = (Group)Scrolly.getContent();
+        ImageView Map1 = (ImageView)group1.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Line edge = new Line();
+        //the points are bound to the fit width property of the image and scaled by the initial image ratio
+        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+        group1.getChildren().add(edge);
+    }
+
 
 
     public void tabPaneListen() {
@@ -241,6 +373,8 @@ public class MapEditorController extends Controller {
                         for (Node n : ns.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
                         }
+
+                        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
                         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
                         editNode_searchResultsList.setItems(obList);
@@ -252,6 +386,22 @@ public class MapEditorController extends Controller {
                         }
                         editNode_addField.getEntries().clear();
                         editNode_addField.getEntries().addAll(names);
+
+                        List<Node> temp = ns.getNodesByFloor(currFloor);
+                        for(Node n: temp){
+                            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
+                        }
+                        EdgeService es = new EdgeService();
+                        List<Edge> edges = es.getAllEdges();
+                        for(Edge e: edges){
+                            if(e.getStart().getLocation().getFloor() == currFloor){
+                                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+                                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
+                                        e.getStart().getLocation().getFloor());
+                                TextField text = new TextField();
+
+                            }
+                        }
                     }
                 }
         );
@@ -273,6 +423,7 @@ public class MapEditorController extends Controller {
                             neighborsS.add(node.getName());
                         }
                     }
+                    Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
                     editNode_neighborsList.setItems(nList);
                 });
@@ -282,6 +433,8 @@ public class MapEditorController extends Controller {
             Node selectedNode = ns.findNodeByName(newValue);
             currNodes[1] = selectedNode;
         });
+
+
     }
 
 
@@ -360,6 +513,7 @@ public class MapEditorController extends Controller {
                 queryList.add(n.getName());
         }
         // Make the list view show the results
+        Collections.sort(queryList, String.CASE_INSENSITIVE_ORDER);
         removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
     }
 
@@ -422,8 +576,24 @@ public class MapEditorController extends Controller {
                 neighborsS.add(node.getName());
             }
         }
+        Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
         editNode_neighborsList.setItems(nList);
+
+        List<Node> temp = ns.getNodesByFloor(currFloor);
+        for(Node n: temp){
+            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
+        }
+        List<Edge> edges = es.getAllEdges();
+        for(Edge e: edges){
+            if(e.getStart().getLocation().getFloor() == currFloor){
+                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
+                        e.getStart().getLocation().getFloor());
+                TextField text = new TextField();
+
+            }
+        }
     }
 
     //
@@ -446,6 +616,22 @@ public class MapEditorController extends Controller {
             }
             ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
             editNode_neighborsList.setItems(nList);
+        }
+
+        List<Node> temp = ns.getNodesByFloor(currFloor);
+        for(Node n: temp){
+            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
+        }
+        EdgeService es = new EdgeService();
+        List<Edge> edges = es.getAllEdges();
+        for(Edge e: edges){
+            if(e.getStart().getLocation().getFloor() == currFloor){
+                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
+                        e.getStart().getLocation().getFloor());
+                TextField text = new TextField();
+
+            }
         }
     }
 

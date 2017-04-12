@@ -3,6 +3,7 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -13,48 +14,56 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
+import model.Edge;
 import model.HospitalProfessional;
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
+import service.EdgeService;
 import service.HospitalProfessionalService;
 import service.NodeService;
 
+import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
 
     //ImageView Objects
     @FXML
-    private ScrollPane FirstFloorScrollPane;
+    private  ScrollPane FirstFloorScrollPane;
     @FXML
     private Slider FirstFloorSlider;
     @FXML
-    private ScrollPane SecondFloorScrollPane;
+    private  ScrollPane SecondFloorScrollPane;
     @FXML
     private Slider SecondFloorSlider;
     @FXML
-    private ScrollPane ThirdFloorScrollPane;
+    private  ScrollPane ThirdFloorScrollPane;
     @FXML
     private Slider ThirdFloorSlider;
     @FXML
-    private ScrollPane FourthFloorScrollPane;
+    private  ScrollPane FourthFloorScrollPane;
     @FXML
     private Slider FourthFloorSlider;
     @FXML
-    private ScrollPane FifthFloorScrollPane;
+    private  ScrollPane FifthFloorScrollPane;
     @FXML
     private Slider FifthFloorSlider;
     @FXML
-    private ScrollPane SixthFloorScrollPane;
+    private  ScrollPane SixthFloorScrollPane;
     @FXML
     private Slider SixthFloorSlider;
     @FXML
-    private ScrollPane SeventhFloorScrollPane;
+    private  ScrollPane SeventhFloorScrollPane;
     @FXML
     private Slider SeventhFloorSlider;
     //---------------------------------------------------
@@ -98,6 +107,7 @@ public class MainController extends Controller{
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
+
         InitializeMapViews();
         PopulateSearchResults(null);
         SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.3));
@@ -107,42 +117,67 @@ public class MainController extends Controller{
 
         PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.05));
 
-
-
-        MakeCircle(1000,1000,4);
+        MakeCircle(1000,1000,4, "");
         MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
+        NodeService ns = new NodeService();
+        List<Node> temp = ns.getNodesByFloor(1);
+        for(Node n: temp){
+            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
+        }
+        EdgeService es = new EdgeService();
+        List<Edge> edges = es.getAllEdges();
+        for(Edge e: edges){
+            if(e.getStart().getLocation().getFloor() == 1){
+                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
+                TextField text = new TextField();
+
+            }
+        }
+
     }
 
 //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
     public void DisplayMap(List<MapNode> nodes){
+        for(int i = 0; i < nodes.size(); i++){
+            System.out.println(nodes.get(i).getLocation().getFloor());
+        }
         System.out.println(nodes);
         ClearOldPaths();
         if (nodes == null) {System.out.println("There is no path.");return;}
 
-        for(int i=0;i<nodes.size();i++){
+        for(int i=0;i<nodes.size();i++) {
             MakeCircle(nodes.get(i).getLocation().getX(),
-                        nodes.get(i).getLocation().getY(),
-                        nodes.get(i).getLocation().getFloor());
-            if((i>0) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
-                MakeLine(nodes.get(i-1).getLocation().getX(), //
-                         nodes.get(i-1).getLocation().getY(),
-                         nodes.get(i).getLocation().getX(),
-                         nodes.get(i).getLocation().getY(),
-                         nodes.get(i).getLocation().getFloor());
-            }
+                    nodes.get(i).getLocation().getY(),
+                    nodes.get(i).getLocation().getFloor(), "");
+        }
+        for(int i = 0; i < nodes.size() - 1; i++){
+            MakeLine(nodes.get(i).getLocation().getX(), //
+                    nodes.get(i).getLocation().getY(),
+                    nodes.get(i+1).getLocation().getX(),
+                    nodes.get(i+1).getLocation().getY(),
+                    nodes.get(i).getLocation().getFloor());
+
+//            if((i>0) && (i != nodes.size()-1) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
+//                MakeLine(nodes.get(i-1).getLocation().getX(), //
+//                         nodes.get(i-1).getLocation().getY(),
+//                         nodes.get(i).getLocation().getX(),
+//                         nodes.get(i).getLocation().getY(),
+//                         nodes.get(i).getLocation().getFloor());
+//            }
         }
     }
 
     //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
     //It locks the points to their position on the image,
     //Resizing the image does not effect the relative position of the nodes and the image
-    public void MakeCircle(double x, double y, int z) {
+    public void MakeCircle(double x, double y, int z, String name) {
         // initial size of image and the image ratior
         ScrollPane Scrolly = null;
         switch(z){
@@ -185,7 +220,22 @@ public class MainController extends Controller{
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
         circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+
+//        Text text = new Text(x,y
+//                , name);
+//
+//        text.setBoundsType(TextBoundsType.VISUAL);
+//        StackPane stack = new StackPane();
+//        stack.getChildren().add(text);
+
+        group1.setOnMouseClicked(event -> {
+            System.out.println(event.getSceneX());
+            System.out.println(event.getSceneY());
+        });
+
         group1.getChildren().add(circle);
+
+
     }
 
     //MakeLine take 2 points (effectively) and draws a line from point to point
@@ -255,6 +305,7 @@ public class MainController extends Controller{
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results) {
+        results.sort(String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
@@ -280,6 +331,7 @@ public class MainController extends Controller{
             for (HospitalProfessional HP : Professionals) {
                 names.add(HP.getName());
             }
+            names.sort(String.CASE_INSENSITIVE_ORDER);
             SearchResultsListView.setItems(names);
         } else {
             for (HospitalProfessional HP : Professionals) {
@@ -287,6 +339,7 @@ public class MainController extends Controller{
                     names.add(HP.getName());
                 }
             }
+            names.sort(String.CASE_INSENSITIVE_ORDER);
             SearchResultsListView.setItems(names);
         }
     }
