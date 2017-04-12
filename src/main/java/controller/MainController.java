@@ -5,8 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -74,7 +74,25 @@ public class MainController extends Controller{
     private TabPane FloorViewsTabPane;
     @FXML
     private MenuButton languageMenuButton;
-
+    @FXML
+    private VBox MainVbox;
+    @FXML
+    private HBox CheckBoxesHBox;
+    @FXML
+    private SplitPane MainSplitPane;
+    @FXML
+    private TextArea Start_location_TextArea;
+    @FXML
+    private TextArea Dest_location_TextArea;
+    @FXML
+    private HBox PathLocationHBox;
+    @FXML
+    private Button SetStartLocationButton;
+    @FXML
+    private Button SetDestLocationButton;
+    @FXML
+    private Button getPathButton;
+    
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
 
@@ -82,6 +100,14 @@ public class MainController extends Controller{
     public void initialize() {
         InitializeMapViews();
         PopulateSearchResults(null);
+        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.3));
+        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        CheckBoxesHBox.setPrefHeight(30);
+
+        PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.05));
+
+
 
         MakeCircle(1000,1000,4);
         MakeLine(1000,1000,2000,2000,2);
@@ -92,35 +118,26 @@ public class MainController extends Controller{
 
     }
 
-
-    //PROXY FUNCTIONS
-
 //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
-//    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-//    public void DisplayMap(List<MapNode> nodes){
-//        //MapAnchor.getChildren().clear();
-//        ImageView mapPic = new ImageView();
-//        Image floorImage = new Image("images/floor4.png");
-//        mapPic.setImage(floorImage);
-//        //mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
-//        mapPic.setPreserveRatio(true);
-//        mapPic.setPickOnBounds(true);
-//        //MapAnchor.getChildren().add(mapPic);
-//
-//        if (nodes == null) {
-//            System.out.println("There is no path.");
-//            return;
-//        }
-//       for(int i=0;i<nodes.size();i++){
-//           MakeCircle(nodes.get(i).getLocation().getX(),nodes.get(i).getLocation().getY());
-//            if(i>0){
-//                MakeLine(nodes.get(i-1).getLocation().getX(),
-//                         nodes.get(i-1).getLocation().getY(),
-//                         nodes.get(i).getLocation().getX(),
-//                         nodes.get(i).getLocation().getY());
-//            }
-//        }
-//    }
+    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
+    public void DisplayMap(List<MapNode> nodes){
+        System.out.println(nodes);
+        ClearOldPaths();
+        if (nodes == null) {System.out.println("There is no path.");return;}
+
+        for(int i=0;i<nodes.size();i++){
+            MakeCircle(nodes.get(i).getLocation().getX(),
+                        nodes.get(i).getLocation().getY(),
+                        nodes.get(i).getLocation().getFloor());
+            if((i>0) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
+                MakeLine(nodes.get(i-1).getLocation().getX(), //
+                         nodes.get(i-1).getLocation().getY(),
+                         nodes.get(i).getLocation().getX(),
+                         nodes.get(i).getLocation().getY(),
+                         nodes.get(i).getLocation().getFloor());
+            }
+        }
+    }
 
     //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
     //It locks the points to their position on the image,
@@ -217,25 +234,39 @@ public class MainController extends Controller{
         group1.getChildren().add(edge);
     }
 
-
+    public void ClearOldPaths(){
+        Group group1 = (Group) FirstFloorScrollPane.getContent();
+        group1.getChildren().remove(1,group1.getChildren().size());
+        Group group2 = (Group) SecondFloorScrollPane.getContent();
+        group2.getChildren().remove(1,group2.getChildren().size());
+        Group group3 = (Group) ThirdFloorScrollPane.getContent();
+        group3.getChildren().remove(1,group3.getChildren().size());
+        Group group4 = (Group) FourthFloorScrollPane.getContent();
+        group4.getChildren().remove(1,group4.getChildren().size());
+        Group group5 = (Group) FifthFloorScrollPane.getContent();
+        group5.getChildren().remove(1,group5.getChildren().size());
+        Group group6 = (Group) SixthFloorScrollPane.getContent();
+        group6.getChildren().remove(1,group6.getChildren().size());
+        Group group7 = (Group) SeventhFloorScrollPane.getContent();
+        group7.getChildren().remove(1,group7.getChildren().size());
+    }
 
     //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results) {
-
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
     }
 
-    public void FindandDisplayPath(HospitalProfessional HP) {
+    public void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
-        MapNode start = map.getNode(NS.findNodeByName("Radiology").getId());
-        MapNode dest = map.getNode(HP.getId());
+        MapNode start = map.getNode(HP_Start.getId());
+        MapNode dest = map.getNode(HP_Dest.getId());
         List<MapNode> path = PathFinder.shortestPath(start, dest);
-        //DisplayMap(path);
+        DisplayMap(path);
     }
 
     public void PopulateSearchResults(String S) {
@@ -263,19 +294,13 @@ public class MainController extends Controller{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-
         HospitalProfessionalService hs = new HospitalProfessionalService();
+        //System.out.println(hs.find(HP.getId()).getOffices());
         String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
-        System.out.println("trying to populate information area");
     }
 
-    // EVENT HANDLERS
-
-    public void handleFirstFloorZoomSlider(){
-        System.out.println(FirstFloorSlider.getValue());
-    }
-
+    //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
@@ -283,15 +308,60 @@ public class MainController extends Controller{
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
-        //FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
     }
 
-    /**
-     * @author JVB
-     * <p>
-     * Method is called when the search bar has a key pressed.
-     * Populates the search ListView with search results from what's in the textfield
-     */
+
+    // function after clicking set start location
+    public void SetStartLocationButtonClicked(){
+        System.out.println("clicked on Set Start button");
+        HospitalProfessionalService HPS = new HospitalProfessionalService();
+        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HospitalProfessional HP = new HospitalProfessional();
+        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        Start_location_TextArea.setText(HP.getName());
+    }
+
+    // function after clicking set destination location
+    public void SetDestLocationButtonClicked(){
+        System.out.println("clicked on Set Dest button");
+        HospitalProfessionalService HPS = new HospitalProfessionalService();
+        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HospitalProfessional HP = new HospitalProfessional();
+        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        Dest_location_TextArea.setText(HP.getName());
+    }
+
+    public void switchLocationButtonClicked(){
+        System.out.println("clicked on switch location button");
+
+
+        String tempStorage = Start_location_TextArea.getText();
+        System.out.println("tempStorage is" + tempStorage);
+        Start_location_TextArea.setText(Dest_location_TextArea.getText());
+        Dest_location_TextArea.setText(tempStorage);
+
+        HospitalProfessionalService switched_Dest = new HospitalProfessionalService();
+        switched_Dest.findHospitalProfessionalByName(Start_location_TextArea.getText());
+
+    }
+
+
+    public void getPathButtonClicked(){
+        System.out.println("clicked on get path button");
+        HospitalProfessionalService HPS_Start = new HospitalProfessionalService();
+        HospitalProfessional HP_Start = HPS_Start.findHospitalProfessionalByName(Start_location_TextArea.getText());
+
+        HospitalProfessionalService HPS_Dest = new HospitalProfessionalService();
+        HospitalProfessional HP_Dest = HPS_Dest.findHospitalProfessionalByName(Dest_location_TextArea.getText());
+
+        FindandDisplayPath(HP_Start,HP_Dest);
+
+        System.out.println("start HP:  " + HP_Start.getName());
+        System.out.println("dest HP:  " + HP_Dest.getName());
+    }
+
+
+
     public void SearchBarTextField_keyReleased() {
         System.out.println("Searching");
         System.out.println(SearchBarTextField.getText().toString());
@@ -310,9 +380,8 @@ public class MainController extends Controller{
                         "please call 774-278-8517");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO SPANISH SOON");
+                DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
+                        "porfavor llame 774-278-8517");
                 break;
             case 3: //chinese
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -320,9 +389,8 @@ public class MainController extends Controller{
                         "\n WILL CHANGE TO CHINESE SOON");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO FRENCH SOON");
+                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
+                        "appelez s'il vous plaît\n 774-278-8517");
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -342,16 +410,14 @@ public class MainController extends Controller{
                 DisplayInformationTextArea.setText("Don't Panic");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO SPANISH SOON");
+                DisplayInformationTextArea.setText("No se asuste");
                 break;
             case 3: //chinese
                 DisplayInformationTextArea.setText("Don't Panic" +
                         "\n WILL CHANGE TO CHINESE SOON");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO FRENCH SOON");
+                DisplayInformationTextArea.setText("Ne panique pas");
                 break;
             default:
                 DisplayInformationTextArea.setText("Don't Panic");
@@ -382,7 +448,7 @@ public class MainController extends Controller{
         SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SecondFloorImageView = new ImageView();
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setImage(SecondFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
         Group SecondFloorGroup = new Group();
         SecondFloorGroup.getChildren().add(SecondFloorImageView);
