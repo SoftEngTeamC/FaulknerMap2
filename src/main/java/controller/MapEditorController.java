@@ -230,13 +230,13 @@ public class MapEditorController extends Controller {
 
 
     public void tabPaneListen() {
-        tabPane.getSelectionModel().selectedItemProperty().addListener(
+        FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
                         NodeService ns = new NodeService();
-                        currFloor = Integer.parseInt(t1.getText().charAt(0) + "");
+                        currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
                         ArrayList<String> nameList = new ArrayList<>();
                         for (Node n : ns.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
@@ -244,6 +244,14 @@ public class MapEditorController extends Controller {
                         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
                         editNode_searchResultsList.setItems(obList);
+
+                        List<Node> nodes = ns.getNodesByFloor(currFloor);
+                        List<String> names = new ArrayList<>();
+                        for(Node n: nodes){
+                            names.add(n.getName());
+                        }
+                        editNode_addField.getEntries().clear();
+                        editNode_addField.getEntries().addAll(names);
                     }
                 }
         );
@@ -527,7 +535,7 @@ public class MapEditorController extends Controller {
         SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SecondFloorImageView = new ImageView();
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setImage(SecondFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
         Group SecondFloorGroup = new Group();
         SecondFloorGroup.getChildren().add(SecondFloorImageView);
