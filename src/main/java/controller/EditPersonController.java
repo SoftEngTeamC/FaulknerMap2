@@ -4,20 +4,19 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import model.HospitalProfessional;
 import model.Node;
 import service.HospitalProfessionalService;
 import service.NodeService;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EditPersonController extends Controller{
 
@@ -194,7 +193,7 @@ public class EditPersonController extends Controller{
         // push to database
         hp.setName(nameField.getText());
         hp.setTitle(titleField.getText());
-        hp.setOffice(currentNodeList);
+        hp.setOffices(currentNodeList);
 
         // remove old, insert new
         HospitalProfessional old = hps.find(hp.getId());
@@ -355,7 +354,7 @@ public class EditPersonController extends Controller{
         idField.setText(this.hp.getId().toString());
 
         // set the current node list
-        currentNodeList = this.hp.getOffice();
+        currentNodeList = this.hp.getOffices();
 
         // set the available node list
         availableNodeList = ns.getAllNodes();

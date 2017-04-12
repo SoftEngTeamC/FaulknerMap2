@@ -1,26 +1,28 @@
 package service;
 
 
+import model.Coordinate;
 import model.Edge;
 import model.Node;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NodeService  extends AbstractService<Node> {
+public class NodeService extends AbstractService<Node> {
     @Override
     public Node find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.find(Node.class, id);
     }
 
-    private Set<Node> neighbors(Long id) {
+    public Set<Node> neighbors(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        List<Edge> edges = manager.createQuery("SELECT e FROM Edge e WHERE e.start.id = :id OR e.end.id = :id", Edge.class).setParameter("id", id).getResultList();
+        List<Edge> edges = manager.createQuery("SELECT e FROM Edge e WHERE e.start.id = :id OR e.end.id = :id", Edge.class)
+                .setParameter("id", id)
+                .getResultList();
         Set<Node> startNeighbors = edges.stream().map(Edge::getStart).collect(Collectors.toSet());
         Set<Node> endNeighbors = edges.stream().map(Edge::getStart).collect(Collectors.toSet());
         startNeighbors.addAll(endNeighbors);
@@ -31,19 +33,19 @@ public class NodeService  extends AbstractService<Node> {
     public Node findNodeByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            return (Node) manager.createQuery(
-                    "SELECT n FROM Node n WHERE n.name LIKE :name")
+            return manager.createQuery(
+                    "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             return null;
         }
     }
 
     public List<Node> findNodeIntersectionByFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return  manager.createQuery(
-                "SELECT n FROM Node n WHERE n.name LIKE :name")
+        return manager.createQuery(
+                "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                 .setParameter("name", "intersection" + floor + "%")
                 .getResultList();
     }
@@ -52,5 +54,15 @@ public class NodeService  extends AbstractService<Node> {
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.createQuery("from Node", Node.class)
                 .getResultList();
+    }
+
+    public List<Node> getNodesByFloor(int floor) {
+        EntityManager manager = this.managerFactory.createEntityManager();
+
+        return manager.createQuery("SELECT n FROM Node n," +
+                " Coordinate c WHERE n.location.id = c.id AND " +
+                "c.floor = :floor", Node.class)
+                .setParameter("floor", floor)
+            .getResultList();
     }
 }
