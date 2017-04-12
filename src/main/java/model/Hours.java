@@ -2,20 +2,20 @@ package model;
 
 
 public class Hours {
-    public int hours1;
-    public int minutes1;
+    public String hours1;
+    public String minutes1;
     public String ampm1;
-    public int hours2;
-    public int minutes2;
+    public String hours2;
+    public String minutes2;
     public String ampm2;
-    public int hours3;
-    public int minutes3;
+    public String hours3;
+    public String minutes3;
     public String ampm3;
-    public int hours4;
-    public int minutes4;
+    public String hours4;
+    public String minutes4;
     public String ampm4;
 
-    public Hours(int hours1, int hours2, int hours3, int hours4, int minutes1, int minutes2, int minutes3, int minutes4, String ampm1, String ampm2, String ampm3, String ampm4){
+    public Hours(String hours1, String hours2, String hours3, String hours4, String minutes1, String minutes2, String minutes3, String minutes4, String ampm1, String ampm2, String ampm3, String ampm4){
         this.hours1=hours1;
         this.hours2=hours2;
         this.hours3=hours3;
