@@ -130,8 +130,8 @@ public class MakeDirections {
     public void printDirectionsTest1() {
         Map map = new Map(NS.getAllNodes());
         PathFinder pf = new PathFinder();
-        Node testNode1 = NS.findNodeByName("Day Surgery");
-        Node testNode2 = NS.findNodeByName("Blood Draw");
+        Node testNode1 = NS.findNodeByName("hallway10");
+        Node testNode2 = NS.findNodeByName("intersection12");
 
         MapNode mNode1 = map.getNode(testNode1.getId());
         MapNode mNode2 = map.getNode(testNode2.getId());
