@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import model.Coordinate;
 import model.Node;
+import service.CoordinateService;
 import service.NodeService;
 
 import java.io.IOException;
@@ -95,9 +96,13 @@ public class MapEditorController extends Controller{
         //floor4Image.widthProperty().bind(anchorPane.widthProperty());
         imageView = new ImageView(floor4Image);
 
+        // init local lists
+        searchList = new ArrayList<>();
+        nodeList = new ArrayList<>();
+
         //Populate the list of all nodes
         this.NS = new NodeService();
-        ArrayList<Node> allNode = new ArrayList<Node>(NS.getAllNodes());
+        ArrayList<Node> allNode = new ArrayList<Node>(this.NS.getAllNodes());
         for (Node aNode : allNode) {
             this.nodeList.add(aNode.getName());
         }
@@ -171,9 +176,18 @@ public class MapEditorController extends Controller{
     public void removeNode_removeBtnPressed(){
         String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
         System.out.println(selectedItem);
-        Node selectNode = (this.NS.findNodeByName(selectedItem));
+        Node selectNode = NS.findNodeByName(selectedItem);
+        System.out.println(selectNode.getName());
         this.searchList.remove(selectNode.getName());
-        this.NS.remove(selectNode);
+        // print out the node we made
+        System.out.println(selectNode.getId());
+        // print out the node from the database
+        try{
+            //TODO make successful text
+            this.NS.remove(selectNode);
+        }catch(Exception e){
+            //TODO make warning text visible
+        }
 
         //repopulate the search list
         ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
@@ -214,13 +228,15 @@ public class MapEditorController extends Controller{
      *
      */
     public void addNode_createNodeBtnPressed(){
+        CoordinateService CS = new CoordinateService();
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         //TODO get floor information
         //float floor = Float.parseFloat(addNode_floor.getText());
         Coordinate addCoord = new Coordinate(x, y, 4);
+        CS.persist(addCoord);
         Node newNode = new Node(addCoord, addNode_nameField.getText());
-        this.NS.merge(newNode);
+        NS.merge(newNode);
     }
 
 //
