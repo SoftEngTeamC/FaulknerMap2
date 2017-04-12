@@ -13,45 +13,55 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity"
            minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-           xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+           stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
             <children>
-                <BorderPane prefHeight="71.0" prefWidth="213.0"/>
-                <HBox fx:id="PathLocationHBox" alignment="CENTER" prefHeight="16.0" prefWidth="213.0">
+            <ImageView fx:id="LogoImageView" fitHeight="39.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" top="5.0" />
+               </VBox.margin>
+            </ImageView>
+                <HBox fx:id="PathLocationHBox" prefHeight="30.0" prefWidth="213.0">
                     <children>
-                        <BorderPane prefHeight="43.0" prefWidth="171.0"/>
-                        <TextArea fx:id="Start_location_TextArea" editable="false" prefHeight="43.0" prefWidth="230.0"
-                                  text="Start"/>
-                        <BorderPane prefHeight="43.0" prefWidth="133.0"/>
+                        <TextArea fx:id="Start_location_TextArea" editable="false" maxWidth="150.0" text="Start">
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </TextArea>
                         <Button fx:id="switchLocationButton" alignment="CENTER" contentDisplay="CENTER"
                                 ellipsisString="&lt;-&gt;" mnemonicParsing="false"
                                 onMouseClicked="#switchLocationButtonClicked" prefHeight="16.0" prefWidth="41.0"
-                                text="&lt;-&gt;" textAlignment="CENTER"/>
-                        <BorderPane prefHeight="43.0" prefWidth="129.0"/>
-                        <TextArea fx:id="Dest_location_TextArea" editable="false" prefHeight="43.0" prefWidth="232.0"
-                                  text="Destination"/>
-                        <BorderPane prefHeight="43.0" prefWidth="161.0">
-                            <center>
-                                <Button fx:id="getPathButton" mnemonicParsing="false"
-                                        onMouseClicked="#getPathButtonClicked" text="get path"
-                                        BorderPane.alignment="CENTER"/>
-                            </center>
-                        </BorderPane>
+                                text="&lt;-&gt;" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets bottom="20.0" top="10.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <TextArea fx:id="Dest_location_TextArea" editable="false" maxWidth="150.0" text="Destination">
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </TextArea>
+                        <Button fx:id="getPathButton" minWidth="65.0" mnemonicParsing="false"
+                                onMouseClicked="#getPathButtonClicked" text="get path">
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0" top="10.0"/>
+                            </HBox.margin>
+                        </Button>
                     </children>
                 </HBox>
-                <BorderPane prefHeight="72.0" prefWidth="213.0"/>
                 <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased"
-                           promptText="Search"/>
+                           promptText="Search" stylesheets="@generalStyles.css"/>
+
                 <HBox fx:id="CheckBoxesHBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <CheckBox mnemonicParsing="false" text="Rooms">
@@ -75,22 +85,56 @@
                             </HBox.margin>
                         </CheckBox>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0" top="5.0"/>
+                    </VBox.margin>
                 </HBox>
-                <ListView fx:id="SearchResultsListView" editable="true" onMouseClicked="#handleClickedOnSearchResult"
-                          prefHeight="108.0" prefWidth="246.0"/>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                <ListView fx:id="SearchResultsListView" editable="true" minHeight="100.0"
+                          onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0"/>
+                <HBox alignment="CENTER">
                     <children>
+                        <Button fx:id="StartAtKioskButton" mnemonicParsing="false"
+                                onMouseClicked="#handleClickedOnStartAtKiosk" text="Start at This Kiosk">
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </Button>
                         <Button fx:id="SetStartLocationButton" alignment="CENTER" contentDisplay="CENTER"
                                 minWidth="40.0" mnemonicParsing="false" onMouseClicked="#SetStartLocationButtonClicked"
-                                prefHeight="27.0" prefWidth="72.0" text="Set Start"/>
-                        <BorderPane prefHeight="35.0" prefWidth="15.0"/>
+                                prefHeight="27.0" prefWidth="72.0" text="Set Start">
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </Button>
                         <Button fx:id="SetDestLocationButton" alignment="CENTER" contentDisplay="CENTER"
                                 mnemonicParsing="false" onMouseClicked="#SetDestLocationButtonClicked" text="Set Dest"/>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0" top="5.0"/>
+                    </VBox.margin>
                 </HBox>
-                <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0"
-                          prefHeight="227.0" prefWidth="227.0"
-                          text="This is where the information goes&#10;Here is even more information, now on two lines&#10;"/>
+            <TabPane fx:id="DisplayInformationTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Information">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                           <children>
+                                  <TextArea fx:id="DisplayInformationTextArea" editable="false" text="This is where the information goes&#10;Here is even more information, now on two lines&#10;" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Text Directions">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="TextDirectionsTextArea" prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
                         <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false"
@@ -115,8 +159,7 @@
                 </HBox>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0"
-                                    prefWidth="208.0" text="Language">
+                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese"
                                           text="中文"/>

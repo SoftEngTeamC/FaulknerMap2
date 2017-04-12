@@ -1,0 +1,68 @@
+.tab-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-font-family: "Helvetica";
+}
+
+.tab {
+    -fx-background-color: #00579f,
+         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
+         linear-gradient(#0067bc, #01467f),
+         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.button {
+    -fx-background-color: #00579f,
+         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
+         linear-gradient(#0067bc, #01467f),
+         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-family: "Helvetica";
+}
+
+.text-field {
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.slider {
+    -fx-color: #00579f,
+         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
+         linear-gradient(#0067bc, #01467f),
+         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+
+.list-view {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.text-area {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.scroll-pane {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
