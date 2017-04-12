@@ -19,9 +19,7 @@ import service.EdgeService;
 import service.NodeService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class MapEditorController extends Controller {
@@ -126,7 +124,15 @@ public class MapEditorController extends Controller {
         tabPaneListen();
         removeNeighborListen();
 
+        addFieldListen();
+
     }
+
+    private void addFieldListen() {
+        SortedSet<String> entries;
+
+    }
+
 
     public void tabPaneListen() {
         tabPane.getSelectionModel().selectedItemProperty().addListener(
@@ -160,7 +166,9 @@ public class MapEditorController extends Controller {
                     Set<Node> neighbors = ns.neighbors(selectedNode.getId());
                     ArrayList<String> neighborsS = new ArrayList<>();
                     for (Node node : neighbors) {
-                        neighborsS.add(node.getName());
+                        if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                            neighborsS.add(node.getName());
+                        }
                     }
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
                     editNode_neighborsList.setItems(nList);
@@ -281,14 +289,17 @@ public class MapEditorController extends Controller {
 
         List<Edge> currEdges = es.findByNodes(currNodes[0], currNodes[1]);
 
-        for(Edge curr : currEdges){
+        for (Edge curr : currEdges) {
             es.remove(curr);
         }
 
         Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
+        System.out.println("currNode: " + currNodes[0].getId());
         List<String> neighborsS = new ArrayList<>();
-        for(Node node: neighbors){
-            neighborsS.add(node.getName());
+        for (Node node : neighbors) {
+            if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                neighborsS.add(node.getName());
+            }
         }
         ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
         editNode_neighborsList.setItems(nList);
@@ -298,20 +309,23 @@ public class MapEditorController extends Controller {
 //
     public void editNode_addBtnPressed() {
 
-//        NodeService ns = new NodeService();
-//        Node newNode = ns.findNodeByName(editNode_addField.getText());
-//        if (newNode != null) {
-//            currNodes[0].addEdge(newNode);
-//
-//            ArrayList<Node> neighbors = EdgesHelper.getNeighbors(currNodes[0]);
-//            ArrayList<String> neighborsS = new ArrayList<>();
-//            for (Node node : neighbors) {
-//                neighborsS.add(node.getName());
-//            }
-//            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
-//            editNode_neighborsList.setItems(nList);
-//        }
+        NodeService ns = new NodeService();
+        Node newNode = ns.findNodeByName(editNode_addField.getText());
+        if (newNode != null) {
+            EdgeService es = new EdgeService();
+            es.persist(new Edge(currNodes[0], newNode, 0));
+            es.persist(new Edge(newNode, currNodes[0], 0));
 
+            Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
+            ArrayList<String> neighborsS = new ArrayList<>();
+            for (Node node : neighbors) {
+                if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                    neighborsS.add(node.getName());
+                }
+            }
+            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+            editNode_neighborsList.setItems(nList);
+        }
     }
 
 
