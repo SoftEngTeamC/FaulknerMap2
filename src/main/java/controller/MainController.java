@@ -36,6 +36,7 @@ import service.EMFProvider;
 import service.HospitalProfessionalService;
 import service.NodeService;
 import model.Hours;
+import textDirections.MakeDirections;
 
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -358,6 +359,8 @@ public class MainController extends Controller{
         MapNode start = map.getNode(HP_Start.getId());
         MapNode dest = map.getNode(HP_Dest.getId());
         List<MapNode> path = PathFinder.shortestPath(start, dest);
+        TextDirectionsTextArea.setText(MakeDirections.getText(path));
+        System.out.println("HERE");
         DisplayMap(path);
     }
 
@@ -407,6 +410,7 @@ public class MainController extends Controller{
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
+        //FindandDisplayPath();
     }
 
 
@@ -701,23 +705,23 @@ public class MainController extends Controller{
         SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
 
-    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
-    @FXML
-    public void OpenAdminTool() throws Exception {
-        // goto genres screen
-        System.out.println("HERE WE ARE");
-        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("AdminToolMenu");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
-    }
-    //SCREEN CHANGING FUNCTIONS
+//    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
 //    @FXML
 //    public void OpenAdminTool() throws Exception {
 //        // goto genres screen
-//        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
+//        System.out.println("HERE WE ARE");
+//        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
+//        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
+//        stage.setTitle("AdminToolMenu");
+//        stage.setScene(new Scene(root, 300, 300));
+//        stage.show();
 //    }
+    //SCREEN CHANGING FUNCTIONS
+    @FXML
+    public void OpenAdminTool() throws Exception {
+        // goto genres screen
+        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
+    }
 
 
     @FXML

@@ -2,6 +2,7 @@
 
 <!--<?import com.gluonhq.charm.glisten.control.TextField?>-->
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -10,29 +11,72 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
     <children>
-        <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" text="Back" />
-        <Text layoutX="214.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor">
-            <font>
-                <Font size="25.0" />
-            </font>
-        </Text>
-        <SplitPane dividerPositions="0.1414141414141414" layoutX="126.0" layoutY="76.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="351.0">
-            <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                    <children>
-                        <TextField fx:id="searchField" onKeyPressed="#searchFieldKeyPressed" prefHeight="25.0" prefWidth="349.0" promptText="Search" />
-                    </children>
-                </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <ListView fx:id="searchList" layoutX="-1.0" prefHeight="166.0" prefWidth="349.0" />
-               </children></AnchorPane>
-            </items>
-        </SplitPane>
-        <Button fx:id="logoutBtn" layoutX="19.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" onMouseClicked="#logout" text="Logout" />
-        <Button fx:id="addPrsnBtn" layoutX="126.0" layoutY="325.0" mnemonicParsing="false" onAction="#addPersonBtnCPressed" text="Add Person" />
-        <Button fx:id="editPrsnBtn" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" onAction="#editPersonBtnPressed" text="Edit Person" />
+      <GridPane layoutY="22.0" prefHeight="1153.0" prefWidth="1900.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="22.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="841.0" minWidth="10.0" prefWidth="492.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1073.0" minWidth="10.0" prefWidth="923.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1356.0" minWidth="10.0" prefWidth="480.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="242.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="682.0" minHeight="10.0" prefHeight="547.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="362.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="308.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="189.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+              <SplitPane dividerPositions="0.26573426573426573" layoutX="126.0" layoutY="76.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="351.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                          <children>
+                              <TextField fx:id="searchField" onKeyPressed="#searchFieldKeyPressed" prefHeight="45.0" prefWidth="923.0" promptText="Search" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font size="42.0" />
+                           </font>
+                        </TextField>
+                          </children>
+                      </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <ListView fx:id="searchList" layoutX="-1.0" prefHeight="285.0" prefWidth="923.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  </items>
+              </SplitPane>
+              <Button fx:id="logoutBtn" layoutX="19.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" onMouseClicked="#logout" prefHeight="90.0" prefWidth="150.0" text="Logout" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <font>
+                  <Font size="29.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="50.0" left="50.0" />
+               </GridPane.margin>
+            </Button>
+              <Button fx:id="addPrsnBtn" layoutX="126.0" layoutY="325.0" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="95.0" prefWidth="250.0" text="Add Person" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="29.0" />
+               </font>
+            </Button>
+              <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="90.0" prefWidth="150.0" text="Back" GridPane.valignment="TOP">
+               <font>
+                  <Font size="29.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" top="50.0" />
+               </GridPane.margin>
+            </Button>
+              <Button fx:id="editPrsnBtn" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="95.0" prefWidth="250.0" text="Edit Person" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="29.0" />
+               </font>
+            </Button>
+              <Text layoutX="214.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor" GridPane.columnIndex="1">
+                  <font>
+                      <Font size="51.0" />
+                  </font>
+              </Text>
+         </children>
+      </GridPane>
     </children>
 </AnchorPane>
