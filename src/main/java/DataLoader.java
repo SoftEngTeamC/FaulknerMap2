@@ -1,5 +1,6 @@
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.processor.ObjectRowProcessor;
+import com.univocity.parsers.conversions.Conversions;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 import model.*;
@@ -52,26 +53,30 @@ public class DataLoader {
         NodeService nodeService = new NodeService();
         CoordinateService coordinateService = new CoordinateService();
 
-
-        // Create all the nodes
         TsvParserSettings parserSettings = new TsvParserSettings();
+        parserSettings.setHeaderExtractionEnabled(true);
+
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 3) return;  // Test for blank line or value
+                double x = (Double) row[1];
+                double y = (Double) row[2];
+                Coordinate location = new Coordinate(x, y, floor);
+
+                coordinateService.persist(location);
+
+                String name = (String) row[0];
+
+                nodeService.persist(new Node(name, location));
+            }
+        };
+        rowProcessor.convertIndexes(Conversions.toDouble()).set(1);
+        rowProcessor.convertIndexes(Conversions.toDouble()).set(2);
+        parserSettings.setProcessor(rowProcessor);
+
         TsvParser parser = new TsvParser(parserSettings);
-
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null) || row.length < 3) continue;  // Test for blank line or value
-
-            double x = Double.parseDouble(row[1]);
-            double y = Double.parseDouble(row[2]);
-            Coordinate location = new Coordinate(x, y, floor);
-
-            coordinateService.persist(location);
-
-            String name = row[0];
-
-            nodeService.persist(new Node(name, location));
-
-        }
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
     }
 
     private static void loadPeople(String peopleFilePath) throws FileNotFoundException {
@@ -79,20 +84,33 @@ public class DataLoader {
         NodeService nodeService = new NodeService();
 
         TsvParserSettings parserSettings = new TsvParserSettings();
+        parserSettings.setHeaderExtractionEnabled(true);
+
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 3) return;
+
+                String name = (String) row[0];
+                String title = (String) row[1];
+
+                String locationName = (String) row[2];
+                Node location = nodeService.findNodeByName(locationName);
+                if (location == null) {
+                    System.err.println("Couldn't find a node with named " + locationName + " while parsing line " + context.currentLine() + " in " + peopleFilePath);
+
+                    return;
+                }
+                List<Node> nodes = new ArrayList<>();
+                nodes.add(location);
+
+                professionalService.persist(new HospitalProfessional(name, title, nodes));
+            }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
         TsvParser parser = new TsvParser(parserSettings);
-
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null) || row.length < 3) continue;
-
-            String name = row[0];
-            String title = row[1];
-
-            List<Node> nodes = new ArrayList<>();
-            nodes.add(nodeService.findNodeByName(row[2]));
-
-            professionalService.persist(new HospitalProfessional(name, title, nodes));
-        }
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
     }
 
     private static void loadService(String serviceFilePath) throws FileNotFoundException {
@@ -100,19 +118,32 @@ public class DataLoader {
         NodeService nodeService = new NodeService();
 
         TsvParserSettings parserSettings = new TsvParserSettings();
+        parserSettings.setHeaderExtractionEnabled(true);
+
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 2) return;
+
+                String name = (String) row[0];
+
+                String locationName = (String) row[1];
+                Node location = nodeService.findNodeByName(locationName);
+                if (location == null) {
+                    System.err.println("Couldn't find a node with named " + locationName + " while parsing line " + context.currentLine() + " in " + serviceFilePath);
+                    return;
+                }
+                List<Node> nodes = new ArrayList<>();
+                nodes.add(location);
+
+                serviceService.persist(new HospitalService(name, nodes));
+
+            }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
         TsvParser parser = new TsvParser(parserSettings);
-
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null) || row.length < 2) continue;
-
-            String name = row[0];
-
-            List<Node> nodes = new ArrayList<>();
-            nodes.add(nodeService.findNodeByName(row[1]));
-
-            serviceService.persist(new HospitalService(name, nodes));
-        }
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
     private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
@@ -134,14 +165,12 @@ public class DataLoader {
                 Node end = nodeService.findNodeByName(endName);
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with name " + startName + " while parsing the following line:");
-                    System.err.println(context.currentLine());
+                    System.err.println("Couldn't find a node with named " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with name " + endName + " while parsing the following line:");
-                    System.err.println(context.currentLine());
+                    System.err.println("Couldn't find a node with named " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
