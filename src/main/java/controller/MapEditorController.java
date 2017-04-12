@@ -5,14 +5,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import model.Edge;
 import model.Node;
 import service.EdgeService;
@@ -20,6 +21,20 @@ import service.NodeService;
 
 import java.io.IOException;
 import java.util.*;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 
 public class MapEditorController extends Controller {
@@ -69,7 +84,7 @@ public class MapEditorController extends Controller {
     @FXML
     private Button editNode_removeNeighborBtn;
     @FXML
-    private TextField editNode_addField;
+    private AutocompletionlTextField editNode_addField;
     @FXML
     private Button editNode_addBtn;
 
@@ -94,8 +109,15 @@ public class MapEditorController extends Controller {
 
     private int currFloor;
 
-
     public void initialize() {
+       // editNode_addField = new AutocompletionlTextField();
+        NodeService ns = new NodeService();
+        List<Node> nodes = ns.getNodesByFloor(1);
+        List<String> names = new ArrayList<>();
+        for(Node n: nodes){
+            names.add(n.getName());
+        }
+        editNode_addField.getEntries().addAll(names);
 
         // Set the image view to populate the image
         floor4Image = new Image("file:../Resources/floor4.png");
@@ -112,7 +134,7 @@ public class MapEditorController extends Controller {
         });
 
         currFloor = 1;
-        NodeService ns = new NodeService();
+
         ArrayList<String> nameList = new ArrayList<>();
         for (Node n : ns.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
@@ -123,14 +145,6 @@ public class MapEditorController extends Controller {
 
         tabPaneListen();
         removeNeighborListen();
-
-        addFieldListen();
-
-    }
-
-    private void addFieldListen() {
-        SortedSet<String> entries;
-
     }
 
 
@@ -342,4 +356,7 @@ public class MapEditorController extends Controller {
     private void mouseClicked(double x, double y) {
 
     }
+
 }
+
+
