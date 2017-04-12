@@ -83,7 +83,8 @@ public class MainController extends Controller{
     private VBox MainVbox;
     @FXML
     private HBox CheckBoxesHBox;
-
+    @FXML
+    private SplitPane MainSplitPane;
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
 
@@ -110,22 +111,8 @@ public class MainController extends Controller{
 //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
     public void DisplayMap(List<MapNode> nodes){
-        //Clear any old Content
-        Group group1 = (Group) FirstFloorScrollPane.getContent();
-        group1.getChildren().remove(1,group1.getChildren().size());
-        Group group2 = (Group) SecondFloorScrollPane.getContent();
-        group2.getChildren().remove(1,group2.getChildren().size());
-        Group group3 = (Group) ThirdFloorScrollPane.getContent();
-        group3.getChildren().remove(1,group3.getChildren().size());
-        Group group4 = (Group) FourthFloorScrollPane.getContent();
-        group4.getChildren().remove(1,group4.getChildren().size());
-        Group group5 = (Group) FifthFloorScrollPane.getContent();
-        group5.getChildren().remove(1,group5.getChildren().size());
-        Group group6 = (Group) SixthFloorScrollPane.getContent();
-        group6.getChildren().remove(1,group6.getChildren().size());
-        Group group7 = (Group) SeventhFloorScrollPane.getContent();
-        group7.getChildren().remove(1,group7.getChildren().size());
-
+        System.out.println(nodes);
+        ClearOldPaths();
         if (nodes == null) {System.out.println("There is no path.");return;}
 
         for(int i=0;i<nodes.size();i++){
@@ -235,6 +222,23 @@ public class MainController extends Controller{
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
         group1.getChildren().add(edge);
+    }
+
+    public void ClearOldPaths(){
+        Group group1 = (Group) FirstFloorScrollPane.getContent();
+        group1.getChildren().remove(1,group1.getChildren().size());
+        Group group2 = (Group) SecondFloorScrollPane.getContent();
+        group2.getChildren().remove(1,group2.getChildren().size());
+        Group group3 = (Group) ThirdFloorScrollPane.getContent();
+        group3.getChildren().remove(1,group3.getChildren().size());
+        Group group4 = (Group) FourthFloorScrollPane.getContent();
+        group4.getChildren().remove(1,group4.getChildren().size());
+        Group group5 = (Group) FifthFloorScrollPane.getContent();
+        group5.getChildren().remove(1,group5.getChildren().size());
+        Group group6 = (Group) SixthFloorScrollPane.getContent();
+        group6.getChildren().remove(1,group6.getChildren().size());
+        Group group7 = (Group) SeventhFloorScrollPane.getContent();
+        group7.getChildren().remove(1,group7.getChildren().size());
     }
 
     //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------

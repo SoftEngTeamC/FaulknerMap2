@@ -17,17 +17,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.362876254180602" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
             <children>
             <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased" promptText="Search" />
-            <HBox fx:id="CheckBoxesHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="CheckBoxesHBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <CheckBox mnemonicParsing="false" text="Rooms">
                      <HBox.margin>
-                        <Insets right="5.0" />
+                        <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </CheckBox>
                   <CheckBox mnemonicParsing="false" text="People">
@@ -51,9 +51,18 @@
                 <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="This is where the information goes&#10;Here is even more information, now on two lines&#10;" />
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="Panic" />
-                        <Button fx:id="AdminToolButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Tool" />
-                        <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#HandleHelpButton" text="Help" />
+                        <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="Panic">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                        <Button fx:id="AdminToolButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Tool">
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                        <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#HandleHelpButton" text="Help">
+                     <HBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </HBox.margin></Button>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
