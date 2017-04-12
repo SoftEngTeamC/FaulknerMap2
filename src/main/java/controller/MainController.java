@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
+import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.HospitalProfessionalService;
@@ -94,6 +95,7 @@ public class MainController extends Controller{
     private Button getPathButton;
     
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+    private NodeService NS;
 
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
@@ -416,11 +418,12 @@ public class MainController extends Controller{
     public void HandlePanicButton() {
         System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
+        pathfinding.Map map = new Map(NS.getAllNodes());
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
-                DisplayInformationTextArea.setText("Don't Panic");
+                DisplayInformationTextArea.setText("Don't Panic! Call 774-278-8517!");
                 break;
             case 2: //spanish
 
@@ -445,6 +448,7 @@ public class MainController extends Controller{
                 DisplayInformationTextArea.setText("Don't Panic");
                 language = 1;
         }
+        DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
     }
 
     //----------------------------------Build Zoomable Maps----------------------------------------------
