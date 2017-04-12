@@ -64,32 +64,32 @@ public class MakeDirections {
 
             }
             else {
-                //System.out.println(angleShift);
+                System.out.println(angleShift);
                 output2 = output.concat("Move straight " + totalDistance + " pixels, then take a ");
                 output = output2;
                 totalDistance = 0;
                 if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
-                    output2 = output.concat("slight left turn\n");
-                    output = output2;
-                }
-                else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
-                    output2 = output.concat("left turn\n");
-                    output = output2;
-                }
-                else if (angleShift > 7 * p / 12 && angleShift <= p) {
-                    output2 = output.concat("sharp left turn\n");
-                    output = output2;
-                }
-                else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
                     output2 = output.concat("slight right turn\n");
                     output = output2;
                 }
-                else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
+                else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
                     output2 = output.concat("right turn\n");
                     output = output2;
                 }
-                else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
+                else if (angleShift > 7 * p / 12 && angleShift <= p) {
                     output2 = output.concat("sharp right turn\n");
+                    output = output2;
+                }
+                else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
+                    output2 = output.concat("slight left turn\n");
+                    output = output2;
+                }
+                else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
+                    output2 = output.concat("left turn\n");
+                    output = output2;
+                }
+                else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
+                    output2 = output.concat("sharp left turn\n");
                     output = output2;
                 }
             }
@@ -154,6 +154,9 @@ public class MakeDirections {
         if (angle > Math.PI) {
             angle -= 2 * Math.PI;
         }
+        if(angle < -1 * Math.PI) {
+            angle += 2 * Math.PI;
+        }
         return angle;
     }
 
@@ -175,7 +178,7 @@ public class MakeDirections {
         Map map = new Map(NS.getAllNodes());
         PathFinder pf = new PathFinder();
         Node testNode1 = NS.findNodeByName("Day Surgery");
-        Node testNode2 = NS.findNodeByName("Radiology");
+        Node testNode2 = NS.findNodeByName("Center for Preoperative Evaluation");
 
         MapNode mNode1 = map.getNode(testNode1.getId());
         MapNode mNode2 = map.getNode(testNode2.getId());
