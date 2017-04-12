@@ -21,5 +21,15 @@
     <orderEntry type="library" name="Gradle: com.fasterxml:classmate:1.3.0" level="project" />
     <orderEntry type="library" name="Gradle: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final" level="project" />
+    <orderEntry type="module-library">
+      <library name="testng">
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/plugins/testng/lib/testng.jar!/" />
+          <root url="jar://$APPLICATION_HOME_DIR$/plugins/testng/lib/jcommander.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
