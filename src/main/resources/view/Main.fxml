@@ -14,6 +14,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -22,6 +23,23 @@
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
             <children>
+            <BorderPane prefHeight="71.0" prefWidth="213.0" />
+            <HBox fx:id="PathLocationHBox" alignment="CENTER" prefHeight="16.0" prefWidth="213.0">
+               <children>
+                  <BorderPane prefHeight="43.0" prefWidth="171.0" />
+                  <TextArea fx:id="Start_location_TextArea" editable="false" prefHeight="43.0" prefWidth="230.0" text="Start" />
+                  <BorderPane prefHeight="43.0" prefWidth="133.0" />
+                  <Button fx:id="switchLocationButton" alignment="CENTER" contentDisplay="CENTER" ellipsisString="&lt;-&gt;" mnemonicParsing="false" onMouseClicked="#switchLocationButtonClicked" prefHeight="16.0" prefWidth="41.0" text="&lt;-&gt;" textAlignment="CENTER" />
+                  <BorderPane prefHeight="43.0" prefWidth="129.0" />
+                  <TextArea fx:id="Dest_location_TextArea" editable="false" prefHeight="43.0" prefWidth="232.0" text="Destination" />
+                  <BorderPane prefHeight="43.0" prefWidth="161.0">
+                     <center>
+                        <Button fx:id="getPathButton" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="get path" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+               </children>
+            </HBox>
+            <BorderPane prefHeight="72.0" prefWidth="213.0" />
             <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased" promptText="Search" />
             <HBox fx:id="CheckBoxesHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
@@ -48,6 +66,13 @@
                </children>
             </HBox>
                 <ListView fx:id="SearchResultsListView" editable="true" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="SetStartLocationButton" alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" mnemonicParsing="false" onMouseClicked="#SetStartLocationButtonClicked" prefHeight="27.0" prefWidth="72.0" text="Set Start" />
+                  <BorderPane prefHeight="35.0" prefWidth="15.0" />
+                <Button fx:id="SetDestLocationButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#SetDestLocationButtonClicked" text="Set Dest" />
+               </children>
+            </HBox>
                 <TextArea fx:id="DisplayInformationTextArea" editable="false" layoutX="6.0" layoutY="132.0" prefHeight="227.0" prefWidth="227.0" text="This is where the information goes&#10;Here is even more information, now on two lines&#10;" />
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
