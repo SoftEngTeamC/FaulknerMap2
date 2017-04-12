@@ -1,25 +1,18 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 import model.Hours;
-
-
-import javax.xml.soap.Text;
-import java.awt.*;
+import service.EMFProvider;
 
 
 public class HoursEditorController extends Controller{
-private Hours hours= new Hours(12,12,12,12,30,30,30,30,"AM","AM","PM","PM");
+public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
 
-    public void initialize(){}
     @FXML
     private Button logoutBtn;
     @FXML
@@ -67,7 +60,16 @@ private Hours hours= new Hours(12,12,12,12,30,30,30,30,"AM","AM","PM","PM");
     @FXML
     private MenuItem pm4;
     @FXML
-    public Label failure;
+    private Text displayerror;
+
+    EMFProvider emf;
+
+    public void initialize(){
+        //displayerror.setVisible(false);
+        emf = new EMFProvider();
+
+    }
+
 
     @FXML
     public void back() throws Exception {
@@ -80,67 +82,101 @@ private Hours hours= new Hours(12,12,12,12,30,30,30,30,"AM","AM","PM","PM");
     }
     public void settoam1() {
         hours.ampm1="AM";
+        ampm1.setText("AM");
     }
     public void settopm1() {
         hours.ampm1="PM";
+        ampm1.setText("PM");
+
 
     }
     public void settoam2() {
         hours.ampm2="AM";
+        ampm2.setText("AM");
 
     }
     public void settopm2() {
         hours.ampm2="PM";
+        ampm2.setText("PM");
 
     }
     public void settoam3() {
         hours.ampm3="AM";
+        ampm3.setText("AM");
 
     }
     public void settopm3() {
         hours.ampm3="PM";
+        ampm3.setText("PM");
 
     }
     public void settoam4() {
         hours.ampm4="AM";
+        ampm4.setText("AM");
 
     }
     public void settopm4() {
         hours.ampm4="PM";
+        ampm4.setText("PM");
 
     }
 
 
     @FXML
     public void SubmitChanges() throws Exception{
-        if (Integer.parseInt(morninghrs1.getText()) <= 12){
-            hours.hours1=Integer.parseInt(morninghrs1.getText());
+
+        if (morninghrs1.getText().trim().isEmpty() && morninghrs2.getText().trim().isEmpty()
+                && eveninghrs1.getText().trim().isEmpty() && eveninghrs2.getText().trim().isEmpty()
+                && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
+                && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
+            displayerror.setVisible(true);
+            morningmin1.setText("0");
+            morninghrs1.setText("0");
+            morningmin2.setText("0");
+            morninghrs2.setText("0");
+            eveninghrs2.setText("0");
+            eveninghrs1.setText("0");
+            eveningmin2.setText("0");
+            eveningmin1.setText("0");
         }
-        if (Integer.parseInt(morninghrs2.getText()) <= 12){
-            hours.hours2=Integer.parseInt(morninghrs2.getText());
+        else if (inputval.checktime(morninghrs1, 0,12) && inputval.checktime(morninghrs2, 0,12)
+                && inputval.checktime(eveninghrs1, 0,12) && inputval.checktime(eveninghrs2, 0,12)
+                && inputval.checktime(morningmin1, 0,59) && inputval.checktime(morningmin2, 0,59)
+                && inputval.checktime(eveningmin1, 0,59) && inputval.checktime(eveningmin2, 0,59)){
+            hours.hours1=morninghrs1.getText();
+            hours.hours2=morninghrs2.getText();
+            hours.hours3=eveninghrs1.getText();
+            hours.hours4=eveninghrs2.getText();
+            hours.minutes1=morningmin1.getText();
+            hours.minutes2=morningmin2.getText();
+            hours.minutes3=eveningmin1.getText();
+            hours.minutes4=eveningmin2.getText();
+            hours = new Hours(hours.hours1,hours.hours2,hours.hours3,hours.hours4,hours.minutes1,hours.minutes2,hours.minutes3,hours.minutes4,hours.ampm1,hours.ampm2,hours.ampm3,hours.ampm4);
+            System.out.println(hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
+            System.out.println(hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
+            System.out.println(hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
+            System.out.println(hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+            displayerror.setVisible(false);
+            System.out.println("Edited hour: " + hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
+            emf.hours = this.hours;
         }
-        if (Integer.parseInt(eveninghrs1.getText()) <= 12){
-            hours.hours3=Integer.parseInt(eveninghrs1.getText());
+
+
+
+        else{
+            displayerror.setVisible(true);
+            morningmin1.setText("0");
+            morninghrs1.setText("0");
+            morningmin2.setText("0");
+            morninghrs2.setText("0");
+            eveninghrs2.setText("0");
+            eveninghrs1.setText("0");
+            eveningmin2.setText("0");
+            eveningmin1.setText("0");
+
+
         }
-        if (Integer.parseInt(eveninghrs2.getText()) <= 12){
-            hours.hours4=Integer.parseInt(eveninghrs2.getText());
-        }
-        if (Integer.parseInt(morningmin1.getText()) <= 59){
-            hours.minutes1=Integer.parseInt(morningmin1.getText());
-        }
-        if (Integer.parseInt(morningmin2.getText()) <= 59){
-            hours.minutes2=Integer.parseInt(morningmin2.getText());
-        }
-        if (Integer.parseInt(eveningmin1.getText()) <= 59){
-            hours.minutes3=Integer.parseInt(eveningmin1.getText());
-        }
-        if (Integer.parseInt(eveningmin2.getText()) <= 59){
-            hours.minutes4=Integer.parseInt(eveningmin2.getText());
-        }
-        System.out.println(hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
-        System.out.println(hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
-        System.out.println(hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
-        System.out.println(hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+
 
     }
 

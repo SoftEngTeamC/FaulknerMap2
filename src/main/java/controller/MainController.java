@@ -1,12 +1,10 @@
 package controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,47 +12,64 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
+import model.Edge;
 import model.HospitalProfessional;
+
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
+import service.EdgeService;
+
+import pathfinding.Map;
+import pathfinding.MapNode;
+import pathfinding.PathFinder;
+import service.EMFProvider;
 import service.HospitalProfessionalService;
 import service.NodeService;
+import model.Hours;
+
+import java.awt.event.MouseEvent;
+import java.util.Collections;
 
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
-
     //ImageView Objects
     @FXML
-    private ScrollPane FirstFloorScrollPane;
+    private  ScrollPane FirstFloorScrollPane;
     @FXML
     private Slider FirstFloorSlider;
     @FXML
-    private ScrollPane SecondFloorScrollPane;
+    private  ScrollPane SecondFloorScrollPane;
     @FXML
     private Slider SecondFloorSlider;
     @FXML
-    private ScrollPane ThirdFloorScrollPane;
+    private  ScrollPane ThirdFloorScrollPane;
     @FXML
     private Slider ThirdFloorSlider;
     @FXML
-    private ScrollPane FourthFloorScrollPane;
+    private  ScrollPane FourthFloorScrollPane;
     @FXML
     private Slider FourthFloorSlider;
     @FXML
-    private ScrollPane FifthFloorScrollPane;
+    private  ScrollPane FifthFloorScrollPane;
     @FXML
     private Slider FifthFloorSlider;
     @FXML
-    private ScrollPane SixthFloorScrollPane;
+    private  ScrollPane SixthFloorScrollPane;
     @FXML
     private Slider SixthFloorSlider;
     @FXML
-    private ScrollPane SeventhFloorScrollPane;
+    private  ScrollPane SeventhFloorScrollPane;
     @FXML
     private Slider SeventhFloorSlider;
     //---------------------------------------------------
@@ -74,58 +89,136 @@ public class MainController extends Controller{
     private TabPane FloorViewsTabPane;
     @FXML
     private MenuButton languageMenuButton;
+    @FXML
+    private VBox MainVbox;
+    @FXML
+    private HBox CheckBoxesHBox;
+    @FXML
+    private SplitPane MainSplitPane;
+    @FXML
+    private TextArea Start_location_TextArea;
+    @FXML
+    private TextArea Dest_location_TextArea;
+    @FXML
+    private HBox PathLocationHBox;
+    @FXML
+    private Button SetStartLocationButton;
+    @FXML
+    private Button SetDestLocationButton;
+    @FXML
+    private Button getPathButton;
+    
+    //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+    private NodeService NS;
+
+   /* public String hours1;
+    public String minutes1;
+    public String ampm1;
+    public String hours2;
+    public String minutes2;
+    public String ampm2;
+    public String hours3;
+    public String minutes3;
+    public String ampm3;
+    public String hours4;
+    public String minutes4;
+    public String ampm4;
+    */
+    public Hours hours;
+
+    @FXML
+    private ImageView LogoImageView;
+    @FXML
+    private VBox StartLocationVBox;
+    @FXML
+    private Button StartAtKioskButton;
+    @FXML
+    private TabPane DisplayInformationTabPane;
+    @FXML
+    private TextArea TextDirectionsTextArea;
 
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
-
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
+
+        EMFProvider emf = new EMFProvider();
+        hours = emf.hours;
         InitializeMapViews();
         PopulateSearchResults(null);
+        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.2));
+        DisplayInformationTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
+        TextDirectionsTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
+        CheckBoxesHBox.setPrefHeight(30);
+        //System.out.println(MainSplitPane.getDividers());
+        //MainSplitPane.setDividerPosition(1,0.3);
 
-        MakeCircle(1000,1000,4);
+        Image logo = new Image("images/logo.png");
+        LogoImageView.setImage(logo);
+        LogoImageView.setPreserveRatio(true);
+        LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
+
+        MakeCircle(1000,1000,4, "");
         MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
-    }
-
-
-    //PROXY FUNCTIONS
-
-//-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
-//    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-//    public void DisplayMap(List<MapNode> nodes){
-//        //MapAnchor.getChildren().clear();
-//        ImageView mapPic = new ImageView();
-//        Image floorImage = new Image("images/floor4.png");
-//        mapPic.setImage(floorImage);
-//        //mapPic.fitWidthProperty().bind(MapAnchor.widthProperty());
-//        mapPic.setPreserveRatio(true);
-//        mapPic.setPickOnBounds(true);
-//        //MapAnchor.getChildren().add(mapPic);
-//
-//        if (nodes == null) {
-//            System.out.println("There is no path.");
-//            return;
+//        NodeService ns = new NodeService();
+//        List<Node> temp = ns.getNodesByFloor(1);
+//        for(Node n: temp){
+//            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
 //        }
-//       for(int i=0;i<nodes.size();i++){
-//           MakeCircle(nodes.get(i).getLocation().getX(),nodes.get(i).getLocation().getY());
-//            if(i>0){
-//                MakeLine(nodes.get(i-1).getLocation().getX(),
-//                         nodes.get(i-1).getLocation().getY(),
-//                         nodes.get(i).getLocation().getX(),
-//                         nodes.get(i).getLocation().getY());
+//        EdgeService es = new EdgeService();
+//        List<Edge> edges = es.getAllEdges();
+//        for(Edge e: edges){
+//            if(e.getStart().getLocation().getFloor() == 1){
+//                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+//                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
+//                TextField text = new TextField();
+//
 //            }
 //        }
-//    }
+
+    }
+
+//-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
+    //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
+    public void DisplayMap(List<MapNode> nodes){
+        for(int i = 0; i < nodes.size(); i++){
+            System.out.println(nodes.get(i).getLocation().getFloor());
+        }
+        System.out.println(nodes);
+        ClearOldPaths();
+        if (nodes == null) {System.out.println("There is no path.");return;}
+
+        for(int i=0;i<nodes.size();i++) {
+            MakeCircle(nodes.get(i).getLocation().getX(),
+                    nodes.get(i).getLocation().getY(),
+                    nodes.get(i).getLocation().getFloor(), "");
+        }
+        for(int i = 0; i < nodes.size() - 1; i++){
+            MakeLine(nodes.get(i).getLocation().getX(), //
+                    nodes.get(i).getLocation().getY(),
+                    nodes.get(i+1).getLocation().getX(),
+                    nodes.get(i+1).getLocation().getY(),
+                    nodes.get(i).getLocation().getFloor());
+
+//            if((i>0) && (i != nodes.size()-1) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
+//                MakeLine(nodes.get(i-1).getLocation().getX(), //
+//                         nodes.get(i-1).getLocation().getY(),
+//                         nodes.get(i).getLocation().getX(),
+//                         nodes.get(i).getLocation().getY(),
+//                         nodes.get(i).getLocation().getFloor());
+//            }
+        }
+    }
 
     //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
     //It locks the points to their position on the image,
     //Resizing the image does not effect the relative position of the nodes and the image
-    public void MakeCircle(double x, double y, int z) {
+    public void MakeCircle(double x, double y, int z, String name) {
         // initial size of image and the image ratior
         ScrollPane Scrolly = null;
         switch(z){
@@ -168,7 +261,22 @@ public class MainController extends Controller{
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
         circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+
+//        Text text = new Text(x,y
+//                , name);
+//
+//        text.setBoundsType(TextBoundsType.VISUAL);
+//        StackPane stack = new StackPane();
+//        stack.getChildren().add(text);
+
+        group1.setOnMouseClicked(event -> {
+            System.out.println(event.getSceneX());
+            System.out.println(event.getSceneY());
+        });
+
         group1.getChildren().add(circle);
+
+
     }
 
     //MakeLine take 2 points (effectively) and draws a line from point to point
@@ -217,25 +325,40 @@ public class MainController extends Controller{
         group1.getChildren().add(edge);
     }
 
-
+    public void ClearOldPaths(){
+        Group group1 = (Group) FirstFloorScrollPane.getContent();
+        group1.getChildren().remove(1,group1.getChildren().size());
+        Group group2 = (Group) SecondFloorScrollPane.getContent();
+        group2.getChildren().remove(1,group2.getChildren().size());
+        Group group3 = (Group) ThirdFloorScrollPane.getContent();
+        group3.getChildren().remove(1,group3.getChildren().size());
+        Group group4 = (Group) FourthFloorScrollPane.getContent();
+        group4.getChildren().remove(1,group4.getChildren().size());
+        Group group5 = (Group) FifthFloorScrollPane.getContent();
+        group5.getChildren().remove(1,group5.getChildren().size());
+        Group group6 = (Group) SixthFloorScrollPane.getContent();
+        group6.getChildren().remove(1,group6.getChildren().size());
+        Group group7 = (Group) SeventhFloorScrollPane.getContent();
+        group7.getChildren().remove(1,group7.getChildren().size());
+    }
 
     //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
     public void UpdateSearchResults(LinkedList<String> results) {
-
+        results.sort(String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> data = FXCollections.observableArrayList();
         data.addAll(results);
         SearchResultsListView.setItems(data);
     }
 
-    public void FindandDisplayPath(HospitalProfessional HP) {
+    public void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
-        MapNode start = map.getNode(NS.findNodeByName("Radiology").getId());
-        MapNode dest = map.getNode(HP.getId());
+        MapNode start = map.getNode(HP_Start.getId());
+        MapNode dest = map.getNode(HP_Dest.getId());
         List<MapNode> path = PathFinder.shortestPath(start, dest);
-        //DisplayMap(path);
+        DisplayMap(path);
     }
 
     public void PopulateSearchResults(String S) {
@@ -249,6 +372,7 @@ public class MainController extends Controller{
             for (HospitalProfessional HP : Professionals) {
                 names.add(HP.getName());
             }
+            names.sort(String.CASE_INSENSITIVE_ORDER);
             SearchResultsListView.setItems(names);
         } else {
             for (HospitalProfessional HP : Professionals) {
@@ -256,6 +380,7 @@ public class MainController extends Controller{
                     names.add(HP.getName());
                 }
             }
+            names.sort(String.CASE_INSENSITIVE_ORDER);
             SearchResultsListView.setItems(names);
         }
     }
@@ -263,19 +388,18 @@ public class MainController extends Controller{
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP){
-
         HospitalProfessionalService hs = new HospitalProfessionalService();
+        //System.out.println(hs.find(HP.getId()).getOffices());
         String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
-        System.out.println("trying to populate information area");
     }
 
-    // EVENT HANDLERS
+    //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
-    public void handleFirstFloorZoomSlider(){
-        System.out.println(FirstFloorSlider.getValue());
+    public void handleClickedOnStartAtKiosk(){
+        System.out.println("start at kiosk");
+        Start_location_TextArea.setText("intersection18");
     }
-
 
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
@@ -283,15 +407,57 @@ public class MainController extends Controller{
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
-        //FindandDisplayPath(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
     }
 
-    /**
-     * @author JVB
-     * <p>
-     * Method is called when the search bar has a key pressed.
-     * Populates the search ListView with search results from what's in the textfield
-     */
+
+    // function after clicking set start location
+    public void SetStartLocationButtonClicked(){
+        System.out.println("clicked on Set Start button");
+        HospitalProfessionalService HPS = new HospitalProfessionalService();
+        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HospitalProfessional HP = new HospitalProfessional();
+        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        Start_location_TextArea.setText(HP.getName());
+    }
+
+    // function after clicking set destination location
+    public void SetDestLocationButtonClicked(){
+        System.out.println("clicked on Set Dest button");
+        HospitalProfessionalService HPS = new HospitalProfessionalService();
+        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HospitalProfessional HP = new HospitalProfessional();
+        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        Dest_location_TextArea.setText(HP.getName());
+    }
+
+    public void switchLocationButtonClicked(){
+        System.out.println("clicked on switch location button");
+
+
+        String tempStorage = Start_location_TextArea.getText();
+        System.out.println("tempStorage is" + tempStorage);
+        Start_location_TextArea.setText(Dest_location_TextArea.getText());
+        Dest_location_TextArea.setText(tempStorage);
+
+        HospitalProfessionalService switched_Dest = new HospitalProfessionalService();
+        switched_Dest.findHospitalProfessionalByName(Start_location_TextArea.getText());
+
+    }
+
+
+    public void getPathButtonClicked(){
+        System.out.println("clicked on get path button");
+        HospitalProfessionalService HPS= new HospitalProfessionalService();
+        HospitalProfessional HP_Start = HPS.findHospitalProfessionalByName(Start_location_TextArea.getText());
+        HospitalProfessional HP_Dest = HPS.findHospitalProfessionalByName(Dest_location_TextArea.getText());
+        FindandDisplayPath(HP_Start,HP_Dest);
+
+        System.out.println("start HP:  " + HP_Start.getName());
+        System.out.println("dest HP:  " + HP_Dest.getName());
+    }
+
+
+
     public void SearchBarTextField_keyReleased() {
         System.out.println("Searching");
         System.out.println(SearchBarTextField.getText().toString());
@@ -299,30 +465,81 @@ public class MainController extends Controller{
     }
 
     //function for Help Button
-    public void HandleHelpButton() {
+    public void HandleHelpButton()throws Exception{
+        System.out.println("HELP");
+        System.out.println(language);
+        // 1: english, 2: spanish, 3: chinese, 4: french
+        //TODO: change once we set what te public void HandleHelpButton() {
         System.out.println("HELP");
         System.out.println(language);
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
+//                System.out.println("Hours:  "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
+//                System.out.println("Hours:  "+hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
+//                System.out.println("Hours:  "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
+//                System.out.println("Hours:  "+hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517");
+                                                     "please call 774-278-8517\n\n"
+                                                        + "Hospital Operating Hour:\n"+
+                                                        "Morning Hours: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                        hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                        "Evening Hours: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                        hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO SPANISH SOON");
+                DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
+                                                      "porfavor llame 774-278-8517\n\n"
+                                                      + "Horas de operacíon:\n" +
+                                                     "Mañana : "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                     hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                     "Atardecer : "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                      hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO CHINESE SOON");
+                DisplayInformationTextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
+                                                    + "医院营业时间:\n" +
+                                                  "白日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                  hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                  "夜晚: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                   hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO FRENCH SOON");
+                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
+                                                 "appelez s'il vous plaît 774-278-8517\n\n"
+                                              + "Heures d'ouverture:\n" +
+                                             "Matin: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                              hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                             "Soir: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                break;
+            case 5: //Italian
+                DisplayInformationTextArea.setText("Per contattare un dipendente dell'ospedale\n" +
+                                                   "chiamare 774-278-8517\n\n"
+                                               + "Ore di servizio:\n" +
+                                              "Mattina: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                               hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                "Notte: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                break;
+            case 6: //Japanese
+                DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
+                                               + "病院ビジネス時間:\n" +
+                                                "日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                "夜: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                break;
+            case 7: //Portuguese
+                DisplayInformationTextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
+                                                  "ligue para 774-278-8517\n\n"
+                                               + "horas de operação:\n" +
+                                               "Manhã: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                             hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                             "Tarde: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -333,30 +550,39 @@ public class MainController extends Controller{
 
     //function for Panic Button
     public void HandlePanicButton() {
+        NS = new NodeService();
         System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
+        pathfinding.Map map = new Map(NS.getAllNodes());
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
-                DisplayInformationTextArea.setText("Don't Panic");
+                DisplayInformationTextArea.setText("Don't Panic! Call 774-278-8517!");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO SPANISH SOON");
+                DisplayInformationTextArea.setText("No se preocupe");
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO CHINESE SOON");
+                DisplayInformationTextArea.setText("不要惊慌");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Don't Panic" +
-                        "\n WILL CHANGE TO FRENCH SOON");
+                DisplayInformationTextArea.setText("Ne paniquez pas");
+                break;
+            case 5: //Italian
+                DisplayInformationTextArea.setText("Non fatevi prendere dal panico");
+                break;
+            case 6: //Japanese
+                DisplayInformationTextArea.setText("パニックしないでください");
+                break;
+            case 7: //Portuguese
+                DisplayInformationTextArea.setText("Não entre em pânico");
                 break;
             default:
                 DisplayInformationTextArea.setText("Don't Panic");
                 language = 1;
         }
+        DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
     }
 
     //----------------------------------Build Zoomable Maps----------------------------------------------
@@ -382,7 +608,7 @@ public class MainController extends Controller{
         SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SecondFloorImageView = new ImageView();
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setImage(SecondFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
         Group SecondFloorGroup = new Group();
         SecondFloorGroup.getChildren().add(SecondFloorImageView);

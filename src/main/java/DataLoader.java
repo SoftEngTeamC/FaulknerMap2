@@ -46,7 +46,7 @@ public class DataLoader {
             loadEdges(emf, "data/floor6/edges.tsv");
             loadEdges(emf, "data/floor7/edges.tsv");
 
-            addEdgeIntersections();
+            //addEdgeIntersections();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,7 +70,7 @@ public class DataLoader {
 
             String[] split = row[0].split("\\s+\\-\\s+");
             if(split.length < 3){
-                System.out.print("Could not add ");
+                System.out.print("Could not add location ");
                 for(int i = 0; i < split.length; i++){
                     System.out.print(split[i]);
                 }
@@ -104,7 +104,7 @@ public class DataLoader {
 
             String[] split = row[0].split("\\s+\\-\\s+");
             if(split.length < 3){
-                System.out.print("Could not add ");
+                System.out.print("Could not add professional");
                 for(int i = 0; i < split.length; i++){
                     System.out.print(split[i]);
                 }
@@ -138,7 +138,7 @@ public class DataLoader {
 
             String[] split = row[0].split("\\s+\\-\\s+");
             if(split.length < 2){
-                System.out.print("Could not add ");
+                System.out.print("Could not add service ");
                 for(int i = 0; i < split.length; i++){
                     System.out.print(split[i]);
                 }

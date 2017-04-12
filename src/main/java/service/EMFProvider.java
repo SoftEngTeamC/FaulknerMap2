@@ -1,5 +1,7 @@
 package service;
 
+import model.Hours;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -8,6 +10,7 @@ public class EMFProvider {
 
     private static EMFProvider myHelper = new EMFProvider();
     private static EntityManagerFactory emf = null;
+    public static Hours hours;
 
     static {
         if (emf == null) {

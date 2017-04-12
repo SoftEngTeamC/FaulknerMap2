@@ -1,16 +1,11 @@
 package textDirections;
 
-//import org.junit.Test;
+//import org.testng.annotations.Test;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.NodeService;
-import pathfinding.Map;
-import model.Node;
 
-import java.nio.file.Path;
 import java.util.List;
-
-import static java.lang.Math.atan2;
 
 /**
  * Created by Alex on 4/9/2017.
@@ -19,6 +14,7 @@ public class MakeDirections {
     private NodeService NS = new NodeService();
     private PathFinder pf = new PathFinder();
     public static String getText(List<MapNode> myPath){
+        String output2 = "";
         String output = "";
         String direction;
         int i;
@@ -30,6 +26,7 @@ public class MakeDirections {
         double nextAngle;
         double angleShift;
         double p = Math.PI;
+        double distance;
         for(i = 0; i < myPath.size() - 2; i++) {
             currentNode = myPath.get(i);
             nextNode = myPath.get(i+1);
@@ -37,47 +34,84 @@ public class MakeDirections {
             currentAngle = getAngle(currentNode, nextNode);
             nextAngle = getAngle(nextNode, afterNextNode);
             angleShift = getAngleShift(currentAngle, nextAngle);
+            //System.out.println(angleShift);
             direction = getDirection(currentAngle);
 
-            if(direction.equals("horizontal")) {
-                totalDistance += xDistance(currentNode, nextNode);
-            }
-            else if(direction.equals("vertical")) {
-                totalDistance += yDistance(currentNode, nextNode);
-            }
-            else {
-                totalDistance += distanceBetween(currentNode, nextNode);
+            //System.out.println(direction);
+
+            if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
+                //System.out.println("Made it here");
+                output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
+                output = output2;
             }
 
-            if(angleShift >= -1 * p/6 && angleShift <= p/6) {
-
-            }
             else {
-                output.concat("Move straight " + totalDistance + " pixels, then take a ");
-                totalDistance = 0;
-                if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
-                    output.concat("slight left turn\n");
+                if (direction.equals("horizontal")) {
+                    //System.out.println(direction);
+                    distance = xDistance(currentNode, nextNode);
+                    totalDistance += distance;
+                    //System.out.println(distance);
+                } else if (direction.equals("vertical")) {
+                    //System.out.println(direction);
+                    totalDistance += yDistance(currentNode, nextNode);
+                } else {
+                    //System.out.println(direction);
+                    totalDistance += distanceBetween(currentNode, nextNode);
                 }
-                else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
-                    output.concat("left turn\n");
-                }
-                else if (angleShift > 7 * p / 12 && angleShift <= p) {
-                    output.concat("sharp left turn\n");
-                }
-                else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
-                    output.concat("slight right turn\n");
-                }
-                else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
-                    output.concat("right turn\n");
-                }
-                else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
-                    output.concat("sharp right turn\n");
+
+                if (angleShift >= -1 * p / 6 && angleShift <= p / 6) {
+
+                } else {
+                    //System.out.println(angleShift);
+                    output2 = output.concat("Move straight " + totalDistance + " pixels, then take a ");
+                    output = output2;
+                    totalDistance = 0;
+                    if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
+                        output2 = output.concat("slight right turn\n");
+                        output = output2;
+                    } else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
+                        output2 = output.concat("right turn\n");
+                        output = output2;
+                    } else if (angleShift > 7 * p / 12 && angleShift <= p) {
+                        output2 = output.concat("sharp right turn\n");
+                        output = output2;
+                    } else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
+                        output2 = output.concat("slight left turn\n");
+                        output = output2;
+                    } else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
+                        output2 = output.concat("left turn\n");
+                        output = output2;
+                    } else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
+                        output2 = output.concat("sharp left turn\n");
+                        output = output2;
+                    }
                 }
             }
         }
-        if(output.equals("")) {
-            output.concat("Move forward " + totalDistance + " pixels");
+
+        currentNode = myPath.get(i);
+        nextNode = myPath.get(i+1);
+        currentAngle = getAngle(currentNode, nextNode);
+        direction = getDirection(currentAngle);
+
+        if(direction.equals("horizontal")) {
+            //System.out.println(direction);
+            distance = xDistance(currentNode, nextNode);
+            totalDistance += distance;
+            //System.out.println(distance);
         }
+        else if(direction.equals("vertical")) {
+            //System.out.println(direction);
+            totalDistance += yDistance(currentNode, nextNode);
+        }
+        else {
+            //System.out.println(direction);
+            totalDistance += distanceBetween(currentNode, nextNode);
+        }
+
+        output2 = output.concat("Move forward " + totalDistance + " pixels");
+        output = output2;
+
         return output;
     }
 
@@ -87,7 +121,11 @@ public class MakeDirections {
     }
 
     private static double xDistance(MapNode a, MapNode b) {
-        return Math.abs(a.getLocation().getX() - b.getLocation().getX());
+        double x1 = a.getLocation().getX();
+        double x2 = b.getLocation().getX();
+        //System.out.println(x1);
+        //System.out.println(x2);
+        return Math.abs(x1 - x2);
     }
 
     private static double yDistance(MapNode a, MapNode b) {
@@ -102,13 +140,16 @@ public class MakeDirections {
     private static double getAngle(MapNode a, MapNode b){
         double deltaY = b.getLocation().getY() - a.getLocation().getY();
         double deltaX = b.getLocation().getX() - a.getLocation().getX();
-        return Math.atan2(deltaX, deltaY);
+        return Math.atan2(deltaY, deltaX);
     }
 
     private static double getAngleShift(double firstAngle, double secondAngle) {
         double angle = secondAngle - firstAngle;
         if (angle > Math.PI) {
             angle -= 2 * Math.PI;
+        }
+        if(angle < -1 * Math.PI) {
+            angle += 2 * Math.PI;
         }
         return angle;
     }
@@ -126,17 +167,24 @@ public class MakeDirections {
         }
     }
 
-//    @Test
-//    public void printDirectionsTest1() {
-//        Map map = new Map(NS.getAllNodes());
-//        PathFinder pf = new PathFinder();
-//        Node testNode1 = NS.findNodeByName("Day Surgery");
-//        Node testNode2 = NS.findNodeByName("Blood Draw");
-//
-//        MapNode mNode1 = map.getNode(testNode1.getId());
-//        MapNode mNode2 = map.getNode(testNode2.getId());
-//
-//        String directions = getText(pf.shortestPath(mNode1, mNode2));
-//        System.out.print(directions);
-//    }
+    /*@Test
+    public void printDirectionsTest1() {
+        Map map = new Map(NS.getAllNodes());
+        PathFinder pf = new PathFinder();
+        Node testNode1 = NS.findNodeByName("4N");
+        Node testNode2 = NS.findNodeByName("5N");
+
+        MapNode mNode1 = map.getNode(testNode1.getId());
+        MapNode mNode2 = map.getNode(testNode2.getId());
+
+        List<MapNode> path = pf.shortestPath(mNode1, mNode2);
+
+        String directions = getText(path);
+        if(directions.equals("")) {
+            System.out.println("no directions");
+        }
+        System.out.println(directions);
+    }
+    */
+
 }

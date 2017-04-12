@@ -22,8 +22,6 @@ Atrium Elevators - hallway110
 
 Hillside Elevators 1 - hallway111
 
-Hillside Elevators 2 - hallway112
-
 hallway10 - intersection12
 
 hallway11 - intersection14
@@ -55,3 +53,15 @@ hallway110 - intersection17
 hallway110 - intersection18
 
 hallway111 - intersection12
+
+intersection11 - intersection12
+
+intersection12 - intersection14
+
+intersection14 - intersection15
+
+intersection15 - intersection17
+
+intersection17 - intersection18
+
+
