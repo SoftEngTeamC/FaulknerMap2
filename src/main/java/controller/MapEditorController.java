@@ -5,7 +5,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-
 import javafx.scene.Group;
 
 import javafx.fxml.FXMLLoader;
@@ -17,6 +16,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
+
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -25,6 +31,7 @@ import model.Node;
 import service.CoordinateService;
 
 import javafx.stage.Stage;
+
 import model.Edge;
 import model.Node;
 import service.EdgeService;
@@ -32,9 +39,21 @@ import service.EdgeService;
 import service.NodeService;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 
 public class MapEditorController extends Controller {
@@ -126,7 +145,7 @@ public class MapEditorController extends Controller {
     @FXML
     private Button editNode_removeNeighborBtn;
     @FXML
-    private TextField editNode_addField;
+    private AutocompletionlTextField editNode_addField;
     @FXML
     private Button editNode_addBtn;
     @FXML
@@ -156,8 +175,16 @@ public class MapEditorController extends Controller {
     private int currFloor;
 
 
+    public void initialize() {
+       // editNode_addField = new AutocompletionlTextField();
+        NodeService ns = new NodeService();
+        List<Node> nodes = ns.getNodesByFloor(1);
+        List<String> names = new ArrayList<>();
+        for(Node n: nodes){
+            names.add(n.getName());
+        }
+        editNode_addField.getEntries().addAll(names);
 
-    public void initialize(){
         InitializeMapViews();
         InitializeIndicatorTextListeners();
 
@@ -188,7 +215,7 @@ public class MapEditorController extends Controller {
 
 
         currFloor = 1;
-        NodeService ns = new NodeService();
+
         ArrayList<String> nameList = new ArrayList<>();
         for (Node n : ns.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
@@ -199,17 +226,17 @@ public class MapEditorController extends Controller {
 
         tabPaneListen();
         removeNeighborListen();
-
     }
 
+
     public void tabPaneListen() {
-        tabPane.getSelectionModel().selectedItemProperty().addListener(
+        FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
                         NodeService ns = new NodeService();
-                        currFloor = Integer.parseInt(t1.getText().charAt(0) + "");
+                        currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
                         ArrayList<String> nameList = new ArrayList<>();
                         for (Node n : ns.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
@@ -217,6 +244,14 @@ public class MapEditorController extends Controller {
                         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
                         editNode_searchResultsList.setItems(obList);
+
+                        List<Node> nodes = ns.getNodesByFloor(currFloor);
+                        List<String> names = new ArrayList<>();
+                        for(Node n: nodes){
+                            names.add(n.getName());
+                        }
+                        editNode_addField.getEntries().clear();
+                        editNode_addField.getEntries().addAll(names);
                     }
                 }
         );
@@ -234,7 +269,9 @@ public class MapEditorController extends Controller {
                     Set<Node> neighbors = ns.neighbors(selectedNode.getId());
                     ArrayList<String> neighborsS = new ArrayList<>();
                     for (Node node : neighbors) {
-                        neighborsS.add(node.getName());
+                        if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                            neighborsS.add(node.getName());
+                        }
                     }
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
                     editNode_neighborsList.setItems(nList);
@@ -373,14 +410,17 @@ public class MapEditorController extends Controller {
 
         List<Edge> currEdges = es.findByNodes(currNodes[0], currNodes[1]);
 
-        for(Edge curr : currEdges){
+        for (Edge curr : currEdges) {
             es.remove(curr);
         }
 
         Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
+        System.out.println("currNode: " + currNodes[0].getId());
         List<String> neighborsS = new ArrayList<>();
-        for(Node node: neighbors){
-            neighborsS.add(node.getName());
+        for (Node node : neighbors) {
+            if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                neighborsS.add(node.getName());
+            }
         }
         ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
         editNode_neighborsList.setItems(nList);
@@ -390,20 +430,23 @@ public class MapEditorController extends Controller {
 //
     public void editNode_addBtnPressed() {
 
-//        NodeService ns = new NodeService();
-//        Node newNode = ns.findNodeByName(editNode_addField.getText());
-//        if (newNode != null) {
-//            currNodes[0].addEdge(newNode);
-//
-//            ArrayList<Node> neighbors = EdgesHelper.getNeighbors(currNodes[0]);
-//            ArrayList<String> neighborsS = new ArrayList<>();
-//            for (Node node : neighbors) {
-//                neighborsS.add(node.getName());
-//            }
-//            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
-//            editNode_neighborsList.setItems(nList);
-//        }
+        NodeService ns = new NodeService();
+        Node newNode = ns.findNodeByName(editNode_addField.getText());
+        if (newNode != null) {
+            EdgeService es = new EdgeService();
+            es.persist(new Edge(currNodes[0], newNode, 0));
+            es.persist(new Edge(newNode, currNodes[0], 0));
 
+            Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
+            ArrayList<String> neighborsS = new ArrayList<>();
+            for (Node node : neighbors) {
+                if (!Objects.equals(node.getId(), currNodes[0].getId())) {
+                    neighborsS.add(node.getName());
+                }
+            }
+            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+            editNode_neighborsList.setItems(nList);
+        }
     }
 
     public void imageClicked() {
@@ -419,6 +462,7 @@ public class MapEditorController extends Controller {
     private void mouseClicked(double x, double y) {
 
     }
+
     //----------------------------------Indicator Text Listeners------------------------------------
     public void InitializeIndicatorTextListeners(){
         addNode_xPos.textProperty().addListener(new ChangeListener(){
@@ -491,7 +535,7 @@ public class MapEditorController extends Controller {
         SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SecondFloorImageView = new ImageView();
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setImage(SecondFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
         Group SecondFloorGroup = new Group();
         SecondFloorGroup.getChildren().add(SecondFloorImageView);
@@ -584,3 +628,5 @@ public class MapEditorController extends Controller {
         SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
 }
+
+

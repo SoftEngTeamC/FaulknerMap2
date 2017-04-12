@@ -23,6 +23,7 @@ public class EdgeService extends AbstractService<Edge> {
     public List<Edge> findByNodes(Node start, Node end){
         EntityManager manager = this.managerFactory.createEntityManager();
         List<Edge> temp = new ArrayList<>();
+        System.out.println("start: " + start.getId() + " end: " + end.getId());
         temp.add(manager.createQuery(
                 "SELECT e FROM Edge e WHERE e.start = :start AND e.end = :end", Edge.class)
                 .setParameter("start", start)
@@ -33,6 +34,7 @@ public class EdgeService extends AbstractService<Edge> {
                 .setParameter("start", end)
                 .setParameter("end", start)
                 .getSingleResult());
+
         return temp;
     }
 }
