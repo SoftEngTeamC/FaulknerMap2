@@ -1,12 +1,9 @@
 package textDirections;
 
 //import org.testng.annotations.Test;
-import model.Node;
-import service.NodeService;
-import org.junit.Test;
-import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
+import service.NodeService;
 
 import java.util.List;
 
@@ -170,7 +167,7 @@ public class MakeDirections {
         }
     }
 
-    @Test
+    /*@Test
     public void printDirectionsTest1() {
         Map map = new Map(NS.getAllNodes());
         PathFinder pf = new PathFinder();
@@ -188,5 +185,6 @@ public class MakeDirections {
         }
         System.out.println(directions);
     }
+    */
 
 }
