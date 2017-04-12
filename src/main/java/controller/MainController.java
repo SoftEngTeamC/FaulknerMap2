@@ -26,6 +26,7 @@ import service.NodeService;
 import model.Hours;
 
 
+import javax.xml.soap.Text;
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
@@ -109,8 +110,18 @@ public class MainController extends Controller{
     */
     public Hours hours;
 
-    private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+    @FXML
+    private ImageView LogoImageView;
+    @FXML
+    private VBox StartLocationVBox;
+    @FXML
+    private Button StartAtKioskButton;
+    @FXML
+    private TabPane DisplayInformationTabPane;
+    @FXML
+    private TextArea TextDirectionsTextArea;
 
+    private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
@@ -118,14 +129,17 @@ public class MainController extends Controller{
         hours = emf.hours;
         InitializeMapViews();
         PopulateSearchResults(null);
-        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.3));
-        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
-        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.2));
+        DisplayInformationTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
+        TextDirectionsTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
         CheckBoxesHBox.setPrefHeight(30);
+        //System.out.println(MainSplitPane.getDividers());
+        //MainSplitPane.setDividerPosition(1,0.3);
 
-        PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
-
-
+        Image logo = new Image("images/logo.png");
+        LogoImageView.setImage(logo);
+        LogoImageView.setPreserveRatio(true);
+        LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
         MakeCircle(1000,1000,4);
         MakeLine(1000,1000,2000,2000,2);
@@ -320,6 +334,11 @@ public class MainController extends Controller{
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
+    public void handleClickedOnStartAtKiosk(){
+        System.out.println("start at kiosk");
+        Start_location_TextArea.setText("intersection18");
+    }
+
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
     public void handleClickedOnSearchResult() {
@@ -366,12 +385,9 @@ public class MainController extends Controller{
 
     public void getPathButtonClicked(){
         System.out.println("clicked on get path button");
-        HospitalProfessionalService HPS_Start = new HospitalProfessionalService();
-        HospitalProfessional HP_Start = HPS_Start.findHospitalProfessionalByName(Start_location_TextArea.getText());
-
-        HospitalProfessionalService HPS_Dest = new HospitalProfessionalService();
-        HospitalProfessional HP_Dest = HPS_Dest.findHospitalProfessionalByName(Dest_location_TextArea.getText());
-
+        HospitalProfessionalService HPS= new HospitalProfessionalService();
+        HospitalProfessional HP_Start = HPS.findHospitalProfessionalByName(Start_location_TextArea.getText());
+        HospitalProfessional HP_Dest = HPS.findHospitalProfessionalByName(Dest_location_TextArea.getText());
         FindandDisplayPath(HP_Start,HP_Dest);
 
         System.out.println("start HP:  " + HP_Start.getName());
