@@ -416,6 +416,7 @@ public class MainController extends Controller{
 
     //function for Panic Button
     public void HandlePanicButton() {
+        NS = new NodeService();
         System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
         pathfinding.Map map = new Map(NS.getAllNodes());
