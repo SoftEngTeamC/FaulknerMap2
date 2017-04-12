@@ -1,22 +1,17 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import model.Hours;
-
-import java.awt.*;
+import service.EMFProvider;
 
 
 public class HoursEditorController extends Controller{
-private Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
+public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
 
     @FXML
     private Button logoutBtn;
@@ -67,8 +62,11 @@ private Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM"
     @FXML
     private Text displayerror;
 
+    EMFProvider emf;
+
     public void initialize(){
         //displayerror.setVisible(false);
+        emf = new EMFProvider();
 
     }
 
@@ -153,12 +151,14 @@ private Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM"
             hours.minutes2=morningmin2.getText();
             hours.minutes3=eveningmin1.getText();
             hours.minutes4=eveningmin2.getText();
+            hours = new Hours(hours.hours1,hours.hours2,hours.hours3,hours.hours4,hours.minutes1,hours.minutes2,hours.minutes3,hours.minutes4,hours.ampm1,hours.ampm2,hours.ampm3,hours.ampm4);
             System.out.println(hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
             System.out.println(hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
             System.out.println(hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
             System.out.println(hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
             displayerror.setVisible(false);
-
+            System.out.println("Edited hour: " + hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
+            emf.hours = this.hours;
         }
 
 

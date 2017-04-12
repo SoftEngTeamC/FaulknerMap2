@@ -1,6 +1,5 @@
 package controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,13 +21,16 @@ import model.HospitalProfessional;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
+import service.EMFProvider;
 import service.HospitalProfessionalService;
 import service.NodeService;
+import model.Hours;
 
+
+import javax.xml.soap.Text;
 import java.util.LinkedList;
 import java.util.List;
 public class MainController extends Controller{
-
     //ImageView Objects
     @FXML
     private ScrollPane FirstFloorScrollPane;
@@ -97,19 +99,51 @@ public class MainController extends Controller{
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
     private NodeService NS;
 
+   /* public String hours1;
+    public String minutes1;
+    public String ampm1;
+    public String hours2;
+    public String minutes2;
+    public String ampm2;
+    public String hours3;
+    public String minutes3;
+    public String ampm3;
+    public String hours4;
+    public String minutes4;
+    public String ampm4;
+    */
+    public Hours hours;
+
+    @FXML
+    private ImageView LogoImageView;
+    @FXML
+    private VBox StartLocationVBox;
+    @FXML
+    private Button StartAtKioskButton;
+    @FXML
+    private TabPane DisplayInformationTabPane;
+    @FXML
+    private TextArea TextDirectionsTextArea;
+
+    private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
+        EMFProvider emf = new EMFProvider();
+        hours = emf.hours;
         InitializeMapViews();
         PopulateSearchResults(null);
-        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.3));
-        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
-        DisplayInformationTextArea.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.5));
+        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.2));
+        DisplayInformationTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
+        TextDirectionsTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
         CheckBoxesHBox.setPrefHeight(30);
+        //System.out.println(MainSplitPane.getDividers());
+        //MainSplitPane.setDividerPosition(1,0.3);
 
-        PathLocationHBox.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.05));
-
-
+        Image logo = new Image("images/logo.png");
+        LogoImageView.setImage(logo);
+        LogoImageView.setPreserveRatio(true);
+        LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
         MakeCircle(1000,1000,4);
         MakeLine(1000,1000,2000,2000,2);
@@ -304,6 +338,11 @@ public class MainController extends Controller{
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
+    public void handleClickedOnStartAtKiosk(){
+        System.out.println("start at kiosk");
+        Start_location_TextArea.setText("intersection18");
+    }
+
     //This function is called when the user clicks on a Search Result.
     //Information unique to the ListView Item can be accessed
     public void handleClickedOnSearchResult() {
@@ -350,12 +389,9 @@ public class MainController extends Controller{
 
     public void getPathButtonClicked(){
         System.out.println("clicked on get path button");
-        HospitalProfessionalService HPS_Start = new HospitalProfessionalService();
-        HospitalProfessional HP_Start = HPS_Start.findHospitalProfessionalByName(Start_location_TextArea.getText());
-
-        HospitalProfessionalService HPS_Dest = new HospitalProfessionalService();
-        HospitalProfessional HP_Dest = HPS_Dest.findHospitalProfessionalByName(Dest_location_TextArea.getText());
-
+        HospitalProfessionalService HPS= new HospitalProfessionalService();
+        HospitalProfessional HP_Start = HPS.findHospitalProfessionalByName(Start_location_TextArea.getText());
+        HospitalProfessional HP_Dest = HPS.findHospitalProfessionalByName(Dest_location_TextArea.getText());
         FindandDisplayPath(HP_Start,HP_Dest);
 
         System.out.println("start HP:  " + HP_Start.getName());
@@ -371,7 +407,7 @@ public class MainController extends Controller{
     }
 
     //function for Help Button
-    public void HandleHelpButton() {
+    public void HandleHelpButton()throws Exception{
         System.out.println("HELP");
         System.out.println(language);
         // 1: english, 2: spanish, 3: chinese, 4: french
@@ -382,30 +418,70 @@ public class MainController extends Controller{
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
+//                System.out.println("Hours:  "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
+//                System.out.println("Hours:  "+hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
+//                System.out.println("Hours:  "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
+//                System.out.println("Hours:  "+hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517");
+                                                     "please call 774-278-8517\n\n"
+                                                        + "Hospital Operating Hour:\n"+
+                                                        "Morning Hours: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                        hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                        "Evening Hours: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                        hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("Para comunicarse con un empleado\n" +
-                        "porfavor llame al 774-278-8517");
+                DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
+                                                      "porfavor llame 774-278-8517\n\n"
+                                                      + "Horas de operacíon:\n" +
+                                                     "Mañana : "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                     hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                     "Atardecer : "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                      hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("拨打电话：774-278-8517 呼叫医院工作人员\n");
+                DisplayInformationTextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
+                                                    + "医院营业时间:\n" +
+                                                  "白日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                  hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                  "夜晚: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                   hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Pour contacter un employé de l'hôpital\n" +
-                        "appelez le 774-278-8517");
+                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
+                                                 "appelez s'il vous plaît 774-278-8517\n\n"
+                                              + "Heures d'ouverture:\n" +
+                                             "Matin: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                              hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                             "Soir: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 5: //Italian
                 DisplayInformationTextArea.setText("Per contattare un dipendente dell'ospedale\n" +
-                        "chiamare 774-278-8517");
+                                                   "chiamare 774-278-8517\n\n"
+                                               + "Ore di servizio:\n" +
+                                              "Mattina: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                               hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                "Notte: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                                hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 6: //Japanese
-                DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n");
+                DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
+                                               + "病院ビジネス時間:\n" +
+                                                "日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                                hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                                "夜: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             case 7: //Portuguese
                 DisplayInformationTextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
-                        "ligue para 774-278-8517");
+                                                  "ligue para 774-278-8517\n\n"
+                                               + "horas de operação:\n" +
+                                               "Manhã: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
+                                             hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
+                                             "Tarde: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
+                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -427,7 +503,6 @@ public class MainController extends Controller{
                 DisplayInformationTextArea.setText("Don't Panic! Call 774-278-8517!");
                 break;
             case 2: //spanish
-
                 DisplayInformationTextArea.setText("No se preocupe");
                 break;
             case 3: //chinese
