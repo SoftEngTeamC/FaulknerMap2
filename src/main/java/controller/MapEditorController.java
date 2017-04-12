@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -15,6 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -57,7 +61,38 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 
-public class MapEditorController extends Controller {
+
+public class MapEditorController extends Controller{
+    @FXML
+    private ScrollPane FirstFloorScrollPane;
+    @FXML
+    private Slider FirstFloorSlider;
+    @FXML
+    private ScrollPane SecondFloorScrollPane;
+    @FXML
+    private Slider SecondFloorSlider;
+    @FXML
+    private ScrollPane ThirdFloorScrollPane;
+    @FXML
+    private Slider ThirdFloorSlider;
+    @FXML
+    private ScrollPane FourthFloorScrollPane;
+    @FXML
+    private Slider FourthFloorSlider;
+    @FXML
+    private ScrollPane FifthFloorScrollPane;
+    @FXML
+    private Slider FifthFloorSlider;
+    @FXML
+    private ScrollPane SixthFloorScrollPane;
+    @FXML
+    private Slider SixthFloorSlider;
+    @FXML
+    private ScrollPane SeventhFloorScrollPane;
+    @FXML
+    private Slider SeventhFloorSlider;
+    @FXML
+    private TabPane FloorViewsTabPane;
 
 
     //ImageView Objects
@@ -174,6 +209,7 @@ public class MapEditorController extends Controller {
     private Node[] currNodes = new Node[2];
 
     private int currFloor;
+
 
 
     public void initialize() {
@@ -653,7 +689,8 @@ public class MapEditorController extends Controller {
         }
     }
 
-    public void imageClicked() {
+    public void imageClicked(){
+
 
     }
 
@@ -663,8 +700,174 @@ public class MapEditorController extends Controller {
      * @param x value
      * @param y value
      */
-    private void mouseClicked(double x, double y) {
 
+    private void mouseClicked(double x, double y){
+    }
+
+    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
+    //It locks the points to their position on the image,
+    //Resizing the image does not effect the relative position of the nodes and the image
+    public void MakeCircle(double x, double y, int z) {
+        // initial size of image and the image ratior
+        ScrollPane Scrolly = null;
+        switch(z){
+            case 1:
+                Scrolly = FirstFloorScrollPane;
+                break;
+            case 2:
+                Scrolly = SecondFloorScrollPane;
+                break;
+            case 3:
+                Scrolly = ThirdFloorScrollPane;
+                break;
+            case 4:
+                Scrolly = FourthFloorScrollPane;
+                break;
+            case 5:
+                Scrolly = FifthFloorScrollPane;
+                break;
+            case 6:
+                Scrolly = SixthFloorScrollPane;
+                break;
+            case 7:
+                Scrolly = SeventhFloorScrollPane;
+                break;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
+                break;
+        }
+        Group group1 = (Group)Scrolly.getContent();
+        ImageView Map1 = (ImageView)group1.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Circle circle = new Circle();
+        //These bind the center positions relative to the width property of the image
+        //the new center is calculated using the initial ratios
+        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
+        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
+        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
+        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+        group1.getChildren().add(circle);
+    }
+
+
+    //----------------------------------Build Zoomable Maps----------------------------------------------
+    public void InitializeMapViews(){
+        //FIRST FLOOR
+        FirstFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FirstFloorImageView = new ImageView();
+        Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
+        FirstFloorImageView.setImage(FirstFloorMapPic);
+        FirstFloorImageView.setPreserveRatio(true);
+        Group FirstFloorGroup = new Group();
+        FirstFloorGroup.getChildren().add(FirstFloorImageView);
+        FirstFloorScrollPane.setContent(FirstFloorGroup);
+        FirstFloorScrollPane.setPannable(true);
+        FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FirstFloorSlider.setMax(FirstFloorMapPic.getWidth());
+        FirstFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorImageView.fitWidthProperty().bind(FirstFloorSlider.valueProperty());
+        //SECOND FLOOR
+        SecondFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SecondFloorImageView = new ImageView();
+        Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
+        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setPreserveRatio(true);
+        Group SecondFloorGroup = new Group();
+        SecondFloorGroup.getChildren().add(SecondFloorImageView);
+        SecondFloorScrollPane.setContent(SecondFloorGroup);
+        SecondFloorScrollPane.setPannable(true);
+        SecondFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SecondFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SecondFloorSlider.setMax(SecondFloorMapPic.getWidth());
+        SecondFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SecondFloorImageView.fitWidthProperty().bind(SecondFloorSlider.valueProperty());
+        //THIRD FLOOR
+        ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView ThirdFloorImageView = new ImageView();
+        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
+        ThirdFloorImageView.setImage(ThirdFloorMapPic);
+        ThirdFloorImageView.setPreserveRatio(true);
+        Group ThirdFloorGroup = new Group();
+        ThirdFloorGroup.getChildren().add(ThirdFloorImageView);
+        ThirdFloorScrollPane.setContent(ThirdFloorGroup);
+        ThirdFloorScrollPane.setPannable(true);
+        ThirdFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ThirdFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ThirdFloorSlider.setMax(ThirdFloorMapPic.getWidth());
+        ThirdFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        ThirdFloorImageView.fitWidthProperty().bind(ThirdFloorSlider.valueProperty());
+        //FOURTH FLOOR
+        FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FourthFloorImageView = new ImageView();
+        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
+        FourthFloorImageView.setImage(FourthFloorMapPic);
+        FourthFloorImageView.setPreserveRatio(true);
+        Group FourthFloorGroup = new Group();
+        FourthFloorGroup.getChildren().add(FourthFloorImageView);
+        FourthFloorScrollPane.setContent(FourthFloorGroup);
+        FourthFloorScrollPane.setPannable(true);
+        FourthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FourthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FourthFloorSlider.setMax(FourthFloorMapPic.getWidth());
+        FourthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FourthFloorImageView.fitWidthProperty().bind(FourthFloorSlider.valueProperty());
+        //FIFTH FLOOR
+        FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FifthFloorImageView = new ImageView();
+        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
+        FifthFloorImageView.setImage(FifthFloorMapPic);
+        FifthFloorImageView.setPreserveRatio(true);
+        Group FifthFloorGroup = new Group();
+        FifthFloorGroup.getChildren().add(FifthFloorImageView);
+        FifthFloorScrollPane.setContent(FifthFloorGroup);
+        FifthFloorScrollPane.setPannable(true);
+        FifthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FifthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FifthFloorSlider.setMax(FifthFloorMapPic.getWidth());
+        FifthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FifthFloorImageView.fitWidthProperty().bind(FifthFloorSlider.valueProperty());
+        //SIXTH FLOOR
+        SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SixthFloorImageView = new ImageView();
+        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
+        SixthFloorImageView.setImage(SixthFloorMapPic);
+        SixthFloorImageView.setPreserveRatio(true);
+        Group SixthFloorGroup = new Group();
+        SixthFloorGroup.getChildren().add(SixthFloorImageView);
+        SixthFloorScrollPane.setContent(SixthFloorGroup);
+        SixthFloorScrollPane.setPannable(true);
+        SixthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SixthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SixthFloorSlider.setMax(SixthFloorMapPic.getWidth());
+        SixthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SixthFloorImageView.fitWidthProperty().bind(SixthFloorSlider.valueProperty());
+        //SEVENTH FLOOR
+        SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SeventhFloorImageView = new ImageView();
+        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
+        SeventhFloorImageView.setImage(SeventhFloorMapPic);
+        SeventhFloorImageView.setPreserveRatio(true);
+        Group SeventhFloorGroup = new Group();
+        SeventhFloorGroup.getChildren().add(SeventhFloorImageView);
+        SeventhFloorScrollPane.setContent(SeventhFloorGroup);
+        SeventhFloorScrollPane.setPannable(true);
+        SeventhFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SeventhFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SeventhFloorSlider.setMax(SeventhFloorMapPic.getWidth());
+        SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
 
     //----------------------------------Indicator Text Listeners------------------------------------
