@@ -18,32 +18,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<<<<<<< HEAD
-<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
-=======
 <SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity"
            minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
            stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controller.MainController">
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
             <children>
-<<<<<<< HEAD
             <ImageView fx:id="LogoImageView" fitHeight="39.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" top="5.0" />
                </VBox.margin>
             </ImageView>
-=======
-                <ImageView fx:id="LogoImageView" fitHeight="39.0" fitWidth="245.0" pickOnBounds="true"
-                           preserveRatio="true">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0"/>
-                    </VBox.margin>
-                </ImageView>
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
                 <HBox fx:id="PathLocationHBox" prefHeight="30.0" prefWidth="213.0">
                     <children>
                         <TextArea fx:id="Start_location_TextArea" editable="false" maxWidth="150.0" text="Start">
@@ -60,19 +47,6 @@
                             </HBox.margin>
                         </Button>
                         <TextArea fx:id="Dest_location_TextArea" editable="false" maxWidth="150.0" text="Destination">
-<<<<<<< HEAD
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                     </HBox.margin></TextArea>
-                          <Button fx:id="getPathButton" minWidth="65.0" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="get path">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" top="10.0" />
-                     </HBox.margin>
-                  </Button>
-                    </children>
-                </HBox>
-                <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased" promptText="Search" stylesheets="@generalStyles.css"/>
-=======
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" top="5.0"/>
                             </HBox.margin>
@@ -87,7 +61,7 @@
                 </HBox>
                 <TextField fx:id="SearchBarTextField" onKeyReleased="#SearchBarTextField_keyReleased"
                            promptText="Search" stylesheets="@generalStyles.css"/>
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
+
                 <HBox fx:id="CheckBoxesHBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <CheckBox mnemonicParsing="false" text="Rooms">
@@ -115,21 +89,6 @@
                         <Insets bottom="5.0" top="5.0"/>
                     </VBox.margin>
                 </HBox>
-<<<<<<< HEAD
-                <ListView fx:id="SearchResultsListView" editable="true" minHeight="100.0" onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0" />
-                <HBox alignment="CENTER">
-                    <children>
-                  <Button fx:id="StartAtKioskButton" mnemonicParsing="false" onMouseClicked="#handleClickedOnStartAtKiosk" text="Start at This Kiosk">
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
-                  </Button>
-                        <Button fx:id="SetStartLocationButton" alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" mnemonicParsing="false" onMouseClicked="#SetStartLocationButtonClicked" prefHeight="27.0" prefWidth="72.0" text="Set Start">
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin></Button>
-                        <Button fx:id="SetDestLocationButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#SetDestLocationButtonClicked" text="Set Dest" />
-=======
                 <ListView fx:id="SearchResultsListView" editable="true" minHeight="100.0"
                           onMouseClicked="#handleClickedOnSearchResult" prefHeight="108.0" prefWidth="246.0"/>
                 <HBox alignment="CENTER">
@@ -149,13 +108,11 @@
                         </Button>
                         <Button fx:id="SetDestLocationButton" alignment="CENTER" contentDisplay="CENTER"
                                 mnemonicParsing="false" onMouseClicked="#SetDestLocationButtonClicked" text="Set Dest"/>
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
                     </children>
                     <VBox.margin>
                         <Insets bottom="5.0" top="5.0"/>
                     </VBox.margin>
                 </HBox>
-<<<<<<< HEAD
             <TabPane fx:id="DisplayInformationTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Information">
@@ -178,32 +135,6 @@
                 </Tab>
               </tabs>
             </TabPane>
-=======
-                <TabPane fx:id="DisplayInformationTabPane" prefHeight="200.0" prefWidth="200.0"
-                         tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab text="Information">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                                    <children>
-                                        <TextArea fx:id="DisplayInformationTextArea" editable="false"
-                                                  text="This is where the information goes&#10;Here is even more information, now on two lines&#10;"/>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
-                        <Tab text="Text Directions">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                    <children>
-                                        <TextArea fx:id="TextDirectionsTextArea" prefHeight="200.0" prefWidth="200.0"/>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
-                    </tabs>
-                </TabPane>
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
                         <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false"
@@ -221,23 +152,14 @@
                         <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false"
                                 onAction="#HandleHelpButton" text="Help">
                             <HBox.margin>
-<<<<<<< HEAD
-                                <Insets bottom="5.0" top="5.0" />
-=======
                                 <Insets bottom="5.0" top="5.0"/>
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
                             </HBox.margin>
                         </Button>
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-<<<<<<< HEAD
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
-=======
-                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0"
-                                    prefWidth="208.0" text="Language">
->>>>>>> 26190b1724052f5cc4f13c84497a661bc5feee88
                             <items>
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese"
                                           text="中文"/>

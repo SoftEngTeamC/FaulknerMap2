@@ -96,7 +96,7 @@ public class MainController extends Controller{
     @FXML
     private Button getPathButton;
     
-    private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
+    //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
     private NodeService NS;
 
    /* public String hours1;
