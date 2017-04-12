@@ -6,60 +6,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.*;
-
-
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import model.Coordinate;
-import model.Node;
-import service.CoordinateService;
-
-import javafx.stage.Stage;
-
 import model.Edge;
 import model.Node;
+import service.CoordinateService;
 import service.EdgeService;
-
 import service.NodeService;
 
 import java.io.IOException;
 import java.util.*;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Side;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.CustomMenuItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 
 
 public class MapEditorController extends Controller{
@@ -561,7 +528,7 @@ public class MapEditorController extends Controller{
         float floor = Float.parseFloat(addNode_floor.getText());
         Coordinate addCoord = new Coordinate(x, y, 4);
         CS.persist(addCoord);
-        Node newNode = new Node(addCoord, addNode_nameField.getText());
+        Node newNode = new Node(addNode_nameField.getText(), addCoord);
         try{
             //TODO make successful text
             NS.merge(newNode);

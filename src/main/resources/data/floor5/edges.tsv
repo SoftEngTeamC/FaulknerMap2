@@ -1,107 +1,108 @@
-5A - hallway51
+start	end
+5A	hallway51
 
-5B - hallway52
+5B	hallway52
 
-5C - hallway53
+5C	hallway53
 
-5D - hallway54
+5D	hallway54
 
-5E - hallway55
+5E	hallway55
 
-5F - hallway56
+5F	hallway56
 
-5G - hallway57
+5G	hallway57
 
-5H - hallway58
+5H	hallway58
 
-5I - hallway59
+5I	hallway59
 
-5J - hallway510
+5J	hallway510
 
-5K - hallway511
+5K	hallway511
 
-5L - hallway512
+5L	hallway512
 
-5N - hallway513
+5N	hallway513
 
-5M - hallway514
+5M	hallway514
 
-5 South - hallway515
+5 South	hallway515
 
-5 North - hallway516
+5 North	hallway516
 
-Atrium Elevators - hallway517
+Atrium Elevators	hallway517
 
-Hillside Elevators 1 - hallway518
+Hillside Elevators 1	hallway518
 
-hallway51 - intersection57
+hallway51	intersection57
 
-hallway51 - intersection58
+hallway51	intersection58
 
-hallway52 - intersection58
+hallway52	intersection58
 
-hallway52 - intersection59
+hallway52	intersection59
 
-hallway53 - intersection513
+hallway53	intersection513
 
-hallway54 - intersection512
+hallway54	intersection512
 
-hallway54 - intersection513
+hallway54	intersection513
 
-hallway55 - intersection511
+hallway55	intersection511
 
-hallway55 - intersection512
+hallway55	intersection512
 
-hallway56 - intersection55
+hallway56	intersection55
 
-hallway56 - intersection510
+hallway56	intersection510
 
-hallway57 - intersection55
+hallway57	intersection55
 
-hallway57 - intersection56
+hallway57	intersection56
 
-hallway58 - intersection55
+hallway58	intersection55
 
-hallway58 - intersection56
+hallway58	intersection56
 
-hallway59 - intersection55
+hallway59	intersection55
 
-hallway59 - intersection56
+hallway59	intersection56
 
-hallway510 - intersection55
+hallway510	intersection55
 
-hallway510 - intersection56
+hallway510	intersection56
 
-hallway511 - intersection55
+hallway511	intersection55
 
-hallway511 - intersection56
+hallway511	intersection56
 
-hallway512 - intersection514
+hallway512	intersection514
 
-hallway513 - intersection51
+hallway513	intersection51
 
-hallway513 - intersection52
+hallway513	intersection52
 
-hallway514 - intersection52
+hallway514	intersection52
 
-hallway515 - intersection52
+hallway515	intersection52
 
-hallway516 - intersection52
+hallway516	intersection52
 
-Hillside Elevators 1 - intersection52
+Hillside Elevators 1	intersection52
 
-Hillside Elevators 1 - intersection53
+Hillside Elevators 1	intersection53
 
-intersection53 - intersection54
+intersection53	intersection54
 
-intersection54 - intersection55
+intersection54	intersection55
 
-intersection56 - intersection57
+intersection56	intersection57
 
-intersection56 - intersection511
+intersection56	intersection511
 
-hallway517 - intersection56
+hallway517	intersection56
 
-hallway517 - intersection513
+hallway517	intersection513
 
-hallway518 - intersection54
+hallway518	intersection54

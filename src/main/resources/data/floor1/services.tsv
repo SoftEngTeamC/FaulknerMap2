@@ -1,13 +1,14 @@
-Information	- Info
-Admitting/Registration - Patient Registration
-Atrium Cafe - Cafe
-Audiology - Blood Draw
-Cardiac Rehabilitation - Blood Draw
-Center for Preoperative Evaluation - Center for Preoperative Evaluation
-Emergency Department - Emergency
-GI Endoscopy - GI Endoscopy
-Laboratory - Day Surgery
-Patient Financial Services - Patient Registration
-Radiology - Radiology
-Special Testing - Blood Draw
-Taiclet Family Center - Family Center
+name	location
+Information	Info
+Admitting/Registration	Patient Registration
+Atrium Cafe	Cafe
+Audiology	Blood Draw
+Cardiac Rehabilitation	Blood Draw
+Center for Preoperative Evaluation	Center for Preoperative Evaluation
+Emergency Department	Emergency
+GI Endoscopy	GI Endoscopy
+Laboratory	Day Surgery
+Patient Financial Services	Patient Registration
+Radiology	Radiology
+Special Testing	Blood Draw
+Taiclet Family Center	Family Center
