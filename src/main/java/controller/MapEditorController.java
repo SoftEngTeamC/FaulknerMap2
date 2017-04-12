@@ -229,7 +229,7 @@ public class MapEditorController extends Controller {
 
         tabPaneListen();
         removeNeighborListen();
-
+        ClearOldPaths();
         List<Node> temp = ns.getNodesByFloor(currFloor);
         for(Node n: temp){
             MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
@@ -360,6 +360,22 @@ public class MapEditorController extends Controller {
     }
 
 
+    public void ClearOldPaths(){
+        Group group1 = (Group) FirstFloorScrollPane.getContent();
+        group1.getChildren().remove(1,group1.getChildren().size());
+        Group group2 = (Group) SecondFloorScrollPane.getContent();
+        group2.getChildren().remove(1,group2.getChildren().size());
+        Group group3 = (Group) ThirdFloorScrollPane.getContent();
+        group3.getChildren().remove(1,group3.getChildren().size());
+        Group group4 = (Group) FourthFloorScrollPane.getContent();
+        group4.getChildren().remove(1,group4.getChildren().size());
+        Group group5 = (Group) FifthFloorScrollPane.getContent();
+        group5.getChildren().remove(1,group5.getChildren().size());
+        Group group6 = (Group) SixthFloorScrollPane.getContent();
+        group6.getChildren().remove(1,group6.getChildren().size());
+        Group group7 = (Group) SeventhFloorScrollPane.getContent();
+        group7.getChildren().remove(1,group7.getChildren().size());
+    }
 
     public void tabPaneListen() {
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
@@ -386,7 +402,7 @@ public class MapEditorController extends Controller {
                         }
                         editNode_addField.getEntries().clear();
                         editNode_addField.getEntries().addAll(names);
-
+                        ClearOldPaths();
                         List<Node> temp = ns.getNodesByFloor(currFloor);
                         for(Node n: temp){
                             MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
@@ -579,7 +595,7 @@ public class MapEditorController extends Controller {
         Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
         editNode_neighborsList.setItems(nList);
-
+        ClearOldPaths();
         List<Node> temp = ns.getNodesByFloor(currFloor);
         for(Node n: temp){
             MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
@@ -614,10 +630,12 @@ public class MapEditorController extends Controller {
                     neighborsS.add(node.getName());
                 }
             }
+
             ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
             editNode_neighborsList.setItems(nList);
         }
 
+        ClearOldPaths();
         List<Node> temp = ns.getNodesByFloor(currFloor);
         for(Node n: temp){
             MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
