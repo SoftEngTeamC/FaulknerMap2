@@ -448,7 +448,7 @@ public class MainController extends Controller{
         SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView SecondFloorImageView = new ImageView();
         Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(FirstFloorMapPic);
+        SecondFloorImageView.setImage(SecondFloorMapPic);
         SecondFloorImageView.setPreserveRatio(true);
         Group SecondFloorGroup = new Group();
         SecondFloorGroup.getChildren().add(SecondFloorImageView);
