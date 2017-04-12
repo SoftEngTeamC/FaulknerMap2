@@ -310,9 +310,8 @@ public class MainController extends Controller{
                         "please call 774-278-8517");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO SPANISH SOON");
+                DisplayInformationTextArea.setText("Para contactar un empleado\n" +
+                        "porfavor llame 774-278-8517");
                 break;
             case 3: //chinese
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -320,9 +319,8 @@ public class MainController extends Controller{
                         "\n WILL CHANGE TO CHINESE SOON");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                        "please call 774-278-8517" +
-                        "\n WILL CHANGE TO FRENCH SOON");
+                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
+                        "appelez s'il vous plaît\n 774-278-8517");
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
