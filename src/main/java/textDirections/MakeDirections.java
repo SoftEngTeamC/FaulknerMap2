@@ -1,6 +1,6 @@
 package textDirections;
 
-import org.testng.annotations.Test;
+//import org.testng.annotations.Test;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.NodeService;
@@ -173,22 +173,23 @@ public class MakeDirections {
         }
     }
 
-    @Test
-    public void printDirectionsTest1() {
-        Map map = new Map(NS.getAllNodes());
-        PathFinder pf = new PathFinder();
-        Node testNode1 = NS.findNodeByName("Day Surgery");
-        Node testNode2 = NS.findNodeByName("Center for Preoperative Evaluation");
+//    @Test
+//    public void printDirectionsTest1() {
+//        Map map = new Map(NS.getAllNodes());
+//        PathFinder pf = new PathFinder();
+//        Node testNode1 = NS.findNodeByName("Day Surgery");
+//        Node testNode2 = NS.findNodeByName("Center for Preoperative Evaluation");
+//
+//        MapNode mNode1 = map.getNode(testNode1.getId());
+//        MapNode mNode2 = map.getNode(testNode2.getId());
+//
+//        List<MapNode> path = pf.shortestPath(mNode1, mNode2);
+//
+//        String directions = getText(path);
+//        if(directions.equals("")) {
+//            System.out.println("no directions");
+//        }
+//        System.out.println(directions);
+//    }
 
-        MapNode mNode1 = map.getNode(testNode1.getId());
-        MapNode mNode2 = map.getNode(testNode2.getId());
-
-        List<MapNode> path = pf.shortestPath(mNode1, mNode2);
-
-        String directions = getText(path);
-        if(directions.equals("")) {
-            System.out.println("no directions");
-        }
-        System.out.println(directions);
-    }
 }
