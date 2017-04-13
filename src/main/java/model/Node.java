@@ -65,8 +65,4 @@ public class Node {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
-
-    public boolean isElevator() {
-        return name.toLowerCase().contains("elevator");
-    }
 }

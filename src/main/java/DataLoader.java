@@ -190,7 +190,7 @@ public class DataLoader {
         EdgeService edgeService = new EdgeService();
 
         List<Node> elevators = nodeService.getAllNodes().stream()
-                .filter(Node::isElevator)
+                .filter(n -> n.getName().toLowerCase().contains("elevator"))
                 .collect(Collectors.toList());
         // Group elevators by name
         Map<String, Set<Node>> elevatorGroups = new HashMap<>();
