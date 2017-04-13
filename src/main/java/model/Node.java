@@ -66,4 +66,7 @@ public class Node {
         this.tags = tags;
     }
 
+    public boolean isElevator() {
+        return name.toLowerCase().contains("elevator");
+    }
 }
