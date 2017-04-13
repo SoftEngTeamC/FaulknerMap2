@@ -5,19 +5,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import model.Coordinate;
 import model.Edge;
 import model.Node;
@@ -29,7 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class MapEditorController extends Controller{
+public class MapEditorController extends Controller {
 
     //ImageView Objects
     @FXML
@@ -146,20 +140,23 @@ public class MapEditorController extends Controller{
 
     private int currFloor;
 
-
-
     public void initialize() {
-        NodeService ns = new NodeService();
-       // editNode_addField = new AutocompletionlTextField();
-
-        List<Node> nodes = ns.getNodesByFloor(1);
+        this.NS = new NodeService();
+        List<Node> nodes = NS.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
-        for(Node n: nodes){
+        for (Node n : nodes) {
             names.add(n.getName());
         }
         editNode_addField.getEntries().addAll(names);
 
-        InitializeMapViews();
+        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
+                 SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
+                 ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
+                 SeventhFloorSlider, FloorViewsTabPane);
+
+        ShowNodesEdgesHelper.InitializeMapViews();
+
         InitializeIndicatorTextListeners();
 
         // Set the image view to populate the image
@@ -172,7 +169,6 @@ public class MapEditorController extends Controller{
         nodeList = new ArrayList<>();
 
         //Populate the list of all nodes
-        this.NS = new NodeService();
         ArrayList<Node> allNode = new ArrayList<Node>(this.NS.getAllNodes());
         for (Node aNode : allNode) {
             this.nodeList.add(aNode.getName());
@@ -191,7 +187,7 @@ public class MapEditorController extends Controller{
         currFloor = 1;
 
         ArrayList<String> nameList = new ArrayList<>();
-        for (Node n : ns.getNodesByFloor(currFloor)) {
+        for (Node n : NS.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
         }
         Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
@@ -200,153 +196,10 @@ public class MapEditorController extends Controller{
         editNode_searchResultsList.setItems(obList);
 
         tabPaneListen();
+
         removeNeighborListen();
-        ClearOldPaths();
-        List<Node> temp = ns.getNodesByFloor(currFloor);
-        for(Node n: temp){
-            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
-        }
-        EdgeService es = new EdgeService();
-        List<Edge> edges = es.getAllEdges();
-        for(Edge e: edges){
-            if(e.getStart().getLocation().getFloor() == currFloor){
-                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
-                        e.getStart().getLocation().getFloor());
-                TextField text = new TextField();
 
-            }
-        }
-    }
-
-    public void MakeCircle(double x, double y, int z, String name) {
-        // initial size of image and the image ratior
-        ScrollPane Scrolly = null;
-        switch(z){
-            case 1:
-                Scrolly = FirstFloorScrollPane;
-                break;
-            case 2:
-                Scrolly = SecondFloorScrollPane;
-                break;
-            case 3:
-                Scrolly = ThirdFloorScrollPane;
-                break;
-            case 4:
-                Scrolly = FourthFloorScrollPane;
-                break;
-            case 5:
-                Scrolly = FifthFloorScrollPane;
-                break;
-            case 6:
-                Scrolly = SixthFloorScrollPane;
-                break;
-            case 7:
-                Scrolly = SeventhFloorScrollPane;
-                break;
-            default:
-                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
-                break;
-        }
-      //  System.out.println(Scrolly.getContent());
-        Group group1 = (Group) Scrolly.getContent();
-
-        ImageView Map1 = (ImageView)group1.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Circle circle = new Circle();
-        //These bind the center positions relative to the width property of the image
-        //the new center is calculated using the initial ratios
-        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
-        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
-        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
-
-
-        Text text = new Text(x,y
-                , name);
-
-        text.setBoundsType(TextBoundsType.VISUAL);
-        StackPane stack = new StackPane();
-        stack.getChildren().addAll(text);
-
-        group1.getChildren().addAll(circle);
-
-      //  group1.getChildren().addAll(circle);
-
-        group1.setOnMouseClicked(event -> {
-            System.out.print(event.getSceneX() + " ");
-            System.out.println(event.getSceneY());
-        });
-
-
-    }
-
-    //MakeLine take 2 points (effectively) and draws a line from point to point
-    //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-    public void MakeLine(double x1, double y1, double x2, double y2, int z){
-        ScrollPane Scrolly = null;
-        switch(z){
-            case 1:
-                Scrolly = FirstFloorScrollPane;
-                break;
-            case 2:
-                Scrolly = SecondFloorScrollPane;
-                break;
-            case 3:
-                Scrolly = ThirdFloorScrollPane;
-                break;
-            case 4:
-                Scrolly = FourthFloorScrollPane;
-                break;
-            case 5:
-                Scrolly = FifthFloorScrollPane;
-                break;
-            case 6:
-                Scrolly = SixthFloorScrollPane;
-                break;
-            case 7:
-                Scrolly = SeventhFloorScrollPane;
-                break;
-            default:
-                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
-                break;
-        }
-        Group group1 = (Group)Scrolly.getContent();
-        ImageView Map1 = (ImageView)group1.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Line edge = new Line();
-        //the points are bound to the fit width property of the image and scaled by the initial image ratio
-        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-        group1.getChildren().add(edge);
-    }
-
-
-    public void ClearOldPaths(){
-        Group group1 = (Group) FirstFloorScrollPane.getContent();
-        group1.getChildren().remove(1,group1.getChildren().size());
-        Group group2 = (Group) SecondFloorScrollPane.getContent();
-        group2.getChildren().remove(1,group2.getChildren().size());
-        Group group3 = (Group) ThirdFloorScrollPane.getContent();
-        group3.getChildren().remove(1,group3.getChildren().size());
-        Group group4 = (Group) FourthFloorScrollPane.getContent();
-        group4.getChildren().remove(1,group4.getChildren().size());
-        Group group5 = (Group) FifthFloorScrollPane.getContent();
-        group5.getChildren().remove(1,group5.getChildren().size());
-        Group group6 = (Group) SixthFloorScrollPane.getContent();
-        group6.getChildren().remove(1,group6.getChildren().size());
-        Group group7 = (Group) SeventhFloorScrollPane.getContent();
-        group7.getChildren().remove(1,group7.getChildren().size());
+        ShowNodesEdgesHelper.showNodes(currFloor);
     }
 
     public void tabPaneListen() {
@@ -355,10 +208,9 @@ public class MapEditorController extends Controller{
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
-                        NodeService ns = new NodeService();
                         currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
                         ArrayList<String> nameList = new ArrayList<>();
-                        for (Node n : ns.getNodesByFloor(currFloor)) {
+                        for (Node n : NS.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
                         }
 
@@ -367,29 +219,15 @@ public class MapEditorController extends Controller{
 
                         editNode_searchResultsList.setItems(obList);
 
-                        List<Node> nodes = ns.getNodesByFloor(currFloor);
+                        List<Node> nodes = NS.getNodesByFloor(currFloor);
                         List<String> names = new ArrayList<>();
-                        for(Node n: nodes){
+                        for (Node n : nodes) {
                             names.add(n.getName());
                         }
                         editNode_addField.getEntries().clear();
                         editNode_addField.getEntries().addAll(names);
-                        ClearOldPaths();
-                        List<Node> temp = ns.getNodesByFloor(currFloor);
-                        for(Node n: temp){
-                            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
-                        }
-                        EdgeService es = new EdgeService();
-                        List<Edge> edges = es.getAllEdges();
-                        for(Edge e: edges){
-                            if(e.getStart().getLocation().getFloor() == currFloor){
-                                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
-                                        e.getStart().getLocation().getFloor());
-                                TextField text = new TextField();
 
-                            }
-                        }
+                        ShowNodesEdgesHelper.showNodes(currFloor);
                     }
                 }
         );
@@ -399,26 +237,15 @@ public class MapEditorController extends Controller{
     public void removeNeighborListen() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    NodeService ns = new NodeService();
-                    Node selectedNode = ns.findNodeByName(newValue);
+                    Node selectedNode = NS.findNodeByName(newValue);
 
                     currNodes[0] = selectedNode;
-
-                    Set<Node> neighbors = ns.neighbors(selectedNode.getId());
-                    ArrayList<String> neighborsS = new ArrayList<>();
-                    for (Node node : neighbors) {
-                        if (!Objects.equals(node.getId(), currNodes[0].getId())) {
-                            neighborsS.add(node.getName());
-                        }
-                    }
-                    Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
-                    ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+                    ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
                     editNode_neighborsList.setItems(nList);
                 });
 
         editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            NodeService ns = new NodeService();
-            Node selectedNode = ns.findNodeByName(newValue);
+            Node selectedNode = NS.findNodeByName(newValue);
             currNodes[1] = selectedNode;
         });
 
@@ -427,21 +254,21 @@ public class MapEditorController extends Controller{
 
 
     // Methods for the remove node tab
-    /**
 
+    /**
      * @author Samuel Coache
-     *
+     * <p>
      * event handler for RemoveNode when the search button is pressed
      * Back button action event handler. Opens the Admin page
      */
-    public void removeNode_searchBtnPressed(){
+    public void removeNode_searchBtnPressed() {
         try {
             String searchField = removeNode_searchField.getText();
             //System.out.println("searchField is: " + searchField);
-            if(searchField.equals("")){
+            if (searchField.equals("")) {
                 ObservableList<String> allOList = FXCollections.observableArrayList(this.nodeList);
                 removeNode_searchList.setItems(allOList);
-            //} else {
+                //} else {
                 //String selectedName = (this.NS.findNodeByName(searchField)).getName();
                 //System.out.println("selectName is: " + selectedName);
                 //ArrayList<String> nodeName = new ArrayList<>();
@@ -450,8 +277,7 @@ public class MapEditorController extends Controller{
                 //ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
                 //removeNode_searchList.setItems(OList);
             }
-        }
-        catch (Exception E){
+        } catch (Exception E) {
             System.out.println("Searching Error");
             E.printStackTrace();
         }
@@ -464,7 +290,7 @@ public class MapEditorController extends Controller{
      * remove node tab: remove button event handler
      * Action event handler for logout button being pressed. Goes to main screen.
      */
-    public void removeNode_removeBtnPressed(){
+    public void removeNode_removeBtnPressed() {
         String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
         System.out.println(selectedItem);
         Node selectNode = NS.findNodeByName(selectedItem);
@@ -473,11 +299,11 @@ public class MapEditorController extends Controller{
         // print out the node we made
         System.out.println(selectNode.getId());
         // print out the node from the database
-        try{
+        try {
             this.NS.remove(selectNode);
             RemoveNodeIndicatorText.setText("Successfully Removed Node");
             RemoveNodeIndicatorText.setFill(Color.GREEN);
-        }catch(Exception e){
+        } catch (Exception e) {
             RemoveNodeIndicatorText.setText("Unable to Remove Node");
             RemoveNodeIndicatorText.setFill(Color.RED);
         }
@@ -490,13 +316,13 @@ public class MapEditorController extends Controller{
     /**
      * method that populates the search results with the search query
      */
-    public void removeNode_searchFieldKeyPressed(){
+    public void removeNode_searchFieldKeyPressed() {
         // get the query from the field
         String query = removeNode_searchField.getText();
         ArrayList<String> queryList = new ArrayList<>();
         // add each query to the list
         List<Node> nodeList = this.NS.getAllNodes();
-        for(Node n: nodeList){
+        for (Node n : nodeList) {
             if (n.getName().contains(query))
                 queryList.add(n.getName());
         }
@@ -507,21 +333,19 @@ public class MapEditorController extends Controller{
 
     /**
      * @author Samuel Coache
-     *
+     * <p>
      * add node tab: connect button event handler
-     *
      */
-    public void addNode_connectToNodeBtnPressed(){
+    public void addNode_connectToNodeBtnPressed() {
 
     }
 
     /**
      * @author Samuel Coache
-     *
+     * <p>
      * add node tab: create button event handler
-     *
      */
-    public void addNode_createNodeBtnPressed(){
+    public void addNode_createNodeBtnPressed() {
         CoordinateService CS = new CoordinateService();
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
@@ -529,24 +353,24 @@ public class MapEditorController extends Controller{
         Coordinate addCoord = new Coordinate(x, y, 4);
         CS.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
-        try{
+        try {
             //TODO make successful text
             NS.merge(newNode);
             AddNodeIndicatorText.setText("Successfully Added Node");
             AddNodeIndicatorText.setFill(Color.GREEN);
-        }catch(Exception e){
+        } catch (Exception e) {
             //TODO make warning text visible
             AddNodeIndicatorText.setText("Unable to Add Node");
             AddNodeIndicatorText.setFill(Color.RED);
         }
     }
-//    // methods for the edit node tab
+
+    //    // methods for the edit node tab
 //
     public void editNode_searchBtnPressed() {
     }
 
     public void editNode_removeNeighborBtnPressed() {
-        NodeService ns = new NodeService();
         EdgeService es = new EdgeService();
 
 
@@ -556,175 +380,76 @@ public class MapEditorController extends Controller{
             es.remove(curr);
         }
 
-        Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
-        System.out.println("currNode: " + currNodes[0].getId());
+        ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
+        editNode_neighborsList.setItems(nList);
+
+        ShowNodesEdgesHelper.showNodes(currFloor);
+    }
+
+    private List<String> neighborNames(Node node){
+        Set<Node> neighbors = NS.neighbors(node.getId());
+        System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
-        for (Node node : neighbors) {
-            if (!Objects.equals(node.getId(), currNodes[0].getId())) {
-                neighborsS.add(node.getName());
+        for (Node n : neighbors) {
+            if (!Objects.equals(n.getId(), node.getId())) {
+                neighborsS.add(n.getName());
             }
         }
         Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
-        ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
-        editNode_neighborsList.setItems(nList);
-        ClearOldPaths();
-        List<Node> temp = ns.getNodesByFloor(currFloor);
-        for(Node n: temp){
-            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
-        }
-        List<Edge> edges = es.getAllEdges();
-        for(Edge e: edges){
-            if(e.getStart().getLocation().getFloor() == currFloor){
-                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
-                        e.getStart().getLocation().getFloor());
-                TextField text = new TextField();
-
-            }
-        }
+        return neighborsS;
     }
 
-    //
-//
+
     public void editNode_addBtnPressed() {
 
-        NodeService ns = new NodeService();
-        Node newNode = ns.findNodeByName(editNode_addField.getText());
+        Node newNode = NS.findNodeByName(editNode_addField.getText());
         if (newNode != null) {
             EdgeService es = new EdgeService();
             es.persist(new Edge(currNodes[0], newNode, 0));
             es.persist(new Edge(newNode, currNodes[0], 0));
 
-            Set<Node> neighbors = ns.neighbors(currNodes[0].getId());
-            ArrayList<String> neighborsS = new ArrayList<>();
-            for (Node node : neighbors) {
-                if (!Objects.equals(node.getId(), currNodes[0].getId())) {
-                    neighborsS.add(node.getName());
-                }
-            }
-
-            ObservableList<String> nList = FXCollections.observableArrayList(neighborsS);
+            ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
             editNode_neighborsList.setItems(nList);
         }
-
-        ClearOldPaths();
-        List<Node> temp = ns.getNodesByFloor(currFloor);
-        for(Node n: temp){
-            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), n.getLocation().getFloor(), n.getName());
-        }
-        EdgeService es = new EdgeService();
-        List<Edge> edges = es.getAllEdges();
-        for(Edge e: edges){
-            if(e.getStart().getLocation().getFloor() == currFloor){
-                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
-                        e.getStart().getLocation().getFloor());
-                TextField text = new TextField();
-
-            }
-        }
+        ShowNodesEdgesHelper.showNodes(currFloor);
     }
-
-    public void imageClicked(){
-
-
-    }
-
-    /**
-     * Handles what happens when mouse is clicked
-     *
-     * @param x value
-     * @param y value
-     */
-
-    private void mouseClicked(double x, double y){
-    }
-
-    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
-    //It locks the points to their position on the image,
-    //Resizing the image does not effect the relative position of the nodes and the image
-    public void MakeCircle(double x, double y, int z) {
-        // initial size of image and the image ratior
-        ScrollPane Scrolly = null;
-        switch(z){
-            case 1:
-                Scrolly = FirstFloorScrollPane;
-                break;
-            case 2:
-                Scrolly = SecondFloorScrollPane;
-                break;
-            case 3:
-                Scrolly = ThirdFloorScrollPane;
-                break;
-            case 4:
-                Scrolly = FourthFloorScrollPane;
-                break;
-            case 5:
-                Scrolly = FifthFloorScrollPane;
-                break;
-            case 6:
-                Scrolly = SixthFloorScrollPane;
-                break;
-            case 7:
-                Scrolly = SeventhFloorScrollPane;
-                break;
-            default:
-                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
-                break;
-        }
-        Group group1 = (Group)Scrolly.getContent();
-        ImageView Map1 = (ImageView)group1.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Circle circle = new Circle();
-        //These bind the center positions relative to the width property of the image
-        //the new center is calculated using the initial ratios
-        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
-        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
-        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
-        group1.getChildren().add(circle);
-    }
-
 
     //----------------------------------Indicator Text Listeners------------------------------------
-    public void InitializeIndicatorTextListeners(){
-        addNode_xPos.textProperty().addListener(new ChangeListener(){
+    public void InitializeIndicatorTextListeners() {
+        addNode_xPos.textProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2){
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
                 AddNodeIndicatorText.setText("");
             }
         });
-        addNode_yPos.textProperty().addListener(new ChangeListener(){
+        addNode_yPos.textProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2){
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
                 AddNodeIndicatorText.setText("");
             }
         });
-        addNode_floor.textProperty().addListener(new ChangeListener(){
+        addNode_floor.textProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2){
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
                 AddNodeIndicatorText.setText("");
             }
         });
-        addNode_nameField.textProperty().addListener(new ChangeListener(){
+        addNode_nameField.textProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2){
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
                 AddNodeIndicatorText.setText("");
             }
         });
-        removeNode_searchField.textProperty().addListener(new ChangeListener(){
+        removeNode_searchField.textProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2){
+            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
                 AddNodeIndicatorText.setText("");
             }
         });
     }
 
     //----------------------------------Sreen Changing Functions-------------------------------------
+
     /**
      * Back button action event handler. Opens the Admin page
      */
@@ -737,122 +462,6 @@ public class MapEditorController extends Controller{
      */
     public void logout() throws IOException {
         switchScreen("view/Main.fxml", "Main", logoutBtn);
-    }
-
-    //----------------------------------Build Zoomable Maps----------------------------------------------
-    public void InitializeMapViews(){
-        //FIRST FLOOR
-        FirstFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FirstFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FirstFloorImageView = new ImageView();
-        Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
-        FirstFloorImageView.setImage(FirstFloorMapPic);
-        FirstFloorImageView.setPreserveRatio(true);
-        Group FirstFloorGroup = new Group();
-        FirstFloorGroup.getChildren().add(FirstFloorImageView);
-        FirstFloorScrollPane.setContent(FirstFloorGroup);
-        FirstFloorScrollPane.setPannable(true);
-        FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FirstFloorSlider.setMax(FirstFloorMapPic.getWidth());
-        FirstFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FirstFloorImageView.fitWidthProperty().bind(FirstFloorSlider.valueProperty());
-        //SECOND FLOOR
-        SecondFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SecondFloorImageView = new ImageView();
-        Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(SecondFloorMapPic);
-        SecondFloorImageView.setPreserveRatio(true);
-        Group SecondFloorGroup = new Group();
-        SecondFloorGroup.getChildren().add(SecondFloorImageView);
-        SecondFloorScrollPane.setContent(SecondFloorGroup);
-        SecondFloorScrollPane.setPannable(true);
-        SecondFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SecondFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SecondFloorSlider.setMax(SecondFloorMapPic.getWidth());
-        SecondFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SecondFloorImageView.fitWidthProperty().bind(SecondFloorSlider.valueProperty());
-        //THIRD FLOOR
-        ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView ThirdFloorImageView = new ImageView();
-        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
-        ThirdFloorImageView.setImage(ThirdFloorMapPic);
-        ThirdFloorImageView.setPreserveRatio(true);
-        Group ThirdFloorGroup = new Group();
-        ThirdFloorGroup.getChildren().add(ThirdFloorImageView);
-        ThirdFloorScrollPane.setContent(ThirdFloorGroup);
-        ThirdFloorScrollPane.setPannable(true);
-        ThirdFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        ThirdFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        ThirdFloorSlider.setMax(ThirdFloorMapPic.getWidth());
-        ThirdFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        ThirdFloorImageView.fitWidthProperty().bind(ThirdFloorSlider.valueProperty());
-        //FOURTH FLOOR
-        FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FourthFloorImageView = new ImageView();
-        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
-        FourthFloorImageView.setImage(FourthFloorMapPic);
-        FourthFloorImageView.setPreserveRatio(true);
-        Group FourthFloorGroup = new Group();
-        FourthFloorGroup.getChildren().add(FourthFloorImageView);
-        FourthFloorScrollPane.setContent(FourthFloorGroup);
-        FourthFloorScrollPane.setPannable(true);
-        FourthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FourthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FourthFloorSlider.setMax(FourthFloorMapPic.getWidth());
-        FourthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FourthFloorImageView.fitWidthProperty().bind(FourthFloorSlider.valueProperty());
-        //FIFTH FLOOR
-        FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FifthFloorImageView = new ImageView();
-        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
-        FifthFloorImageView.setImage(FifthFloorMapPic);
-        FifthFloorImageView.setPreserveRatio(true);
-        Group FifthFloorGroup = new Group();
-        FifthFloorGroup.getChildren().add(FifthFloorImageView);
-        FifthFloorScrollPane.setContent(FifthFloorGroup);
-        FifthFloorScrollPane.setPannable(true);
-        FifthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FifthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FifthFloorSlider.setMax(FifthFloorMapPic.getWidth());
-        FifthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FifthFloorImageView.fitWidthProperty().bind(FifthFloorSlider.valueProperty());
-        //SIXTH FLOOR
-        SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SixthFloorImageView = new ImageView();
-        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
-        SixthFloorImageView.setImage(SixthFloorMapPic);
-        SixthFloorImageView.setPreserveRatio(true);
-        Group SixthFloorGroup = new Group();
-        SixthFloorGroup.getChildren().add(SixthFloorImageView);
-        SixthFloorScrollPane.setContent(SixthFloorGroup);
-        SixthFloorScrollPane.setPannable(true);
-        SixthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SixthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SixthFloorSlider.setMax(SixthFloorMapPic.getWidth());
-        SixthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SixthFloorImageView.fitWidthProperty().bind(SixthFloorSlider.valueProperty());
-        //SEVENTH FLOOR
-        SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SeventhFloorImageView = new ImageView();
-        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
-        SeventhFloorImageView.setImage(SeventhFloorMapPic);
-        SeventhFloorImageView.setPreserveRatio(true);
-        Group SeventhFloorGroup = new Group();
-        SeventhFloorGroup.getChildren().add(SeventhFloorImageView);
-        SeventhFloorScrollPane.setContent(SeventhFloorGroup);
-        SeventhFloorScrollPane.setPannable(true);
-        SeventhFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SeventhFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SeventhFloorSlider.setMax(SeventhFloorMapPic.getWidth());
-        SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
 }
 
