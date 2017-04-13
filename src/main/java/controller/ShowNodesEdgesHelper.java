@@ -1,12 +1,15 @@
 package controller;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -17,6 +20,7 @@ import model.Node;
 import service.EdgeService;
 import service.NodeService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +42,8 @@ class ShowNodesEdgesHelper {
     private static Slider SixthFloorSlider;
     private static Slider SeventhFloorSlider;
     private static TabPane FloorViewsTabPane;
+
+    private static NodeService ns;
 
     ShowNodesEdgesHelper(ScrollPane FirstFloorScrollPane, ScrollPane SecondFloorScrollPane,
                          ScrollPane ThirdFloorScrollPane, ScrollPane FourthFloorScrollPane,
@@ -63,6 +69,8 @@ class ShowNodesEdgesHelper {
         ShowNodesEdgesHelper.SixthFloorSlider = SixthFloorSlider;
         ShowNodesEdgesHelper.SeventhFloorSlider = SeventhFloorSlider;
         ShowNodesEdgesHelper.FloorViewsTabPane = FloorViewsTabPane;
+
+        ns = new NodeService();
     }
 
     static void ClearOldPaths() {
@@ -169,7 +177,7 @@ class ShowNodesEdgesHelper {
         group1.getChildren().add(edge);
     }
 
-    public static void MakeCircle(double x, double y, int z, String name) {
+    public static Circle MakeCircle(double x, double y, int z, Node node) {
         // initial size of image and the image ratior
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
@@ -190,41 +198,40 @@ class ShowNodesEdgesHelper {
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
         circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
 
-
-        Text text = new Text(x, y
-                , name);
-
-        text.setBoundsType(TextBoundsType.VISUAL);
-        StackPane stack = new StackPane();
-        stack.getChildren().addAll(text);
-
+        circle.setId(node.getId().toString());
         group1.getChildren().addAll(circle);
 
-        //  group1.getChildren().addAll(circle);
-
-        group1.setOnMouseClicked(event -> {
-            System.out.print(event.getSceneX() + " ");
-            System.out.println(event.getSceneY());
-        });
+        return circle;
     }
 
-    public static void showNodes(int currFloor){
+    static List<Circle> showNodes(int currFloor) {
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
+        List<Circle> circles = new ArrayList<Circle>();
         for (Node n : temp) {
-            ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(),
-                    n.getLocation().getFloor(), n.getName());
+            Circle circle = ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(),
+                    n.getLocation().getFloor(), n);
+            circles.add(circle);
         }
+
+        showEdges(currFloor);
+        return circles;
+    }
+
+    static List<Edge> showEdges(int currFloor) {
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
+        List<Edge> retEdges = new ArrayList<Edge>();
         for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
+                retEdges.add(e);
                 ShowNodesEdgesHelper.MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
                         e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
                         e.getStart().getLocation().getFloor());
             }
         }
+        return retEdges;
     }
 
 }

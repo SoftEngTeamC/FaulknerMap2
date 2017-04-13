@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import model.Coordinate;
 import model.Edge;
@@ -135,6 +137,7 @@ public class MapEditorController extends Controller {
     private ArrayList<String> searchList;
     private ArrayList<String> nodeList;
     private NodeService NS;
+    private EdgeService ES;
 
     private Node[] currNodes = new Node[2];
 
@@ -142,6 +145,7 @@ public class MapEditorController extends Controller {
 
     public void initialize() {
         this.NS = new NodeService();
+        this.ES = new EdgeService();
         List<Node> nodes = NS.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for (Node n : nodes) {
@@ -169,7 +173,7 @@ public class MapEditorController extends Controller {
         nodeList = new ArrayList<>();
 
         //Populate the list of all nodes
-        ArrayList<Node> allNode = new ArrayList<Node>(this.NS.getAllNodes());
+        ArrayList<Node> allNode = new ArrayList<>(this.NS.getAllNodes());
         for (Node aNode : allNode) {
             this.nodeList.add(aNode.getName());
         }
@@ -199,7 +203,40 @@ public class MapEditorController extends Controller {
 
         removeNeighborListen();
 
-        ShowNodesEdgesHelper.showNodes(currFloor);
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+
+        circlesListen(circles);
+    }
+
+    public void circlesListen(List<Circle> circles){
+        final Circle[] firstCircle = new Circle[1];
+        for(Circle circle: circles) {
+            circle.setOnMouseClicked(event -> {
+                System.out.println("Clicked on node: " +
+                        NS.find(Long.parseLong(circle.getId())).getName());
+                if(firstCircle[0] == null){
+                    System.out.println("two0 is null");
+                    firstCircle[0] = circle;
+                    circle.fillProperty().setValue(Paint.valueOf(Color.TEAL.toString()));
+                } else {
+                    System.out.println("two0 is not null");
+                    circle.fillProperty().setValue(Paint.valueOf(Color.TEAL.toString()));
+
+                    Edge edge1 = new Edge(NS.find(Long.parseLong(firstCircle[0].getId())),
+                            NS.find(Long.parseLong(circle.getId())), 0);
+                    Edge edge2 = new Edge(NS.find(Long.parseLong(circle.getId())),
+                            NS.find(Long.parseLong(firstCircle[0].getId())), 0);
+
+                    firstCircle[0] = null;
+                    ES.persist(edge1);
+                    ES.persist(edge2);
+
+                    circlesListen(ShowNodesEdgesHelper.showNodes(currFloor));
+                    return;
+                }
+
+            });
+        }
     }
 
     public void tabPaneListen() {
@@ -227,7 +264,9 @@ public class MapEditorController extends Controller {
                         editNode_addField.getEntries().clear();
                         editNode_addField.getEntries().addAll(names);
 
-                        ShowNodesEdgesHelper.showNodes(currFloor);
+                        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+
+                        circlesListen(circles);
                     }
                 }
         );
@@ -383,7 +422,9 @@ public class MapEditorController extends Controller {
         ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
         editNode_neighborsList.setItems(nList);
 
-        ShowNodesEdgesHelper.showNodes(currFloor);
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+
+        circlesListen(circles);
     }
 
     private List<String> neighborNames(Node node){
@@ -411,7 +452,9 @@ public class MapEditorController extends Controller {
             ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
             editNode_neighborsList.setItems(nList);
         }
-        ShowNodesEdgesHelper.showNodes(currFloor);
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+
+        circlesListen(circles);
     }
 
     //----------------------------------Indicator Text Listeners------------------------------------

@@ -143,6 +143,7 @@ public class MainController extends Controller{
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
 
+        NS = new NodeService();
         EMFProvider emf = new EMFProvider();
         hours = emf.hours;
 
@@ -168,23 +169,22 @@ public class MainController extends Controller{
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
         //TODO: delete
-        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, "");
+//        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, new Node());
         ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
-//        NodeService ns = new NodeService();
-//        List<Node> temp = ns.getNodesByFloor(1);
+//        List<Node> temp = NS.getNodesByFloor(1);
 //        for(Node n: temp){
-//            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
+//            ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n);
 //        }
 //        EdgeService es = new EdgeService();
 //        List<Edge> edges = es.getAllEdges();
 //        for(Edge e: edges){
 //            if(e.getStart().getLocation().getFloor() == 1){
-//                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+//                ShowNodesEdgesHelper.MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
 //                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
 //                TextField text = new TextField();
 //
@@ -202,12 +202,12 @@ public class MainController extends Controller{
         System.out.println(nodes);
         ShowNodesEdgesHelper.ClearOldPaths();
 
-        if (nodes.size() < 1) {System.out.println("There is no path.");return;}
+        if (nodes.size() < 1) { System.out.println("There is no path.");return;}
 
         for (MapNode node : nodes) {
             ShowNodesEdgesHelper.MakeCircle(node.getLocation().getX(),
                     node.getLocation().getY(),
-                    node.getLocation().getFloor(), "");
+                    node.getLocation().getFloor(), NS.find(node.getModelNodeID()));
         }
 
         for(int i = 0; i < nodes.size() - 1; i++){
