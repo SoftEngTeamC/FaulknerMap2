@@ -7,9 +7,8 @@ import model.*;
 import service.*;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataLoader {
     public static void main(String[] args) {
@@ -42,6 +41,8 @@ public class DataLoader {
             loadEdges("data/floor5/edges.tsv");
             loadEdges("data/floor6/edges.tsv");
             loadEdges("data/floor7/edges.tsv");
+
+            connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -182,6 +183,34 @@ public class DataLoader {
 
         TsvParser parser = new TsvParser(parserSettings);
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
+    }
+
+    private static void connectElevators() {
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
+
+        List<Node> elevators = nodeService.getAllNodes().stream()
+                .filter(n -> n.getName().toLowerCase().contains("elevator"))
+                .collect(Collectors.toList());
+        // Group elevators by name
+        Map<String, Set<Node>> elevatorGroups = new HashMap<>();
+        for (Node elevator : elevators) {
+            if (elevatorGroups.containsKey(elevator.getName())) {
+                elevatorGroups.get(elevator.getName()).add(elevator);
+            } else {
+                Set<Node> newGroup = new HashSet<>();
+                newGroup.add(elevator);
+                elevatorGroups.put(elevator.getName(), newGroup);
+            }
+        }
+        // Connect all the groups
+        for (Set<Node> group : elevatorGroups.values()) {
+            for (Node n1 : group) {
+                for (Node n2 : group) {
+                    edgeService.persist(new Edge(n1, n2, 0));
+                }
+            }
+        }
     }
 
     private static void addEdgeIntersections(){
