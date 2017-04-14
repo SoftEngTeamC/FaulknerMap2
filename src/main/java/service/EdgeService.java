@@ -29,12 +29,24 @@ public class EdgeService extends AbstractService<Edge> {
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .getSingleResult());
+        System.out.println("getting a list of edge ");
         temp.add(manager.createQuery(
                 "SELECT e FROM Edge e WHERE e.start = :start AND e.end = :end", Edge.class)
                 .setParameter("start", end)
                 .setParameter("end", start)
                 .getSingleResult());
 
+        //System.out.println("getting a list of edge ");
         return temp;
+    }
+
+    public void disableEdge(Edge temp){
+        System.out.println("GO into disable function");
+        temp.setDisabled(true);
+    }
+
+    public void ableEdge(Edge temp){
+        System.out.println("GO into disable function");
+        temp.setDisabled(false);
     }
 }

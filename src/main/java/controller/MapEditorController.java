@@ -125,8 +125,24 @@ public class MapEditorController extends Controller {
     // Map imageview and anchorpane
     @FXML
     private ImageView imageView;
+
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private ListView<String> disableEdge_searchResultsList;
+
+    @FXML
+    private Text node1NameText;
+
+    @FXML
+    private Text node2NameText;
+
+    @FXML
+    private Text ifDisableText;
+
+    @FXML
+    private Text ifUndoDisableText;
 
     // Images
     private Image floor4Image;
@@ -198,6 +214,8 @@ public class MapEditorController extends Controller {
         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
         editNode_searchResultsList.setItems(obList);
+        disableEdge_searchResultsList.setItems(obList);
+
 
         tabPaneListen();
 
@@ -270,6 +288,7 @@ public class MapEditorController extends Controller {
                     }
                 }
         );
+
 
     }
 
@@ -406,8 +425,8 @@ public class MapEditorController extends Controller {
 
     //    // methods for the edit node tab
 //
-    public void editNode_searchBtnPressed() {
-    }
+//    public void editNode_searchBtnPressed() {
+//    }
 
     public void editNode_removeNeighborBtnPressed() {
         EdgeService es = new EdgeService();
@@ -457,7 +476,63 @@ public class MapEditorController extends Controller {
         circlesListen(circles);
     }
 
-    //----------------------------------Indicator Text Listeners------------------------------------
+    public void disableEdgeSelectedNodeListen() {
+//        disableEdge_searchResultsList.getSelectionModel().selectedItemProperty()
+//                .addListener((observable, oldValue, newValue) -> {
+//                    Node selectedNode = NS.findNodeByName(newValue);
+//
+//                    currNodes[0] = selectedNode;
+
+
+    }
+
+    public void Node1ButtonPressed() {
+        NodeService selectedNS = new NodeService ();
+        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
+
+        node1NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
+
+    }
+
+    public void Node2ButtonPressed() {
+        NodeService selectedNS = new NodeService ();
+        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
+
+        node2NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
+    }
+
+    public void DisableEdgeButtonPressed() {
+        Node node1 = NS.findNodeByName(node1NameText.getText());
+        Node node2 = NS.findNodeByName(node2NameText.getText());
+        EdgeService es = new EdgeService();
+        List<Edge> selectedEdges = es.findByNodes(node1, node2);
+
+        for (Edge curr : selectedEdges) {
+            es.disableEdge(curr);
+            System.out.println("Disabled : " + curr.getStart().getName() + " " + curr.getEnd().getName());
+        }
+        System.out.println("successful");
+        ifDisableText.setText("Disable Successful!");
+    }
+
+    public void UndoDisableEdgeButtonPressed() {
+
+        Node node1 = NS.findNodeByName(node1NameText.getText());
+        Node node2 = NS.findNodeByName(node2NameText.getText());
+        EdgeService es = new EdgeService();
+        List<Edge> selectedEdges = es.findByNodes(node1, node2);
+
+        for (Edge curr : selectedEdges) {
+            es.ableEdge(curr);
+            System.out.println("Undo disable : " + curr.getStart().getName() + " " + curr.getEnd().getName());
+        }
+        System.out.println("successful");
+        ifUndoDisableText.setText("Undo Successful!");
+
+    }
+
+
+        //----------------------------------Indicator Text Listeners------------------------------------
     public void InitializeIndicatorTextListeners() {
         addNode_xPos.textProperty().addListener(new ChangeListener() {
             @Override

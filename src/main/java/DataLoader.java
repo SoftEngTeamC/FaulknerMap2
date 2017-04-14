@@ -44,7 +44,7 @@ public class DataLoader {
 
             loadEdges("data/allEdges.tsv");
 
-  //          connectElevators();
+   //         connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -164,8 +164,10 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.find(Long.parseLong((String)row[0]));
-                Node end = nodeService.find(Long.parseLong((String)row[1]));
+//                Node start = nodeService.find(Long.parseLong((String)row[0]));
+//                Node end = nodeService.find(Long.parseLong((String)row[1]));
+                Node start = nodeService.findNodeByName(startName);
+                Node end = nodeService.findNodeByName(endName);
 
                 if (start == null) {
                     System.err.println("Couldn't find a node with id " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
@@ -176,6 +178,8 @@ public class DataLoader {
                     System.err.println("Couldn't find a node with id " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
                     return;
                 }
+
+             //   System.out.println(start.getName() + "\t" + end.getName());
 
                 edgeService.persist(new Edge(start, end, 0));
             }
