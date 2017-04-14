@@ -240,8 +240,13 @@ public class MainController extends Controller{
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
-        MapNode start = map.getNode(HP_Start.getId());
-        MapNode dest = map.getNode(HP_Dest.getId());
+
+        Node nodeStart = (HP_Start.getOffices().get(0));
+        Node nodeEnd = (HP_Dest.getOffices().get(0));
+
+        MapNode start = map.getNode(nodeStart.getId());
+        MapNode dest = map.getNode(nodeEnd.getId());
+
         List<MapNode> path = PathFinder.shortestPath(start, dest);
         TextDirectionsTextArea.setText(MakeDirections.getText(path));
         System.out.println("HERE");
