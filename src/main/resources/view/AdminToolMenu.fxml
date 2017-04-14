@@ -14,46 +14,61 @@
     <children>
       <GridPane layoutX="14.0" layoutY="27.943359375" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="246.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1540.0" minWidth="10.0" prefWidth="1414.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="362.0" minWidth="10.0" prefWidth="240.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="107.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="269.0" minHeight="10.0" prefHeight="269.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="326.0" minHeight="10.0" prefHeight="217.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="275.0" minHeight="10.0" prefHeight="163.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="192.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-              <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editMap" text="Map Editor" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+              <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editMap" text="Map Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                <GridPane.margin>
-                  <Insets bottom="50.0" left="500.0" right="500.0" top="50.0" />
+                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
                <font>
                   <Font size="56.0" />
                </font>
             </Button>
-              <Text layoutX="222.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Option" GridPane.halignment="CENTER">
+              <Text layoutX="222.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Menu" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                   <font>
                       <Font size="96.0" />
                   </font>
               </Text>
-              <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editHours" text="Visiting Hours" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+              <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editHours" text="Visiting Hours" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
                <GridPane.margin>
-                  <Insets bottom="50.0" left="500.0" right="500.0" top="50.0" />
+                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
                <font>
                   <Font size="56.0" />
                </font>
             </Button>
-              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" text="Logout" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-              <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editDirectory" text="Database Editor" AnchorPane.bottomAnchor="265.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="110.0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" prefHeight="86.0" prefWidth="228.0" text="Logout" GridPane.rowIndex="6">
+               <font>
+                  <Font size="40.0" />
+               </font>
                <GridPane.margin>
-                  <Insets bottom="50.0" left="500.0" right="500.0" top="50.0" />
+                  <Insets bottom="50.0" left="50.0" />
+               </GridPane.margin></Button>
+              <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editDirectory" text="Database Editor" AnchorPane.bottomAnchor="265.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="110.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
                <font>
                   <Font size="56.0" />
                </font>
             </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an admin menu below" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Text>
          </children>
       </GridPane>
     </children>
