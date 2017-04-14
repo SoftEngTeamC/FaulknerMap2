@@ -25,6 +25,8 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-family: "Helvetica";
+    -fx-max-height: 25px;
+    -fx-min-height: 25px;
 }
 
 .button:hover {
