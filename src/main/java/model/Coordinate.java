@@ -59,4 +59,8 @@ public class Coordinate {
     public void setFloor(int floor) {
         this.floor = floor;
     }
+
+    public String toString(){
+        return "Node Location: [" + x + "," + y + "," + floor + "]";
+    }
 }

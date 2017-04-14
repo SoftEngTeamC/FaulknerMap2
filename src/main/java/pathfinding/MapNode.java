@@ -1,6 +1,7 @@
 package pathfinding;
 
 import model.Coordinate;
+import service.CoordinateService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,23 +12,23 @@ public class MapNode implements Node<MapNode> {
     static double FEET_PER_PIXEL = 0.2902;
     static double SECONDS_PER_FOOT = 0.2975;
     static double STEPS_PER_FOOT = 0.5157;
-    private Coordinate location;
+    private long locationID;
     private Set<MapNode> neighbors;
     private long modelNodeID;
 
     public MapNode(Coordinate location) {
-        this.location = location;
+        this.locationID = location.getId();
         this.neighbors = new HashSet<>();
     }
 
     public MapNode(Coordinate location, Set<MapNode> neighbors) {
-        this.location = location;
+        this.locationID = location.getId();
         this.neighbors = neighbors;
     }
 
 
     public MapNode(model.Node n) {
-        this.location = n.getLocation();
+        this.locationID = n.getLocation().getId();
         this.neighbors = new HashSet<>();
         this.modelNodeID = n.getId();
     }
@@ -65,13 +66,16 @@ public class MapNode implements Node<MapNode> {
     }
 
     public double distanceTo(MapNode n) {
-        double xDelta = this.location.getX() - n.location.getX();
-        double yDelta = this.location.getY() - n.location.getY();
+        CoordinateService cs = new CoordinateService();
+        Coordinate location = cs.find(locationID);
+        double xDelta = location.getX() - n.getLocation().getX();
+        double yDelta = location.getY() - n.getLocation().getY();
         return Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
     }
 
     public Coordinate getLocation() {
-        return location;
+        CoordinateService cs = new CoordinateService();
+        return cs.find(locationID);
     }
 
     public void addNeighbor(MapNode n) {
@@ -81,6 +85,10 @@ public class MapNode implements Node<MapNode> {
 
     public long getModelNodeID() {
         return modelNodeID;
+    }
+
+    public void setLocationID(long id){
+        this.locationID = id;
     }
 
 }

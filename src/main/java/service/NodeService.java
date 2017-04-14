@@ -24,7 +24,7 @@ public class NodeService extends AbstractService<Node> {
                 .setParameter("id", id)
                 .getResultList();
         Set<Node> startNeighbors = edges.stream().map(Edge::getStart).collect(Collectors.toSet());
-        Set<Node> endNeighbors = edges.stream().map(Edge::getStart).collect(Collectors.toSet());
+        Set<Node> endNeighbors = edges.stream().map(Edge::getEnd).collect(Collectors.toSet());
         startNeighbors.addAll(endNeighbors);
         startNeighbors.remove(find(id));
         startNeighbors.remove(find(id));
