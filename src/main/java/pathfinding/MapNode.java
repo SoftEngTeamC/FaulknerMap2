@@ -13,6 +13,7 @@ public class MapNode implements Node<MapNode> {
     static double STEPS_PER_FOOT = 0.5157;
     private Coordinate location;
     private Set<MapNode> neighbors;
+    private long modelNodeID;
 
     public MapNode(Coordinate location) {
         this.location = location;
@@ -28,6 +29,7 @@ public class MapNode implements Node<MapNode> {
     public MapNode(model.Node n) {
         this.location = n.getLocation();
         this.neighbors = new HashSet<>();
+        this.modelNodeID = n.getId();
     }
 
     public static double getPixels(List<MapNode> myPath) {
@@ -75,6 +77,10 @@ public class MapNode implements Node<MapNode> {
     public void addNeighbor(MapNode n) {
         neighbors.add(n);
         n.neighbors.add(this);
+    }
+
+    public long getModelNodeID() {
+        return modelNodeID;
     }
 
 }

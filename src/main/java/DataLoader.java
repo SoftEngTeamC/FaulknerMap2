@@ -7,9 +7,8 @@ import model.*;
 import service.*;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataLoader {
     public static void main(String[] args) {
@@ -35,13 +34,17 @@ public class DataLoader {
             loadService("data/floor6/services.tsv");
             loadService("data/floor7/services.tsv");
 
-            loadEdges("data/floor1/edges.tsv");
-            loadEdges("data/floor2/edges.tsv");
-            loadEdges("data/floor3/edges.tsv");
-            loadEdges("data/floor4/edges.tsv");
-            loadEdges("data/floor5/edges.tsv");
-            loadEdges("data/floor6/edges.tsv");
-            loadEdges("data/floor7/edges.tsv");
+//            loadEdges("data/floor1/edges.tsv");
+//            loadEdges("data/floor2/edges.tsv");
+//            loadEdges("data/floor3/edges.tsv");
+//            loadEdges("data/floor4/edges.tsv");
+//            loadEdges("data/floor5/edges.tsv");
+//            loadEdges("data/floor6/edges.tsv");
+//            loadEdges("data/floor7/edges.tsv");
+
+            loadEdges("data/allEdges.tsv");
+
+  //          connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -161,27 +164,54 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.findNodeByName(startName);
-                Node end = nodeService.findNodeByName(endName);
+                Node start = nodeService.find(Long.parseLong((String)row[0]));
+                Node end = nodeService.find(Long.parseLong((String)row[1]));
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with named " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
+                    System.err.println("Couldn't find a node with id " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with named " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
+                    System.err.println("Couldn't find a node with id " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
                     return;
                 }
 
                 edgeService.persist(new Edge(start, end, 0));
-                edgeService.persist(new Edge(end, start, 0));
             }
         };
         parserSettings.setProcessor(rowProcessor);
 
         TsvParser parser = new TsvParser(parserSettings);
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
+    }
+
+    private static void connectElevators() {
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
+
+        List<Node> elevators = nodeService.getAllNodes().stream()
+                .filter(n -> n.getName().toLowerCase().contains("elevator"))
+                .collect(Collectors.toList());
+        // Group elevators by name
+        Map<String, Set<Node>> elevatorGroups = new HashMap<>();
+        for (Node elevator : elevators) {
+            if (elevatorGroups.containsKey(elevator.getName())) {
+                elevatorGroups.get(elevator.getName()).add(elevator);
+            } else {
+                Set<Node> newGroup = new HashSet<>();
+                newGroup.add(elevator);
+                elevatorGroups.put(elevator.getName(), newGroup);
+            }
+        }
+        // Connect all the groups
+        for (Set<Node> group : elevatorGroups.values()) {
+            for (Node n1 : group) {
+                for (Node n2 : group) {
+                    edgeService.persist(new Edge(n1, n2, 0));
+                }
+            }
+        }
     }
 
     private static void addEdgeIntersections(){
