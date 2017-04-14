@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -9,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -34,6 +37,8 @@ public class DirectoryEditorController extends Controller{
     private TextField searchField;
     @FXML
     private ListView<String> searchList;
+    @FXML
+    private SplitPane splitPane;
 
     // database helpers
     HospitalProfessionalService hps;
@@ -58,15 +63,14 @@ public class DirectoryEditorController extends Controller{
         editPrsnBtn.setDisable(true);
 
         // add a listener to the listview
-        searchList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        searchList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            /**
-             * @author paul
-             * enables the edit person button
-             */
-            public void handle(MouseEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
                 editPrsnBtn.setDisable(false);
-            }});
+            }
+        });
+
     }
 
     @FXML

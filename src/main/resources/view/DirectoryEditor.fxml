@@ -22,12 +22,13 @@
          <rowConstraints>
             <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="242.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="682.0" minHeight="10.0" prefHeight="547.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="362.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="362.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="362.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="308.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="189.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-              <SplitPane dividerPositions="0.26573426573426573" layoutX="126.0" layoutY="76.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="351.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+              <SplitPane fx:id="splitPane" dividerPositions="0.1426" layoutX="126.0" layoutY="76.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="351.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                           <children>
@@ -38,35 +39,35 @@
                         </TextField>
                           </children>
                       </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="428.0" prefWidth="923.0">
                      <children>
                         <ListView fx:id="searchList" layoutX="-1.0" prefHeight="285.0" prefWidth="923.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                   </items>
               </SplitPane>
-              <Button fx:id="logoutBtn" layoutX="19.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" onMouseClicked="#logout" prefHeight="90.0" prefWidth="150.0" text="Logout" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+              <Button fx:id="logoutBtn" layoutX="19.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" onMouseClicked="#logout" prefHeight="90.0" prefWidth="150.0" text="Logout" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
                <font>
                   <Font size="29.0" />
                </font>
                <GridPane.margin>
-                  <Insets bottom="50.0" left="50.0" />
+                  <Insets bottom="30.0" left="50.0" />
                </GridPane.margin>
             </Button>
-              <Button fx:id="addPrsnBtn" layoutX="126.0" layoutY="325.0" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="95.0" prefWidth="250.0" text="Add Person" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <Button fx:id="addPrsnBtn" layoutX="126.0" layoutY="325.0" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="95.0" prefWidth="250.0" text="Add Person" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <font>
                   <Font size="29.0" />
                </font>
             </Button>
-              <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="90.0" prefWidth="150.0" text="Back" GridPane.valignment="TOP">
+              <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="59.0" prefWidth="143.0" text="Back" GridPane.valignment="TOP">
                <font>
                   <Font size="29.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="50.0" top="50.0" />
+                  <Insets left="50.0" top="30.0" />
                </GridPane.margin>
             </Button>
-              <Button fx:id="editPrsnBtn" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="95.0" prefWidth="250.0" text="Edit Person" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <Button fx:id="editPrsnBtn" layoutX="126.0" layoutY="286.0" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="95.0" prefWidth="250.0" text="Edit Person" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                <font>
                   <Font size="29.0" />
                </font>
@@ -76,6 +77,7 @@
                       <Font size="51.0" />
                   </font>
               </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="test" GridPane.rowIndex="1" />
          </children>
       </GridPane>
     </children>
