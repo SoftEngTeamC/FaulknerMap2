@@ -4,10 +4,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -131,8 +136,6 @@ public class MapEditorController extends Controller {
     // Images
     private Image floor4Image;
 
-    // database helper
-
     // arraylist of search terms
     private ArrayList<String> searchList;
     private ArrayList<String> nodeList;
@@ -153,11 +156,11 @@ public class MapEditorController extends Controller {
         }
         editNode_addField.getEntries().addAll(names);
 
-        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
-                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
-                 SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
-                 ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
-                 SeventhFloorSlider, FloorViewsTabPane);
+        new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
+                SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
+                ThirdFloorSlider, FourthFloorSlider, FifthFloorSlider, SixthFloorSlider,
+                SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
 
@@ -208,13 +211,16 @@ public class MapEditorController extends Controller {
         circlesListen(circles);
     }
 
-    public void circlesListen(List<Circle> circles){
+    public void circlesListen(List<Circle> circles) {
         final Circle[] firstCircle = new Circle[1];
-        for(Circle circle: circles) {
+        for (Circle circle : circles) {
+
+        //    setDraggable(circle);
+
             circle.setOnMouseClicked(event -> {
                 System.out.println("Clicked on node: " +
                         NS.find(Long.parseLong(circle.getId())).getName());
-                if(firstCircle[0] == null){
+                if (firstCircle[0] == null) {
                     System.out.println("two0 is null");
                     firstCircle[0] = circle;
                     circle.fillProperty().setValue(Paint.valueOf(Color.TEAL.toString()));
@@ -239,35 +245,167 @@ public class MapEditorController extends Controller {
         }
     }
 
-    public void tabPaneListen() {
+    private void setDraggable(Circle circle) {
+//        final double orgx = circle.getCenterX();
+//        final double orgy =  circle.getCenterY();
+////        final double[] transx = circle.getSouc
+////        final double[] transy = new double[1];
+//        final double[] offsetX = new double[1];
+//        final double[] offsetY = new double[1];
+//        NodeService ns = new NodeService();
+        //  System.out.println("Start " + ns.find(Long.parseLong(circle.getId())).getLocation().toString());
+
+//        EventHandler<MouseEvent> circleOnMousePressedEventHandler =
+//                t -> {
+//                    orgx[0] = t.getSceneX();
+//                    orgy[0] = t.getSceneY();
+//                    transx[0] = ((Circle) (t.getSource())).getTranslateX();
+//                    transy[0] = ((Circle) (t.getSource())).getTranslateY();
+//                    System.out.println("Pressed");
+//                };
+//
+//        EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+//                t -> {
+//                    ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+//                    tempScrollPane.setPannable(false);
+//                    offsetX[0] = t.getSceneX() - orgx;
+//                    offsetY[0] = t.getSceneY() - orgy;
+////                    double newTranslateX = transx[0] + offsetX[0];
+////                    double newTranslateY = transy[0] + offsetY[0];
+//
+//                    ((Circle) (t.getSource())).setTranslateX(newTranslateX);
+//                    ((Circle) (t.getSource())).setTranslateY(newTranslateY);
+//                    Node node = NS.find(Long.parseLong(circle.getId()));
+//                    CoordinateService CS = new CoordinateService();
+//                    Coordinate coor = CS.find(node.getLocation().getId());
+//                    coor.setX(coor.getX() + offsetX[0]);
+//                    coor.setY(coor.getY() + offsetY[0]);
+//                    CS.merge(coor);
+//
+////                    NS.merge(node);
+//                 //   System.out.println("End " + node.getLocation().toString());
+//                    System.out.println("Dragging");
+//                };
+//
+//        EventHandler<DragEvent> circleOnMouseDragExitEventHandler =
+//                t -> {
+//
+////                    Node node = NS.find(Long.parseLong(circle.getId()));
+////                    CoordinateService CS = new CoordinateService();
+////                    Coordinate coor = CS.find(node.getLocation().getId());
+////                    coor.setX(coor.getX() + offsetX[0]);
+////                    coor.setY(coor.getY() + offsetY[0]);
+////                    CS.merge(coor);
+////                    NS.merge(node);
+//                    System.out.println("End ");
+//                };
+//
+//
+//        circle.setCursor(Cursor.CROSSHAIR);
+//       // circle.setOnMousePressed(circleOnMousePressedEventHandler);
+//        circle.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+//        circle.setOnDragDone(circleOnMouseDragExitEventHandler);
+//        circle.setOnDragDropped(circleOnMouseDragExitEventHandler);
+//       circle.setOnDragOver(circleOnMouseDragExitEventHandler);
+
+        final double[] orgx = new double[1];
+        final double[] orgy = new double[1];
+        final double[] transx = new double[1];
+        final double[] transy = new double[1];
+        final double[] offsetX = new double[1];
+        final double[] offsetY = new double[1];
+        CoordinateService CS = new CoordinateService();
+
+
+        EventHandler<MouseEvent> circleOnMousePressedEventHandler =
+                t -> {
+                    orgx[0] = t.getSceneX();
+                    orgy[0] = t.getSceneY();
+                    transx[0] = ((Circle) (t.getSource())).getTranslateX();
+                    transy[0] = ((Circle) (t.getSource())).getTranslateY();
+                    System.out.println("Pressed");
+                };
+        EventHandler<MouseEvent> circleOnMouseDraggedEventHandler =
+                t -> {
+                    ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+                    Slider tempSlider = ShowNodesEdgesHelper.checkSlider(currFloor);
+                    System.out.println("Slider: " + tempSlider.getValue());
+//                    Group group1 = (Group) tempScrollPane.getContent();
+//                    ImageView Map1 = (ImageView) group1.getChildren().get(0);
+
+//                    double ImgW = Map1.getImage().getWidth();
+//                    double ImgH = Map1.getImage().getHeight();
+//                    double ImgR = ImgH / ImgW;
+
+                    double per = (tempSlider.getValue() - 730) / (5000 - 730);
+
+                    tempScrollPane.setPannable(false);
+                    offsetX[0] = t.getSceneX() - orgx[0];
+                    offsetY[0] = t.getSceneY() - orgy[0];
+                    double newTranslateX = transx[0] + offsetX[0];
+                    double newTranslateY = transy[0] + offsetY[0];
+
+                    System.out.println("orgx " + orgx[0]);
+                    System.out.println("orgy " + orgy[0]);
+                    System.out.println("transx " + transx[0]);
+                    System.out.println("transy " + transy[0]);
+                    System.out.println("offsetX " + offsetX[0]);
+                    System.out.println("offsetY " + offsetY[0]);
+                    System.out.println("newTranslateX " + newTranslateX);
+                    System.out.println("newTranslateY " + newTranslateY);
+
+
+                    ((Circle) (t.getSource())).setTranslateX(newTranslateX);
+                    ((Circle) (t.getSource())).setTranslateY(newTranslateY);
+
+//                    circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(newTranslateX / ImgW));
+//                    circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(newTranslateY / ImgH));
+//                    circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
+
+                    Node node = NS.find(Long.parseLong(circle.getId()));
+                    System.out.println("start: " + node.getLocation().toString());
+                    Coordinate coor = CS.find(node.getLocation().getId());
+                    coor.setX(coor.getX() + (offsetX[0]*(1-per)));
+                    coor.setY(coor.getY() + (offsetY[0]*(1-per)));
+                    System.out.println("Per " + per);
+                    CS.merge(coor);
+                    Node node1 = NS.find(Long.parseLong(circle.getId()));
+                    System.out.println("final: " + node1.getLocation().toString());
+                    System.out.println("Dragging");
+                };
+
+
+        circle.setCursor(Cursor.CROSSHAIR);
+        circle.setOnMousePressed(circleOnMousePressedEventHandler);
+        circle.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+    }
+
+    private void tabPaneListen() {
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Tab>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                        System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
-                        currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
-                        ArrayList<String> nameList = new ArrayList<>();
-                        for (Node n : NS.getNodesByFloor(currFloor)) {
-                            nameList.add(n.getName());
-                        }
-
-                        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
-                        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
-
-                        editNode_searchResultsList.setItems(obList);
-
-                        List<Node> nodes = NS.getNodesByFloor(currFloor);
-                        List<String> names = new ArrayList<>();
-                        for (Node n : nodes) {
-                            names.add(n.getName());
-                        }
-                        editNode_addField.getEntries().clear();
-                        editNode_addField.getEntries().addAll(names);
-
-                        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-
-                        circlesListen(circles);
+                (ov, t, t1) -> {
+                    System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
+                    currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
+                    ArrayList<String> nameList = new ArrayList<>();
+                    for (Node n : NS.getNodesByFloor(currFloor)) {
+                        nameList.add(n.getName());
                     }
+
+                    nameList.sort(String.CASE_INSENSITIVE_ORDER);
+                    ObservableList<String> obList = FXCollections.observableArrayList(nameList);
+
+                    editNode_searchResultsList.setItems(obList);
+
+                    List<Node> nodes = NS.getNodesByFloor(currFloor);
+                    List<String> names = new ArrayList<>();
+                    for (Node n : nodes) {
+                        names.add(n.getName());
+                    }
+                    editNode_addField.getEntries().clear();
+                    editNode_addField.getEntries().addAll(names);
+
+                    List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+
+                    circlesListen(circles);
                 }
         );
 
@@ -427,7 +565,7 @@ public class MapEditorController extends Controller {
         circlesListen(circles);
     }
 
-    private List<String> neighborNames(Node node){
+    private List<String> neighborNames(Node node) {
         Set<Node> neighbors = NS.neighbors(node.getId());
         System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();

@@ -156,6 +156,28 @@ class ShowNodesEdgesHelper {
         }
     }
 
+    static Slider checkSlider(int z) {
+        switch (z) {
+            case 1:
+                return FirstFloorSlider;
+            case 2:
+                return SecondFloorSlider;
+            case 3:
+                return ThirdFloorSlider;
+            case 4:
+                return FourthFloorSlider;
+            case 5:
+                return FifthFloorSlider;
+            case 6:
+                return SixthFloorSlider;
+            case 7:
+                return SeventhFloorSlider;
+            default:
+                System.out.println("You gave MakeCircle() a floor that doesn't exist, or it isnt an int");
+                return null;
+        }
+    }
+
     //MakeLine take 2 points (effectively) and draws a line from point to point
     //this line is bounded to the image such that resizing does not effect the relative position of the line and image
     static void MakeLine(double x1, double y1, double x2, double y2, int z) {
