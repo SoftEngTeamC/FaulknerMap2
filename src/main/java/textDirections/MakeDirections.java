@@ -28,6 +28,8 @@ public class MakeDirections {
         double p = Math.PI;
         double distance;
         for(i = 0; i < myPath.size() - 2; i++) {
+           // if(myPath.size()
+            System.out.println("Path: " +myPath.size());
             currentNode = myPath.get(i);
             nextNode = myPath.get(i+1);
             afterNextNode = myPath.get(i+2);
