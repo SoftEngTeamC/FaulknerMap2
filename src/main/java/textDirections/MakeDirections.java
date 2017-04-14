@@ -5,6 +5,7 @@ import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.NodeService;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -65,7 +66,8 @@ public class MakeDirections {
 
                 } else {
                     //System.out.println(angleShift);
-                    output2 = output.concat("Move straight " + totalDistance + " feet, then take a ");
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    output2 = output.concat("Move straight " + df.format(totalDistance) + " feet, then take a ");
                     output = output2;
                     totalDistance = 0;
                     if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
@@ -110,8 +112,8 @@ public class MakeDirections {
             //System.out.println(direction);
             totalDistance += distanceBetween(currentNode, nextNode);
         }
-
-        output2 = output.concat("Move forward " + totalDistance + " feet. You have arrived.");
+        DecimalFormat df = new DecimalFormat("#.#");
+        output2 = output.concat("Move forward " + df.format(totalDistance) + " feet. You have arrived.");
         output = output2;
 
         return output;
