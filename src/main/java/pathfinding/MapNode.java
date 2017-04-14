@@ -8,9 +8,9 @@ import java.util.Set;
 
 
 public class MapNode implements Node<MapNode> {
-    final static double FEET_PER_PIXEL = 0.2902;
-    final static double SECONDS_PER_FOOT = 0.2975;
-    final static double STEPS_PER_FOOT = 0.5157;
+    public final static double FEET_PER_PIXEL = 0.2902;
+    public final static double SECONDS_PER_FOOT = 0.2975;
+    public final static double STEPS_PER_FOOT = 0.5157;
     private Coordinate location;
     private Set<MapNode> neighbors;
     private long modelNodeID;
