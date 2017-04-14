@@ -65,7 +65,7 @@ public class MakeDirections {
 
                 } else {
                     //System.out.println(angleShift);
-                    output2 = output.concat("Move straight " + totalDistance + " pixels, then take a ");
+                    output2 = output.concat("Move straight " + totalDistance + " feet, then take a ");
                     output = output2;
                     totalDistance = 0;
                     if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
@@ -111,7 +111,7 @@ public class MakeDirections {
             totalDistance += distanceBetween(currentNode, nextNode);
         }
 
-        output2 = output.concat("Move forward " + totalDistance + " pixels");
+        output2 = output.concat("Move forward " + totalDistance + " feet. You have arrived.");
         output = output2;
 
         return output;
@@ -119,7 +119,8 @@ public class MakeDirections {
 
     private static double distanceBetween(MapNode a, MapNode b) {
         return Math.sqrt(Math.pow((a.getLocation().getX() - b.getLocation().getX()), 2) +
-                Math.pow((a.getLocation().getY() - b.getLocation().getY()), 2));
+                Math.pow((a.getLocation().getY() - b.getLocation().getY()), 2)) *
+                MapNode.FEET_PER_PIXEL;
     }
 
     private static double xDistance(MapNode a, MapNode b) {
@@ -127,11 +128,11 @@ public class MakeDirections {
         double x2 = b.getLocation().getX();
         //System.out.println(x1);
         //System.out.println(x2);
-        return Math.abs(x1 - x2);
+        return Math.abs(x1 - x2) * MapNode.FEET_PER_PIXEL;
     }
 
     private static double yDistance(MapNode a, MapNode b) {
-        return Math.abs(a.getLocation().getY() - b.getLocation().getY());
+        return Math.abs(a.getLocation().getY() - b.getLocation().getY()) * MapNode.FEET_PER_PIXEL;
     }
 
     /** Angle from starting node A to ending node B
