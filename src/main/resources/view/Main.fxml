@@ -103,7 +103,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                            <children>
-                                  <TextArea fx:id="DisplayInformationTextArea" editable="false" text="This is where the information goes&#10;Here is even more information, now on two lines&#10;" />
+                                  <TextArea fx:id="DisplayInformationTextArea" editable="false" text="" />
                            </children>
                         </AnchorPane>
                   </content>

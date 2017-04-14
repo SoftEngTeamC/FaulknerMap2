@@ -143,9 +143,18 @@ public class MainController extends Controller{
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
 
+        NS = new NodeService();
         EMFProvider emf = new EMFProvider();
         hours = emf.hours;
-        InitializeMapViews();
+
+        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
+                SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
+                ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
+                SeventhFloorSlider, FloorViewsTabPane);
+
+        ShowNodesEdgesHelper.InitializeMapViews();
+
         PopulateSearchResults(null);
         SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.2));
         DisplayInformationTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
@@ -159,23 +168,23 @@ public class MainController extends Controller{
         LogoImageView.setPreserveRatio(true);
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
 
-        MakeCircle(1000,1000,4, "");
-        MakeLine(1000,1000,2000,2000,2);
+        //TODO: delete
+//        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, new Node());
+        ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
 
-//        NodeService ns = new NodeService();
-//        List<Node> temp = ns.getNodesByFloor(1);
+//        List<Node> temp = NS.getNodesByFloor(1);
 //        for(Node n: temp){
-//            MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n.getName());
+//            ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n);
 //        }
 //        EdgeService es = new EdgeService();
 //        List<Edge> edges = es.getAllEdges();
 //        for(Edge e: edges){
 //            if(e.getStart().getLocation().getFloor() == 1){
-//                MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
+//                ShowNodesEdgesHelper.MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
 //                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
 //                TextField text = new TextField();
 //
@@ -191,16 +200,18 @@ public class MainController extends Controller{
             System.out.println(nodes.get(i).getLocation().getFloor());
         }
         System.out.println(nodes);
-        ClearOldPaths();
-        if (nodes == null) {System.out.println("There is no path.");return;}
+        ShowNodesEdgesHelper.ClearOldPaths();
 
-        for(int i=0;i<nodes.size();i++) {
-            MakeCircle(nodes.get(i).getLocation().getX(),
-                    nodes.get(i).getLocation().getY(),
-                    nodes.get(i).getLocation().getFloor(), "");
+        if (nodes.size() < 1) { System.out.println("There is no path.");return;}
+
+        for (MapNode node : nodes) {
+            ShowNodesEdgesHelper.MakeCircle(node.getLocation().getX(),
+                    node.getLocation().getY(),
+                    node.getLocation().getFloor(), NS.find(node.getModelNodeID()));
         }
+
         for(int i = 0; i < nodes.size() - 1; i++){
-            MakeLine(nodes.get(i).getLocation().getX(), //
+            ShowNodesEdgesHelper.MakeLine(nodes.get(i).getLocation().getX(), //
                     nodes.get(i).getLocation().getY(),
                     nodes.get(i+1).getLocation().getX(),
                     nodes.get(i+1).getLocation().getY(),
@@ -216,133 +227,6 @@ public class MainController extends Controller{
         }
     }
 
-    //MakeCircle creates a circle centered at the given X,Y relative to the initial size of the image
-    //It locks the points to their position on the image,
-    //Resizing the image does not effect the relative position of the nodes and the image
-    public void MakeCircle(double x, double y, int z, String name) {
-        // initial size of image and the image ratior
-        ScrollPane Scrolly = null;
-        switch(z){
-            case 1:
-                Scrolly = FirstFloorScrollPane;
-                break;
-            case 2:
-                Scrolly = SecondFloorScrollPane;
-                break;
-            case 3:
-                Scrolly = ThirdFloorScrollPane;
-                break;
-            case 4:
-                Scrolly = FourthFloorScrollPane;
-                break;
-            case 5:
-                Scrolly = FifthFloorScrollPane;
-                break;
-            case 6:
-                Scrolly = SixthFloorScrollPane;
-                break;
-            case 7:
-                Scrolly = SeventhFloorScrollPane;
-                break;
-            default:
-                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
-                break;
-        }
-        Group group1 = (Group)Scrolly.getContent();
-        ImageView Map1 = (ImageView)group1.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Circle circle = new Circle();
-        //These bind the center positions relative to the width property of the image
-        //the new center is calculated using the initial ratios
-        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
-        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10/ImgW));
-        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
-
-//        Text text = new Text(x,y
-//                , name);
-//
-//        text.setBoundsType(TextBoundsType.VISUAL);
-//        StackPane stack = new StackPane();
-//        stack.getChildren().add(text);
-
-        group1.setOnMouseClicked(event -> {
-            System.out.println(event.getSceneX());
-            System.out.println(event.getSceneY());
-        });
-
-        group1.getChildren().add(circle);
-
-
-    }
-
-    //MakeLine take 2 points (effectively) and draws a line from point to point
-    //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-    public void MakeLine(double x1, double y1, double x2, double y2, int z){
-        ScrollPane Scrolly = null;
-        switch(z){
-            case 1:
-                Scrolly = FirstFloorScrollPane;
-                break;
-            case 2:
-                Scrolly = SecondFloorScrollPane;
-                break;
-            case 3:
-                Scrolly = ThirdFloorScrollPane;
-                break;
-            case 4:
-                Scrolly = FourthFloorScrollPane;
-                break;
-            case 5:
-                Scrolly = FifthFloorScrollPane;
-                break;
-            case 6:
-                Scrolly = SixthFloorScrollPane;
-                break;
-            case 7:
-                Scrolly = SeventhFloorScrollPane;
-                break;
-            default:
-                System.out.println("You gave MakeCircle() a floor that doesnt exist, or it isnt an int");
-                break;
-        }
-        Group group1 = (Group)Scrolly.getContent();
-        ImageView Map1 = (ImageView)group1.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Line edge = new Line();
-        //the points are bound to the fit width property of the image and scaled by the initial image ratio
-        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-        group1.getChildren().add(edge);
-    }
-
-    public void ClearOldPaths(){
-        Group group1 = (Group) FirstFloorScrollPane.getContent();
-        group1.getChildren().remove(1,group1.getChildren().size());
-        Group group2 = (Group) SecondFloorScrollPane.getContent();
-        group2.getChildren().remove(1,group2.getChildren().size());
-        Group group3 = (Group) ThirdFloorScrollPane.getContent();
-        group3.getChildren().remove(1,group3.getChildren().size());
-        Group group4 = (Group) FourthFloorScrollPane.getContent();
-        group4.getChildren().remove(1,group4.getChildren().size());
-        Group group5 = (Group) FifthFloorScrollPane.getContent();
-        group5.getChildren().remove(1,group5.getChildren().size());
-        Group group6 = (Group) SixthFloorScrollPane.getContent();
-        group6.getChildren().remove(1,group6.getChildren().size());
-        Group group7 = (Group) SeventhFloorScrollPane.getContent();
-        group7.getChildren().remove(1,group7.getChildren().size());
-    }
-
     //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
 
     //This function takes a list of strings and updates the SearchResult ListView to contain those strings
@@ -353,7 +237,7 @@ public class MainController extends Controller{
         SearchResultsListView.setItems(data);
     }
 
-    public void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
+    private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
         MapNode start = map.getNode(HP_Start.getId());
@@ -364,7 +248,7 @@ public class MainController extends Controller{
         DisplayMap(path);
     }
 
-    public void PopulateSearchResults(String S) {
+    private void PopulateSearchResults(String S) {
         System.out.println("Populate Search String");
         HospitalProfessionalService HS = new HospitalProfessionalService();
         List<HospitalProfessional> Professionals = HS.getAllProfessionals();
@@ -587,122 +471,6 @@ public class MainController extends Controller{
                 language = 1;
         }
         DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
-    }
-
-    //----------------------------------Build Zoomable Maps----------------------------------------------
-    public void InitializeMapViews(){
-        //FIRST FLOOR
-        FirstFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FirstFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FirstFloorImageView = new ImageView();
-        Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
-        FirstFloorImageView.setImage(FirstFloorMapPic);
-        FirstFloorImageView.setPreserveRatio(true);
-        Group FirstFloorGroup = new Group();
-        FirstFloorGroup.getChildren().add(FirstFloorImageView);
-        FirstFloorScrollPane.setContent(FirstFloorGroup);
-        FirstFloorScrollPane.setPannable(true);
-        FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FirstFloorSlider.setMax(FirstFloorMapPic.getWidth());
-        FirstFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FirstFloorImageView.fitWidthProperty().bind(FirstFloorSlider.valueProperty());
-        //SECOND FLOOR
-        SecondFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SecondFloorImageView = new ImageView();
-        Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
-        SecondFloorImageView.setImage(SecondFloorMapPic);
-        SecondFloorImageView.setPreserveRatio(true);
-        Group SecondFloorGroup = new Group();
-        SecondFloorGroup.getChildren().add(SecondFloorImageView);
-        SecondFloorScrollPane.setContent(SecondFloorGroup);
-        SecondFloorScrollPane.setPannable(true);
-        SecondFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SecondFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SecondFloorSlider.setMax(SecondFloorMapPic.getWidth());
-        SecondFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SecondFloorImageView.fitWidthProperty().bind(SecondFloorSlider.valueProperty());
-        //THIRD FLOOR
-        ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView ThirdFloorImageView = new ImageView();
-        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
-        ThirdFloorImageView.setImage(ThirdFloorMapPic);
-        ThirdFloorImageView.setPreserveRatio(true);
-        Group ThirdFloorGroup = new Group();
-        ThirdFloorGroup.getChildren().add(ThirdFloorImageView);
-        ThirdFloorScrollPane.setContent(ThirdFloorGroup);
-        ThirdFloorScrollPane.setPannable(true);
-        ThirdFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        ThirdFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        ThirdFloorSlider.setMax(ThirdFloorMapPic.getWidth());
-        ThirdFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        ThirdFloorImageView.fitWidthProperty().bind(ThirdFloorSlider.valueProperty());
-        //FOURTH FLOOR
-        FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FourthFloorImageView = new ImageView();
-        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
-        FourthFloorImageView.setImage(FourthFloorMapPic);
-        FourthFloorImageView.setPreserveRatio(true);
-        Group FourthFloorGroup = new Group();
-        FourthFloorGroup.getChildren().add(FourthFloorImageView);
-        FourthFloorScrollPane.setContent(FourthFloorGroup);
-        FourthFloorScrollPane.setPannable(true);
-        FourthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FourthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FourthFloorSlider.setMax(FourthFloorMapPic.getWidth());
-        FourthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FourthFloorImageView.fitWidthProperty().bind(FourthFloorSlider.valueProperty());
-        //FIFTH FLOOR
-        FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView FifthFloorImageView = new ImageView();
-        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
-        FifthFloorImageView.setImage(FifthFloorMapPic);
-        FifthFloorImageView.setPreserveRatio(true);
-        Group FifthFloorGroup = new Group();
-        FifthFloorGroup.getChildren().add(FifthFloorImageView);
-        FifthFloorScrollPane.setContent(FifthFloorGroup);
-        FifthFloorScrollPane.setPannable(true);
-        FifthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FifthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        FifthFloorSlider.setMax(FifthFloorMapPic.getWidth());
-        FifthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        FifthFloorImageView.fitWidthProperty().bind(FifthFloorSlider.valueProperty());
-        //SIXTH FLOOR
-        SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SixthFloorImageView = new ImageView();
-        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
-        SixthFloorImageView.setImage(SixthFloorMapPic);
-        SixthFloorImageView.setPreserveRatio(true);
-        Group SixthFloorGroup = new Group();
-        SixthFloorGroup.getChildren().add(SixthFloorImageView);
-        SixthFloorScrollPane.setContent(SixthFloorGroup);
-        SixthFloorScrollPane.setPannable(true);
-        SixthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SixthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SixthFloorSlider.setMax(SixthFloorMapPic.getWidth());
-        SixthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SixthFloorImageView.fitWidthProperty().bind(SixthFloorSlider.valueProperty());
-        //SEVENTH FLOOR
-        SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
-        SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
-        ImageView SeventhFloorImageView = new ImageView();
-        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
-        SeventhFloorImageView.setImage(SeventhFloorMapPic);
-        SeventhFloorImageView.setPreserveRatio(true);
-        Group SeventhFloorGroup = new Group();
-        SeventhFloorGroup.getChildren().add(SeventhFloorImageView);
-        SeventhFloorScrollPane.setContent(SeventhFloorGroup);
-        SeventhFloorScrollPane.setPannable(true);
-        SeventhFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SeventhFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        SeventhFloorSlider.setMax(SeventhFloorMapPic.getWidth());
-        SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
-        SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
     }
 
 //    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
