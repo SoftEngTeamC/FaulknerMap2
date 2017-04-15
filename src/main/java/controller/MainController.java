@@ -498,7 +498,7 @@ public class MainController extends Controller {
     @FXML
     public void OpenAdminTool() throws Exception {
         // goto genres screen
-        switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", AdminToolButton);
+        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
     }
 
 
