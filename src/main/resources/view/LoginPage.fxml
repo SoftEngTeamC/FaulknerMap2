@@ -20,5 +20,8 @@
       <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Button fx:id="loginBtn" layoutX="270.0" layoutY="234.0" mnemonicParsing="false" onAction="#login" text="Login" />
       <Text fx:id="displayerror" fill="RED" layoutX="211.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong Username/Password" textAlignment="CENTER" visible="false" />
+      <Text fx:id="displaysuccess" layoutX="248.0" layoutY="227.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login Successful" textAlignment="CENTER" visible="false" />
+      <Text fx:id="displayerror1" fill="RED" layoutX="242.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Attemps:" textAlignment="CENTER" visible="false" />
+      <Text fx:id="displayerror2" fill="RED" layoutX="311.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" />
    </children>
 </AnchorPane>
