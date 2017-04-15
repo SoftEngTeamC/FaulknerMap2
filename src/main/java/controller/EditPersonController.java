@@ -1,6 +1,8 @@
 package controller;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -81,24 +83,21 @@ public class EditPersonController extends Controller{
         // disable add node button
         addNodeBtn.setDisable(true);
 
-        // add event handlers for when an item is clicked in both lists
-        locationsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        locationsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            /**
-             * Handler for when someone selects an item. Enables remove node option.
-             */
-            public void handle(MouseEvent event) {
-                removeNodeBtn.setDisable(false);
-            }});
-        availableLocationsList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            /**
-             * Handler for when the available nodes list is clicked. Enables add node button.
-             */
-            public void handle(MouseEvent event) {
-                addNodeBtn.setDisable(false);
-            }});
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
+                removeNodeBtn.setDisable(false);
+            }
+        });
+
+        availableLocationsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                addNodeBtn.setDisable(false);
+            }
+        });
     }
 
     // ~~~~~~ Event handlers ~~~~~~~~~
@@ -298,15 +297,12 @@ public class EditPersonController extends Controller{
 
         // find the node referenced by string
         Node n = ns.findNodeByName(selected);
-        System.out.println("Node ID: " + n.getId().toString());
 
         // add to this list
-        System.out.println("~~~~~~~~~~~~~~        ahhhhhhhhh       ~~~~~~~~~");
-        System.out.println(currentNodeList.add(n));
+        currentNodeList.add(n);
 
         // remove it from available list
-        System.out.println("~~~~~~~~~~~~~~        ahhhhhhhhh       ~~~~~~~~~");
-        System.out.println(deleteNode(n, availableNodeList));
+        deleteNode(n, availableNodeList);
 
     }
 

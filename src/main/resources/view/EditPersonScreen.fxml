@@ -59,7 +59,10 @@
             <Button fx:id="backBtn" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" prefHeight="54.0" prefWidth="110.0" text="Back">
                <font>
                   <Font size="18.0" />
-               </font></Button>
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin></Button>
             <Text fx:id="updateText" fill="LIME" layoutX="323.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Changes submitted." GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                <font>
                   <Font size="22.0" />
@@ -101,7 +104,10 @@
             <Button fx:id="logoutBtn" layoutX="14.0" layoutY="504.0" mnemonicParsing="false" onAction="#logout" prefHeight="54.0" prefWidth="97.0" text="logout" GridPane.rowIndex="9">
                <font>
                   <Font size="18.0" />
-               </font></Button>
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin></Button>
             <ListView fx:id="availableLocationsList" layoutX="582.0" layoutY="175.0" prefHeight="66.0" prefWidth="149.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="50.0" right="50.0" />

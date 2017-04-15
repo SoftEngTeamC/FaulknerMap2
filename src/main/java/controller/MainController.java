@@ -43,34 +43,35 @@ import java.util.Collections;
 
 import java.util.LinkedList;
 import java.util.List;
-public class MainController extends Controller{
+
+public class MainController extends Controller {
     //ImageView Objects
     @FXML
-    private  ScrollPane FirstFloorScrollPane;
+    private ScrollPane FirstFloorScrollPane;
     @FXML
     private Slider FirstFloorSlider;
     @FXML
-    private  ScrollPane SecondFloorScrollPane;
+    private ScrollPane SecondFloorScrollPane;
     @FXML
     private Slider SecondFloorSlider;
     @FXML
-    private  ScrollPane ThirdFloorScrollPane;
+    private ScrollPane ThirdFloorScrollPane;
     @FXML
     private Slider ThirdFloorSlider;
     @FXML
-    private  ScrollPane FourthFloorScrollPane;
+    private ScrollPane FourthFloorScrollPane;
     @FXML
     private Slider FourthFloorSlider;
     @FXML
-    private  ScrollPane FifthFloorScrollPane;
+    private ScrollPane FifthFloorScrollPane;
     @FXML
     private Slider FifthFloorSlider;
     @FXML
-    private  ScrollPane SixthFloorScrollPane;
+    private ScrollPane SixthFloorScrollPane;
     @FXML
     private Slider SixthFloorSlider;
     @FXML
-    private  ScrollPane SeventhFloorScrollPane;
+    private ScrollPane SeventhFloorScrollPane;
     @FXML
     private Slider SeventhFloorSlider;
     //---------------------------------------------------
@@ -108,24 +109,24 @@ public class MainController extends Controller{
     private Button SetDestLocationButton;
     @FXML
     private Button getPathButton;
-    
+
     //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
     private NodeService NS;
     private EdgeService ES;
 
-   /* public String hours1;
-    public String minutes1;
-    public String ampm1;
-    public String hours2;
-    public String minutes2;
-    public String ampm2;
-    public String hours3;
-    public String minutes3;
-    public String ampm3;
-    public String hours4;
-    public String minutes4;
-    public String ampm4;
-    */
+    /* public String hours1;
+     public String minutes1;
+     public String ampm1;
+     public String hours2;
+     public String minutes2;
+     public String ampm2;
+     public String hours3;
+     public String minutes3;
+     public String ampm3;
+     public String hours4;
+     public String minutes4;
+     public String ampm4;
+     */
     public Hours hours;
 
     @FXML
@@ -148,10 +149,10 @@ public class MainController extends Controller{
         EMFProvider emf = new EMFProvider();
         hours = emf.hours;
 
-        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
-                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
-                SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
-                ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
+        new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
+                SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
+                ThirdFloorSlider, FourthFloorSlider, FifthFloorSlider, SixthFloorSlider,
                 SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
@@ -171,7 +172,9 @@ public class MainController extends Controller{
 
         //TODO: delete
 //        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, new Node());
+
         //ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
+
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
@@ -194,16 +197,19 @@ public class MainController extends Controller{
 
     }
 
-//-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
+    //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-    public void DisplayMap(List<MapNode> nodes){
-        for(int i = 0; i < nodes.size(); i++){
+    public void DisplayMap(List<MapNode> nodes) {
+        for (int i = 0; i < nodes.size(); i++) {
             System.out.println(nodes.get(i).getLocation().getFloor());
         }
         System.out.println(nodes);
         ShowNodesEdgesHelper.ClearOldPaths();
 
-        if (nodes.size() < 1) { System.out.println("There is no path.");return;}
+        if (nodes.size() < 1) {
+            System.out.println("There is no path.");
+            return;
+        }
 
         for (MapNode node : nodes) {
             ShowNodesEdgesHelper.MakeCircle(NS.find(node.getModelNodeID()));
@@ -219,6 +225,7 @@ public class MainController extends Controller{
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
             }
+
         }
     }
 
@@ -235,10 +242,19 @@ public class MainController extends Controller{
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         NodeService NS = new NodeService();
         pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
-        MapNode start = map.getNode(HP_Start.getId());
-        MapNode dest = map.getNode(HP_Dest.getId());
+
+        Node nodeStart = (HP_Start.getOffices().get(0));
+        Node nodeEnd = (HP_Dest.getOffices().get(0));
+
+        MapNode start = map.getNode(nodeStart.getId());
+        MapNode dest = map.getNode(nodeEnd.getId());
+
         List<MapNode> path = PathFinder.shortestPath(start, dest);
-        TextDirectionsTextArea.setText(MakeDirections.getText(path));
+        if (path.size() < 2) {
+            TextDirectionsTextArea.setText("You are already at your destination");
+        } else {
+            TextDirectionsTextArea.setText(MakeDirections.getText(path));
+        }
         System.out.println("HERE");
         DisplayMap(path);
     }
@@ -269,16 +285,16 @@ public class MainController extends Controller{
 
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
-    public void PopulateInformationDisplay(HospitalProfessional HP){
+    public void PopulateInformationDisplay(HospitalProfessional HP) {
         HospitalProfessionalService hs = new HospitalProfessionalService();
         //System.out.println(hs.find(HP.getId()).getOffices());
         String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
-        DisplayInformationTextArea.setText(HP.getName()+"\n\n"+HP.getTitle()+"\n"+offices);
+        DisplayInformationTextArea.setText(HP.getName() + "\n\n" + HP.getTitle() + "\n" + offices);
     }
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
-    public void handleClickedOnStartAtKiosk(){
+    public void handleClickedOnStartAtKiosk() {
         System.out.println("start at kiosk");
         Start_location_TextArea.setText("intersection18");
     }
@@ -294,7 +310,7 @@ public class MainController extends Controller{
 
 
     // function after clicking set start location
-    public void SetStartLocationButtonClicked(){
+    public void SetStartLocationButtonClicked() {
         System.out.println("clicked on Set Start button");
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
@@ -304,7 +320,7 @@ public class MainController extends Controller{
     }
 
     // function after clicking set destination location
-    public void SetDestLocationButtonClicked(){
+    public void SetDestLocationButtonClicked() {
         System.out.println("clicked on Set Dest button");
         HospitalProfessionalService HPS = new HospitalProfessionalService();
         HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
@@ -313,7 +329,7 @@ public class MainController extends Controller{
         Dest_location_TextArea.setText(HP.getName());
     }
 
-    public void switchLocationButtonClicked(){
+    public void switchLocationButtonClicked() {
         System.out.println("clicked on switch location button");
 
 
@@ -328,17 +344,16 @@ public class MainController extends Controller{
     }
 
 
-    public void getPathButtonClicked(){
+    public void getPathButtonClicked() {
         System.out.println("clicked on get path button");
-        HospitalProfessionalService HPS= new HospitalProfessionalService();
+        HospitalProfessionalService HPS = new HospitalProfessionalService();
         HospitalProfessional HP_Start = HPS.findHospitalProfessionalByName(Start_location_TextArea.getText());
         HospitalProfessional HP_Dest = HPS.findHospitalProfessionalByName(Dest_location_TextArea.getText());
-        FindandDisplayPath(HP_Start,HP_Dest);
+        FindandDisplayPath(HP_Start, HP_Dest);
 
         System.out.println("start HP:  " + HP_Start.getName());
         System.out.println("dest HP:  " + HP_Dest.getName());
     }
-
 
 
     public void SearchBarTextField_keyReleased() {
@@ -348,7 +363,7 @@ public class MainController extends Controller{
     }
 
     //function for Help Button
-    public void HandleHelpButton()throws Exception{
+    public void HandleHelpButton() throws Exception {
         System.out.println("HELP");
         System.out.println(language);
         // 1: english, 2: spanish, 3: chinese, 4: french
@@ -365,64 +380,64 @@ public class MainController extends Controller{
 //                System.out.println("Hours:  "+hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
 
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
-                                                     "please call 774-278-8517\n\n"
-                                                        + "Hospital Operating Hour:\n"+
-                                                        "Morning Hours: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                                        hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                                        "Evening Hours: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                                        hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        "please call 774-278-8517\n\n"
+                        + "Hospital Operating Hour:\n" +
+                        "Morning Hours: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "Evening Hours: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 2: //spanish
                 DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
-                                                      "porfavor llame 774-278-8517\n\n"
-                                                      + "Horas de operacíon:\n" +
-                                                     "Mañana : "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                                     hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                                     "Atardecer : "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                                      hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        "porfavor llame 774-278-8517\n\n"
+                        + "Horas de operacíon:\n" +
+                        "Mañana : " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "Atardecer : " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 3: //chinese
                 DisplayInformationTextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
-                                                    + "医院营业时间:\n" +
-                                                  "白日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                                  hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                                  "夜晚: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                                   hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        + "医院营业时间:\n" +
+                        "白日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "夜晚: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 4: //french
                 DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
-                                                 "appelez s'il vous plaît 774-278-8517\n\n"
-                                              + "Heures d'ouverture:\n" +
-                                             "Matin: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                              hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                             "Soir: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        "appelez s'il vous plaît 774-278-8517\n\n"
+                        + "Heures d'ouverture:\n" +
+                        "Matin: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "Soir: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 5: //Italian
                 DisplayInformationTextArea.setText("Per contattare un dipendente dell'ospedale\n" +
-                                                   "chiamare 774-278-8517\n\n"
-                                               + "Ore di servizio:\n" +
-                                              "Mattina: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                               hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                                "Notte: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                                hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        "chiamare 774-278-8517\n\n"
+                        + "Ore di servizio:\n" +
+                        "Mattina: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "Notte: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 6: //Japanese
                 DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
-                                               + "病院ビジネス時間:\n" +
-                                                "日: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                                hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                                "夜: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        + "病院ビジネス時間:\n" +
+                        "日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "夜: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 7: //Portuguese
                 DisplayInformationTextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
-                                                  "ligue para 774-278-8517\n\n"
-                                               + "horas de operação:\n" +
-                                               "Manhã: "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1+ "-"+
-                                             hours.hours2+":"+hours.minutes2+" "+hours.ampm2+"\n"+
-                                             "Tarde: "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3+ "-"+
-                                               hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+                        "ligue para 774-278-8517\n\n"
+                        + "horas de operação:\n" +
+                        "Manhã: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
+                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
+                        "Tarde: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             default:
                 DisplayInformationTextArea.setText("To contact a hospital worker\n" +
@@ -468,7 +483,7 @@ public class MainController extends Controller{
         DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
     }
 
-//    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
+    //    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
 //    @FXML
 //    public void OpenAdminTool() throws Exception {
 //        // goto genres screen
