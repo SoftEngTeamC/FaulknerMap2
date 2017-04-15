@@ -272,37 +272,67 @@ public class MapEditorController extends Controller {
     public void removeNeighborListen() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
+                    System.out.println("editNode_SearchResultsList Listener");
+                    //Update Current Node
                     Node selectedNode = NS.findNodeByName(newValue);
                     currNodes[0] = selectedNode;
+                    //Update Neighbors List
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
                     editNode_neighborsList.setItems(nList);
+                    //Clear old highlights
+                    ShowNodesEdgesHelper.resetDrawnShapeColors(currFloor);
+                    //HighLight Selected Node
+                    // - get all Drawn Objects on current Map
+                    // - find the ones with the same ID
+                    // - If its a Circle Highlight it
+                    String SelectedNodeID = NS.findNodeByName(newValue).getId().toString();
+                    ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+                    Group group = (Group) Scrolly.getContent();
+                    List<javafx.scene.Node> DrawnObjects = group.getChildren();
+                    for(int i=1;i<DrawnObjects.size();i++){
+                        if(DrawnObjects.get(i).getId().equals(SelectedNodeID)){
+                            try {
+                                Circle circle = (Circle) DrawnObjects.get(i);
+                                circle.fillProperty().setValue(Color.TEAL);
+                            }
+                            //found an edge instead
+                            catch(Exception e){}
+                        }
+                    }
                 });
 
         editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            //reset edges
-            ShowNodesEdgesHelper.showEdges(currFloor);
+            System.out.println("EditNode_NeighborsList Listener");
+            //clear Old Highlights
+            ShowNodesEdgesHelper.resetDrawnShapeColors(currFloor);
             //find start and end nodes
             Node end = NS.findNodeByName(newValue);
             Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
             //Search Through Edges on Floor for one with same start/end
-            Long ID=null;
+            String ID=null;
             List<Edge> edges = ShowNodesEdgesHelper.getEdges(currFloor);
             for(Edge e : edges){
-                if((e.getStart() == start)&&(e.getEnd()==end)){
-                    ID = e.getId();
+                if((e.getStart().getId().equals(start.getId()))&&(e.getEnd().getId().equals(end.getId()))){
+                    ID = e.getId().toString();
                 }
             }
-            //Search through drawn objects to find one with mathcing Id
+            //HighLight Selected Edge
+            // - get all Drawn Objects on current Map
+            // - find the ones with the same ID
+            // - If its a Line, Highlight it
             ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
             Group group = (Group) Scrolly.getContent();
             List<javafx.scene.Node> DrawnObjects = group.getChildren();
-            System.out.println(DrawnObjects);
-            for(javafx.scene.Node n : DrawnObjects){
-
-                if(n.getId().equals(ID)){
-                    //Line has been found
-                    Line line = (Line)n;
-                    line.fillProperty().setValue(Color.PEACHPUFF);
+            for(int i=1;i<DrawnObjects.size();i++){
+                if(DrawnObjects.get(i).getId().equals(ID)){
+                    try{
+                        //Line has been found
+                        Line line = (Line) DrawnObjects.get(i);
+                        line.setStroke(Color.BLUEVIOLET);
+                        line.setStrokeWidth(3);
+                    }
+                    //Found a circle Instead
+                    catch(Exception e){}
                 }
             }
             //Update Current Node
@@ -429,13 +459,11 @@ public class MapEditorController extends Controller {
     }
 
     public void editNode_removeNeighborBtnPressed() {
-        EdgeService es = new EdgeService();
-
-
-        List<Edge> currEdges = es.findByNodes(currNodes[0], currNodes[1]);
-
+        Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = NS.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        List<Edge> currEdges = ES.findByNodes(start,end);
         for (Edge curr : currEdges) {
-            es.remove(curr);
+            ES.remove(curr);
         }
 
         ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));

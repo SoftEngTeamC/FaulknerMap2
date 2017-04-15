@@ -182,7 +182,6 @@ class ShowNodesEdgesHelper {
 
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
-        System.out.println("Drawing Line");
         return edge;
     }
 
@@ -208,11 +207,10 @@ class ShowNodesEdgesHelper {
         circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+        circle.fillProperty().setValue(Color.RED);
 
         circle.setId(node.getId().toString());
         group1.getChildren().addAll(circle);
-        System.out.println("Drawing Circle");
         return circle;
     }
 
@@ -254,6 +252,24 @@ class ShowNodesEdgesHelper {
             }
         }
         return retEdges;
+    }
+
+    static void resetDrawnShapeColors(int currFloor){
+        ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+        Group group = (Group) Scrolly.getContent();
+        List<javafx.scene.Node> DrawnObjects = group.getChildren();
+        for(int i=1;i<DrawnObjects.size();i++){
+            try {
+                Circle circle = (Circle) DrawnObjects.get(i);
+                circle.fillProperty().setValue(Color.RED);
+            }
+            //found an edge instead
+            catch(Exception e){
+                Line line = (Line) DrawnObjects.get(i);
+                line.setStrokeWidth(1);
+                line.setStroke(Color.BLACK);
+            }
+        }
     }
 
 }
