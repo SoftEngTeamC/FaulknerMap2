@@ -12,25 +12,14 @@ public class MapNode implements Node<MapNode> {
     public final static double FEET_PER_PIXEL = 0.2902;
     public final static double SECONDS_PER_FOOT = 0.2975;
     public final static double STEPS_PER_FOOT = 0.5157;
-    private long locationID;
     private Set<MapNode> neighbors;
-    private long modelNodeID;
-
-    public MapNode(Coordinate location) {
-        this.locationID = location.getId();
-        this.neighbors = new HashSet<>();
-    }
-
-    public MapNode(Coordinate location, Set<MapNode> neighbors) {
-        this.locationID = location.getId();
-        this.neighbors = neighbors;
-    }
-
+    private model.Node modelNode;
+    private Coordinate location;
 
     public MapNode(model.Node n) {
-        this.locationID = n.getLocation().getId();
         this.neighbors = new HashSet<>();
-        this.modelNodeID = n.getId();
+        this.modelNode = n;
+        this.location = n.getLocation();
     }
 
     public static double getPixels(List<MapNode> myPath) {
@@ -66,16 +55,13 @@ public class MapNode implements Node<MapNode> {
     }
 
     public double distanceTo(MapNode n) {
-        CoordinateService cs = new CoordinateService();
-        Coordinate location = cs.find(locationID);
         double xDelta = location.getX() - n.getLocation().getX();
         double yDelta = location.getY() - n.getLocation().getY();
         return Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
     }
 
     public Coordinate getLocation() {
-        CoordinateService cs = new CoordinateService();
-        return cs.find(locationID);
+        return location;
     }
 
     public void addNeighbor(MapNode n) {
@@ -83,12 +69,7 @@ public class MapNode implements Node<MapNode> {
         n.neighbors.add(this);
     }
 
-    public long getModelNodeID() {
-        return modelNodeID;
+    public model.Node getModelNode() {
+        return modelNode;
     }
-
-    public void setLocationID(long id){
-        this.locationID = id;
-    }
-
 }
