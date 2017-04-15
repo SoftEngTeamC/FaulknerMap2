@@ -33,22 +33,18 @@ public class LoginPageController extends Controller{
         if(username.getText().equals(UserName) && password.getText().equals(Password)){
             displayerror.setVisible(false);
             switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", loginBtn);
-            System.out.println("Login Succesful");
         }
 
         else if (attempts>=2){
-            System.out.println("switch screen");
             switchScreen("view/Main.fxml", "Faulkner Kiosk", backBtn);
         }
 
         else if(username.getText().trim().isEmpty() && password.getText().trim().isEmpty()){
             displayerror.setVisible(true);
             attempts++;
-            System.out.println("No username or password");
         }
 
         else {
-            System.out.println("else");
             displayerror.setVisible(true);
             attempts++;
         }
