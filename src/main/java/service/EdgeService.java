@@ -34,7 +34,6 @@ public class EdgeService extends AbstractService<Edge> {
                 .setParameter("start", end)
                 .setParameter("end", start)
                 .getSingleResult());
-
         return temp;
     }
 }

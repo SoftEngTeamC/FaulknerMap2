@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import model.Coordinate;
 import model.Edge;
@@ -160,13 +162,7 @@ public class MapEditorController extends Controller {
                  SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
-
         InitializeIndicatorTextListeners();
-
-        // Set the image view to populate the image
-        floor4Image = new Image("file:../Resources/floor4.png");
-        //floor4Image.widthProperty().bind(anchorPane.widthProperty());
-        imageView = new ImageView(floor4Image);
 
         // init local lists
         searchList = new ArrayList<>();
@@ -177,16 +173,6 @@ public class MapEditorController extends Controller {
         for (Node aNode : allNode) {
             this.nodeList.add(aNode.getName());
         }
-
-//        //mouse clicked handler, send x,y data to function
-//        anchorPane.setOnMouseClicked(event -> {
-//            // get the coordinates
-//            double x = event.getX();
-//            double y = event.getY();
-//            // send to function
-//            mouseClicked(x,y);
-//        });
-
 
         currFloor = 1;
 
@@ -200,20 +186,28 @@ public class MapEditorController extends Controller {
         editNode_searchResultsList.setItems(obList);
 
         tabPaneListen();
-
+        System.out.println("INITRemoveNaighboreListener:");
         removeNeighborListen();
-
+        System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-
+        System.out.println("INITcirclesListen:");
         circlesListen(circles);
+        //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
     public void circlesListen(List<Circle> circles){
+        System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
         for(Circle circle: circles) {
             circle.setOnMouseClicked(event -> {
-                System.out.println("Clicked on node: " +
-                        NS.find(Long.parseLong(circle.getId())).getName());
+                System.out.println("Clicked on node: " + NS.find(Long.parseLong(circle.getId())).getName());
+                List<String> ItemsInListView = editNode_searchResultsList.getItems();
+                System.out.println(ItemsInListView);
+                int i=0;
+                for(i=0; !(ItemsInListView.get(i).equals(NS.find(Long.parseLong(circle.getId())).getName()));i++){
+                    System.out.println(ItemsInListView.get(i));
+                }
+                editNode_searchResultsList.getSelectionModel().select(i);
                 if(firstCircle[0] == null){
                     System.out.println("two0 is null");
                     firstCircle[0] = circle;
@@ -234,28 +228,29 @@ public class MapEditorController extends Controller {
                     circlesListen(ShowNodesEdgesHelper.showNodes(currFloor));
                     return;
                 }
-
             });
         }
     }
 
+
     public void tabPaneListen() {
+        System.out.println("TabPaneListener");
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
+                        //Update Current Floor
                         currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
+                        //Update EditTab Listviews with new floors data
                         ArrayList<String> nameList = new ArrayList<>();
                         for (Node n : NS.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
                         }
-
                         Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
                         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
-
                         editNode_searchResultsList.setItems(obList);
-
+                        //Update AutoComplete suggestion of neighbors with new data
                         List<Node> nodes = NS.getNodesByFloor(currFloor);
                         List<String> names = new ArrayList<>();
                         for (Node n : nodes) {
@@ -265,6 +260,7 @@ public class MapEditorController extends Controller {
                         editNode_addField.getEntries().addAll(names);
 
                         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+                        List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
 
                         circlesListen(circles);
                     }
@@ -277,15 +273,40 @@ public class MapEditorController extends Controller {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     Node selectedNode = NS.findNodeByName(newValue);
-
                     currNodes[0] = selectedNode;
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
                     editNode_neighborsList.setItems(nList);
                 });
 
         editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Node selectedNode = NS.findNodeByName(newValue);
-            currNodes[1] = selectedNode;
+            //reset edges
+            ShowNodesEdgesHelper.showEdges(currFloor);
+            //find start and end nodes
+            Node end = NS.findNodeByName(newValue);
+            Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+            //Search Through Edges on Floor for one with same start/end
+            Long ID=null;
+            List<Edge> edges = ShowNodesEdgesHelper.getEdges(currFloor);
+            for(Edge e : edges){
+                if((e.getStart() == start)&&(e.getEnd()==end)){
+                    ID = e.getId();
+                }
+            }
+            //Search through drawn objects to find one with mathcing Id
+            ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+            Group group = (Group) Scrolly.getContent();
+            List<javafx.scene.Node> DrawnObjects = group.getChildren();
+            System.out.println(DrawnObjects);
+            for(javafx.scene.Node n : DrawnObjects){
+
+                if(n.getId().equals(ID)){
+                    //Line has been found
+                    Line line = (Line)n;
+                    line.fillProperty().setValue(Color.PEACHPUFF);
+                }
+            }
+            //Update Current Node
+            currNodes[1] = end;
         });
 
 
@@ -393,12 +414,10 @@ public class MapEditorController extends Controller {
         CS.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
         try {
-            //TODO make successful text
             NS.merge(newNode);
             AddNodeIndicatorText.setText("Successfully Added Node");
             AddNodeIndicatorText.setFill(Color.GREEN);
         } catch (Exception e) {
-            //TODO make warning text visible
             AddNodeIndicatorText.setText("Unable to Add Node");
             AddNodeIndicatorText.setFill(Color.RED);
         }
@@ -423,7 +442,6 @@ public class MapEditorController extends Controller {
         editNode_neighborsList.setItems(nList);
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-
         circlesListen(circles);
     }
 
@@ -453,9 +471,13 @@ public class MapEditorController extends Controller {
             editNode_neighborsList.setItems(nList);
         }
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-
         circlesListen(circles);
     }
+
+    public void HandleEditNodes_NeighborsListClicked(){
+
+    }
+
 
     //----------------------------------Indicator Text Listeners------------------------------------
     public void InitializeIndicatorTextListeners() {

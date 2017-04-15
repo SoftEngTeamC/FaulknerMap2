@@ -111,6 +111,7 @@ public class MainController extends Controller{
     
     //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
     private NodeService NS;
+    private EdgeService ES;
 
    /* public String hours1;
     public String minutes1;
@@ -170,7 +171,7 @@ public class MainController extends Controller{
 
         //TODO: delete
 //        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, new Node());
-        ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
+        //ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
@@ -205,25 +206,19 @@ public class MainController extends Controller{
         if (nodes.size() < 1) { System.out.println("There is no path.");return;}
 
         for (MapNode node : nodes) {
-            ShowNodesEdgesHelper.MakeCircle(node.getLocation().getX(),
-                    node.getLocation().getY(),
-                    node.getLocation().getFloor(), NS.find(node.getModelNodeID()));
+            ShowNodesEdgesHelper.MakeCircle(NS.find(node.getModelNodeID()));
         }
 
         for(int i = 0; i < nodes.size() - 1; i++){
-            ShowNodesEdgesHelper.MakeLine(nodes.get(i).getLocation().getX(), //
-                    nodes.get(i).getLocation().getY(),
-                    nodes.get(i+1).getLocation().getX(),
-                    nodes.get(i+1).getLocation().getY(),
-                    nodes.get(i).getLocation().getFloor());
-
-//            if((i>0) && (i != nodes.size()-1) && (nodes.get(i).getLocation().getFloor() == nodes.get(i++).getLocation().getFloor())){
-//                MakeLine(nodes.get(i-1).getLocation().getX(), //
-//                         nodes.get(i-1).getLocation().getY(),
-//                         nodes.get(i).getLocation().getX(),
-//                         nodes.get(i).getLocation().getY(),
-//                         nodes.get(i).getLocation().getFloor());
-//            }
+            Node start = NS.find(nodes.get(i).getModelNodeID());
+            Node end = NS.find(nodes.get(i+1).getModelNodeID());
+            //find the edge from the database.
+            // 0 index because findByNodes returns list of edges, forward and backwards
+            Edge e = ES.findByNodes(start,end).get(0);
+            //only draw if not last node, nodes are on same floor
+            if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
+                ShowNodesEdgesHelper.MakeLine(e);
+            }
         }
     }
 
