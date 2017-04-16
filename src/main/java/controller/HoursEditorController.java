@@ -182,6 +182,18 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
             displayerror.setVisible(true);
         }
+        else if(ampm1.getText().trim() != "AM" && ampm1.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm2.getText().trim() != "AM" && ampm2.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm4.getText().trim() != "AM" && ampm4.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm3.getText().trim() != "AM" && ampm3.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
         else if (morningmin1.getText().length()<2){
             displayerror.setVisible(true);
         }
