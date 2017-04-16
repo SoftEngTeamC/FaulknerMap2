@@ -62,7 +62,9 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
     @FXML
     private Text displayerror;
     @FXML
-    private Text startTimeError;
+    private Text startTimeErrorMorning;
+    @FXML
+    private Text startTimeErrorEvening;
 
     EMFProvider emf;
 
@@ -123,16 +125,27 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
 
     }
 
-    public void validateEqual() {
+    public void validateEqualMorning() {
         if((morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
-                (morningmin1.getText().trim().equals(morningmin2.getText().trim()))){
-            startTimeError.setVisible(true);
+                (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
+                (hours.ampm1.equals(hours.ampm2))){
+            startTimeErrorMorning.setVisible(true);
         }
         else{
-            startTimeError.setVisible(false);
+            startTimeErrorMorning.setVisible(false);
         }
     }
 
+    public void validateEqualEvening() {
+        if((eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
+                (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
+                (hours.ampm3.equals(hours.ampm4))){
+            startTimeErrorEvening.setVisible(true);
+        }
+        else{
+            startTimeErrorEvening.setVisible(false);
+        }
+    }
     @FXML
     public void SubmitChanges() throws Exception{
 

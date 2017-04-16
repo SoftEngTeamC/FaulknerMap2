@@ -32,17 +32,17 @@
       </Text>
       <Text layoutX="335.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
       <Text layoutX="342.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" />
-      <TextField fx:id="morninghrs1" layoutX="389.0" layoutY="107.0" prefHeight="27.0" prefWidth="31.0" />
-      <TextField fx:id="morningmin1" layoutX="437.0" layoutY="107.0" prefHeight="27.0" prefWidth="40.0" />
-      <MenuButton fx:id="ampm1" layoutX="479.0" layoutY="107.0" mnemonicParsing="false" text="Time">
+      <TextField fx:id="morninghrs1" layoutX="389.0" layoutY="107.0" onKeyReleased="#validateEqualMorning" prefHeight="27.0" prefWidth="31.0" />
+      <TextField fx:id="morningmin1" layoutX="437.0" layoutY="107.0" onKeyReleased="#validateEqualMorning" prefHeight="27.0" prefWidth="40.0" />
+      <MenuButton fx:id="ampm1" layoutX="479.0" layoutY="107.0" mnemonicParsing="false" onKeyReleased="#validateEqualMorning" onMouseDragReleased="#validateEqualMorning" onMouseReleased="#validateEqualMorning" onTouchReleased="#validateEqualMorning" text="Time">
         <items>
           <MenuItem fx:id="am1" mnemonicParsing="false" onAction="#settoam1" text="AM" />
           <MenuItem fx:id="pm1" mnemonicParsing="false" onAction="#settopm1" text="PM" />
         </items>
       </MenuButton>
-      <TextField fx:id="morninghrs2" layoutX="389.0" layoutY="154.0" prefHeight="27.0" prefWidth="31.0" />
-      <TextField fx:id="morningmin2" layoutX="437.0" layoutY="154.0" onKeyReleased="#validateEqual" prefHeight="27.0" prefWidth="40.0" />
-      <MenuButton fx:id="ampm2" layoutX="479.0" layoutY="153.0" mnemonicParsing="false" text="Time">
+      <TextField fx:id="morninghrs2" layoutX="389.0" layoutY="154.0" onKeyReleased="#validateEqualMorning" prefHeight="27.0" prefWidth="31.0" />
+      <TextField fx:id="morningmin2" layoutX="437.0" layoutY="154.0" onKeyReleased="#validateEqualMorning" prefHeight="27.0" prefWidth="40.0" />
+      <MenuButton fx:id="ampm2" layoutX="479.0" layoutY="153.0" mnemonicParsing="false" onKeyReleased="#validateEqualMorning" onMouseDragReleased="#validateEqualMorning" onMouseReleased="#validateEqualMorning" onTouchReleased="#validateEqualMorning" text="Time">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#settoam2" text="AM" />
             <MenuItem mnemonicParsing="false" onAction="#settopm2" text="PM" />
@@ -50,17 +50,17 @@
       </MenuButton>
       <Text layoutX="335.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
       <Text layoutX="342.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" />
-      <TextField fx:id="eveninghrs1" layoutX="389.0" layoutY="232.0" prefHeight="27.0" prefWidth="31.0" />
-      <TextField fx:id="eveningmin1" layoutX="437.0" layoutY="232.0" prefHeight="27.0" prefWidth="40.0" />
-      <MenuButton fx:id="ampm3" layoutX="479.0" layoutY="230.0" mnemonicParsing="false" text="Time">
+      <TextField fx:id="eveninghrs1" layoutX="389.0" layoutY="232.0" onKeyReleased="#validateEqualEvening" prefHeight="27.0" prefWidth="31.0" />
+      <TextField fx:id="eveningmin1" layoutX="437.0" layoutY="232.0" onKeyReleased="#validateEqualEvening" prefHeight="27.0" prefWidth="40.0" />
+      <MenuButton fx:id="ampm3" layoutX="479.0" layoutY="230.0" mnemonicParsing="false" onKeyReleased="#validateEqualEvening" onMouseDragReleased="#validateEqualEvening" onMouseReleased="#validateEqualEvening" onTouchReleased="#validateEqualEvening" text="Time">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#settoam3" text="AM" />
             <MenuItem mnemonicParsing="false" onAction="#settopm3" text="PM" />
          </items>
       </MenuButton>
-      <TextField fx:id="eveninghrs2" layoutX="389.0" layoutY="281.0" prefHeight="27.0" prefWidth="31.0" />
-      <TextField fx:id="eveningmin2" layoutX="437.0" layoutY="281.0" prefHeight="27.0" prefWidth="40.0" />
-      <MenuButton fx:id="ampm4" layoutX="479.0" layoutY="281.0" mnemonicParsing="false" text="Time">
+      <TextField fx:id="eveninghrs2" layoutX="389.0" layoutY="281.0" onKeyReleased="#validateEqualEvening" prefHeight="27.0" prefWidth="31.0" />
+      <TextField fx:id="eveningmin2" layoutX="437.0" layoutY="281.0" onKeyReleased="#validateEqualEvening" prefHeight="27.0" prefWidth="40.0" />
+      <MenuButton fx:id="ampm4" layoutX="479.0" layoutY="281.0" mnemonicParsing="false" onKeyReleased="#validateEqualEvening" onMouseDragReleased="#validateEqualEvening" onMouseReleased="#validateEqualEvening" onTouchReleased="#validateEqualEvening" text="Time">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#settoam4" text="AM" />
             <MenuItem mnemonicParsing="false" onAction="#settopm4" text="PM" />
@@ -93,7 +93,12 @@
             <Font size="46.0" />
          </font>
       </Text>
-      <Text fx:id="startTimeError" fill="RED" layoutX="306.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time must not equal End Time" visible="false">
+      <Text fx:id="startTimeErrorMorning" fill="RED" layoutX="306.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time must not equal End Time" visible="false">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <Text fx:id="startTimeErrorEvening" fill="RED" layoutX="306.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time must not equal End Time" visible="false">
          <font>
             <Font size="17.0" />
          </font>
