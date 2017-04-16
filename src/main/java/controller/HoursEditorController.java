@@ -61,6 +61,8 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
     private MenuItem pm4;
     @FXML
     private Text displayerror;
+    @FXML
+    private Text startTimeError;
 
     EMFProvider emf;
 
@@ -121,6 +123,15 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
 
     }
 
+    public void validateEqual() {
+        if((morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
+                (morningmin1.getText().trim().equals(morningmin2.getText().trim()))){
+            startTimeError.setVisible(true);
+        }
+        else{
+            startTimeError.setVisible(false);
+        }
+    }
 
     @FXML
     public void SubmitChanges() throws Exception{
