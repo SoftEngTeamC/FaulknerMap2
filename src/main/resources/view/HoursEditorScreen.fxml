@@ -11,7 +11,7 @@
 <AnchorPane accessibleRole="MENU_BUTTON" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
    <children>
       <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Text layoutX="211.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visiting hours Editor">
+      <Text layoutX="211.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visiting Hours Editor">
          <font>
             <Font size="20.0" />
          </font>
