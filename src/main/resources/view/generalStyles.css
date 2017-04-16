@@ -14,6 +14,10 @@
     -fx-open-tab-animation: NONE;
 }
 
+.tab:pressed {
+    -fx-background-color: #f1f1f1;
+}
+
 .button {
     -fx-background-color: #0058a1;
     -fx-height: 50px;
