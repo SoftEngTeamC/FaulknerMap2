@@ -38,27 +38,14 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
     @FXML
     private MenuButton ampm1;
     @FXML
-    private MenuItem am1;
-    @FXML
-    private MenuItem pm1;
-    @FXML
     private MenuButton ampm2;
-    @FXML
-    private MenuItem am2;
-    @FXML
-    private MenuItem pm2;
+
     @FXML
     private MenuButton ampm3;
-    @FXML
-    private MenuItem am3;
-    @FXML
-    private MenuItem pm3;
+
     @FXML
     private MenuButton ampm4;
-    @FXML
-    private MenuItem am4;
-    @FXML
-    private MenuItem pm4;
+
     @FXML
     private Text displayerror;
     @FXML
