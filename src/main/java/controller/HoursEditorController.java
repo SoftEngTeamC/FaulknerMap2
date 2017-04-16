@@ -131,8 +131,21 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 (hours.ampm1.equals(hours.ampm2))){
             startTimeErrorMorning.setVisible(true);
         }
+        else if (morninghrs1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morninghrs2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
         else{
             startTimeErrorMorning.setVisible(false);
+            displayerror.setVisible(false);
         }
     }
 
@@ -142,8 +155,22 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 (hours.ampm3.equals(hours.ampm4))){
             startTimeErrorEvening.setVisible(true);
         }
+        else if (eveninghrs1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveninghrs2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
         else{
             startTimeErrorEvening.setVisible(false);
+            displayerror.setVisible(false);
+
         }
     }
     @FXML
@@ -153,6 +180,18 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 && eveninghrs1.getText().trim().isEmpty() && eveninghrs2.getText().trim().isEmpty()
                 && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin1.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin2.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin2.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin1.getText().length()<2){
             displayerror.setVisible(true);
         }
         else if (inputval.checktime(morninghrs1, 1,12) && inputval.checktime(morninghrs2, 1,12)
@@ -183,8 +222,6 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
             emf.hours = this.hours;
             logout();
         }
-
-
 
         else{
             displayerror.setVisible(true);
