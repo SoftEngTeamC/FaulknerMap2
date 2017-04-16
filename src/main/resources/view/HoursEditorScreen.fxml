@@ -11,7 +11,6 @@
 <AnchorPane accessibleRole="MENU_BUTTON" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
    <children>
       <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
       <Text layoutX="211.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visiting hours Editor">
          <font>
             <Font size="20.0" />
@@ -64,6 +63,7 @@
          </items>
       </MenuButton>
       <Button fx:id="submitbtn" layoutX="357.0" layoutY="345.0" mnemonicParsing="false" onAction="#SubmitChanges" prefHeight="32.0" prefWidth="142.0" text="Submit Changes" textFill="#049e1b" />
+      <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
       <Text layoutX="424.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" textAlignment="CENTER">
          <font>
             <Font size="27.0" />
