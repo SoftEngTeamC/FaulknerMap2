@@ -11,8 +11,7 @@ import service.EMFProvider;
 
 
 public class HoursEditorController extends Controller{
-public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
-
+    public static Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
     @FXML
     private Button logoutBtn;
     @FXML
@@ -85,42 +84,42 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
         switchScreen("view/Main.fxml", "Main", logoutBtn);
     }
     public void settoam1() {
-        hours.ampm1="AM";
+        this.hours.ampm1="AM";
         ampm1.setText("AM");
     }
     public void settopm1() {
-        hours.ampm1="PM";
+        this.hours.ampm1="PM";
         ampm1.setText("PM");
 
 
     }
     public void settoam2() {
-        hours.ampm2="AM";
+        this.hours.ampm2="AM";
         ampm2.setText("AM");
 
     }
     public void settopm2() {
-        hours.ampm2="PM";
+        this.hours.ampm2="PM";
         ampm2.setText("PM");
 
     }
     public void settoam3() {
-        hours.ampm3="AM";
+        this.hours.ampm3="AM";
         ampm3.setText("AM");
 
     }
     public void settopm3() {
-        hours.ampm3="PM";
+        this.hours.ampm3="PM";
         ampm3.setText("PM");
 
     }
     public void settoam4() {
-        hours.ampm4="AM";
+        this.hours.ampm4="AM";
         ampm4.setText("AM");
 
     }
     public void settopm4() {
-        hours.ampm4="PM";
+        this.hours.ampm4="PM";
         ampm4.setText("PM");
 
     }
