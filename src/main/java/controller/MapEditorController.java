@@ -209,11 +209,11 @@ public class MapEditorController extends Controller {
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
-        circlesListen(circles);
+        circlesListen(circles,currFloor);
         //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
-    public void circlesListen(List<Circle> circles){
+    public void circlesListen(List<Circle> circles, int floor){
         System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
         for(Circle circle: circles) {
@@ -223,9 +223,10 @@ public class MapEditorController extends Controller {
                 System.out.println(ItemsInListView);
                 int i=0;
                 for(i=0; !(ItemsInListView.get(i).equals(NS.find(Long.parseLong(circle.getId())).getName()));i++){
-                    System.out.println(ItemsInListView.get(i));
+                    //System.out.println(ItemsInListView.get(i));
                 }
                 editNode_searchResultsList.getSelectionModel().select(i);
+                removeNode_searchList.getSelectionModel().select(i);
                 if(firstCircle[0] == null){
                     System.out.println("two0 is null");
                     firstCircle[0] = circle;
@@ -243,11 +244,29 @@ public class MapEditorController extends Controller {
                     ES.persist(edge1);
                     ES.persist(edge2);
 
-                    circlesListen(ShowNodesEdgesHelper.showNodes(currFloor));
+                    circlesListen(ShowNodesEdgesHelper.showNodes(currFloor),currFloor);
                     return;
                 }
             });
+
+            //Listener on the Map such that when map is clicked it removes any highlights
+            //also resets the value for firstCircle such that it will begin the path adding again
+            ScrollPane scrolly = ShowNodesEdgesHelper.checkScroll(floor);
+            Group group = (Group) scrolly.getContent();
+            ImageView Map = (ImageView) group.getChildren().get(0);
+            Map.setOnMouseClicked(event ->{
+                System.out.println("ClickedOnMap");
+                ShowNodesEdgesHelper.resetDrawnShapeColors(floor);
+                firstCircle[0] = null;
+            });
         }
+    }
+
+    //This function listens for a click on anything that isnt a circle.
+    //Then it removes all the highlights and clears the firstCircle[0]
+    public void ClickOnMapListener(int floor){
+
+
     }
 
 
@@ -268,6 +287,7 @@ public class MapEditorController extends Controller {
                         Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
                         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
                         editNode_searchResultsList.setItems(obList);
+                        removeNode_searchList.setItems(obList);
                         //Update AutoComplete suggestion of neighbors with new data
                         List<Node> nodes = NS.getNodesByFloor(currFloor);
                         List<String> names = new ArrayList<>();
@@ -280,7 +300,7 @@ public class MapEditorController extends Controller {
                         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
                         List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
 
-                        circlesListen(circles);
+                        circlesListen(circles,currFloor);
                     }
                 }
         );
@@ -489,7 +509,7 @@ public class MapEditorController extends Controller {
         editNode_neighborsList.setItems(nList);
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-        circlesListen(circles);
+        circlesListen(circles,currFloor);
     }
 
     private List<String> neighborNames(Node node){
@@ -518,7 +538,7 @@ public class MapEditorController extends Controller {
             editNode_neighborsList.setItems(nList);
         }
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-        circlesListen(circles);
+        circlesListen(circles,currFloor);
     }
 
     public void HandleEditNodes_NeighborsListClicked(){}
