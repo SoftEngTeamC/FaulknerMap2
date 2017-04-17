@@ -76,7 +76,7 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="158.0">
                                  <children>
                                     <Button fx:id="removeNode_searchBtn" layoutX="205.0" layoutY="27.0" mnemonicParsing="false" onAction="#removeNode_searchBtnPressed" text="Search" />
-                                    <TextField fx:id="removeNode_searchField" layoutX="15.0" layoutY="27.0" onKeyPressed="#removeNode_searchFieldKeyPressed" prefHeight="25.0" prefWidth="187.0" />
+                                    <TextField fx:id="removeNode_searchField" layoutX="15.0" layoutY="27.0" prefHeight="25.0" prefWidth="187.0" />
                                     <Text layoutX="20.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search for node" />
                                     <ListView fx:id="removeNode_searchList" layoutX="14.0" layoutY="73.0" prefHeight="98.0" prefWidth="187.0" />
                                     <Text layoutX="20.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search results:" />
