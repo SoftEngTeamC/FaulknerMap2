@@ -62,7 +62,7 @@ public class DirectoryEditorController extends Controller{
         searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
         searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
         searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
-        //searchList.setMaxHeight(400);
+
         //init hps
         hps = new HospitalProfessionalService();
 
@@ -86,16 +86,13 @@ public class DirectoryEditorController extends Controller{
 
     @FXML
     public void back() throws Exception {
-
+        System.out.println("Directory Editor Back Button");
         switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
-
     }
 
     @FXML
     public void logout() throws Exception {
-
         switchScreen("view/Main.fxml", "Main screen", logoutBtn);
-
     }
 
     /**

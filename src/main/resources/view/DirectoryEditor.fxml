@@ -13,14 +13,9 @@
 
 <AnchorPane fx:id="DirectoryEditor_AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
    <children>
-      <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
       <VBox fx:id="DirectoryEditor_VBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor">
+            <Text accessibleRole="BUTTON" strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor">
                <font>
                   <Font size="51.0" />
                </font>
@@ -59,5 +54,10 @@
             </HBox>
          </children>
       </VBox>
+      <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
