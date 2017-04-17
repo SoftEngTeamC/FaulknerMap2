@@ -15,8 +15,12 @@ public class MakeDirections {
     private NodeService NS = new NodeService();
     private PathFinder pf = new PathFinder();
     public static String getText(List<MapNode> myPath){
-        String output2 = "";
+        DecimalFormat pathFormat = new DecimalFormat("#.#");
+        double pathLength = MapNode.getFeet(myPath);
+        double pathTime = MapNode.getSeconds(myPath);
         String output = "";
+        String output2 = output.concat("Expected Distance: " + pathFormat.format(pathLength) + " feet. \nExpected time: " + pathFormat.format(pathTime) + " seconds.\n\t--------------------------\n");
+        output = output2;
         String direction;
         int i;
         MapNode currentNode;
