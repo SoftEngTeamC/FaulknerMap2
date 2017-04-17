@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
     <children>
       <GridPane layoutX="14.0" layoutY="27.943359375" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -28,7 +27,7 @@
             <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-              <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editMap" text="Map Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+              <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editMap" style="-fx-max-height: 110; -fx-min-height: 110;" text="Map Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
@@ -41,7 +40,7 @@
                       <Font size="96.0" />
                   </font>
               </Text>
-              <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editHours" text="Visiting Hours" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+              <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editHours" style="-fx-max-height: 110; -fx-min-height: 110;" text="Visiting Hours" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
@@ -49,14 +48,14 @@
                   <Font size="56.0" />
                </font>
             </Button>
-              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" prefHeight="86.0" prefWidth="228.0" text="Logout" GridPane.rowIndex="6">
+              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" prefHeight="86.0" prefWidth="228.0" style="-fx-min-width: 170; -fx-max-width: 170;" text="Logout" GridPane.rowIndex="6">
                <font>
                   <Font size="40.0" />
                </font>
                <GridPane.margin>
                   <Insets bottom="50.0" left="50.0" />
                </GridPane.margin></Button>
-              <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editDirectory" text="Database Editor" AnchorPane.bottomAnchor="265.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="110.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+              <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editDirectory" style="-fx-max-height: 150; -fx-min-height: 150;" text="Database Editor" AnchorPane.bottomAnchor="265.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="110.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
                </GridPane.margin>
