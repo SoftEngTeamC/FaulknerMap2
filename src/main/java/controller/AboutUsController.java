@@ -11,18 +11,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-public class AddPersonController extends Controller{
+public class AboutUsController extends Controller{
 
     @FXML
-    private Button backBtn;
-    @FXML
-    private TextField nameField;
+    private Button MeetTheTeamButton;
 
-
-    @FXML
-    public void initialize() {
-
-    }
 
     /**
      * handler for the back button being pressed. Brings it back to the directory editor screen.

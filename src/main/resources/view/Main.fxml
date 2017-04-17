@@ -96,7 +96,6 @@
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
->>>>>>> dev
                 </HBox>
             <TabPane fx:id="DisplayInformationTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
