@@ -233,7 +233,6 @@ public class MapEditorController extends Controller {
         final Circle[] firstCircle = new Circle[1];
         for (Circle circle : circles) {
 
-        //    setDraggable(circle);
 
             circle.setOnMouseClicked(event -> {
                 System.out.println("Clicked on node: " +
