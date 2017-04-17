@@ -1,18 +1,23 @@
 package controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import model.Hours;
 import service.EMFProvider;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class HoursEditorController extends Controller{
-public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
-
+    public static Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
     @FXML
     private Button logoutBtn;
     @FXML
@@ -61,6 +66,12 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
     private MenuItem pm4;
     @FXML
     private Text displayerror;
+    @FXML
+    private Text startTimeErrorMorning;
+    @FXML
+    private Text startTimeErrorEvening;
+    @FXML
+    private Text displaySuccess;
 
     EMFProvider emf;
 
@@ -81,47 +92,118 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
         switchScreen("view/Main.fxml", "Main", logoutBtn);
     }
     public void settoam1() {
-        hours.ampm1="AM";
+        this.hours.ampm1="AM";
         ampm1.setText("AM");
     }
     public void settopm1() {
-        hours.ampm1="PM";
+        this.hours.ampm1="PM";
         ampm1.setText("PM");
 
 
     }
     public void settoam2() {
-        hours.ampm2="AM";
+        this.hours.ampm2="AM";
         ampm2.setText("AM");
 
     }
     public void settopm2() {
-        hours.ampm2="PM";
+        this.hours.ampm2="PM";
         ampm2.setText("PM");
 
     }
     public void settoam3() {
-        hours.ampm3="AM";
+        this.hours.ampm3="AM";
         ampm3.setText("AM");
 
     }
     public void settopm3() {
-        hours.ampm3="PM";
+        this.hours.ampm3="PM";
         ampm3.setText("PM");
 
     }
     public void settoam4() {
-        hours.ampm4="AM";
+        this.hours.ampm4="AM";
         ampm4.setText("AM");
 
     }
     public void settopm4() {
-        hours.ampm4="PM";
+        this.hours.ampm4="PM";
         ampm4.setText("PM");
 
     }
 
+    public boolean validateEqualMorning() {
+        System.out.println();
+        System.out.print(morninghrs1);
+        System.out.println();
+        //if all the boxes have numbers and all the numbers are equal to each other
+        if((!morninghrs1.getText().trim().equals("") &&
+            !morninghrs2.getText().trim().equals("") &&
+            !morningmin1.getText().trim().equals("") &&
+            !morningmin2.getText().trim().equals("")) &&
+                (morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
+                (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
+                (hours.ampm1.equals(hours.ampm2))){
+            startTimeErrorMorning.setVisible(true);
+            final Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                    new KeyValue(startTimeErrorMorning.visibleProperty(), false)));
+            timeline.play();
+        }
+        else if (morninghrs1.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (morningmin1.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (morninghrs2.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (morningmin2.getText().length()>2){
+            flashErrorMessage();
+        }
+        else{
+            startTimeErrorMorning.setVisible(false);
+            displayerror.setVisible(false);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean validateEqualEvening() {
+        //if all the boxes have numbers and all the numbers are equal to each other
+        if((!eveninghrs1.getText().trim().equals("") &&
+            !eveninghrs2.getText().trim().equals("") &&
+            !eveningmin1.getText().trim().equals("") &&
+            !eveningmin2.getText().trim().equals("")) &&
+                (eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
+                (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
+                (hours.ampm3.equals(hours.ampm4))){
+            startTimeErrorEvening.setVisible(true);
+            final Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                    new KeyValue(startTimeErrorEvening.visibleProperty(), false)));
+            timeline.play();
+        }
+        else if (eveninghrs1.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (eveningmin1.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (eveninghrs2.getText().length()>2){
+            flashErrorMessage();
+        }
+        else if (eveningmin2.getText().length()>2){
+            flashErrorMessage();
+        }
+        else{
+            startTimeErrorEvening.setVisible(false);
+            displayerror.setVisible(false);
+            return true;
+        }
+        return false;
+    }
     @FXML
     public void SubmitChanges() throws Exception{
 
@@ -129,18 +211,37 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 && eveninghrs1.getText().trim().isEmpty() && eveninghrs2.getText().trim().isEmpty()
                 && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
-            displayerror.setVisible(true);
-            morningmin1.setText("0");
-            morninghrs1.setText("0");
-            morningmin2.setText("0");
-            morninghrs2.setText("0");
-            eveninghrs2.setText("0");
-            eveninghrs1.setText("0");
-            eveningmin2.setText("0");
-            eveningmin1.setText("0");
+            flashErrorMessage();
         }
-        else if (inputval.checktime(morninghrs1, 0,12) && inputval.checktime(morninghrs2, 0,12)
-                && inputval.checktime(eveninghrs1, 0,12) && inputval.checktime(eveninghrs2, 0,12)
+        else if(!validateEqualMorning() || !validateEqualEvening()){
+            //All the stuff is handled in the booleans in the if statement
+        }
+        else if(!ampm1.getText().trim().equals("AM") && !ampm1.getText().trim().equals("PM")){
+            flashErrorMessage();
+        }
+        else if(!ampm2.getText().trim().equals("AM") && !ampm2.getText().trim().equals("PM")){
+            flashErrorMessage();
+        }
+        else if(!ampm4.getText().trim().equals("AM") && !ampm4.getText().trim().equals("PM")){
+            flashErrorMessage();
+        }
+        else if(!ampm3.getText().trim().equals("AM") && !ampm3.getText().trim().equals("PM")){
+            flashErrorMessage();
+        }
+        else if (morningmin1.getText().length()!=2){
+            flashErrorMessage();
+        }
+        else if (morningmin2.getText().length()!=2){
+            flashErrorMessage();
+        }
+        else if (eveningmin2.getText().length()!=2){
+            flashErrorMessage();
+        }
+        else if (eveningmin1.getText().length()!=2){
+            flashErrorMessage();
+        }
+        else if (inputval.checktime(morninghrs1, 1,12) && inputval.checktime(morninghrs2, 1,12)
+                && inputval.checktime(eveninghrs1, 1,12) && inputval.checktime(eveninghrs2, 1,12)
                 && inputval.checktime(morningmin1, 0,59) && inputval.checktime(morningmin2, 0,59)
                 && inputval.checktime(eveningmin1, 0,59) && inputval.checktime(eveningmin2, 0,59)){
             hours.hours1=morninghrs1.getText();
@@ -151,35 +252,50 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
             hours.minutes2=morningmin2.getText();
             hours.minutes3=eveningmin1.getText();
             hours.minutes4=eveningmin2.getText();
-            hours = new Hours(hours.hours1,hours.hours2,hours.hours3,hours.hours4,hours.minutes1,hours.minutes2,hours.minutes3,hours.minutes4,hours.ampm1,hours.ampm2,hours.ampm3,hours.ampm4);
-            System.out.println(hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
-            System.out.println(hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
-            System.out.println(hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
-            System.out.println(hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
+            hours = new Hours(hours.hours1,
+                    hours.hours2,
+                    hours.hours3,
+                    hours.hours4,
+                    hours.minutes1,
+                    hours.minutes2,
+                    hours.minutes3,
+                    hours.minutes4,
+                    hours.ampm1,
+                    hours.ampm2,
+                    hours.ampm3,
+                    hours.ampm4);
             displayerror.setVisible(false);
-            System.out.println("Edited hour: " + hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
             emf.hours = this.hours;
+            flashSuccessMessage();
+
         }
 
-
-
         else{
-            displayerror.setVisible(true);
-            morningmin1.setText("0");
-            morninghrs1.setText("0");
-            morningmin2.setText("0");
-            morninghrs2.setText("0");
-            eveninghrs2.setText("0");
-            eveninghrs1.setText("0");
-            eveningmin2.setText("0");
-            eveningmin1.setText("0");
-
-
+            flashErrorMessage();
         }
 
 
     }
 
+    private void flashSuccessMessage(){
+        //THESE LINES ARE THE WINNERS! COPY PASTE EVERYWHERE! THEY WORK!
+        //This is how you make a message flash on for only two and a half seconds.
+        //Change the "displaySuccess" in "displaySuccess.visibleProperty()" to
+        //the name of the message that you want to flash.
+        displaySuccess.setVisible(true);
+        final Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                new KeyValue(displaySuccess.visibleProperty(), false)));
+        timeline.play();
 
+    }
+
+    private void flashErrorMessage(){
+        displayerror.setVisible(true);
+        final Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                new KeyValue(displayerror.visibleProperty(), false)));
+        timeline.play();
+    }
 
 }

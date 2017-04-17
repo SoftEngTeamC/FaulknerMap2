@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -9,9 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
 import model.Node;
@@ -34,6 +39,12 @@ public class DirectoryEditorController extends Controller{
     private TextField searchField;
     @FXML
     private ListView<String> searchList;
+    @FXML
+    private SplitPane splitPane;
+    @FXML
+    private VBox DirectoryEditor_VBox;
+    @FXML
+    private AnchorPane DirectoryEditor_AnchorPane;
 
     // database helpers
     HospitalProfessionalService hps;
@@ -46,6 +57,11 @@ public class DirectoryEditorController extends Controller{
 
     @FXML
     public void initialize() {
+        //organize visual elements
+        DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
+        searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
+        searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
+        searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
 
         //init hps
         hps = new HospitalProfessionalService();
@@ -58,29 +74,25 @@ public class DirectoryEditorController extends Controller{
         editPrsnBtn.setDisable(true);
 
         // add a listener to the listview
-        searchList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        searchList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            /**
-             * @author paul
-             * enables the edit person button
-             */
-            public void handle(MouseEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
                 editPrsnBtn.setDisable(false);
-            }});
+            }
+        });
+
     }
 
     @FXML
     public void back() throws Exception {
-
+        System.out.println("Directory Editor Back Button");
         switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
-
     }
 
     @FXML
     public void logout() throws Exception {
-
         switchScreen("view/Main.fxml", "Main screen", logoutBtn);
-
     }
 
     /**

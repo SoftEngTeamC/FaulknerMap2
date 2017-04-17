@@ -74,7 +74,7 @@ class ShowNodesEdgesHelper {
     }
 
     static void ClearOldPaths() {
-
+        System.out.println("Clearing Old Paths");
         Group group1 = (Group) FirstFloorScrollPane.getContent();
         group1.getChildren().remove(1, group1.getChildren().size());
         Group group2 = (Group) SecondFloorScrollPane.getContent();
@@ -158,7 +158,12 @@ class ShowNodesEdgesHelper {
 
     //MakeLine take 2 points (effectively) and draws a line from point to point
     //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-    static void MakeLine(double x1, double y1, double x2, double y2, int z) {
+    public static Line MakeLine(Edge e){
+        double x1 = e.getStart().getLocation().getX();
+        double y1 = e.getStart().getLocation().getY();
+        double x2 = e.getEnd().getLocation().getX();
+        double y2 = e.getEnd().getLocation().getY();
+        int z = e.getStart().getLocation().getFloor();
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         Group group1 = (Group) Scrolly.getContent();
@@ -174,10 +179,16 @@ class ShowNodesEdgesHelper {
         edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
+        return edge;
     }
 
-    public static Circle MakeCircle(double x, double y, int z, Node node) {
+    public static Circle MakeCircle(Node node) {
+        double x = node.getLocation().getX();
+        double y = node.getLocation().getY();
+        int z = node.getLocation().getFloor();
         // initial size of image and the image ratior
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
@@ -196,42 +207,69 @@ class ShowNodesEdgesHelper {
         circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Paint.valueOf("#ff2d1f"));
+        circle.fillProperty().setValue(Color.RED);
 
         circle.setId(node.getId().toString());
         group1.getChildren().addAll(circle);
-
         return circle;
     }
 
     static List<Circle> showNodes(int currFloor) {
+        System.out.println("ShowNodes");
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
         List<Circle> circles = new ArrayList<Circle>();
-        for (Node n : temp) {
-            Circle circle = ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(),
-                    n.getLocation().getFloor(), n);
+        for (Node n : temp){
+            Circle circle = ShowNodesEdgesHelper.MakeCircle(n);
             circles.add(circle);
         }
-
         showEdges(currFloor);
         return circles;
     }
 
-    static List<Edge> showEdges(int currFloor) {
+    static void showEdges(int currFloor) {
+        System.out.println("ShowEdges");
+        //Desired Clear old lines
+        EdgeService es = new EdgeService();
+        List<Edge> edges = es.getAllEdges();
+        List<Edge> retEdges = new ArrayList<Edge>();
+        for (Edge e : edges){
+            if (e.getStart().getLocation().getFloor() == currFloor) {
+                retEdges.add(e);
+                ShowNodesEdgesHelper.MakeLine(e);
+            }
+        }
+    }
+
+    static List<Edge> getEdges(int currFloor){
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
         List<Edge> retEdges = new ArrayList<Edge>();
         for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
                 retEdges.add(e);
-                ShowNodesEdgesHelper.MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(),
-                        e.getStart().getLocation().getFloor());
             }
         }
         return retEdges;
+    }
+
+    static void resetDrawnShapeColors(int currFloor){
+        ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+        Group group = (Group) Scrolly.getContent();
+        List<javafx.scene.Node> DrawnObjects = group.getChildren();
+        for(int i=1;i<DrawnObjects.size();i++){
+            try {
+                Circle circle = (Circle) DrawnObjects.get(i);
+                circle.fillProperty().setValue(Color.RED);
+            }
+            //found an edge instead
+            catch(Exception e){
+                Line line = (Line) DrawnObjects.get(i);
+                line.setStrokeWidth(1);
+                line.setStroke(Color.BLACK);
+            }
+        }
     }
 
 }
