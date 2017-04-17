@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import controller.AutocompletionlTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
-<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1038.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import controller.SwitchButton?>
+
+<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1038.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
   <items>
       <VBox fx:id="MapEditorVBox">
          <children>
@@ -125,6 +119,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider1" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -139,6 +134,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="SecondFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider2" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -153,6 +149,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="ThirdFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider3" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -167,6 +164,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="FourthFloorSlider" layoutX="350.0" layoutY="215.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider4" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -181,6 +179,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="FifthFloorSlider" layoutX="350.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider5" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -195,6 +194,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="SixthFloorSlider" layoutX="342.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider6" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -209,6 +209,7 @@
                            </content>
                         </ScrollPane>
                         <Slider fx:id="SeventhFloorSlider" layoutX="331.0" layoutY="229.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <SwitchButton fx:id="slider7" stylesheets="@generalStyles.css" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>
