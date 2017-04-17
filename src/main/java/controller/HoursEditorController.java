@@ -133,7 +133,15 @@ public class HoursEditorController extends Controller{
     }
 
     public boolean validateEqualMorning() {
-        if((morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
+        System.out.println();
+        System.out.print(morninghrs1);
+        System.out.println();
+        //if all the boxes have numbers and all the numbers are equal to each other
+        if((!morninghrs1.getText().trim().equals("") &&
+            !morninghrs2.getText().trim().equals("") &&
+            !morningmin1.getText().trim().equals("") &&
+            !morningmin2.getText().trim().equals("")) &&
+                (morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
                 (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
                 (hours.ampm1.equals(hours.ampm2))){
             startTimeErrorMorning.setVisible(true);
@@ -163,7 +171,12 @@ public class HoursEditorController extends Controller{
     }
 
     public boolean validateEqualEvening() {
-        if((eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
+        //if all the boxes have numbers and all the numbers are equal to each other
+        if((!eveninghrs1.getText().trim().equals("") &&
+            !eveninghrs2.getText().trim().equals("") &&
+            !eveningmin1.getText().trim().equals("") &&
+            !eveningmin2.getText().trim().equals("")) &&
+                (eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
                 (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
                 (hours.ampm3.equals(hours.ampm4))){
             startTimeErrorEvening.setVisible(true);
