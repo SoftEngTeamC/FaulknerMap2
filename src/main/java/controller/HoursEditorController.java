@@ -11,8 +11,7 @@ import service.EMFProvider;
 
 
 public class HoursEditorController extends Controller{
-public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
-
+    public static Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");
     @FXML
     private Button logoutBtn;
     @FXML
@@ -61,6 +60,10 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
     private MenuItem pm4;
     @FXML
     private Text displayerror;
+    @FXML
+    private Text startTimeErrorMorning;
+    @FXML
+    private Text startTimeErrorEvening;
 
     EMFProvider emf;
 
@@ -81,47 +84,94 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
         switchScreen("view/Main.fxml", "Main", logoutBtn);
     }
     public void settoam1() {
-        hours.ampm1="AM";
+        this.hours.ampm1="AM";
         ampm1.setText("AM");
     }
     public void settopm1() {
-        hours.ampm1="PM";
+        this.hours.ampm1="PM";
         ampm1.setText("PM");
 
 
     }
     public void settoam2() {
-        hours.ampm2="AM";
+        this.hours.ampm2="AM";
         ampm2.setText("AM");
 
     }
     public void settopm2() {
-        hours.ampm2="PM";
+        this.hours.ampm2="PM";
         ampm2.setText("PM");
 
     }
     public void settoam3() {
-        hours.ampm3="AM";
+        this.hours.ampm3="AM";
         ampm3.setText("AM");
 
     }
     public void settopm3() {
-        hours.ampm3="PM";
+        this.hours.ampm3="PM";
         ampm3.setText("PM");
 
     }
     public void settoam4() {
-        hours.ampm4="AM";
+        this.hours.ampm4="AM";
         ampm4.setText("AM");
 
     }
     public void settopm4() {
-        hours.ampm4="PM";
+        this.hours.ampm4="PM";
         ampm4.setText("PM");
 
     }
 
+    public void validateEqualMorning() {
+        if((morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
+                (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
+                (hours.ampm1.equals(hours.ampm2))){
+            startTimeErrorMorning.setVisible(true);
+        }
+        else if (morninghrs1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morninghrs2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else{
+            startTimeErrorMorning.setVisible(false);
+            displayerror.setVisible(false);
+        }
+    }
 
+    public void validateEqualEvening() {
+        if((eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
+                (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
+                (hours.ampm3.equals(hours.ampm4))){
+            startTimeErrorEvening.setVisible(true);
+        }
+        else if (eveninghrs1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin1.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveninghrs2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin2.getText().length()>2){
+            displayerror.setVisible(true);
+        }
+        else{
+            startTimeErrorEvening.setVisible(false);
+            displayerror.setVisible(false);
+
+        }
+    }
     @FXML
     public void SubmitChanges() throws Exception{
 
@@ -129,6 +179,30 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                 && eveninghrs1.getText().trim().isEmpty() && eveninghrs2.getText().trim().isEmpty()
                 && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
+            displayerror.setVisible(true);
+        }
+        else if(ampm1.getText().trim() != "AM" && ampm1.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm2.getText().trim() != "AM" && ampm2.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm4.getText().trim() != "AM" && ampm4.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if(ampm3.getText().trim() != "AM" && ampm3.getText().trim() != "PM"){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin1.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (morningmin2.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin2.getText().length()<2){
+            displayerror.setVisible(true);
+        }
+        else if (eveningmin1.getText().length()<2){
             displayerror.setVisible(true);
         }
         else if (inputval.checktime(morninghrs1, 1,12) && inputval.checktime(morninghrs2, 1,12)
@@ -157,10 +231,7 @@ public Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM",
                     hours.ampm4);
             displayerror.setVisible(false);
             emf.hours = this.hours;
-            logout();
         }
-
-
 
         else{
             displayerror.setVisible(true);

@@ -36,7 +36,6 @@ public class EdgeService extends AbstractService<Edge> {
                 .setParameter("end", start)
                 .getSingleResult());
 
-        //System.out.println("getting a list of edge ");
         return temp;
     }
 
