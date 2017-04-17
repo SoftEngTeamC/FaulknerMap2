@@ -441,16 +441,12 @@ public class MapEditorController extends Controller {
 
                         circlesListen(circles,currFloor);
                     }
-                    editNode_addField.getEntries().clear();
-                    editNode_addField.getEntries().addAll(names);
-
-                    List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-
-                    circlesListen(circles);
                 }
         );
 
+
     }
+
 
     public void removeNeighborListen() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
