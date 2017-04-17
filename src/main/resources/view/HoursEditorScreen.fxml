@@ -88,7 +88,7 @@
             <Font size="27.0" />
          </font>
       </Text>
-      <Text fx:id="displayerror" fill="RED" layoutX="145.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong Format" textAlignment="CENTER" visible="false">
+      <Text fx:id="displayerror" fill="RED" layoutX="33.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong Format" textAlignment="CENTER" visible="false">
          <font>
             <Font size="46.0" />
          </font>
