@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import sun.plugin.javascript.navig.Anchor;
 import javafx.collections.FXCollections;
 
 
