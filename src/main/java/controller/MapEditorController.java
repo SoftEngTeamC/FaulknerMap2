@@ -120,6 +120,10 @@ public class MapEditorController extends Controller {
     private Button editNode_addBtn;
     @FXML
     private Text AddNodeIndicatorText;
+    @FXML
+    private VBox EditNode_VBox;
+    @FXML
+    private AnchorPane EditNode_AnchorPane;
 
     @FXML
     protected TabPane tabPane;
@@ -170,7 +174,7 @@ public class MapEditorController extends Controller {
             names.add(n.getName());
         }
         editNode_addField.getEntries().addAll(names);
-
+        //Visual Initializations
         new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
                  SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
@@ -178,6 +182,9 @@ public class MapEditorController extends Controller {
                  SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
+        editNode_searchResultsList.prefWidthProperty().bind(EditNode_AnchorPane.widthProperty());
+        editNode_searchResultsList.setPrefHeight(300);
+
         InitializeIndicatorTextListeners();
         removeNode_searchFieldValueListner();
 
