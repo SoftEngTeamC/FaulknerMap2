@@ -19,7 +19,7 @@ public class Node {
         // This is kept empty for hibernate
     }
 
-    public Node(Coordinate location, String name) {
+    public Node(String name, Coordinate location) {
         this.location = location;
         this.name = name;
     }
@@ -65,5 +65,4 @@ public class Node {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
-
 }

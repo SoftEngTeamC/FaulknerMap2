@@ -18,7 +18,7 @@ public class HospitalService {
         // This is left empty for hibernate
     }
 
-    public HospitalService(List<Node> locations, String name) {
+    public HospitalService(String name, List<Node> locations) {
         this.locations = locations;
         this.name = name;
     }

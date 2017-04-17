@@ -1,199 +1,215 @@
+import com.univocity.parsers.common.ParsingContext;
+import com.univocity.parsers.common.processor.ObjectRowProcessor;
+import com.univocity.parsers.conversions.Conversions;
 import com.univocity.parsers.tsv.TsvParser;
 import com.univocity.parsers.tsv.TsvParserSettings;
 import model.*;
 import service.*;
 
-import javax.persistence.EntityManagerFactory;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataLoader {
     public static void main(String[] args) {
-        EntityManagerFactory emf = EMFProvider.getInstance().getEMFactory();
         try {
-       //     loadLocations(emf, "data/belkinHouse/locations.tsv");
-            loadLocations(emf, "data/floor1/locations.tsv", 1);
-            loadLocations(emf, "data/floor2/locations.tsv", 2);
-            loadLocations(emf, "data/floor3/locations.tsv", 3);
-            loadLocations(emf, "data/floor4/locations.tsv", 4);
-            loadLocations(emf, "data/floor5/locations.tsv", 5);
-            loadLocations(emf, "data/floor6/locations.tsv", 6);
-            loadLocations(emf, "data/floor7/locations.tsv", 7);
+            loadLocations("data/floor1/locations.tsv", 1);
+            loadLocations("data/floor2/locations.tsv", 2);
+            loadLocations("data/floor3/locations.tsv", 3);
+            loadLocations("data/floor4/locations.tsv", 4);
+            loadLocations("data/floor5/locations.tsv", 5);
+            loadLocations("data/floor6/locations.tsv", 6);
+            loadLocations("data/floor7/locations.tsv", 7);
 
-        //    loadPeople(emf, "data/belkinHouse/people.tsv");
-            loadPeople(emf, "data/floor2/people.tsv");
-            loadPeople(emf, "data/floor3/people.tsv");
-            loadPeople(emf, "data/floor4/people.tsv");
-            loadPeople(emf, "data/floor5/people.tsv");
+            loadPeople("data/floor2/people.tsv");
+            loadPeople("data/floor3/people.tsv");
+            loadPeople("data/floor4/people.tsv");
+            loadPeople("data/floor5/people.tsv");
 
-        //    loadService(emf, "data/belkinHouse/services.tsv");
-            loadService(emf, "data/floor1/services.tsv");
-            loadService(emf, "data/floor2/services.tsv");
-            loadService(emf, "data/floor3/services.tsv");
-            loadService(emf, "data/floor4/services.tsv");
-            loadService(emf, "data/floor5/services.tsv");
-            loadService(emf, "data/floor6/services.tsv");
-            loadService(emf, "data/floor7/services.tsv");
+            loadService("data/floor1/services.tsv");
+            loadService("data/floor2/services.tsv");
+            loadService("data/floor3/services.tsv");
+            loadService("data/floor4/services.tsv");
+            loadService("data/floor5/services.tsv");
+            loadService("data/floor6/services.tsv");
+            loadService("data/floor7/services.tsv");
 
-           // loadEdges(emf, "data/belkinHouse/edges.tsv");
-            loadEdges(emf, "data/floor1/edges.tsv");
-            loadEdges(emf, "data/floor2/edges.tsv");
-            loadEdges(emf, "data/floor3/edges.tsv");
-            loadEdges(emf, "data/floor4/edges.tsv");
-            loadEdges(emf, "data/floor5/edges.tsv");
-            loadEdges(emf, "data/floor6/edges.tsv");
-            loadEdges(emf, "data/floor7/edges.tsv");
+//            loadEdges("data/floor1/edges.tsv");
+//            loadEdges("data/floor2/edges.tsv");
+//            loadEdges("data/floor3/edges.tsv");
+//            loadEdges("data/floor4/edges.tsv");
+//            loadEdges("data/floor5/edges.tsv");
+//            loadEdges("data/floor6/edges.tsv");
+//            loadEdges("data/floor7/edges.tsv");
 
-            addEdgeIntersections();
+            loadEdges("data/allEdges.tsv");
 
+  //          connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            emf.close();
+            EMFProvider.getInstance().getEMFactory().close();
         }
     }
 
-    private static void loadLocations(EntityManagerFactory emf, String locationsFilePath, int floor) throws FileNotFoundException {
+    private static void loadLocations(String locationsFilePath, int floor) throws FileNotFoundException {
         NodeService nodeService = new NodeService();
         CoordinateService coordinateService = new CoordinateService();
 
-
-        // Create all the nodes
         TsvParserSettings parserSettings = new TsvParserSettings();
-        TsvParser parser = new TsvParser(parserSettings);
+        parserSettings.setHeaderExtractionEnabled(true);
 
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;  // Test for blank line or value
-
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 3){
-                System.out.print("Could not add location ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
-
-                // Parse the Coordinate
-                double x = Double.parseDouble(split[1]);
-                double y = Double.parseDouble(split[2]);
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 3) return;  // Test for blank line or value
+                double x = (Double) row[1];
+                double y = (Double) row[2];
                 Coordinate location = new Coordinate(x, y, floor);
 
                 coordinateService.persist(location);
 
-                String name = split[0];
+                String name = (String) row[0];
 
-                nodeService.persist(new Node(location, name));
+                nodeService.persist(new Node(name, location));
             }
-        }
+        };
+        rowProcessor.convertIndexes(Conversions.toDouble()).set(1);
+        rowProcessor.convertIndexes(Conversions.toDouble()).set(2);
+        parserSettings.setProcessor(rowProcessor);
+
+        TsvParser parser = new TsvParser(parserSettings);
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
     }
 
-    private static void loadPeople(EntityManagerFactory emf, String peopleFilePath) throws FileNotFoundException {
+    private static void loadPeople(String peopleFilePath) throws FileNotFoundException {
         HospitalProfessionalService professionalService = new HospitalProfessionalService();
         NodeService nodeService = new NodeService();
 
         TsvParserSettings parserSettings = new TsvParserSettings();
-        TsvParser parser = new TsvParser(parserSettings);
+        parserSettings.setHeaderExtractionEnabled(true);
 
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 3) return;
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 3){
-                System.out.print("Could not add professional");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
+                String name = (String) row[0];
+                String title = (String) row[1];
+
+                String locationName = (String) row[2];
+                Node location = nodeService.findNodeByName(locationName);
+                if (location == null) {
+                    System.err.println("Couldn't find a node with named " + locationName + " while parsing line " + context.currentLine() + " in " + peopleFilePath);
+
+                    return;
                 }
-                System.out.println("");
-            } else {
-
-                String name =split[0];
-                String title = split[1];
-
                 List<Node> nodes = new ArrayList<>();
-                //System.out.println(split[2]);
-                nodes.add(nodeService.findNodeByName(split[2]));
-                HospitalProfessional hp = new HospitalProfessional(name, title, nodes);
+                nodes.add(location);
 
                 professionalService.persist(new HospitalProfessional(name, title, nodes));
-
             }
-        }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
+        TsvParser parser = new TsvParser(parserSettings);
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
     }
 
-    private static void loadService(EntityManagerFactory emf, String serviceFilePath) throws FileNotFoundException {
+    private static void loadService(String serviceFilePath) throws FileNotFoundException {
         HospitalServiceService serviceService = new HospitalServiceService();
         NodeService nodeService = new NodeService();
 
         TsvParserSettings parserSettings = new TsvParserSettings();
-        TsvParser parser = new TsvParser(parserSettings);
+        parserSettings.setHeaderExtractionEnabled(true);
 
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 2) return;
 
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 2){
-                System.out.print("Could not add service ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
+                String name = (String) row[0];
+
+                String locationName = (String) row[1];
+                Node location = nodeService.findNodeByName(locationName);
+                if (location == null) {
+                    System.err.println("Couldn't find a node with named " + locationName + " while parsing line " + context.currentLine() + " in " + serviceFilePath);
+                    return;
                 }
-                System.out.println("");
-            } else {
-
-                String name =split[0];
-
                 List<Node> nodes = new ArrayList<>();
-                nodes.add(nodeService.findNodeByName(split[1]));
-            //    System.out.println(split[1]);
+                nodes.add(location);
 
-                HospitalService hs = new HospitalService(nodes, name);
-
-                serviceService.persist(new HospitalService(nodes, name));
-
+                serviceService.persist(new HospitalService(name, nodes));
 
             }
-        }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
+        TsvParser parser = new TsvParser(parserSettings);
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
-    private static void loadEdges(EntityManagerFactory emf, String locationsFilePath) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
-        // Create all the edges
         TsvParserSettings parserSettings = new TsvParserSettings();
-        TsvParser parser = new TsvParser(parserSettings);
+        parserSettings.setHeaderExtractionEnabled(true);
 
-        List<String[]> allRows = parser.parseAll(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
-        for (String[] row : allRows.subList(1, allRows.size())) {
-            if (Arrays.asList(row).contains(null)) continue;  // Test for blank line or value
-
-            String[] split = row[0].split("\\s+\\-\\s+");
-            if(split.length < 2){
-                System.out.print("Could not add ");
-                for(int i = 0; i < split.length; i++){
-                    System.out.print(split[i]);
-                }
-                System.out.println("");
-            } else {
-
-                Node start = nodeService.findNodeByName(split[0]);
-                Node end = nodeService.findNodeByName(split[1]);
-
-                if(start == null){
-                    System.out.println("could not add edge " + split[0]);
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 2) {
+                    return;
                 }
 
-                if(end == null){
-                    System.out.println("could not add edge " + split[1]);
+                String startName = (String) row[0];
+                String endName = (String) row[1];
+                Node start = nodeService.find(Long.parseLong((String)row[0]));
+                Node end = nodeService.find(Long.parseLong((String)row[1]));
+
+                if (start == null) {
+                    System.err.println("Couldn't find a node with id " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    return;
+                }
+
+                if (end == null) {
+                    System.err.println("Couldn't find a node with id " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    return;
                 }
 
                 edgeService.persist(new Edge(start, end, 0));
-                edgeService.persist(new Edge(end, start, 0));
+            }
+        };
+        parserSettings.setProcessor(rowProcessor);
+
+        TsvParser parser = new TsvParser(parserSettings);
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
+    }
+
+    private static void connectElevators() {
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
+
+        List<Node> elevators = nodeService.getAllNodes().stream()
+                .filter(n -> n.getName().toLowerCase().contains("elevator"))
+                .collect(Collectors.toList());
+        // Group elevators by name
+        Map<String, Set<Node>> elevatorGroups = new HashMap<>();
+        for (Node elevator : elevators) {
+            if (elevatorGroups.containsKey(elevator.getName())) {
+                elevatorGroups.get(elevator.getName()).add(elevator);
+            } else {
+                Set<Node> newGroup = new HashSet<>();
+                newGroup.add(elevator);
+                elevatorGroups.put(elevator.getName(), newGroup);
+            }
+        }
+        // Connect all the groups
+        for (Set<Node> group : elevatorGroups.values()) {
+            for (Node n1 : group) {
+                for (Node n2 : group) {
+                    edgeService.persist(new Edge(n1, n2, 0));
+                }
             }
         }
     }

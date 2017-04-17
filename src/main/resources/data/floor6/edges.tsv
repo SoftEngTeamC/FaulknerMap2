@@ -1,17 +1,52 @@
-Case Management - hallway60
+start	end
+Case Management	hallway60
 
-Pariser Conference Room - hallway61
+Pariser Conference Room	hallway61
 
-Hillside Elevators 1 - hallway62
+Hillside Elevators 1	hallway62
 
-hallway60 - intersection69
+hallway60	intersection69
 
-hallway60 - intersection610
+hallway60	intersection610
 
-hallway61 - intersection621
+hallway61	intersection621
 
-hallway61 - intersection622
+hallway61	intersection622
 
-hallway62 - intersection69
+hallway62	intersection69
 
-hallway62 - intersection611
+hallway62	intersection611
+
+intersection620	intersection617
+
+intersection617	intersection614
+
+intersection614	intersection616
+
+intersection62	intersection63
+
+intersection61	intersection64
+
+intersection62	intersection61
+
+intersection63	intersection64
+
+intersection66	intersection67
+
+intersection65	intersection68
+
+intersection66	intersection65
+
+intersection67	intersection68
+
+intersection64	intersection65
+
+intersection65	intersection69
+
+intersection610	intersection613
+
+intersection615	intersection613
+
+intersection613	intersection614
+
+intersection616	intersection615

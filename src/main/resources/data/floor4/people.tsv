@@ -1,75 +1,76 @@
-Caplan, Laura - PA-C - 4A
-Copello, Maria - MD - 4A
-Healy, Barbara - RN - 4A
-Lauretti, Linda - MD - 4A
-Oliver, Lynn - RN - 4A
-Walsh Samp, Kathy - LICSW - 4A
-Welker, Roy - MD - 4A
-Conant, Alene - MD - 4B
-Drewniak, Stephen - MD - 4B
-Homenko, Daria - MD - 4B
-Lo, Amy - MD - 4B
-Matloff, Daniel - MD - 4B
-McNabb-Balter, Julia - MD - 4B
-Mutinga, Muthoka - MD - 4B
-Preneta, Ewa - MD - 4B
-Smith, Benjamin - MD - 4B
-Mullally, William - MD - 4C
-Novak, Peter - MD - 4C
-Pilgrim, David - MD - 4C
-Vardeh, Daniel - MD - 4C
-Weisholtz, Daniel - MD - 4C
-Whitman, Gregory - MD - 4C
-Hoover, Paul - MD, PhD - 4D
-Pariser, Kenneth - MD - 4D
-Todd, Derrick - MD, PhD - 4D
-Clark, Roger - DO - 4F
-McGowan, Katherine - MD - 4F
-Ash, Samuel - MD - 4G
-Bachman, William - MD - 4G
-Bonaca, Marc - MD - 4G
-Cardet, Juan Carlos - MD - 4G
-Cardin, Kristin - NP - 4G
-Chan, Walter - MD - 4G
-Connell, Nathan - MD - 4G
-D'Ambrosio, Carolyn - MD - 4G
-Dave, Jatin - MD - 4G
-Fanta, Christopher - MD - 4G
-Hentschel, Dirk - MD - 4G
-Hsu, Joyce - MD - 4G
-Lilly, Leonard Stuart - MD - 4G
-McMahon, Gearoid - MD - 4G
-Parnes, Aric - MD - 4G
-Ramirez, Alberto - MD - 4G
-Romano, Keith - MD - 4G
-Ruff, Christian - MD - 4G
-Saldana, Fidencio - MD - 4G
-Schissel, Scott - MD - 4G
-Shah, Amil - MD - 4G
-Sheth, Samira - NP - 4G
-Sweeney, Michael - MD - 4G
-Tucker, Kevin - MD - 4G
-Voiculescu, Adina - MD - 4G
-Wickner, Paige - MD - 4G
-Bernstein, Carolyn - MD - 4H
-Burch, Rebecca - MD - 4H
-Cochrane, Thomas - MD - 4H
-Friedman, Pamela - PsyD, ABPP - 4H
-Loder, Elizabeth - MD - 4H
-Mathew, Paul - MD - 4H
-Rizzoli, Paul - MD - 4H
-Cua, Christopher - MD - 4I
-Lahive, Karen - MD - 4I
-Tarpy, Robert - MD - 4I
-Ruiz, Emily - MD - 4J
-Schmults, Chrysalyne - MD - 4J
-Waldman, Abigail - MD - 4J
-Bhasin, Shalender - MD - 4N
-Kathrins, Martin - MD - 4N
-Malone, Michael - MD - 4N
-McDonald, Michael - MD - 4N
-O'Leary, Michael - MD - 4N
-Steele, Graeme - MD - 4N
-Goldman, Jill - MD - 4S
-Lilienfeld, Armin - MD - 4S
-Owens, Lisa Michelle - MD - 4S
+name	title	location
+Caplan, Laura	PA-C	4A
+Copello, Maria	MD	4A
+Healy, Barbara	RN	4A
+Lauretti, Linda	MD	4A
+Oliver, Lynn	RN	4A
+Walsh Samp, Kathy	LICSW	4A
+Welker, Roy	MD	4A
+Conant, Alene	MD	4B
+Drewniak, Stephen	MD	4B
+Homenko, Daria	MD	4B
+Lo, Amy	MD	4B
+Matloff, Daniel	MD	4B
+McNabb-Balter, Julia	MD	4B
+Mutinga, Muthoka	MD	4B
+Preneta, Ewa	MD	4B
+Smith, Benjamin	MD	4B
+Mullally, William	MD	4C
+Novak, Peter	MD	4C
+Pilgrim, David	MD	4C
+Vardeh, Daniel	MD	4C
+Weisholtz, Daniel	MD	4C
+Whitman, Gregory	MD	4C
+Hoover, Paul	MD, PhD	4D
+Pariser, Kenneth	MD	4D
+Todd, Derrick	MD, PhD	4D
+Clark, Roger	DO	4F
+McGowan, Katherine	MD	4F
+Ash, Samuel	MD	4G
+Bachman, William	MD	4G
+Bonaca, Marc	MD	4G
+Cardet, Juan Carlos	MD	4G
+Cardin, Kristin	NP	4G
+Chan, Walter	MD	4G
+Connell, Nathan	MD	4G
+D'Ambrosio, Carolyn	MD	4G
+Dave, Jatin	MD	4G
+Fanta, Christopher	MD	4G
+Hentschel, Dirk	MD	4G
+Hsu, Joyce	MD	4G
+Lilly, Leonard Stuart	MD	4G
+McMahon, Gearoid	MD	4G
+Parnes, Aric	MD	4G
+Ramirez, Alberto	MD	4G
+Romano, Keith	MD	4G
+Ruff, Christian	MD	4G
+Saldana, Fidencio	MD	4G
+Schissel, Scott	MD	4G
+Shah, Amil	MD	4G
+Sheth, Samira	NP	4G
+Sweeney, Michael	MD	4G
+Tucker, Kevin	MD	4G
+Voiculescu, Adina	MD	4G
+Wickner, Paige	MD	4G
+Bernstein, Carolyn	MD	4H
+Burch, Rebecca	MD	4H
+Cochrane, Thomas	MD	4H
+Friedman, Pamela	PsyD, ABPP	4H
+Loder, Elizabeth	MD	4H
+Mathew, Paul	MD	4H
+Rizzoli, Paul	MD	4H
+Cua, Christopher	MD	4I
+Lahive, Karen	MD	4I
+Tarpy, Robert	MD	4I
+Ruiz, Emily	MD	4J
+Schmults, Chrysalyne	MD	4J
+Waldman, Abigail	MD	4J
+Bhasin, Shalender	MD	4N
+Kathrins, Martin	MD	4N
+Malone, Michael	MD	4N
+McDonald, Michael	MD	4N
+O'Leary, Michael	MD	4N
+Steele, Graeme	MD	4N
+Goldman, Jill	MD	4S
+Lilienfeld, Armin	MD	4S
+Owens, Lisa Michelle	MD	4S
