@@ -18,7 +18,7 @@ public class Controller {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
         stage.setTitle(title);
         stage.setScene(new Scene(root, 600, 400));
-        stage.setFullScreen(true);
+        stage.setMaximized(true);
         stage.show();
     }
 
