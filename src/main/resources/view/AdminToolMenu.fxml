@@ -1,75 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
-    <children>
-      <GridPane layoutX="14.0" layoutY="27.943359375" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="246.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1540.0" minWidth="10.0" prefWidth="1414.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="362.0" minWidth="10.0" prefWidth="240.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="107.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="269.0" minHeight="10.0" prefHeight="269.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="326.0" minHeight="10.0" prefHeight="217.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="275.0" minHeight="10.0" prefHeight="163.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="192.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
-         </rowConstraints>
+<AnchorPane fx:id="AdminTool_AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
+   <children>
+      <VBox fx:id="AdminTool_VBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-              <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editMap" text="Map Editor" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
-               </GridPane.margin>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Menu">
                <font>
-                  <Font size="56.0" />
-               </font>
-            </Button>
-              <Text layoutX="222.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Menu" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                  <font>
-                      <Font size="96.0" />
-                  </font>
-              </Text>
-              <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editHours" text="Visiting Hours" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <GridPane.margin>
-                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="56.0" />
-               </font>
-            </Button>
-              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" prefHeight="86.0" prefWidth="228.0" text="Logout" GridPane.rowIndex="6">
-               <font>
-                  <Font size="40.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets bottom="50.0" left="50.0" />
-               </GridPane.margin></Button>
-              <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editDirectory" text="Database Editor" AnchorPane.bottomAnchor="265.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="110.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets bottom="50.0" left="400.0" right="400.0" top="50.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="56.0" />
-               </font>
-            </Button>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an admin menu below" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-               <font>
-                  <Font size="40.0" />
+                  <Font size="47.0" />
                </font>
             </Text>
+            <Button fx:id="editDirectoryBtn" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editDirectory" prefHeight="70.0" prefWidth="300.0" text="Database Editor">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="50.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="mapEditorBtn" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editMap" prefHeight="70.0" prefWidth="300.0" text="Map Editor">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="editHoursBtn" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editHours" prefHeight="70.0" prefWidth="300.0" text="Visiting Hours">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
          </children>
-      </GridPane>
-    </children>
+      </VBox>
+      <Button fx:id="logoutBtn" layoutX="24.0" layoutY="371.0" mnemonicParsing="false" onAction="#logout" prefHeight="50.0" prefWidth="100.0" text="Logout" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+   </children>
 </AnchorPane>
