@@ -2,7 +2,6 @@ package controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
@@ -17,7 +16,7 @@ public class Controller {
         Stage stage = (Stage) b.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
         stage.setTitle(title);
-        stage.setScene(new Scene(root, 600, 400));
+        stage.getScene().setRoot(root);
         stage.setFullScreen(true);
         stage.show();
     }
