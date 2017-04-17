@@ -124,6 +124,9 @@ public class MainController extends Controller{
     private TabPane DisplayInformationTabPane;
     @FXML
     private TextArea TextDirectionsTextArea;
+    @FXML
+
+    AboutUsButton
 
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
