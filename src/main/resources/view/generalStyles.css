@@ -34,10 +34,6 @@
     -fx-background-color: #0090ad;
 }
 
-.button:focused {
-    -fx-background-color: #f1f1f1;
-}
-
 .text-field {
     -fx-background-color: #f1f1f1;
     -fx-border-color: #2f3332;
