@@ -2,6 +2,7 @@ package pathfinding;
 
 import model.Coordinate;
 import service.CoordinateService;
+import service.NodeService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,8 @@ public class MapNode implements Node<MapNode> {
     public final static double FEET_PER_PIXEL = 0.2902;
     public final static double SECONDS_PER_FOOT = 0.2975;
     public final static double STEPS_PER_FOOT = 0.5157;
+    private final double ELEVATOR_COST = 0.1;
+
     private Set<MapNode> neighbors;
     private model.Node modelNode;
     private Coordinate location;
@@ -43,10 +46,21 @@ public class MapNode implements Node<MapNode> {
     }
 
     public double heuristicCost(MapNode goal) {
+        int floorDifference = this.location.getFloor() - goal.getLocation().getFloor();
+        if (floorDifference != 0) {
+            Coordinate closestElevatorLocation = closestElevator().getLocation();
+            return distanceTo(closestElevatorLocation) + goal.distanceTo(closestElevatorLocation) + ELEVATOR_COST * floorDifference;
+        }
         return distanceTo(goal);
     }
 
     public double traversalCost(MapNode neighbor) {
+        // Make elevators take more than 0 cost so that we don't take elevators to a different floor
+        int floorDifference = this.location.getFloor() - neighbor.getLocation().getFloor();
+        if (floorDifference != 0) {
+            return Math.abs(floorDifference) * ELEVATOR_COST;
+        }
+
         return distanceTo(neighbor);
     }
 
@@ -55,8 +69,12 @@ public class MapNode implements Node<MapNode> {
     }
 
     public double distanceTo(MapNode n) {
-        double xDelta = location.getX() - n.getLocation().getX();
-        double yDelta = location.getY() - n.getLocation().getY();
+        return distanceTo(n.getLocation());
+    }
+
+    private double distanceTo(Coordinate otherLocation) {
+        double xDelta = location.getX() - otherLocation.getX();
+        double yDelta = location.getY() - otherLocation.getY();
         return Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
     }
 
@@ -71,5 +89,21 @@ public class MapNode implements Node<MapNode> {
 
     public model.Node getModelNode() {
         return modelNode;
+    }
+
+    private model.Node closestElevator() {
+        NodeService nodeService = new NodeService();
+        List<model.Node> elevators = nodeService.getElevatorNodes();
+        model.Node closestElevator = elevators.get(0); // TODO: Don't assume existence of elevators
+        for (model.Node e : elevators) {
+            if (distanceTo(e.getLocation()) < distanceTo(closestElevator.getLocation())) {
+                closestElevator = e;
+            }
+        }
+        return closestElevator;
+    }
+
+    public String toString() {
+        return modelNode.getName();
     }
 }
