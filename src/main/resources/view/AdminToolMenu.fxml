@@ -11,7 +11,7 @@
     <children>
         <VBox fx:id="AdminTool_VBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
             <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Menu">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Admin Menu">
                     <font>
                         <Font size="47.0" />
                     </font>
