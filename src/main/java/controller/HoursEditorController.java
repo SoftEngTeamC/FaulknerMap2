@@ -132,7 +132,7 @@ public class HoursEditorController extends Controller{
 
     }
 
-    public void validateEqualMorning() {
+    public boolean validateEqualMorning() {
         if((morninghrs1.getText().trim().equals(morninghrs2.getText().trim())) &&
                 (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
                 (hours.ampm1.equals(hours.ampm2))){
@@ -157,10 +157,12 @@ public class HoursEditorController extends Controller{
         else{
             startTimeErrorMorning.setVisible(false);
             displayerror.setVisible(false);
+            return true;
         }
+        return false;
     }
 
-    public void validateEqualEvening() {
+    public boolean validateEqualEvening() {
         if((eveninghrs1.getText().trim().equals(eveninghrs2.getText().trim())) &&
                 (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
                 (hours.ampm3.equals(hours.ampm4))){
@@ -185,8 +187,9 @@ public class HoursEditorController extends Controller{
         else{
             startTimeErrorEvening.setVisible(false);
             displayerror.setVisible(false);
-
+            return true;
         }
+        return false;
     }
     @FXML
     public void SubmitChanges() throws Exception{
@@ -196,6 +199,9 @@ public class HoursEditorController extends Controller{
                 && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
             flashErrorMessage();
+        }
+        else if(!validateEqualMorning() || !validateEqualEvening()){
+            //All the stuff is handled in the booleans in the if statement
         }
         else if(!ampm1.getText().trim().equals("AM") && !ampm1.getText().trim().equals("PM")){
             flashErrorMessage();
@@ -246,9 +252,8 @@ public class HoursEditorController extends Controller{
                     hours.ampm3,
                     hours.ampm4);
             displayerror.setVisible(false);
-            flashSuccessMessage();
             emf.hours = this.hours;
-
+            flashSuccessMessage();
 
         }
 
