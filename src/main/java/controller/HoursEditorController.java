@@ -231,7 +231,6 @@ public class HoursEditorController extends Controller{
                     hours.ampm4);
             displayerror.setVisible(false);
             emf.hours = this.hours;
-            logout();
         }
 
         else{
