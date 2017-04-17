@@ -654,6 +654,17 @@ public class MainController extends Controller{
         stage.setScene(new Scene(root, 300, 300));
         stage.show();
     }
+
+    @FXML
+    public void OpenAboutUs() throws Exception {
+        // goto genres screen
+        System.out.println("HERE WE ARE");
+        Stage stage = (Stage) AboutUsButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AboutUs.fxml"));
+        stage.setTitle("AboutUs");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+    }
     //SCREEN CHANGING FUNCTIONS
 //    @FXML
 //    public void OpenAdminTool() throws Exception {
