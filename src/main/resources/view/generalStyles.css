@@ -14,8 +14,8 @@
     -fx-open-tab-animation: NONE;
 }
 
-.tab:pressed {
-    -fx-background-color: #f1f1f1;
+.tab:selected:top {
+    -fx-background-color: #0090ad;
 }
 
 .button {
@@ -32,6 +32,10 @@
 
 .button:hover {
     -fx-background-color: #0090ad;
+}
+
+.button:focused {
+    -fx-background-color: #f1f1f1;
 }
 
 .text-field {
