@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -101,6 +102,11 @@
       <Text fx:id="startTimeErrorEvening" fill="RED" layoutX="306.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time must not equal End Time" visible="false">
          <font>
             <Font size="17.0" />
+         </font>
+      </Text>
+      <Text fx:id="displaySuccess" fill="GREEN" layoutX="75.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Accepted!" textAlignment="CENTER" visible="false" wrappingWidth="314.7626953125">
+         <font>
+            <Font size="46.0" />
          </font>
       </Text>
    </children>

@@ -1,13 +1,19 @@
 package controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import model.Hours;
 import service.EMFProvider;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class HoursEditorController extends Controller{
@@ -64,6 +70,8 @@ public class HoursEditorController extends Controller{
     private Text startTimeErrorMorning;
     @FXML
     private Text startTimeErrorEvening;
+    @FXML
+    private Text displaySuccess;
 
     EMFProvider emf;
 
@@ -129,18 +137,22 @@ public class HoursEditorController extends Controller{
                 (morningmin1.getText().trim().equals(morningmin2.getText().trim())) &&
                 (hours.ampm1.equals(hours.ampm2))){
             startTimeErrorMorning.setVisible(true);
+            final Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                    new KeyValue(startTimeErrorMorning.visibleProperty(), false)));
+            timeline.play();
         }
         else if (morninghrs1.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (morningmin1.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (morninghrs2.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (morningmin2.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else{
             startTimeErrorMorning.setVisible(false);
@@ -153,18 +165,22 @@ public class HoursEditorController extends Controller{
                 (eveningmin1.getText().trim().equals(eveningmin2.getText().trim())) &&
                 (hours.ampm3.equals(hours.ampm4))){
             startTimeErrorEvening.setVisible(true);
+            final Timeline timeline = new Timeline();
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                    new KeyValue(startTimeErrorEvening.visibleProperty(), false)));
+            timeline.play();
         }
         else if (eveninghrs1.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (eveningmin1.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (eveninghrs2.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (eveningmin2.getText().length()>2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else{
             startTimeErrorEvening.setVisible(false);
@@ -179,31 +195,31 @@ public class HoursEditorController extends Controller{
                 && eveninghrs1.getText().trim().isEmpty() && eveninghrs2.getText().trim().isEmpty()
                 && morningmin1.getText().trim().isEmpty() && morningmin2.getText().trim().isEmpty()
                 && eveningmin1.getText().trim().isEmpty() && eveningmin2.getText().trim().isEmpty()){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if(!ampm1.getText().trim().equals("AM") && !ampm1.getText().trim().equals("PM")){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if(!ampm2.getText().trim().equals("AM") && !ampm2.getText().trim().equals("PM")){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if(!ampm4.getText().trim().equals("AM") && !ampm4.getText().trim().equals("PM")){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if(!ampm3.getText().trim().equals("AM") && !ampm3.getText().trim().equals("PM")){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (morningmin1.getText().length()!=2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (morningmin2.getText().length()!=2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (eveningmin2.getText().length()!=2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (eveningmin1.getText().length()!=2){
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
         else if (inputval.checktime(morninghrs1, 1,12) && inputval.checktime(morninghrs2, 1,12)
                 && inputval.checktime(eveninghrs1, 1,12) && inputval.checktime(eveninghrs2, 1,12)
@@ -230,16 +246,38 @@ public class HoursEditorController extends Controller{
                     hours.ampm3,
                     hours.ampm4);
             displayerror.setVisible(false);
+            flashSuccessMessage();
             emf.hours = this.hours;
+
+
         }
 
         else{
-            displayerror.setVisible(true);
+            flashErrorMessage();
         }
 
 
     }
 
+    private void flashSuccessMessage(){
+        //THESE LINES ARE THE WINNERS! COPY PASTE EVERYWHERE! THEY WORK!
+        //This is how you make a message flash on for only two and a half seconds.
+        //Change the "displaySuccess" in "displaySuccess.visibleProperty()" to
+        //the name of the message that you want to flash.
+        displaySuccess.setVisible(true);
+        final Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                new KeyValue(displaySuccess.visibleProperty(), false)));
+        timeline.play();
 
+    }
+
+    private void flashErrorMessage(){
+        displayerror.setVisible(true);
+        final Timeline timeline = new Timeline();
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2500),
+                new KeyValue(displayerror.visibleProperty(), false)));
+        timeline.play();
+    }
 
 }
