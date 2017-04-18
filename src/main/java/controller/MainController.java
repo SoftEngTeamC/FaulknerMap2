@@ -474,30 +474,19 @@ public class MainController extends Controller {
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() throws Exception {
-        // goto genres screen
-        System.out.println("HERE WE ARE");
-        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("AdminToolMenu");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+        switchScreen("view/AdminToolMenu.fxml","Admin Tool Menu", AdminToolButton);
     }
 
     @FXML
     public void OpenAboutUs() throws Exception {
-        // goto genres screen
-        System.out.println("about us");
-        Stage stage = (Stage) AboutUsButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AboutUs.fxml"));
-        stage.setTitle("AboutUs");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
     }
-    //SCREEN CHANGING FUNCTIONS
 
-
+    //LANGUAGE CHANGES
+    //Note that these do not use the switchscreen function because they do not have buttons to pass
     @FXML
     public void toEnglish() throws Exception {
+        //switchScreen("view/Main.fxml", "Faulkner Kiosk", languageMenuButton);
         Stage stage = (Stage) languageMenuButton.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
         stage.setTitle("Faulkner Kiosk");

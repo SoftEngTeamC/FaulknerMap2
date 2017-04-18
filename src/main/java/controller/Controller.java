@@ -14,7 +14,6 @@ import java.io.IOException;
  * edited by JVB on 4/17/17
  */
 public class Controller {
-
     public void switchScreen(String file, String title,Button b) throws IOException {
         Stage stage = (Stage) b.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
