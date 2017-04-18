@@ -71,6 +71,14 @@ public class DirectoryEditorController extends Controller{
             }
         });
 
+        // add a listener to the textfield being changed to fix the search lag
+        searchField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                textFieldChanged(newValue);
+            }
+        });
+
     }
 
     @FXML
@@ -103,7 +111,7 @@ public class DirectoryEditorController extends Controller{
         loader.setLocation(getClass().getClassLoader().getResource("view/EditPersonScreen.fxml"));
         loader.load();
         Parent p = loader.getRoot();
-        Stage stage = (Stage) logoutBtn.getScene().getWindow();
+        Stage stage = (Stage) backBtn.getScene().getWindow();
         stage.setScene(new Scene(p));
         EditPersonController controller = loader.getController();
         controller.setSelectedUser(hp);
@@ -134,10 +142,10 @@ public class DirectoryEditorController extends Controller{
      *
      */
     @FXML
-    public void searchFieldKeyPressed() {
+    public void textFieldChanged(String anew) {
 
         // get the query from the search field
-        String query = searchField.getText();
+        String query = anew;
 
         // reset list
         searchResults.removeAll(searchResults);
