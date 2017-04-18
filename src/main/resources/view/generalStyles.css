@@ -6,21 +6,20 @@
 }
 
 .tab {
-    -fx-background-color: #00579f,
-         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
-         linear-gradient(#0067bc, #01467f),
-         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-color: #0058a1;
     -fx-border-color: #2f3332;
     -fx-border-width: 1px;
     -fx-background-radius: 3;
     -fx-border-radius: 3;
+    -fx-open-tab-animation: NONE;
+}
+
+.tab:selected:top {
+    -fx-background-color: #0090ad;
 }
 
 .button {
-    -fx-background-color: #00579f,
-         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
-         linear-gradient(#0067bc, #01467f),
-         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-color: #0058a1;
     -fx-border-color: #2f3332;
     -fx-border-width: 1px;
     -fx-background-radius: 3;
@@ -29,6 +28,10 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-family: "Helvetica";
+}
+
+.button:hover {
+    -fx-background-color: #0090ad;
 }
 
 .text-field {
@@ -40,10 +43,7 @@
 }
 
 .slider {
-    -fx-color: #00579f,
-         linear-gradient(#8eb7db 0%, #6d97bc 20%, #4c7eaa 100%),
-         linear-gradient(#0067bc, #01467f),
-         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-color: #0058a1;
 }
 
 .list-view {
