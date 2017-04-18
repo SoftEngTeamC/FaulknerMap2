@@ -1,25 +1,25 @@
 name	x	y
-Valet Parking   2507    911
-Belkin House Entrance 1614  413
+Valet Parking	2507	911
+Belkin House Entrance 1614	413
 
-Parking1    1653    967
+Parking1	1653	967
 
-Parking2    3423    1450
+Parking2	3423	1450
 
-ExternalNode1   3590    1350
-ExternalNode2   3715    2100
-ExternalNode3   3440    2880
-ExternalNode4   2600    2370
-ExternalNode5   2600    2620
+ExternalNode1	3590	1350
+ExternalNode2	3715	2100
+ExternalNode3	3440	2880
+ExternalNode4	2600	2370
+ExternalNode5	2600	2620
 
-Parking3    2120    2620
+Parking3	2120	2620
 
-intersection11  2200    1690
-intersection12  2514    1690
-intersection14  2662    1690
-intersection15  2662    1380
-intersection17  2514    1380
-intersection18  2514    1110
+intersection11	2200	1690
+intersection12	2514	1690
+intersection14	2662	1690
+intersection15	2662	1380
+intersection17	2514	1380
+intersection18	2514	1110
 
 GI Endoscopy	2497	1807
 hallway10	2515	1805
