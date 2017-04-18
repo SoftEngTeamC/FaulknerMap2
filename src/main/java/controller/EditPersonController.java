@@ -4,17 +4,13 @@ package controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import model.HospitalProfessional;
 import model.Node;
-import service.HospitalProfessionalService;
-import service.NodeService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,11 +44,6 @@ public class EditPersonController extends Controller{
     private Text updateText;
     @FXML
     private Text deletedText;
-
-    // ~~~~~database helpers~~~~~
-    NodeService ns;
-    HospitalProfessionalService hps;
-
     // Hospital professional on which we are editing
     HospitalProfessional hp;
 
@@ -69,10 +60,6 @@ public class EditPersonController extends Controller{
         // disable update and delete text fields
         updateText.setVisible(false);
         deletedText.setVisible(false);
-
-        // initialize database helpers
-        ns = new NodeService();
-        hps = new HospitalProfessionalService();
 
         // disable remove node button
         removeNodeBtn.setDisable(true);
@@ -195,9 +182,9 @@ public class EditPersonController extends Controller{
         hp.setOffices(currentNodeList);
 
         // remove old, insert new
-        HospitalProfessional old = hps.find(hp.getId());
-        hps.remove(old);
-        hps.merge(hp);
+        HospitalProfessional old = professionalService.find(hp.getId());
+        professionalService.remove(old);
+        professionalService.merge(hp);
 
         // alert user
         updateText.setVisible(true);
@@ -214,7 +201,7 @@ public class EditPersonController extends Controller{
     public void deleteBtnPressed() {
 
         //remove person
-        hps.remove(hp);
+        professionalService.remove(hp);
 
         // indicate to user
         deletedText.setVisible(true);
@@ -275,7 +262,7 @@ public class EditPersonController extends Controller{
     private void removeNode(String selected) {
 
         // get the node referenced by string
-        Node n = ns.findNodeByName(selected);
+        Node n = nodeService.findNodeByName(selected);
 
         // remove from current
         deleteNode(n, currentNodeList);
@@ -296,7 +283,7 @@ public class EditPersonController extends Controller{
     private void addNode(String selected){
 
         // find the node referenced by string
-        Node n = ns.findNodeByName(selected);
+        Node n = nodeService.findNodeByName(selected);
 
         // add to this list
         currentNodeList.add(n);
@@ -353,7 +340,7 @@ public class EditPersonController extends Controller{
         currentNodeList = this.hp.getOffices();
 
         // set the available node list
-        availableNodeList = ns.getAllNodes();
+        availableNodeList = nodeService.getAllNodes();
 
         // make it the set of all nodes - the person's set of nodes
         updateAvailableNodesList();

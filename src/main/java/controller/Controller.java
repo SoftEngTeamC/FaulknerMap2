@@ -1,11 +1,11 @@
 package controller;
 
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.HospitalService;
+import service.*;
 
 import java.io.IOException;
 
@@ -14,6 +14,13 @@ import java.io.IOException;
  * edited by JVB on 4/17/17
  */
 public class Controller {
+
+    protected CoordinateService coordinateService = new CoordinateService();
+    protected EdgeService edgeService = new EdgeService();
+    protected HospitalProfessionalService professionalService = new HospitalProfessionalService();
+    protected HospitalService hospitalService = new HospitalService();
+    protected NodeService nodeService = new NodeService();
+    protected TagService tagService = new TagService();
 
     public void switchScreen(String file, String title,Button b) throws IOException {
         Stage stage = (Stage) b.getScene().getWindow();
