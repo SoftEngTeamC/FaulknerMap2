@@ -250,12 +250,12 @@ public class MapEditorController extends Controller {
 
 
         tabPaneListen();
-        System.out.println("INITRemoveNeighborListener:");
-        removeNeighborListen();
+        System.out.println("INITRemoveNaighboreListener:");
+        setEditNode_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
-        circlesListen(circles, currFloor);
+        circlesListen(circles,currFloor);
         //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
