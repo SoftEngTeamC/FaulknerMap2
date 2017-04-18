@@ -19,7 +19,9 @@ public class MakeDirections {
         double pathLength = MapNode.getFeet(myPath);
         double pathTime = MapNode.getSeconds(myPath);
         String output = "";
-        String output2 = output.concat("Expected Distance: " + pathFormat.format(pathLength) + " feet. \nExpected time: " + pathFormat.format(pathTime) + " seconds.\n\t--------------------------\n");
+        String output2 = output.concat("Approximate Distance: " + pathFormat.format(pathLength) +
+                " feet. \nEstimated time: " + pathFormat.format(Math.floor(pathTime/60)) + " minutes and " +
+                pathFormat.format(Math.floor(pathTime%60)) + " seconds.\n\t--------------------------\n");
         output = output2;
         String direction;
         int i;
@@ -51,10 +53,6 @@ public class MakeDirections {
                     output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
                     output = output2;
                 }
-                //else These aren't the droids you're looking for. Ignore this node. It's a lie!
-                //Assuming we'll never start on floor five, go to floor 4, jump to 1, go back to 4.
-                //System.out.println("Made it here");
-
             }
 
             else {
