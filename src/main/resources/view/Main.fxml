@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -13,12 +14,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
@@ -136,6 +138,11 @@
                                 <Insets bottom="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
+                  <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" prefHeight="25.0" prefWidth="54.0" text="About Us" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
@@ -167,6 +174,9 @@
                                 </ScrollPane>
                                 <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                             </children>
+                     <effect>
+                        <Glow />
+                     </effect>
                         </AnchorPane>
                     </content>
                 </Tab>
@@ -257,4 +267,8 @@
             </tabs>
         </TabPane>
     </items>
+   <stylesheets>
+      <URL value="@generalStyles.css" />
+      <URL value="@normalizeButtons.css" />
+   </stylesheets>
 </SplitPane>

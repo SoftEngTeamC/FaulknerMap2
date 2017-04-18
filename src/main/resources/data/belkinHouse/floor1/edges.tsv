@@ -1,0 +1,10 @@
+Dialysis Clinic - HallwayB10
+StairsB10 - HallwayB11
+StairsB11 - HallwayB12
+HallwayB11 - HallwayB13
+HallwayB13 - IntersectionB10
+IntersectionB10 - IntersectionB13
+IntersectionB13 - IntersectionB14
+IntersectionB14 - IntersectionB12
+IntersectionB12 - IntersectionB11
+HallwayB12 - IntersectionB11

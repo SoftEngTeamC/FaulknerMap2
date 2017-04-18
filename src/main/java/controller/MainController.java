@@ -2,7 +2,6 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -13,33 +12,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import model.Edge;
 import model.HospitalProfessional;
-
+import model.Hours;
 import model.Node;
-import pathfinding.MapNode;
-import pathfinding.PathFinder;
-import service.EdgeService;
-
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.EMFProvider;
+import service.EdgeService;
 import service.HospitalProfessionalService;
 import service.NodeService;
-import model.Hours;
 import textDirections.MakeDirections;
-
-import java.awt.event.MouseEvent;
-import java.util.Collections;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -139,6 +125,8 @@ public class MainController extends Controller {
     private TabPane DisplayInformationTabPane;
     @FXML
     private TextArea TextDirectionsTextArea;
+    @FXML
+    private Button AboutUsButton;
 
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
@@ -483,23 +471,145 @@ public class MainController extends Controller {
         DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
     }
 
-    //    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
-//    @FXML
-//    public void OpenAdminTool() throws Exception {
-//        // goto genres screen
-//        System.out.println("HERE WE ARE");
-//        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-//        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-//        stage.setTitle("AdminToolMenu");
-//        stage.setScene(new Scene(root, 300, 300));
-//        stage.show();
-//    }
-    //SCREEN CHANGING FUNCTIONS
+    //----------------------------------Build Zoomable Maps----------------------------------------------
+    public void InitializeMapViews(){
+        //FIRST FLOOR
+        FirstFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FirstFloorImageView = new ImageView();
+        Image FirstFloorMapPic = new Image("images/1_thefirstfloor.png");
+        FirstFloorImageView.setImage(FirstFloorMapPic);
+        FirstFloorImageView.setPreserveRatio(true);
+        Group FirstFloorGroup = new Group();
+        FirstFloorGroup.getChildren().add(FirstFloorImageView);
+        FirstFloorScrollPane.setContent(FirstFloorGroup);
+        FirstFloorScrollPane.setPannable(true);
+        FirstFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FirstFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FirstFloorSlider.setMax(FirstFloorMapPic.getWidth());
+        FirstFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FirstFloorImageView.fitWidthProperty().bind(FirstFloorSlider.valueProperty());
+        //SECOND FLOOR
+        SecondFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SecondFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SecondFloorImageView = new ImageView();
+        Image SecondFloorMapPic = new Image("images/2_thesecondfloor.png");
+        SecondFloorImageView.setImage(SecondFloorMapPic);
+        SecondFloorImageView.setPreserveRatio(true);
+        Group SecondFloorGroup = new Group();
+        SecondFloorGroup.getChildren().add(SecondFloorImageView);
+        SecondFloorScrollPane.setContent(SecondFloorGroup);
+        SecondFloorScrollPane.setPannable(true);
+        SecondFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SecondFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SecondFloorSlider.setMax(SecondFloorMapPic.getWidth());
+        SecondFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SecondFloorImageView.fitWidthProperty().bind(SecondFloorSlider.valueProperty());
+        //THIRD FLOOR
+        ThirdFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        ThirdFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView ThirdFloorImageView = new ImageView();
+        Image ThirdFloorMapPic = new Image("images/3_thethirdfloor.png");
+        ThirdFloorImageView.setImage(ThirdFloorMapPic);
+        ThirdFloorImageView.setPreserveRatio(true);
+        Group ThirdFloorGroup = new Group();
+        ThirdFloorGroup.getChildren().add(ThirdFloorImageView);
+        ThirdFloorScrollPane.setContent(ThirdFloorGroup);
+        ThirdFloorScrollPane.setPannable(true);
+        ThirdFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ThirdFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ThirdFloorSlider.setMax(ThirdFloorMapPic.getWidth());
+        ThirdFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        ThirdFloorImageView.fitWidthProperty().bind(ThirdFloorSlider.valueProperty());
+        //FOURTH FLOOR
+        FourthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FourthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FourthFloorImageView = new ImageView();
+        Image FourthFloorMapPic = new Image("images/4_thefourthfloor.png");
+        FourthFloorImageView.setImage(FourthFloorMapPic);
+        FourthFloorImageView.setPreserveRatio(true);
+        Group FourthFloorGroup = new Group();
+        FourthFloorGroup.getChildren().add(FourthFloorImageView);
+        FourthFloorScrollPane.setContent(FourthFloorGroup);
+        FourthFloorScrollPane.setPannable(true);
+        FourthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FourthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FourthFloorSlider.setMax(FourthFloorMapPic.getWidth());
+        FourthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FourthFloorImageView.fitWidthProperty().bind(FourthFloorSlider.valueProperty());
+        //FIFTH FLOOR
+        FifthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        FifthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView FifthFloorImageView = new ImageView();
+        Image FifthFloorMapPic = new Image("images/5_thefifthfloor.png");
+        FifthFloorImageView.setImage(FifthFloorMapPic);
+        FifthFloorImageView.setPreserveRatio(true);
+        Group FifthFloorGroup = new Group();
+        FifthFloorGroup.getChildren().add(FifthFloorImageView);
+        FifthFloorScrollPane.setContent(FifthFloorGroup);
+        FifthFloorScrollPane.setPannable(true);
+        FifthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FifthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        FifthFloorSlider.setMax(FifthFloorMapPic.getWidth());
+        FifthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        FifthFloorImageView.fitWidthProperty().bind(FifthFloorSlider.valueProperty());
+        //SIXTH FLOOR
+        SixthFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SixthFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SixthFloorImageView = new ImageView();
+        Image SixthFloorMapPic = new Image("images/6_thesixthfloor.png");
+        SixthFloorImageView.setImage(SixthFloorMapPic);
+        SixthFloorImageView.setPreserveRatio(true);
+        Group SixthFloorGroup = new Group();
+        SixthFloorGroup.getChildren().add(SixthFloorImageView);
+        SixthFloorScrollPane.setContent(SixthFloorGroup);
+        SixthFloorScrollPane.setPannable(true);
+        SixthFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SixthFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SixthFloorSlider.setMax(SixthFloorMapPic.getWidth());
+        SixthFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SixthFloorImageView.fitWidthProperty().bind(SixthFloorSlider.valueProperty());
+        //SEVENTH FLOOR
+        SeventhFloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
+        SeventhFloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
+        ImageView SeventhFloorImageView = new ImageView();
+        Image SeventhFloorMapPic = new Image("images/7_theseventhfloor.png");
+        SeventhFloorImageView.setImage(SeventhFloorMapPic);
+        SeventhFloorImageView.setPreserveRatio(true);
+        Group SeventhFloorGroup = new Group();
+        SeventhFloorGroup.getChildren().add(SeventhFloorImageView);
+        SeventhFloorScrollPane.setContent(SeventhFloorGroup);
+        SeventhFloorScrollPane.setPannable(true);
+        SeventhFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SeventhFloorScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SeventhFloorSlider.setMax(SeventhFloorMapPic.getWidth());
+        SeventhFloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
+        SeventhFloorImageView.fitWidthProperty().bind(SeventhFloorSlider.valueProperty());
+    }
+
+    //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() throws Exception {
         // goto genres screen
-        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+        System.out.println("HERE WE ARE");
+        Stage stage = (Stage) AdminToolButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
+        stage.setTitle("AdminToolMenu");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
     }
+
+    @FXML
+    public void OpenAboutUs() throws Exception {
+        // goto genres screen
+        System.out.println("about us");
+        Stage stage = (Stage) AboutUsButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AboutUs.fxml"));
+        stage.setTitle("AboutUs");
+        stage.setScene(new Scene(root, 300, 300));
+        stage.show();
+    }
+    //SCREEN CHANGING FUNCTIONS
 
 
     @FXML
