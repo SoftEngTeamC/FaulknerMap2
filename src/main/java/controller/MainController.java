@@ -458,7 +458,7 @@ public class MainController extends Controller {
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() throws Exception {
-        switchScreen("view/AdminToolMenu.fxml","Admin Tool Menu", AdminToolButton);
+        switchScreen("view/LoginPage.fxml","Login", AdminToolButton);
     }
 
     @FXML
