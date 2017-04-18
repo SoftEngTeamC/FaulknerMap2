@@ -10,54 +10,53 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="DirectoryEditor_AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
-   <children>
-      <VBox fx:id="DirectoryEditor_VBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <Text accessibleRole="BUTTON" strokeType="OUTSIDE" strokeWidth="0.0" text="Directory Editor">
-               <font>
-                  <Font size="51.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="searchField" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#searchFieldKeyPressed" prefHeight="50.0" prefWidth="300.0" promptText="Search">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </TextField>
-            <ListView fx:id="searchList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button fx:id="editPrsnBtn" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="95.0" prefWidth="250.0" text="Edit Person">
-                     <font>
-                        <Font size="29.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="addPrsnBtn" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="50.0" prefWidth="250.0" text="Add Person">
-                     <font>
-                        <Font size="29.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </HBox>
-         </children>
-      </VBox>
-      <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-   </children>
+<AnchorPane fx:id="DirectoryEditor_AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
+    <children>
+        <VBox fx:id="DirectoryEditor_VBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <Text accessibleRole="BUTTON" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Directory Editor">
+                    <font>
+                        <Font size="51.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="searchField" maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#searchFieldKeyPressed" prefHeight="50.0" prefWidth="300.0" promptText="Search">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </TextField>
+                <ListView fx:id="searchList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" />
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button fx:id="editPrsnBtn" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="95.0" prefWidth="250.0" text="Edit Person">
+                            <font>
+                                <Font size="29.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets right="10.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="addPrsnBtn" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="50.0" prefWidth="250.0" text="Add Person">
+                            <font>
+                                <Font size="29.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+        <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
+    </children>
 </AnchorPane>

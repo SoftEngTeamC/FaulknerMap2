@@ -15,8 +15,12 @@ public class MakeDirections {
     private NodeService NS = new NodeService();
     private PathFinder pf = new PathFinder();
     public static String getText(List<MapNode> myPath){
-        String output2 = "";
+        DecimalFormat pathFormat = new DecimalFormat("#.#");
+        double pathLength = MapNode.getFeet(myPath);
+        double pathTime = MapNode.getSeconds(myPath);
         String output = "";
+        String output2 = output.concat("Expected Distance: " + pathFormat.format(pathLength) + " feet. \nExpected time: " + pathFormat.format(pathTime) + " seconds.\n\t--------------------------\n");
+        output = output2;
         String direction;
         int i;
         MapNode currentNode;
@@ -43,9 +47,14 @@ public class MakeDirections {
             //System.out.println(direction);
 
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
+                if(nextNode.getLocation().getFloor() == myPath.get(myPath.size()-1).getLocation().getFloor()){
+                    output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
+                    output = output2;
+                }
+                //else These aren't the droids you're looking for. Ignore this node. It's a lie!
+                //Assuming we'll never start on floor five, go to floor 4, jump to 1, go back to 4.
                 //System.out.println("Made it here");
-                output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
-                output = output2;
+
             }
 
             else {

@@ -164,22 +164,18 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-//                Node start = nodeService.find(Long.parseLong((String)row[0]));
-//                Node end = nodeService.find(Long.parseLong((String)row[1]));
                 Node start = nodeService.findNodeByName(startName);
                 Node end = nodeService.findNodeByName(endName);
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with id " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with id " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
                     return;
                 }
-
-             //   System.out.println(start.getName() + "\t" + end.getName());
 
                 edgeService.persist(new Edge(start, end, 0));
             }
