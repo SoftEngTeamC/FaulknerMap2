@@ -21,6 +21,7 @@ public class DataLoader {
             loadLocations("data/floor6/locations.tsv", 6);
             loadLocations("data/floor7/locations.tsv", 7);
 
+            loadPeople("data/floor1/kiosk.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
