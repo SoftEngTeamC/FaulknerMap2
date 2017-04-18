@@ -30,7 +30,7 @@ public class MapNode implements Node<MapNode> {
 
     public static double getPixels(List<MapNode> myPath) {
         int totalDistance = 0;
-        for(int i = 0; i < myPath.size()-2;i++){ //Go until 1 before the end
+        for(int i = 0; i < myPath.size()-1;i++){ //Go until 1 before the end
             totalDistance += myPath.get(i).distanceTo(myPath.get(i+1));
         }
         return totalDistance;
