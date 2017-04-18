@@ -49,6 +49,32 @@ public class PathFinder {
         return null;
     }
 
+    public static <T extends Node<T>> List<T> BFS(T start, T goal) {
+        BFSIterator<T> iterator = new BFSIterator<>(start);
+        java.util.Map<T, T> cameFrom = new HashMap<>();
+        T prev = null;
+        for (BFSIterator<T> it = iterator; it.hasNext();) {
+            T n = it.next();
+            cameFrom.put(n, prev);
+            if (n.equals(goal)) return reconstructPath(n, cameFrom);
+            prev = n;
+        }
+        return null;
+    }
+
+    public static <T extends Node<T>> List<T> DFS(T start, T goal) {
+        DFSIterator<T> iterator = new DFSIterator<>(start);
+        java.util.Map<T, T> cameFrom = new HashMap<>();
+        T prev = null;
+        for (DFSIterator<T> it = iterator; it.hasNext();) {
+            T n = it.next();
+            cameFrom.put(n, prev);
+            if (n.equals(goal)) return reconstructPath(n, cameFrom);
+            prev = n;
+        }
+        return null;
+    }
+
     private static <T extends Node<T>> List<T> reconstructPath(T end, java.util.Map<T, T> cameFrom) {
         LinkedList<T> path = new LinkedList<>();
         while (end != null) {
