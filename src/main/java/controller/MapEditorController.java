@@ -182,14 +182,16 @@ public class MapEditorController extends Controller {
 
     private List<floorCircles> floorCircles;
 
-    class floorCircles{
+    class floorCircles {
         int floor;
         List<Circle> circles;
-        floorCircles(int floor, List<Circle> circles){
+
+        floorCircles(int floor, List<Circle> circles) {
             this.floor = floor;
             this.circles = circles;
         }
     }
+
     public MapEditorController() {
     }
 
@@ -236,7 +238,7 @@ public class MapEditorController extends Controller {
 
 
         tabPaneListen();
-        System.out.println("INITRemoveNaighboreListener:");
+        System.out.println("INITRemoveNeighborListener:");
         removeNeighborListen();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
@@ -248,10 +250,17 @@ public class MapEditorController extends Controller {
     public void circlesListen(List<Circle> circles, int floor) {
         System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
+        final double[] orgx = new double[1];
+        final double[] orgy = new double[1];
+        final double[] transx = new double[1];
+        final double[] transy = new double[1];
+        final boolean[] set = {false};
         for (Circle circle : circles) {
-
-
             circle.setOnMouseClicked(event -> {
+                System.out.println("slider: " + ShowNodesEdgesHelper.checkSlider(currFloor).getValue());
+                System.out.println("X: " + circle.getCenterX());
+                System.out.println("Y: " + circle.getCenterY());
+
                 System.out.println("Clicked on node: " + NS.find(Long.parseLong(circle.getId())).getName());
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
                 System.out.println(ItemsInListView);
@@ -292,14 +301,50 @@ public class MapEditorController extends Controller {
                 System.out.println("ClickedOnMap");
                 ShowNodesEdgesHelper.resetDrawnShapeColors(floor);
                 firstCircle[0] = null;
+                ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+                tempScrollPane.setPannable(true);
+            });
+
+            circle.setOnMouseDragged(event -> {
+                ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+                tempScrollPane.setPannable(false);
+
+                if (!set[0]) {
+                    orgx[0] = event.getSceneX();
+                    orgy[0] = event.getSceneY();
+                    transx[0] = ((Circle) (event.getSource())).getTranslateX();
+                    transy[0] = ((Circle) (event.getSource())).getTranslateY();
+                    set[0] = true;
+                }
+
+                double offsetX = event.getSceneX() - orgx[0];
+                double offsetY = event.getSceneY() - orgy[0];
+                double newTranslateX = transx[0] + offsetX;
+                double newTranslateY = transy[0] + offsetY;
+
+                ((Circle) (event.getSource())).setTranslateX(newTranslateX);
+                ((Circle) (event.getSource())).setTranslateY(newTranslateY);
+
+                Node node = NS.find(Long.parseLong(circle.getId()));
+                CoordinateService CS = new CoordinateService();
+                Coordinate coor = CS.find(node.getLocation().getId());
+                coor.setX(coor.getX() + offsetX);
+                coor.setY(coor.getY() + offsetY);
+                CS.merge(coor);
+
+//                    NS.merge(node);
+                //   System.out.println("End " + node.getLocation().toString());
+                //   System.out.println("Dragging");
             });
         }
     }
 
     //This function listens for a click on anything that isnt a circle.
     //Then it removes all the highlights and clears the firstCircle[0]
-    public void ClickOnMapListener(int floor) {
 
+    public void ClickOnMapListener(int floor) {
+        ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+        tempScrollPane.setPannable(true);
 
     }
 
@@ -722,7 +767,7 @@ public class MapEditorController extends Controller {
         switchScreen("view/Main.fxml", "Main", logoutBtn);
     }
 
-    public static int getCurrFloor(){
+    public static int getCurrFloor() {
         return currFloor;
     }
 }
