@@ -64,7 +64,7 @@ public class MapEditorController extends Controller {
     @FXML
     private TabPane FloorViewsTabPane;
     @FXML
-    private VBox MapEditorVBox;
+    private TabPane MapEditorTabPane;
 
     // Back and logout buttons
     @FXML
@@ -120,6 +120,10 @@ public class MapEditorController extends Controller {
     private Button editNode_addBtn;
     @FXML
     private Text AddNodeIndicatorText;
+    @FXML
+    private VBox EditNode_VBox;
+    @FXML
+    private AnchorPane EditNode_AnchorPane;
 
     @FXML
     protected TabPane tabPane;
@@ -170,7 +174,7 @@ public class MapEditorController extends Controller {
             names.add(n.getName());
         }
         editNode_addField.getEntries().addAll(names);
-
+        //Visual Initializations
         new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
                  SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
@@ -178,7 +182,13 @@ public class MapEditorController extends Controller {
                  SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
+        editNode_searchResultsList.minWidthProperty().bind(EditNode_AnchorPane.widthProperty());
+        editNode_searchResultsList.setMinHeight(200);
+        editNode_neighborsList.setMinHeight(80);
+        //EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
+        EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
         InitializeIndicatorTextListeners();
+        removeNode_searchFieldValueListner();
 
         // init local lists
         searchList = new ArrayList<>();
@@ -200,12 +210,13 @@ public class MapEditorController extends Controller {
         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
         editNode_searchResultsList.setItems(obList);
+        removeNode_searchList.setItems(obList);
         disableEdge_searchResultsList.setItems(obList);
 
 
         tabPaneListen();
         System.out.println("INITRemoveNaighboreListener:");
-        removeNeighborListen();
+        setEditNode_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
@@ -213,6 +224,8 @@ public class MapEditorController extends Controller {
         //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
+
+    //-------------------------------------------Listeners---------------------------------------------
     public void circlesListen(List<Circle> circles, int floor){
         System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
@@ -262,13 +275,7 @@ public class MapEditorController extends Controller {
         }
     }
 
-    //This function listens for a click on anything that isnt a circle.
-    //Then it removes all the highlights and clears the firstCircle[0]
-    public void ClickOnMapListener(int floor){
-
-
-    }
-
+    //This Listener is trggered when a different MapTab is selected
 
     public void tabPaneListen() {
         System.out.println("TabPaneListener");
@@ -304,17 +311,22 @@ public class MapEditorController extends Controller {
                     }
                 }
         );
-
-
     }
 
-    public void removeNeighborListen() {
+    //This Listener is triggered when an item in the EditNode_SearchResults List is selected
+    public void setEditNode_searchResultsListening() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     System.out.println("editNode_SearchResultsList Listener");
                     //Update Current Node
                     Node selectedNode = NS.findNodeByName(newValue);
                     currNodes[0] = selectedNode;
+                    ObservableList<String> RemoveNodeList = removeNode_searchList.getItems();
+                    int j=0;
+                    for(j=0; !newValue.equals(removeNode_searchList.getItems().get(j));j++){
+                        //find the index of the item in the list
+                    }
+                    removeNode_searchList.getSelectionModel().select(j);
                     //Update Neighbors List
                     ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
                     editNode_neighborsList.setItems(nList);
@@ -340,6 +352,7 @@ public class MapEditorController extends Controller {
                     }
                 });
 
+        //This listener is triggered when the EditNode_Neighbors List is selected
         editNode_neighborsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("EditNode_NeighborsList Listener");
             //clear Old Highlights
@@ -381,8 +394,6 @@ public class MapEditorController extends Controller {
 
     }
 
-
-    // Methods for the remove node tab
 
     /**
      * @author Samuel Coache
@@ -445,19 +456,22 @@ public class MapEditorController extends Controller {
     /**
      * method that populates the search results with the search query
      */
-    public void removeNode_searchFieldKeyPressed() {
-        // get the query from the field
-        String query = removeNode_searchField.getText();
-        ArrayList<String> queryList = new ArrayList<>();
-        // add each query to the list
-        List<Node> nodeList = this.NS.getAllNodes();
-        for (Node n : nodeList) {
-            if (n.getName().contains(query))
-                queryList.add(n.getName());
-        }
-        // Make the list view show the results
-        Collections.sort(queryList, String.CASE_INSENSITIVE_ORDER);
-        removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
+    public void removeNode_searchFieldValueListner() {
+        removeNode_searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // get the query from the field
+            String query = newValue;
+            ArrayList<String> queryList = new ArrayList<>();
+            // add each query to the list
+            List<Node> nodeList = this.NS.getNodesByFloor(currFloor);
+            for (Node n : nodeList) {
+                if (n.getName().contains(query)) {
+                    queryList.add(n.getName());
+                }
+            }
+            // Make the list view show the results
+            Collections.sort(queryList, String.CASE_INSENSITIVE_ORDER);
+            removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
+        });
     }
 
     /**
