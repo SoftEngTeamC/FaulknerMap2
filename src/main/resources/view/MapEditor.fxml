@@ -15,42 +15,53 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
+<SplitPane fx:id="MapEditor_SplitPane" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
   <items>
-      <VBox fx:id="MapEditorVBox">
+      <VBox fx:id="MapEditorVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
             <Button fx:id="backBtn" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="60.0" text="Back">
                <VBox.margin>
-                  <Insets left="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="5.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Text fx:id="MapEditorInstructionText" strokeType="OUTSIDE" strokeWidth="0.0" text="To edit nodes or routes, select them on the map for more options." textAlignment="CENTER" wrappingWidth="200.0">
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin></Text>
-            <TabPane prefHeight="461.0" prefWidth="305.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="MapEditorTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="305.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                   <Tab text="Edit Node">
                     <content>
-                      <AnchorPane fx:id="EditNode_AnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="362.0" prefWidth="305.0">
+                      <AnchorPane fx:id="EditNode_AnchorPane" maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefWidth="305.0">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                              <VBox fx:id="EditNode_VBox" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308">
                                  <children>
                                     <!--<Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search for node:" />-->
                                     <!--<TextField fx:id="editNode_searchField" layoutX="14.0" layoutY="31.0" />-->
                                     <!--<Button fx:id="editNode_searchBtn" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#editNode_searchBtnPressed" text="Refresh" />-->
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Node:" />
-                                    <ListView fx:id="editNode_searchResultsList" prefHeight="99.0" prefWidth="263.0" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Neighbors:" wrappingWidth="249.1962890625" />
-                                    <ListView fx:id="editNode_neighborsList" onMouseClicked="#HandleEditNodes_NeighborsListClicked" prefHeight="67.0" prefWidth="264.0" />
-                                    <!--<TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0" />-->
-      
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Node:" wrappingWidth="232.22201538085938">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </VBox.margin></Text>
+                                    <ListView fx:id="editNode_searchResultsList" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="263.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Neighbors:" wrappingWidth="233.86294555664062">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </VBox.margin></Text>
+                                    <ListView fx:id="editNode_neighborsList" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#HandleEditNodes_NeighborsListClicked" prefHeight="67.0" prefWidth="264.0" />
+
+                                    <Button fx:id="editNode_removeNeighborBtn" mnemonicParsing="false" onAction="#editNode_removeNeighborBtnPressed" text="Remove Neighbor">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin></Button>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manually add neighbor by Searching for them here:">
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </VBox.margin></Text>
+                                    <!--<TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0">-->
                                     <AutocompletionlTextField fx:id="editNode_addField" />
-                                    <Button fx:id="editNode_removeNeighborBtn" mnemonicParsing="false" onAction="#editNode_removeNeighborBtnPressed" text="Remove Neighbor" />
-                                    <Button fx:id="editNode_addBtn" mnemonicParsing="false" onAction="#editNode_addBtnPressed" text="Add" />
+                                    <Button fx:id="editNode_addBtn" mnemonicParsing="false" onAction="#editNode_addBtnPressed" text="Add">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin></Button>
                                     <Text fx:id="editNode_warningText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Node doesn't not exist" visible="false" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manually add neighbor:" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add an edge, click on one node and then the next" wrappingWidth="249.1962890625" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add an edge, click on one node and then the next" wrappingWidth="285.1962890625" />
                                  </children>
                               </VBox>
                            </children></AnchorPane>
@@ -111,8 +122,14 @@
                      </content>
                   </Tab>
               </tabs>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </TabPane>
-            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logout" text="Logout" />
+            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logout" text="Logout">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" />
+               </VBox.margin></Button>
         </children>
 
       </VBox>

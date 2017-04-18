@@ -64,7 +64,7 @@ public class MapEditorController extends Controller {
     @FXML
     private TabPane FloorViewsTabPane;
     @FXML
-    private VBox MapEditorVBox;
+    private TabPane MapEditorTabPane;
 
     // Back and logout buttons
     @FXML
@@ -182,9 +182,11 @@ public class MapEditorController extends Controller {
                  SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
-        editNode_searchResultsList.prefWidthProperty().bind(EditNode_AnchorPane.widthProperty());
-        editNode_searchResultsList.setPrefHeight(300);
-
+        editNode_searchResultsList.minWidthProperty().bind(EditNode_AnchorPane.widthProperty());
+        editNode_searchResultsList.setMinHeight(200);
+        editNode_neighborsList.setMinHeight(80);
+        //EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
+        EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
         InitializeIndicatorTextListeners();
         removeNode_searchFieldValueListner();
 
