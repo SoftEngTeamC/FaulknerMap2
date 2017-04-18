@@ -4,29 +4,17 @@ package controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import model.HospitalProfessional;
 import model.Node;
-import service.HospitalProfessionalService;
-import service.NodeService;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 
 public class AddPersonController extends Controller{
@@ -68,11 +56,6 @@ public class AddPersonController extends Controller{
     List<Node> availableLocationsList;
     List<Node> currentLocationsList;
 
-    //database helpers
-    NodeService ns;
-    HospitalProfessionalService hps;
-
-
     @FXML
     public void initialize() {
 
@@ -80,16 +63,12 @@ public class AddPersonController extends Controller{
         addNodeBtn.setDisable(true);
         removeNodeBtn.setDisable(true);
 
-        // init helpers
-        hps = new HospitalProfessionalService();
-        ns = new NodeService();
-
         // set success text invisible
         successText.setVisible(false);
         errorText.setVisible(false);
 
         //init available nodes
-        availableLocationsList = ns.getAllNodes();
+        availableLocationsList = nodeService.getAllNodes();
 
         // init current locations
         currentLocationsList = new ArrayList<>();
@@ -146,7 +125,7 @@ public class AddPersonController extends Controller{
 
         Node n = null;
         // find the node referenced by string
-        for(Node an: ns.getAllNodes()) {
+        for(Node an: nodeService.getAllNodes()) {
             if(an.getName().equals(selected)){
                 n = an;
             }
@@ -211,7 +190,7 @@ public class AddPersonController extends Controller{
     private void removeNode(String selected) {
 
         // get the node referenced by string
-        Node n = ns.findNodeByName(selected);
+        Node n = nodeService.findNodeByName(selected);
 
         System.out.println(n.getName());
 
@@ -273,7 +252,7 @@ public class AddPersonController extends Controller{
      */
     public void addPersonBtnPressed() {
         if(!(nameField.getText().isEmpty() || titleField.getText().isEmpty() || currentLocationsList.isEmpty())) {
-            hps.merge(new HospitalProfessional(nameField.getText(), titleField.getText(), currentLocationsList));
+            professionalService.merge(new HospitalProfessional(nameField.getText(), titleField.getText(), currentLocationsList));
             successText.setVisible(true);
             errorText.setVisible(false);
         } else
@@ -292,7 +271,7 @@ public class AddPersonController extends Controller{
         ArrayList<String> results = new ArrayList<>();
 
         // add search results
-        for(Node n : ns.getAllNodes()){
+        for(Node n : nodeService.getAllNodes()){
             if(n.getName().toLowerCase().contains(query.toLowerCase())){
                 results.add(n.getName());
             }
