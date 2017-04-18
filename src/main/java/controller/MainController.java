@@ -200,12 +200,12 @@ public class MainController extends Controller {
         }
 
         for (MapNode node : nodes) {
-            ShowNodesEdgesHelper.MakeCircle(NS.find(node.getModelNodeID()));
+            ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
         }
 
         for(int i = 0; i < nodes.size() - 1; i++){
-            Node start = NS.find(nodes.get(i).getModelNodeID());
-            Node end = NS.find(nodes.get(i+1).getModelNodeID());
+            Node start = nodes.get(i).getModelNode();
+            Node end = nodes.get(i+1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
             Edge e = ES.findByNodes(start,end).get(0);

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "ENTITIES")
+@Table(name = "TAGS")
 public class Tag {
     private Long id;
 
