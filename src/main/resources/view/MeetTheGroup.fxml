@@ -5,8 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MeetTheGroupController">
    <children>
       <Text layoutX="178.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Meet the Group">
          <font>
@@ -23,7 +22,7 @@
       <Text layoutX="180.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patrick Malone - Software Engineer" />
       <Text layoutX="168.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Alexander Taglieri - Software Engineer" />
       <Text layoutX="180.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Yaofeng Wang - Software Engineer" />
-      <Button layoutX="29.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="back" />
+      <Button fx:id="backbtn" layoutX="29.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="back" />
       <Text layoutX="75.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Coaches - Yizhou Yan, Liang Zhang, Dominik Smreczak" wrappingWidth="415.203125">
          <font>
             <Font size="14.0" />

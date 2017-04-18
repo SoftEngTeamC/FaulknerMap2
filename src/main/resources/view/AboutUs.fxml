@@ -12,7 +12,7 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Text>
-      <Button layoutX="39.0" layoutY="31.0" mnemonicParsing="false" text="back" />
+      <Button fx:id="backbtn" layoutX="39.0" layoutY="31.0" mnemonicParsing="false" onAction="#back" text="back" />
       <Button fx:id="MeetTheTeamButton" layoutX="215.0" layoutY="213.0" mnemonicParsing="false" onAction="#OpenMeetTheGroup" text="Meet the Team">
          <font>
             <Font size="20.0" />
