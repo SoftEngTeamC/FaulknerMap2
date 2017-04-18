@@ -404,24 +404,14 @@ public class MapEditorController extends Controller {
     public void removeNode_searchBtnPressed() {
         try {
             String searchField = removeNode_searchField.getText();
-            //System.out.println("searchField is: " + searchField);
             if (searchField.equals("")) {
                 ObservableList<String> allOList = FXCollections.observableArrayList(this.nodeList);
                 removeNode_searchList.setItems(allOList);
-                //} else {
-                //String selectedName = (this.NS.findNodeByName(searchField)).getName();
-                //System.out.println("selectName is: " + selectedName);
-                //ArrayList<String> nodeName = new ArrayList<>();
-                //nodeName.add(selectedName);
-                //System.out.println("nodeName is: " + nodeName);
-                //ObservableList<String> OList = FXCollections.observableArrayList(nodeName);
-                //removeNode_searchList.setItems(OList);
             }
         } catch (Exception E) {
             System.out.println("Searching Error");
             E.printStackTrace();
         }
-
     }
 
     /**
