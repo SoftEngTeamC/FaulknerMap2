@@ -132,6 +132,9 @@ class ShowNodesEdgesHelper {
         FloorSlider.setMax(FirstFloorMapPic.getWidth());
         FloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
         FloorImageView.fitWidthProperty().bind(FloorSlider.valueProperty());
+        FloorSlider.setValue(FloorSlider.getMin() + ((FloorSlider.getMax() - FloorSlider.getMin()) * 0.25));
+        FloorScrollPane.setHvalue((FloorScrollPane.getHmax()+FloorScrollPane.getHmin()) / 2);
+        FloorScrollPane.setVvalue((FloorScrollPane.getVmax()+FloorScrollPane.getVmin()) / 2);
     }
 
 //    public void ZoomListener(){

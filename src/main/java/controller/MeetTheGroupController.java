@@ -1,5 +1,4 @@
 package controller;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -43,30 +42,14 @@ import java.util.Collections;
 
 import java.util.LinkedList;
 import java.util.List;
-
-
-public class AboutUsController extends Controller{
-
-    @FXML
-    private Button MeetTheTeamButton;
-
+/**
+ * Created by Guillermo on 4/17/17.
+ */
+public class MeetTheGroupController extends Controller {
     @FXML
     private Button backbtn;
-
     @FXML
-    public void OpenMeetTheGroup() throws Exception {
-        // goto genres screen
-        System.out.println("Meet the group");
-        Stage stage = (Stage) MeetTheTeamButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/MeetTheGroup.fxml"));
-        stage.setTitle("Meet The Group");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+    public void back() throws Exception {
+        switchScreen("view/AboutUs.fxml", "About Us", backbtn);
     }
-
-
-      @FXML
-      public void back() throws Exception {
-          switchScreen("view/Main.fxml", "Main", backbtn);
-      }
 }
