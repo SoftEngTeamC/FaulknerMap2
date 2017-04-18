@@ -275,7 +275,7 @@ public class MainController extends Controller {
 
     public void handleClickedOnStartAtKiosk() {
         System.out.println("start at kiosk");
-        Start_location_TextArea.setText("intersection18");
+        Start_location_TextArea.setText("Floor 1 Kiosk");
     }
 
     //This function is called when the user clicks on a Search Result.
