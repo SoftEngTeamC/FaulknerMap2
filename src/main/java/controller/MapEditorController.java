@@ -1,21 +1,14 @@
 package controller;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -223,7 +216,7 @@ public class MapEditorController extends Controller {
         //EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
         EditNode_VBox.prefHeightProperty().bind(MapEditorTabPane.heightProperty());
         InitializeIndicatorTextListeners();
-        removeNode_searchFieldValueListner();
+        removeNode_searchFieldValueListener();
 
         // init local lists
         searchList = new ArrayList<>();
@@ -481,7 +474,6 @@ public class MapEditorController extends Controller {
             currNodes[1] = end;
         });
 
-
     }
 
 
@@ -502,6 +494,7 @@ public class MapEditorController extends Controller {
             //System.out.println("Searching Error");
             e.printStackTrace();
         }
+
     }
 
 
@@ -530,13 +523,14 @@ public class MapEditorController extends Controller {
         //repopulate the search list
         ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
         removeNode_searchList.setItems(OList);
+
     }
 
 
     /**
      * method that populates the search results with the search query
      */
-    public void removeNode_searchFieldValueListner() {
+    public void removeNode_searchFieldValueListener() {
         removeNode_searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             // get the query from the field
             String query = newValue;
@@ -612,6 +606,7 @@ public class MapEditorController extends Controller {
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
+
     }
 
     private List<String> neighborNames(Node node) {
@@ -633,6 +628,7 @@ public class MapEditorController extends Controller {
 
     public void editNode_addBtnPressed() {
         Node newNode = NS.findNodeByName(editNode_addField.getText());
+
         if (newNode != null) {
             EdgeService es = new EdgeService();
             es.persist(new Edge(currNodes[0], newNode, 0));
@@ -642,14 +638,13 @@ public class MapEditorController extends Controller {
         }
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
+
     }
 
     public void HandleEditNodes_NeighborsListClicked() {
+
     }
 
-    public void HandleEditNodes_NeighborsListClicked(){
-        //
-    }
 
     public void disableEdgeSelectedNodeListen() {
 //        disableEdge_searchResultsList.getSelectionModel().selectedItemProperty()
