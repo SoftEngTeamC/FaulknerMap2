@@ -138,6 +138,11 @@
                                 <Insets bottom="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
+                  <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" prefHeight="25.0" prefWidth="54.0" text="About Us" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <children>
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="208.0" text="Language">
                             <items>
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
