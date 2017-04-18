@@ -27,7 +27,6 @@ public class Controller {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
         stage.setTitle(title);
         stage.getScene().setRoot(root);
-        stage.setFullScreen(true);
         stage.show();
     }
     /**
