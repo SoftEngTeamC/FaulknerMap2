@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -325,16 +326,27 @@ public class MapEditorController extends Controller {
                 ((Circle) (event.getSource())).setTranslateX(newTranslateX);
                 ((Circle) (event.getSource())).setTranslateY(newTranslateY);
 
+
+                Group group1 = (Group) tempScrollPane.getContent();
+
+                ImageView Map1 = (ImageView) group1.getChildren().get(0);
+
+                double ImgW = Map1.getImage().getWidth();
+                double ImgH = Map1.getImage().getHeight();
+
                 Node node = NS.find(Long.parseLong(circle.getId()));
                 CoordinateService CS = new CoordinateService();
                 Coordinate coor = CS.find(node.getLocation().getId());
-                coor.setX(coor.getX() + offsetX);
-                coor.setY(coor.getY() + offsetY);
+                System.out.println("Before: " + coor.toString());
+                System.out.println("Offsetx: " + offsetX);
+                System.out.println("Offsety: " + offsetY);
+                System.out.println("Offsetx/: " + (Map1.fitWidthProperty().multiply(offsetX / ImgW)).doubleValue());
+                System.out.println("Offsety/: " + ((Map1.fitWidthProperty().multiply(offsetY / ImgH)).doubleValue()));
+                coor.setX(coor.getX() + ((Map1.fitWidthProperty().multiply(offsetX / ImgW)).doubleValue()));
+                coor.setY(coor.getY() + ((Map1.fitWidthProperty().multiply(offsetY / ImgH)).doubleValue()));
+                System.out.println("After: " + coor.toString());
                 CS.merge(coor);
 
-//                    NS.merge(node);
-                //   System.out.println("End " + node.getLocation().toString());
-                //   System.out.println("Dragging");
             });
         }
     }
