@@ -1,14 +1,21 @@
 package controller;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -150,10 +157,23 @@ public class MapEditorController extends Controller {
     @FXML
     private Text ifUndoDisableText;
 
+    @FXML
+    private Button dragNode1;
+    @FXML
+    private Button dragNode2;
+    @FXML
+    private Button dragNode3;
+    @FXML
+    private Button dragNode4;
+    @FXML
+    private Button dragNode5;
+    @FXML
+    private Button dragNode6;
+    @FXML
+    private Button dragNode7;
+
     // Images
     private Image floor4Image;
-
-    // database helper
 
     // arraylist of search terms
     private ArrayList<String> searchList;
@@ -163,7 +183,22 @@ public class MapEditorController extends Controller {
 
     private Node[] currNodes = new Node[2];
 
-    private int currFloor;
+    private static int currFloor;
+
+    private List<floorCircles> floorCircles;
+
+    class floorCircles {
+        int floor;
+        List<Circle> circles;
+
+        floorCircles(int floor, List<Circle> circles) {
+            this.floor = floor;
+            this.circles = circles;
+        }
+    }
+
+    public MapEditorController() {
+    }
 
     public void initialize() {
         this.NS = new NodeService();
@@ -224,23 +259,31 @@ public class MapEditorController extends Controller {
         //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
-
     //-------------------------------------------Listeners---------------------------------------------
     public void circlesListen(List<Circle> circles, int floor){
         System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
-        for(Circle circle: circles) {
+        final double[] orgx = new double[1];
+        final double[] orgy = new double[1];
+        final double[] transx = new double[1];
+        final double[] transy = new double[1];
+        final boolean[] set = {false};
+        for (Circle circle : circles) {
             circle.setOnMouseClicked(event -> {
+                System.out.println("slider: " + ShowNodesEdgesHelper.checkSlider(currFloor).getValue());
+                System.out.println("X: " + circle.getCenterX());
+                System.out.println("Y: " + circle.getCenterY());
+
                 System.out.println("Clicked on node: " + NS.find(Long.parseLong(circle.getId())).getName());
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
                 System.out.println(ItemsInListView);
-                int i=0;
-                for(i=0; !(ItemsInListView.get(i).equals(NS.find(Long.parseLong(circle.getId())).getName()));i++){
+                int i = 0;
+                for (i = 0; !(ItemsInListView.get(i).equals(NS.find(Long.parseLong(circle.getId())).getName())); i++) {
                     //System.out.println(ItemsInListView.get(i));
                 }
                 editNode_searchResultsList.getSelectionModel().select(i);
                 removeNode_searchList.getSelectionModel().select(i);
-                if(firstCircle[0] == null){
+                if (firstCircle[0] == null) {
                     System.out.println("two0 is null");
                     firstCircle[0] = circle;
                     circle.fillProperty().setValue(Paint.valueOf(Color.TEAL.toString()));
@@ -257,7 +300,7 @@ public class MapEditorController extends Controller {
                     ES.persist(edge1);
                     ES.persist(edge2);
 
-                    circlesListen(ShowNodesEdgesHelper.showNodes(currFloor),currFloor);
+                    circlesListen(ShowNodesEdgesHelper.showNodes(currFloor), currFloor);
                     return;
                 }
             });
@@ -267,10 +310,55 @@ public class MapEditorController extends Controller {
             ScrollPane scrolly = ShowNodesEdgesHelper.checkScroll(floor);
             Group group = (Group) scrolly.getContent();
             ImageView Map = (ImageView) group.getChildren().get(0);
-            Map.setOnMouseClicked(event ->{
+            Map.setOnMouseClicked(event -> {
                 System.out.println("ClickedOnMap");
                 ShowNodesEdgesHelper.resetDrawnShapeColors(floor);
                 firstCircle[0] = null;
+                ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+                tempScrollPane.setPannable(true);
+            });
+
+            circle.setOnMouseDragged(event -> {
+                ScrollPane tempScrollPane = ShowNodesEdgesHelper.checkScroll(currFloor);
+                tempScrollPane.setPannable(false);
+
+                if (!set[0]) {
+                    orgx[0] = event.getSceneX();
+                    orgy[0] = event.getSceneY();
+                    transx[0] = ((Circle) (event.getSource())).getTranslateX();
+                    transy[0] = ((Circle) (event.getSource())).getTranslateY();
+                    set[0] = true;
+                }
+
+                double offsetX = event.getSceneX() - orgx[0];
+                double offsetY = event.getSceneY() - orgy[0];
+                double newTranslateX = transx[0] + offsetX;
+                double newTranslateY = transy[0] + offsetY;
+
+                ((Circle) (event.getSource())).setTranslateX(newTranslateX);
+                ((Circle) (event.getSource())).setTranslateY(newTranslateY);
+
+
+                Group group1 = (Group) tempScrollPane.getContent();
+
+                ImageView Map1 = (ImageView) group1.getChildren().get(0);
+
+                double ImgW = Map1.getImage().getWidth();
+                double ImgH = Map1.getImage().getHeight();
+
+                Node node = NS.find(Long.parseLong(circle.getId()));
+                CoordinateService CS = new CoordinateService();
+                Coordinate coor = CS.find(node.getLocation().getId());
+                System.out.println("Before: " + coor.toString());
+                System.out.println("Offsetx: " + offsetX);
+                System.out.println("Offsety: " + offsetY);
+                System.out.println("Offsetx/: " + (Map1.fitWidthProperty().multiply(offsetX / ImgW)).doubleValue());
+                System.out.println("Offsety/: " + ((Map1.fitWidthProperty().multiply(offsetY / ImgH)).doubleValue()));
+                coor.setX(coor.getX() + ((Map1.fitWidthProperty().multiply(offsetX / ImgW)).doubleValue()));
+                coor.setY(coor.getY() + ((Map1.fitWidthProperty().multiply(offsetY / ImgH)).doubleValue()));
+                System.out.println("After: " + coor.toString());
+                CS.merge(coor);
+
             });
         }
     }
@@ -307,12 +395,11 @@ public class MapEditorController extends Controller {
                         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
                         List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
 
-                        circlesListen(circles,currFloor);
+                        circlesListen(circles, currFloor);
                     }
                 }
         );
     }
-
 
     //This Listener is triggered when an item in the EditNode_SearchResults List is selected
     public void setEditNode_searchResultsListening() {
@@ -341,14 +428,15 @@ public class MapEditorController extends Controller {
                     ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
                     Group group = (Group) Scrolly.getContent();
                     List<javafx.scene.Node> DrawnObjects = group.getChildren();
-                    for(int i=1;i<DrawnObjects.size();i++){
-                        if(DrawnObjects.get(i).getId().equals(SelectedNodeID)){
+                    for (int i = 1; i < DrawnObjects.size(); i++) {
+                        if (DrawnObjects.get(i).getId().equals(SelectedNodeID)) {
                             try {
                                 Circle circle = (Circle) DrawnObjects.get(i);
                                 circle.fillProperty().setValue(Color.TEAL);
                             }
                             //found an edge instead
-                            catch(Exception e){}
+                            catch (Exception e) {
+                            }
                         }
                     }
                 });
@@ -362,10 +450,10 @@ public class MapEditorController extends Controller {
             Node end = NS.findNodeByName(newValue);
             Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
             //Search Through Edges on Floor for one with same start/end
-            String ID=null;
+            String ID = null;
             List<Edge> edges = ShowNodesEdgesHelper.getEdges(currFloor);
-            for(Edge e : edges){
-                if((e.getStart().getId().equals(start.getId()))&&(e.getEnd().getId().equals(end.getId()))){
+            for (Edge e : edges) {
+                if ((e.getStart().getId().equals(start.getId())) && (e.getEnd().getId().equals(end.getId()))) {
                     ID = e.getId().toString();
                 }
             }
@@ -376,16 +464,17 @@ public class MapEditorController extends Controller {
             ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
             Group group = (Group) Scrolly.getContent();
             List<javafx.scene.Node> DrawnObjects = group.getChildren();
-            for(int i=1;i<DrawnObjects.size();i++){
-                if(DrawnObjects.get(i).getId().equals(ID)){
-                    try{
+            for (int i = 1; i < DrawnObjects.size(); i++) {
+                if (DrawnObjects.get(i).getId().equals(ID)) {
+                    try {
                         //Line has been found
                         Line line = (Line) DrawnObjects.get(i);
                         line.setStroke(Color.BLUEVIOLET);
                         line.setStrokeWidth(3);
                     }
                     //Found a circle Instead
-                    catch(Exception e){}
+                    catch (Exception e) {
+                    }
                 }
             }
             //Update Current Node
@@ -513,7 +602,7 @@ public class MapEditorController extends Controller {
     public void editNode_removeNeighborBtnPressed() {
         Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
         Node end = NS.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> currEdges = ES.findByNodes(start,end);
+        List<Edge> currEdges = ES.findByNodes(start, end);
         for (Edge curr : currEdges) {
             ES.remove(curr);
         }
@@ -522,11 +611,11 @@ public class MapEditorController extends Controller {
         editNode_neighborsList.setItems(nList);
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-        circlesListen(circles,currFloor);
+        circlesListen(circles, currFloor);
     }
 
+    private List<String> neighborNames(Node node) {
 
-    private List<String> neighborNames(Node node){
         Set<Node> neighbors = NS.neighbors(node.getId());
         //System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
@@ -552,14 +641,15 @@ public class MapEditorController extends Controller {
             editNode_neighborsList.setItems(nList);
         }
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-        circlesListen(circles,currFloor);
+        circlesListen(circles, currFloor);
     }
 
+    public void HandleEditNodes_NeighborsListClicked() {
+    }
 
     public void HandleEditNodes_NeighborsListClicked(){
         //
     }
-
 
     public void disableEdgeSelectedNodeListen() {
 //        disableEdge_searchResultsList.getSelectionModel().selectedItemProperty()
@@ -572,14 +662,14 @@ public class MapEditorController extends Controller {
 
 
     public void Node1ButtonPressed() {
-        NodeService selectedNS = new NodeService ();
+        NodeService selectedNS = new NodeService();
         //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
         node1NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
     }
 
 
     public void Node2ButtonPressed() {
-        NodeService selectedNS = new NodeService ();
+        NodeService selectedNS = new NodeService();
         //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
         node2NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
 
@@ -619,8 +709,7 @@ public class MapEditorController extends Controller {
 
     }
 
-
-        //----------------------------------Indicator Text Listeners------------------------------------
+    //----------------------------------Indicator Text Listeners------------------------------------
 
     public void InitializeIndicatorTextListeners() {
         addNode_xPos.textProperty().addListener(new ChangeListener() {
@@ -669,6 +758,10 @@ public class MapEditorController extends Controller {
      */
     public void logout() throws IOException {
         switchScreen("view/Main.fxml", "Main", logoutBtn);
+    }
+
+    public static int getCurrFloor() {
+        return currFloor;
     }
 }
 

@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -15,8 +16,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
+import model.Coordinate;
 import model.Edge;
 import model.Node;
+import service.CoordinateService;
 import service.EdgeService;
 import service.NodeService;
 
@@ -169,6 +172,27 @@ class ShowNodesEdgesHelper {
         }
     }
 
+    static Slider checkSlider(int z) {
+        switch (z) {
+            case 1:
+                return FirstFloorSlider;
+            case 2:
+                return SecondFloorSlider;
+            case 3:
+                return ThirdFloorSlider;
+            case 4:
+                return FourthFloorSlider;
+            case 5:
+                return FifthFloorSlider;
+            case 6:
+                return SixthFloorSlider;
+            case 7:
+                return SeventhFloorSlider;
+            default:
+                return null;
+        }
+    }
+
     //MakeLine take 2 points (effectively) and draws a line from point to point
     //this line is bounded to the image such that resizing does not effect the relative position of the line and image
     public static Line MakeLine(Edge e){
@@ -284,5 +308,4 @@ class ShowNodesEdgesHelper {
             }
         }
     }
-
 }
