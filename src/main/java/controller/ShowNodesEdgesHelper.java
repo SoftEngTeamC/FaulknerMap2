@@ -134,13 +134,13 @@ class ShowNodesEdgesHelper {
         FloorImageView.fitWidthProperty().bind(FloorSlider.valueProperty());
     }
 
-    public void ZoomListener(){
-        FifthFloorSlider.valueProperty().addListener( oldvalue, new value){
-            Imagview.setX(    )
-
-
-        });
-    }
+//    public void ZoomListener(){
+//        FifthFloorSlider.valueProperty().addListener( oldvalue, new value){
+//            Imagview.setX(    )
+//
+//
+//        });
+//    }
 
     static ScrollPane checkScroll(int z) {
         switch (z) {
