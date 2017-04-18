@@ -1,8 +1,6 @@
 package pathfinding;
 
 
-import service.NodeService;
-
 import java.util.*;
 
 /**
@@ -58,55 +56,5 @@ public class PathFinder {
             end = cameFrom.get(end);
         }
         return path;
-    }
-
-    private LinkedList<MapNode> depthFirstSearch(MapNode start, MapNode end) {
-        NodeService NS = new NodeService();
-        int numberOfNodes = NS.getAllNodes().size();
-        return depthFirstSearchHelper(start, end, numberOfNodes);
-    }
-
-    private LinkedList<MapNode> depthFirstSearchHelper(MapNode start, MapNode end, int limit) {
-        LinkedList<MapNode> path = new LinkedList<MapNode>();
-        if(start.equals(end)) {
-            path.add(end);
-            return path;
-        }
-        if(limit == 0)
-            return null;
-        for(MapNode neighbor : start.neighbors()) {
-            path = depthFirstSearchHelper(neighbor, end, limit - 1);
-            if(path.getLast().equals(end)) {
-                path.addFirst(start);
-                return path;
-            }
-        }
-        return null;
-    }
-
-    private LinkedList<MapNode> breadthFirstSearch(MapNode start, MapNode end) {
-        HashMap<MapNode, LinkedList<MapNode>> paths = new HashMap<MapNode, LinkedList<MapNode>>();
-        LinkedList<MapNode> newPath = new LinkedList<MapNode>();
-        newPath.add(start);
-        paths.put(start, newPath);
-        for(MapNode node : paths.keySet()) {
-            LinkedList<MapNode> path = paths.get(node);
-            if(path.getLast().equals(end)) {
-                return path;
-            }
-            paths.remove(node);
-            paths = getNext(node, path, paths);
-        }
-        return null;
-    }
-
-    private HashMap<MapNode, LinkedList<MapNode>>
-    getNext(MapNode node, LinkedList<MapNode> pathSoFar, HashMap<MapNode, LinkedList<MapNode>> paths) {
-        for(MapNode neighbor : node.neighbors()) {
-            pathSoFar.addLast(neighbor);
-            paths.put(neighbor, pathSoFar);
-            pathSoFar.removeLast();
-        }
-        return paths;
     }
 }
