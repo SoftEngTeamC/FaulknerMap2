@@ -13,8 +13,6 @@ import javafx.util.Duration;
 import model.Hours;
 import service.EMFProvider;
 
-import java.util.concurrent.TimeUnit;
-
 
 public class HoursEditorController extends Controller{
     public static Hours hours= new Hours("12","12","12","12","30","30","30","30","AM","AM","PM","PM");

@@ -19,9 +19,6 @@ import javafx.scene.text.Text;
 import model.Coordinate;
 import model.Edge;
 import model.Node;
-import service.CoordinateService;
-import service.EdgeService;
-import service.NodeService;
 
 import java.io.IOException;
 import java.util.*;
@@ -171,8 +168,6 @@ public class MapEditorController extends Controller {
     // arraylist of search terms
     private ArrayList<String> searchList;
     private ArrayList<String> nodeList;
-    private NodeService NS;
-    private EdgeService ES;
 
     private Node[] currNodes = new Node[2];
 
@@ -194,9 +189,7 @@ public class MapEditorController extends Controller {
     }
 
     public void initialize() {
-        this.NS = new NodeService();
-        this.ES = new EdgeService();
-        List<Node> nodes = NS.getNodesByFloor(1);
+        List<Node> nodes = nodeService.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for (Node n : nodes) {
             names.add(n.getName());
@@ -223,7 +216,7 @@ public class MapEditorController extends Controller {
         nodeList = new ArrayList<>();
 
         //Populate the list of all nodes
-        ArrayList<Node> allNode = new ArrayList<>(this.NS.getAllNodes());
+        ArrayList<Node> allNode = new ArrayList<>(this.nodeService.getAllNodes());
         for (Node aNode : allNode) {
             this.nodeList.add(aNode.getName());
         }
@@ -231,7 +224,7 @@ public class MapEditorController extends Controller {
         currFloor = 1;
 
         ArrayList<String> nameList = new ArrayList<>();
-        for (Node n : NS.getNodesByFloor(currFloor)) {
+        for (Node n : nodeService.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
         }
         Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
@@ -267,11 +260,11 @@ public class MapEditorController extends Controller {
                 System.out.println("X: " + circle.getCenterX());
                 System.out.println("Y: " + circle.getCenterY());
 
-                System.out.println("Clicked on node: " + NS.find(Long.parseLong(circle.getId())).getName());
+                System.out.println("Clicked on node: " + nodeService.find(Long.parseLong(circle.getId())).getName());
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
                 System.out.println(ItemsInListView);
                 int i = 0;
-                for (i = 0; !(ItemsInListView.get(i).equals(NS.find(Long.parseLong(circle.getId())).getName())); i++) {
+                for (i = 0; !(ItemsInListView.get(i).equals(nodeService.find(Long.parseLong(circle.getId())).getName())); i++) {
                     //System.out.println(ItemsInListView.get(i));
                 }
                 editNode_searchResultsList.getSelectionModel().select(i);
@@ -284,14 +277,14 @@ public class MapEditorController extends Controller {
                     System.out.println("two0 is not null");
                     circle.fillProperty().setValue(Paint.valueOf(Color.TEAL.toString()));
 
-                    Edge edge1 = new Edge(NS.find(Long.parseLong(firstCircle[0].getId())),
-                            NS.find(Long.parseLong(circle.getId())), 0);
-                    Edge edge2 = new Edge(NS.find(Long.parseLong(circle.getId())),
-                            NS.find(Long.parseLong(firstCircle[0].getId())), 0);
+                    Edge edge1 = new Edge(nodeService.find(Long.parseLong(firstCircle[0].getId())),
+                            nodeService.find(Long.parseLong(circle.getId())), 0);
+                    Edge edge2 = new Edge(nodeService.find(Long.parseLong(circle.getId())),
+                            nodeService.find(Long.parseLong(firstCircle[0].getId())), 0);
 
                     firstCircle[0] = null;
-                    ES.persist(edge1);
-                    ES.persist(edge2);
+                    edgeService.persist(edge1);
+                    edgeService.persist(edge2);
 
                     circlesListen(ShowNodesEdgesHelper.showNodes(currFloor), currFloor);
                     return;
@@ -339,9 +332,8 @@ public class MapEditorController extends Controller {
                 double ImgW = Map1.getImage().getWidth();
                 double ImgH = Map1.getImage().getHeight();
 
-                Node node = NS.find(Long.parseLong(circle.getId()));
-                CoordinateService CS = new CoordinateService();
-                Coordinate coor = CS.find(node.getLocation().getId());
+                Node node = nodeService.find(Long.parseLong(circle.getId()));
+                Coordinate coor = coordinateService.find(node.getLocation().getId());
                 System.out.println("Before: " + coor.toString());
                 System.out.println("Offsetx: " + offsetX);
                 System.out.println("Offsety: " + offsetY);
@@ -350,7 +342,7 @@ public class MapEditorController extends Controller {
                 coor.setX(coor.getX() + ((Map1.fitWidthProperty().multiply(offsetX / ImgW)).doubleValue()));
                 coor.setY(coor.getY() + ((Map1.fitWidthProperty().multiply(offsetY / ImgH)).doubleValue()));
                 System.out.println("After: " + coor.toString());
-                CS.merge(coor);
+                coordinateService.merge(coor);
 
             });
         }
@@ -369,7 +361,7 @@ public class MapEditorController extends Controller {
                         currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
                         //Update EditTab Listviews with new floors data
                         ArrayList<String> nameList = new ArrayList<>();
-                        for (Node n : NS.getNodesByFloor(currFloor)) {
+                        for (Node n : nodeService.getNodesByFloor(currFloor)) {
                             nameList.add(n.getName());
                         }
                         Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
@@ -377,7 +369,7 @@ public class MapEditorController extends Controller {
                         editNode_searchResultsList.setItems(obList);
                         removeNode_searchList.setItems(obList);
                         //Update AutoComplete suggestion of neighbors with new data
-                        List<Node> nodes = NS.getNodesByFloor(currFloor);
+                        List<Node> nodes = nodeService.getNodesByFloor(currFloor);
                         List<String> names = new ArrayList<>();
                         for (Node n : nodes) {
                             names.add(n.getName());
@@ -400,7 +392,7 @@ public class MapEditorController extends Controller {
                 .addListener((observable, oldValue, newValue) -> {
                     System.out.println("editNode_SearchResultsList Listener");
                     //Update Current Node
-                    Node selectedNode = NS.findNodeByName(newValue);
+                    Node selectedNode = nodeService.findNodeByName(newValue);
                     currNodes[0] = selectedNode;
                     ObservableList<String> RemoveNodeList = removeNode_searchList.getItems();
                     int j=0;
@@ -417,7 +409,7 @@ public class MapEditorController extends Controller {
                     // - get all Drawn Objects on current Map
                     // - find the ones with the same ID
                     // - If its a Circle Highlight it
-                    String SelectedNodeID = NS.findNodeByName(newValue).getId().toString();
+                    String SelectedNodeID = nodeService.findNodeByName(newValue).getId().toString();
                     ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
                     Group group = (Group) Scrolly.getContent();
                     List<javafx.scene.Node> DrawnObjects = group.getChildren();
@@ -440,8 +432,8 @@ public class MapEditorController extends Controller {
             //clear Old Highlights
             ShowNodesEdgesHelper.resetDrawnShapeColors(currFloor);
             //find start and end nodes
-            Node end = NS.findNodeByName(newValue);
-            Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+            Node end = nodeService.findNodeByName(newValue);
+            Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
             //Search Through Edges on Floor for one with same start/end
             String ID = null;
             List<Edge> edges = ShowNodesEdgesHelper.getEdges(currFloor);
@@ -506,11 +498,11 @@ public class MapEditorController extends Controller {
      */
     public void removeNode_removeBtnPressed() {
         String selectedItem = removeNode_searchList.getSelectionModel().getSelectedItem();
-        Node selectNode = NS.findNodeByName(selectedItem);
+        Node selectNode = nodeService.findNodeByName(selectedItem);
 
         // print out the node from the database
         try {
-            this.NS.remove(selectNode);
+            this.nodeService.remove(selectNode);
             this.searchList.remove(selectNode.getName());
             RemoveNodeIndicatorText.setText("Successfully Removed Node");
             RemoveNodeIndicatorText.setFill(Color.GREEN);
@@ -536,7 +528,7 @@ public class MapEditorController extends Controller {
             String query = newValue;
             ArrayList<String> queryList = new ArrayList<>();
             // add each query to the list
-            List<Node> nodeList = this.NS.getNodesByFloor(currFloor);
+            List<Node> nodeList = this.nodeService.getNodesByFloor(currFloor);
             for (Node n : nodeList) {
                 if (n.getName().contains(query)) {
                     queryList.add(n.getName());
@@ -565,16 +557,15 @@ public class MapEditorController extends Controller {
      * add node tab: create button event handler
      */
     public void addNode_createNodeBtnPressed() {
-        CoordinateService CS = new CoordinateService();
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         float floor = Float.parseFloat(addNode_floor.getText());
         Coordinate addCoord = new Coordinate(x, y, (int)floor);
-        CS.persist(addCoord);
+        coordinateService.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
 
         try {
-            this.NS.merge(newNode);
+            this.nodeService.merge(newNode);
             this.searchList.add(newNode.getName());
             AddNodeIndicatorText.setText("Successfully Added Node");
             AddNodeIndicatorText.setFill(Color.GREEN);
@@ -594,11 +585,11 @@ public class MapEditorController extends Controller {
 
 
     public void editNode_removeNeighborBtnPressed() {
-        Node start = NS.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
-        Node end = NS.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> currEdges = ES.findByNodes(start, end);
+        Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        List<Edge> currEdges = edgeService.findByNodes(start, end);
         for (Edge curr : currEdges) {
-            ES.remove(curr);
+            edgeService.remove(curr);
         }
 
         ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
@@ -611,7 +602,7 @@ public class MapEditorController extends Controller {
 
     private List<String> neighborNames(Node node) {
 
-        Set<Node> neighbors = NS.neighbors(node.getId());
+        Set<Node> neighbors = nodeService.neighbors(node.getId());
         //System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
 
@@ -627,12 +618,11 @@ public class MapEditorController extends Controller {
 
 
     public void editNode_addBtnPressed() {
-        Node newNode = NS.findNodeByName(editNode_addField.getText());
+        Node newNode = nodeService.findNodeByName(editNode_addField.getText());
 
         if (newNode != null) {
-            EdgeService es = new EdgeService();
-            es.persist(new Edge(currNodes[0], newNode, 0));
-            es.persist(new Edge(newNode, currNodes[0], 0));
+            edgeService.persist(new Edge(currNodes[0], newNode, 0));
+            edgeService.persist(new Edge(newNode, currNodes[0], 0));
             ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
             editNode_neighborsList.setItems(nList);
         }
@@ -657,14 +647,12 @@ public class MapEditorController extends Controller {
 
 
     public void Node1ButtonPressed() {
-        NodeService selectedNS = new NodeService();
         //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
         node1NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
     }
 
 
     public void Node2ButtonPressed() {
-        NodeService selectedNS = new NodeService();
         //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
         node2NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
 
@@ -672,13 +660,12 @@ public class MapEditorController extends Controller {
 
 
     public void DisableEdgeButtonPressed() {
-        Node node1 = NS.findNodeByName(node1NameText.getText());
-        Node node2 = NS.findNodeByName(node2NameText.getText());
-        EdgeService es = new EdgeService();
-        List<Edge> selectedEdges = es.findByNodes(node1, node2);
+        Node node1 = nodeService.findNodeByName(node1NameText.getText());
+        Node node2 = nodeService.findNodeByName(node2NameText.getText());
+        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
 
         for (Edge curr : selectedEdges) {
-            es.disableEdge(curr);
+            edgeService.disableEdge(curr);
             System.out.println("Disabled : " + curr.getStart().getName() + " " + curr.getEnd().getName());
         }
         System.out.println("successful");
@@ -689,13 +676,12 @@ public class MapEditorController extends Controller {
 
     public void UndoDisableEdgeButtonPressed() {
 
-        Node node1 = NS.findNodeByName(node1NameText.getText());
-        Node node2 = NS.findNodeByName(node2NameText.getText());
-        EdgeService es = new EdgeService();
-        List<Edge> selectedEdges = es.findByNodes(node1, node2);
+        Node node1 = nodeService.findNodeByName(node1NameText.getText());
+        Node node2 = nodeService.findNodeByName(node2NameText.getText());
+        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
 
         for (Edge curr : selectedEdges) {
-            es.ableEdge(curr);
+            edgeService.ableEdge(curr);
             System.out.println("Undo disable : " + curr.getStart().getName() + " " + curr.getEnd().getName());
         }
 

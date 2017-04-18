@@ -2,15 +2,8 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-
-
-import java.awt.*;
-import java.util.concurrent.TimeUnit;
 /**
  * Created by Guillermo on 4/15/17.
  */
