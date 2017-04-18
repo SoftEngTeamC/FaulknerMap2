@@ -67,6 +67,6 @@ public class AboutUsController extends Controller{
 
       @FXML
       public void back() throws Exception {
-          switchScreen("view/Main.fxml", "About Us", backbtn);
+          switchScreen("view/Main.fxml", "Main", backbtn);
       }
 }
