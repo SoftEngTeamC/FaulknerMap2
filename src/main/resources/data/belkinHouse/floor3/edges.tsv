@@ -1,0 +1,15 @@
+stairwellB30 - hallwayB30
+elevatorB30 - hallwayB30
+
+hallwayB30 - Sayoff Breast Center Surgery
+
+Sayoff Breast Center Surgery - intersectionB30
+
+intersectionB30 - intersectionB31
+intersectionB30 - intersectionB32
+
+intersectionB31 - intersectionB33
+
+stairwellB31 - hallwayB31
+hallwayB31 - intersectionB32
+hallwayB31 - intersectionB33

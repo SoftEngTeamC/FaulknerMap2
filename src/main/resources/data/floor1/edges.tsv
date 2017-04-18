@@ -32,3 +32,13 @@ intersection12	intersection14
 intersection14	intersection15
 intersection15	intersection17
 intersection17	intersection18
+
+Valet Parking   Belkin House Entrance
+Valet Parking   Parking1
+Valet Parking   ExternalNode1
+ExternalNode1   Parking2
+ExternalNode1   ExternalNode2
+ExternalNode2   ExternalNode3
+ExternalNode3   ExternalNode4
+ExternalNode4   ExternalNode5
+ExternalNode5   Parking3

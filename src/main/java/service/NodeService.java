@@ -4,9 +4,15 @@ package service;
 import model.Coordinate;
 import model.Edge;
 import model.Node;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.type.EntityType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -65,5 +71,22 @@ public class NodeService extends AbstractService<Node> {
                 "c.floor = :floor", Node.class)
                 .setParameter("floor", floor)
             .getResultList();
+    }
+
+    public List<Node> getElevatorNodes() {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Node> elevatorCriteria = builder.createQuery(Node.class);
+        Root<Node> root = elevatorCriteria.from(Node.class);
+        elevatorCriteria.where(
+                builder.like(
+                        builder.lower(
+                                root.get("name")
+                        ),
+                        "%elevator%"
+                )
+        );
+
+        return manager.createQuery(elevatorCriteria).getResultList();
     }
 }
