@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -20,7 +27,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">-->
         <VBox fx:id="MainVbox">
@@ -172,7 +179,7 @@
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                                     </content>
                                 </ScrollPane>
-                                <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                <Slider fx:id="FirstFloorSlider" layoutX="350.0" layoutY="215.0" max="1.0" orientation="VERTICAL" value="1.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                             </children>
                      <effect>
                         <Glow />
