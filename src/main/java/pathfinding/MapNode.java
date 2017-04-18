@@ -1,7 +1,6 @@
 package pathfinding;
 
 import model.Coordinate;
-import service.CoordinateService;
 import service.NodeService;
 
 import java.util.HashSet;
@@ -15,12 +14,16 @@ public class MapNode implements Node<MapNode> {
     public final static double STEPS_PER_FOOT = 0.5157;
     private final double ELEVATOR_COST = 0.1;
 
-    private Set<MapNode> neighbors;
+    private Set<MapNode> neighbors = new HashSet<>();
     private model.Node modelNode;
     private Coordinate location;
 
+    public MapNode(Coordinate location) {
+        this.location = location;
+        this.modelNode = null;
+    }
+
     public MapNode(model.Node n) {
-        this.neighbors = new HashSet<>();
         this.modelNode = n;
         this.location = n.getLocation();
     }

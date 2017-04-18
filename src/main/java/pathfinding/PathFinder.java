@@ -1,8 +1,6 @@
 package pathfinding;
 
 
-import service.NodeService;
-
 import java.util.*;
 
 /**
@@ -51,6 +49,32 @@ public class PathFinder {
         return null;
     }
 
+    public static <T extends Node<T>> List<T> BFS(T start, T goal) {
+        BFSIterator<T> iterator = new BFSIterator<>(start);
+        java.util.Map<T, T> cameFrom = new HashMap<>();
+        T prev = null;
+        for (BFSIterator<T> it = iterator; it.hasNext();) {
+            T n = it.next();
+            cameFrom.put(n, prev);
+            if (n.equals(goal)) return reconstructPath(n, cameFrom);
+            prev = n;
+        }
+        return null;
+    }
+
+    public static <T extends Node<T>> List<T> DFS(T start, T goal) {
+        DFSIterator<T> iterator = new DFSIterator<>(start);
+        java.util.Map<T, T> cameFrom = new HashMap<>();
+        T prev = null;
+        for (DFSIterator<T> it = iterator; it.hasNext();) {
+            T n = it.next();
+            cameFrom.put(n, prev);
+            if (n.equals(goal)) return reconstructPath(n, cameFrom);
+            prev = n;
+        }
+        return null;
+    }
+
     private static <T extends Node<T>> List<T> reconstructPath(T end, java.util.Map<T, T> cameFrom) {
         LinkedList<T> path = new LinkedList<>();
         while (end != null) {
@@ -58,55 +82,5 @@ public class PathFinder {
             end = cameFrom.get(end);
         }
         return path;
-    }
-
-    private LinkedList<MapNode> depthFirstSearch(MapNode start, MapNode end) {
-        NodeService NS = new NodeService();
-        int numberOfNodes = NS.getAllNodes().size();
-        return depthFirstSearchHelper(start, end, numberOfNodes);
-    }
-
-    private LinkedList<MapNode> depthFirstSearchHelper(MapNode start, MapNode end, int limit) {
-        LinkedList<MapNode> path = new LinkedList<MapNode>();
-        if(start.equals(end)) {
-            path.add(end);
-            return path;
-        }
-        if(limit == 0)
-            return null;
-        for(MapNode neighbor : start.neighbors()) {
-            path = depthFirstSearchHelper(neighbor, end, limit - 1);
-            if(path.getLast().equals(end)) {
-                path.addFirst(start);
-                return path;
-            }
-        }
-        return null;
-    }
-
-    private LinkedList<MapNode> breadthFirstSearch(MapNode start, MapNode end) {
-        HashMap<MapNode, LinkedList<MapNode>> paths = new HashMap<MapNode, LinkedList<MapNode>>();
-        LinkedList<MapNode> newPath = new LinkedList<MapNode>();
-        newPath.add(start);
-        paths.put(start, newPath);
-        for(MapNode node : paths.keySet()) {
-            LinkedList<MapNode> path = paths.get(node);
-            if(path.getLast().equals(end)) {
-                return path;
-            }
-            paths.remove(node);
-            paths = getNext(node, path, paths);
-        }
-        return null;
-    }
-
-    private HashMap<MapNode, LinkedList<MapNode>>
-    getNext(MapNode node, LinkedList<MapNode> pathSoFar, HashMap<MapNode, LinkedList<MapNode>> paths) {
-        for(MapNode neighbor : node.neighbors()) {
-            pathSoFar.addLast(neighbor);
-            paths.put(neighbor, pathSoFar);
-            pathSoFar.removeLast();
-        }
-        return paths;
     }
 }
