@@ -493,17 +493,19 @@ public class MapEditorController extends Controller {
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         float floor = Float.parseFloat(addNode_floor.getText());
-        Coordinate addCoord = new Coordinate(x, y, 4);
+        Coordinate addCoord = new Coordinate(x, y, (int)floor);
         CS.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
+
         try {
-            NS.merge(newNode);
+            this.NS.merge(newNode);
             AddNodeIndicatorText.setText("Successfully Added Node");
             AddNodeIndicatorText.setFill(Color.GREEN);
         } catch (Exception e) {
             AddNodeIndicatorText.setText("Unable to Add Node");
             AddNodeIndicatorText.setFill(Color.RED);
         }
+
     }
 
     //    // methods for the edit node tab
@@ -530,6 +532,7 @@ public class MapEditorController extends Controller {
         Set<Node> neighbors = NS.neighbors(node.getId());
         System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
+
         for (Node n : neighbors) {
             if (!Objects.equals(n.getId(), node.getId())) {
                 neighborsS.add(n.getName());
@@ -537,6 +540,7 @@ public class MapEditorController extends Controller {
         }
         Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
         return neighborsS;
+
     }
 
 
