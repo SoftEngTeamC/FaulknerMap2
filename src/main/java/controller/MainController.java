@@ -461,8 +461,8 @@ public class MainController extends Controller {
         // goto genres screen
         System.out.println("HERE WE ARE");
         Stage stage = (Stage) AdminToolButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("AdminToolMenu");
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/LoginPage.fxml"));
+        stage.setTitle("Login");
         stage.setScene(new Scene(root, 300, 300));
         stage.show();
     }
