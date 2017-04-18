@@ -22,9 +22,6 @@ import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
 import service.EMFProvider;
-import service.EdgeService;
-import service.HospitalProfessionalService;
-import service.NodeService;
 import textDirections.MakeDirections;
 
 import java.util.LinkedList;
@@ -97,8 +94,6 @@ public class MainController extends Controller {
     private Button getPathButton;
 
     //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
-    private NodeService NS;
-    private EdgeService ES;
 
     /* public String hours1;
      public String minutes1;
@@ -133,7 +128,6 @@ public class MainController extends Controller {
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
 
-        NS = new NodeService();
         EMFProvider emf = new EMFProvider();
         hours = emf.hours;
 
@@ -208,7 +202,7 @@ public class MainController extends Controller {
             Node end = nodes.get(i+1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
-            Edge e = ES.findByNodes(start,end).get(0);
+            Edge e = edgeService.findByNodes(start,end).get(0);
             //only draw if not last node, nodes are on same floor
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
@@ -228,8 +222,7 @@ public class MainController extends Controller {
     }
 
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
-        NodeService NS = new NodeService();
-        pathfinding.Map map = new pathfinding.Map(NS.getAllNodes());
+        Map map = new Map(nodeService.getAllNodes());
 
         Node nodeStart = (HP_Start.getOffices().get(0));
         Node nodeEnd = (HP_Dest.getOffices().get(0));
@@ -249,8 +242,7 @@ public class MainController extends Controller {
 
     private void PopulateSearchResults(String S) {
         System.out.println("Populate Search String");
-        HospitalProfessionalService HS = new HospitalProfessionalService();
-        List<HospitalProfessional> Professionals = HS.getAllProfessionals();
+        List<HospitalProfessional> Professionals = professionalService.getAllProfessionals();
         System.out.println(Professionals.size());
         ObservableList<String> names = FXCollections.observableArrayList();
         if (S == null) {
@@ -274,9 +266,8 @@ public class MainController extends Controller {
     //This function takes a HospitalProfessional edits the DisplayInformation TextArea
     //with all the HP's associated information
     public void PopulateInformationDisplay(HospitalProfessional HP) {
-        HospitalProfessionalService hs = new HospitalProfessionalService();
         //System.out.println(hs.find(HP.getId()).getOffices());
-        String offices = "\nOffices:\n" + hs.find(HP.getId()).getOffices().get(0).getName();
+        String offices = "\nOffices:\n" + professionalService.find(HP.getId()).getOffices().get(0).getName();
         DisplayInformationTextArea.setText(HP.getName() + "\n\n" + HP.getTitle() + "\n" + offices);
     }
 
@@ -291,8 +282,7 @@ public class MainController extends Controller {
     //Information unique to the ListView Item can be accessed
     public void handleClickedOnSearchResult() {
         System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
-        HospitalProfessionalService HPS = new HospitalProfessionalService();
-        PopulateInformationDisplay(HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
+        PopulateInformationDisplay(professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
         //FindandDisplayPath();
     }
 
@@ -300,20 +290,18 @@ public class MainController extends Controller {
     // function after clicking set start location
     public void SetStartLocationButtonClicked() {
         System.out.println("clicked on Set Start button");
-        HospitalProfessionalService HPS = new HospitalProfessionalService();
-        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
         HospitalProfessional HP = new HospitalProfessional();
-        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HP = professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
         Start_location_TextArea.setText(HP.getName());
     }
 
     // function after clicking set destination location
     public void SetDestLocationButtonClicked() {
         System.out.println("clicked on Set Dest button");
-        HospitalProfessionalService HPS = new HospitalProfessionalService();
-        HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
         HospitalProfessional HP = new HospitalProfessional();
-        HP = HPS.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
+        HP = professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
         Dest_location_TextArea.setText(HP.getName());
     }
 
@@ -326,17 +314,14 @@ public class MainController extends Controller {
         Start_location_TextArea.setText(Dest_location_TextArea.getText());
         Dest_location_TextArea.setText(tempStorage);
 
-        HospitalProfessionalService switched_Dest = new HospitalProfessionalService();
-        switched_Dest.findHospitalProfessionalByName(Start_location_TextArea.getText());
-
+        professionalService.findHospitalProfessionalByName(Start_location_TextArea.getText());
     }
 
 
     public void getPathButtonClicked() {
         System.out.println("clicked on get path button");
-        HospitalProfessionalService HPS = new HospitalProfessionalService();
-        HospitalProfessional HP_Start = HPS.findHospitalProfessionalByName(Start_location_TextArea.getText());
-        HospitalProfessional HP_Dest = HPS.findHospitalProfessionalByName(Dest_location_TextArea.getText());
+        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(Start_location_TextArea.getText());
+        HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(Dest_location_TextArea.getText());
         FindandDisplayPath(HP_Start, HP_Dest);
 
         System.out.println("start HP:  " + HP_Start.getName());
@@ -436,10 +421,9 @@ public class MainController extends Controller {
 
     //function for Panic Button
     public void HandlePanicButton() {
-        NS = new NodeService();
         System.out.println(language);
         DisplayInformationTextArea.setText("Don't Panic");
-        pathfinding.Map map = new Map(NS.getAllNodes());
+        Map map = new Map(nodeService.getAllNodes());
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
@@ -468,7 +452,7 @@ public class MainController extends Controller {
                 DisplayInformationTextArea.setText("Don't Panic");
                 language = 1;
         }
-        DisplayMap(PathFinder.shortestPath(map.getNode(NS.findNodeByName("intersection18").getId()), map.getNode(NS.findNodeByName("Emergency Department").getId())));
+        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("intersection18").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
     }
 
     //----------------------------------Build Zoomable Maps----------------------------------------------
