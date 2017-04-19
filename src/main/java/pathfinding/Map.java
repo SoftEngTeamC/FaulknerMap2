@@ -2,6 +2,7 @@ package pathfinding;
 
 
 import service.AlgorithmSingleton;
+import service.EdgeService;
 import service.NodeService;
 
 import java.util.*;
@@ -14,6 +15,7 @@ public class Map {
 
     public Map(Collection<model.Node> nodes) {
         nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
         nodeMap = new HashMap<>();
         for (model.Node n : nodes) {
             nodeMap.put(n.getId(), new MapNode(n));
@@ -24,6 +26,7 @@ public class Map {
                 if (n == null) continue;
                 MapNode neighbor = nodeMap.get(n.getId());
                 MapNode currentNode = nodeMap.get(id);
+                if (edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId())).isDisabled()) continue;
                 if (neighbor == null || currentNode == null) continue;
                 currentNode.addNeighbor(neighbor);
             }
