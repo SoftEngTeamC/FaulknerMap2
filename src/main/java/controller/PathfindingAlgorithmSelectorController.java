@@ -3,10 +3,13 @@
  * controller for pathfinding algorithm selector
  */
 package controller;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
@@ -33,8 +36,16 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
     @FXML
     private Text successText;
 
+    ToggleGroup group;
+
+    private int selected; // 0 is A*, 1 is bfs, 2 is dfs
+
 
     public void initialize(){
+
+        //ensure only one dude is selected
+        group = new ToggleGroup();
+
 
         // initialize the right checkbox to be selected
 
@@ -42,8 +53,6 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
         // initialize the success text to be invisible
         successText.setVisible(false);
 
-        //ensure only one dude is selected
-        ToggleGroup group = new ToggleGroup();
     }
 
     @FXML
@@ -52,7 +61,19 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
      *
      */
     public void submitBtnAction(){
-        // select from the backend what happens
+
+        // init selected algorithm
+        if(aRadioButton.selectedProperty().getValue()){
+            selected = 0;
+        } else if (bfsRadioButton.selectedProperty().getValue()){
+            selected = 1;
+        } else if (dfsRadioButton.selectedProperty().getValue()){
+            selected = 2;
+        } else selected = -1;
+
+        // push
+
+
 
         //indicate success
         successText.setVisible(true);
