@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 public class DataLoader {
     public static void main(String[] args) {
         try {
+            loadLocations("data/belkinHouse/floor1/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor2/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor3/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor4/locations.tsv", 1);
             loadLocations("data/floor1/locations.tsv", 1);
             loadLocations("data/floor2/locations.tsv", 2);
             loadLocations("data/floor3/locations.tsv", 3);
@@ -21,12 +25,17 @@ public class DataLoader {
             loadLocations("data/floor6/locations.tsv", 6);
             loadLocations("data/floor7/locations.tsv", 7);
 
+            loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
             loadPeople("data/floor5/people.tsv");
 
+            loadService("data/belkinHouse/floor1/services.tsv");
+            loadService("data/belkinHouse/floor2/services.tsv");
+            loadService("data/belkinHouse/floor3/services.tsv");
+            loadService("data/belkinHouse/floor4/services.tsv");
             loadService("data/floor1/services.tsv");
             loadService("data/floor2/services.tsv");
             loadService("data/floor3/services.tsv");
@@ -178,6 +187,7 @@ public class DataLoader {
                     return;
                 }
 
+                System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
