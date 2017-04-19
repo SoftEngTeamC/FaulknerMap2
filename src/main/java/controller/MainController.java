@@ -22,6 +22,7 @@ import textDirections.MakeDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainController extends Controller {
     //ImageView Objects
@@ -186,7 +187,7 @@ public class MainController extends Controller {
     }
 
     public void HideTabs(List<MapNode> path){
-        List<int> floors = getfloors(path);
+        Set<Integer> floors = Map.floorsInPath(path);
         ObservableList<Tab> tabs = FloorViewsTabPane.getTabs();
         //Turn all tabs on
         for(Tab t: tabs){
