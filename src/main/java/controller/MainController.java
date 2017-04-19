@@ -370,90 +370,49 @@ public class MainController extends Controller {
     //Note that these do not use the switchscreen function because they do not have buttons to pass
     @FXML
     public void toEnglish() throws Exception {
-        //switchScreen("view/Main.fxml", "Faulkner Kiosk", languageMenuButton);
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 1;
     }
 
     @FXML
     public void toSpanish() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_SP.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_SP.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 2;
     }
 
     @FXML
     public void toChinese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_CN.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_CN.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 3;
     }
 
     @FXML
     public void toFrench() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_FR.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_FR.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 4;
     }
 
     @FXML
     public void toItalian() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_IT.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_IT.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 5;
     }
 
     @FXML
     public void toJapanese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_JP.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_JP.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 6;
     }
 
     @FXML
     public void toPortuguese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_PG.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_PG.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 7;
     }
 }
-
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
 //
 //        FirstFloorSlider.valueProperty().addListener(new ChangeListener() {
