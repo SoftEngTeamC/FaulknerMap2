@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <SplitPane fx:id="MapEditor_SplitPane" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
   <items>
       <VBox fx:id="MapEditorVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -46,23 +45,26 @@
                                           <Insets bottom="5.0" top="5.0" />
                                        </VBox.margin></Text>
                                     <ListView fx:id="editNode_neighborsList" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#HandleEditNodes_NeighborsListClicked" prefHeight="67.0" prefWidth="264.0" />
-
-                                    <Button fx:id="editNode_removeNeighborBtn" mnemonicParsing="false" onAction="#editNode_removeNeighborBtnPressed" text="Remove Neighbor">
-                                       <VBox.margin>
-                                          <Insets top="5.0" />
-                                       </VBox.margin></Button>
+                                    <AnchorPane prefHeight="0.0" prefWidth="315.0">
+                                       <children>
+                                          <Button fx:id="editNode_disableNeighborBtn" contentDisplay="CENTER" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#DisableEdgeButtonPressed" text="Disable" />
+      
+                                                <Button fx:id="editNode_removeNeighborBtn" contentDisplay="CENTER" layoutX="165.0" layoutY="2.0" mnemonicParsing="false" onAction="#editNode_removeNeighborBtnPressed" text="Remove Neighbor" />
+                                          <Button fx:id="editNode_undisableNeighborBtn" layoutX="76.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#UndoDisableEdgeButtonPressed" text="Undisable" />
+                                       </children>
+                                    </AnchorPane>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manually add neighbor by Searching for them here:">
                                        <VBox.margin>
                                           <Insets bottom="5.0" top="5.0" />
                                        </VBox.margin></Text>
-                                    <!--<TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0">-->
+                                    <!--<TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0" />-->
                                     <AutocompletionlTextField fx:id="editNode_addField" />
                                     <Button fx:id="editNode_addBtn" mnemonicParsing="false" onAction="#editNode_addBtnPressed" text="Add">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin></Button>
                                     <Text fx:id="editNode_warningText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Node doesn't not exist" visible="false" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add an edge, click on one node and then the next" wrappingWidth="285.1962890625" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To add an edge, click on one node and then the next" wrappingWidth="308.1962890625" />
                                  </children>
                               </VBox>
                            </children></AnchorPane>
@@ -104,24 +106,6 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab text="Disable Edge">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="346.0" prefWidth="255.0">
-                           <children>
-                              <ListView fx:id="disableEdge_searchResultsList" layoutX="20.0" layoutY="52.0" prefHeight="146.0" prefWidth="281.0" />
-                              <Text layoutX="27.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Node:" />
-                              <Button fx:id="Node1Button" layoutX="41.0" layoutY="214.0" mnemonicParsing="false" onMouseClicked="#Node1ButtonPressed" prefHeight="27.0" prefWidth="69.0" text="Node 1" />
-                              <Button fx:id="Node2Button" layoutX="41.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#Node2ButtonPressed" prefHeight="27.0" prefWidth="69.0" text="Node 2" />
-                              <Text fx:id="node1NameText" layoutX="116.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="183.0" />
-                              <Text fx:id="node2NameText" layoutX="118.0" layoutY="272.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="241.0" />
-                              <Button fx:id="DisableEdgeButton" layoutX="105.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#DisableEdgeButtonPressed" text="Disable" />
-                              <Button fx:id="UndoDisableEdgeButton" layoutX="112.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#UndoDisableEdgeButtonPressed" text="Undo" />
-                              <Text fx:id="ifDisableText" layoutX="179.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
-                              <Text fx:id="UndoDisableEdgeButtonPressed" layoutX="169.0" layoutY="370.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="157.21875" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
               </tabs>
                <VBox.margin>
                   <Insets />

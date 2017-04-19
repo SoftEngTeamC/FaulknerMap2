@@ -38,14 +38,14 @@ public class EdgeService extends AbstractService<Edge> {
 
         return temp;
     }
-
-    public void disableEdge(Edge temp){
-        System.out.println("GO into disable function");
-        temp.setDisabled(true);
-    }
-
-    public void ableEdge(Edge temp){
-        System.out.println("GO into disable function");
-        temp.setDisabled(false);
-    }
+//
+//    public void disableEdge(Edge temp){
+//        System.out.println("GO into disable function");
+//        temp.setDisabled(true);
+//    }
+//
+//    public void ableEdge(Edge temp){
+//        System.out.println("GO into disable function");
+//        temp.setDisabled(false);
+//    }
 }

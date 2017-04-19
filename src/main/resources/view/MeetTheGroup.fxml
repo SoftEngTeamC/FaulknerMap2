@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MeetTheGroupController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MeetTheGroupController">
    <children>
       <GridPane layoutX="29.0" layoutY="19.78515625" prefHeight="1200.0" prefWidth="1800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -101,7 +100,7 @@
                   <Font size="26.0" />
                </font>
             </Text>
-            <Text layoutX="75.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Coaches - Yizhou Yan, Liang Zhang, Dominik Smreczak" wrappingWidth="717.203125" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="15">
+            <Text layoutX="75.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Coaches - Yizhou Yan, Liang Zhang, Dominik Smreczak" wrappingWidth="794.0264892578125" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="15">
                <font>
                   <Font size="26.0" />
                </font>
