@@ -1,11 +1,13 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table(name = "TAGS")
 public class Tag {
     private Long id;
