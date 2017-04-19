@@ -59,8 +59,8 @@ public class DataLoader {
 //            loadEdges("data/floor7/edges.tsv",7);
 
             loadEdges("data/allEdges.tsv", 1);
-
-                     connectElevators();
+            connectElevators();
+            connectStairs();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -255,6 +255,18 @@ public class DataLoader {
                     edgeService.persist(new Edge(n1, n2, 0));
                 }
             }
+        }
+    }
+
+    private static void connectStairs() {
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
+
+        List<Node> stairs = nodeService.getAllNodes().stream()
+                .filter(n -> n.getName().toLowerCase().contains("stair"))
+                .collect(Collectors.toList());
+        for (Node s1 : stairs) {
+            for (Node s2 : stairs) edgeService.persist(new Edge(s1, s2, 0));
         }
     }
 
