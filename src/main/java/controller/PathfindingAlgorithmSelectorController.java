@@ -3,6 +3,7 @@
  * controller for pathfinding algorithm selector
  */
 package controller;
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -12,6 +13,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import pathfinding.Map;
+import service.AlgorithmSingleton;
+import service.EMFProvider;
 
 public class PathfindingAlgorithmSelectorController  extends Controller{
 
@@ -46,9 +50,7 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
         //ensure only one dude is selected
         group = new ToggleGroup();
 
-
-        // initialize the right checkbox to be selected
-
+        // <TODO> enable the current algorithm
 
         // initialize the success text to be invisible
         successText.setVisible(false);
@@ -74,21 +76,18 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
         // push
         switch (selected){
             case 0: // A*
-
+                AlgorithmSingleton.getInstance().setCurrentAlgorithm(Map.algorithm.ASTAR);
                 break;
             case 1: // BFS
-
+                AlgorithmSingleton.getInstance().setCurrentAlgorithm(Map.algorithm.BFS);
                 break;
             case 2: // DFS
-
+                AlgorithmSingleton.getInstance().setCurrentAlgorithm(Map.algorithm.DFS);
                 break;
         }
 
-
-
         //indicate success
         successText.setVisible(true);
-
     }
 
 
