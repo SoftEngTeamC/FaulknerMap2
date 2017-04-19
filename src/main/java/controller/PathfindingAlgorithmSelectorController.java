@@ -72,6 +72,17 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
         } else selected = -1;
 
         // push
+        switch (selected){
+            case 0: // A*
+
+                break;
+            case 1: // BFS
+
+                break;
+            case 2: // DFS
+
+                break;
+        }
 
 
 
