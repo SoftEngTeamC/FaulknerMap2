@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -109,9 +110,6 @@ public class MainController extends Controller {
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
         Info_TabPane.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.6));
 
-        ShowNodesEdgesHelper.SetMapZoom(0,0,2000,FirstFloorScrollPane,FirstFloorSlider);
-        ShowNodesEdgesHelper.SetMapZoom(1,1,4000,FirstFloorScrollPane,FirstFloorSlider);
-
         //-----------------------Data initialization
         List<HospitalProfessional> HPs = professionalService.getAllProfessionals();
         List<String> names = new ArrayList<>();
@@ -154,8 +152,8 @@ public class MainController extends Controller {
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
             }
-
         }
+        HideTabs(nodes);
     }
 
     //-----------------------------------FUNCTIONS------------------------------------------
@@ -186,6 +184,20 @@ public class MainController extends Controller {
         EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
                 +"Offices:\n\n"+EndProfessional.getOffices());
     }
+
+    public void HideTabs(List<MapNode> path){
+        List<int> floors = getfloors(path);
+        ObservableList<Tab> tabs = FloorViewsTabPane.getTabs();
+        //Turn all tabs on
+        for(Tab t: tabs){
+            t.setDisable(false);
+        }
+        //disable tabs that are not included in path
+        for(int n: floors){
+            tabs.get(n-1).setDisable(true);
+        }
+    }
+
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
