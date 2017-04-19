@@ -3,6 +3,9 @@ package service;
 
 import model.Edge;
 import model.Node;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -102,5 +105,20 @@ public class NodeService extends AbstractService<Node> {
         List<Node> nodes = manager.createQuery(elevatorCriteria).getResultList();
         System.out.println(nodes);
         return nodes;
+    }
+
+    public List<Node> search(String s) {
+        EntityManager manager = managerFactory.createEntityManager();
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
+        manager.getTransaction().begin();
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder().forEntity(Node.class).get();
+        org.apache.lucene.search.Query query = qb.keyword().onFields("name").matching(s).createQuery();
+        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, Node.class);
+
+        List<Node> result = JPAQuery.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
+        return result;
     }
 }
