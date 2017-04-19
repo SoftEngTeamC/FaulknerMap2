@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ import textDirections.MakeDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainController extends Controller {
     //ImageView Objects
@@ -151,8 +153,8 @@ public class MainController extends Controller {
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
             }
-
         }
+        HideTabs(nodes);
     }
 
     //-----------------------------------FUNCTIONS------------------------------------------
@@ -165,7 +167,7 @@ public class MainController extends Controller {
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
 
-        List<MapNode> path = PathFinder.shortestPath(start, dest);
+        List<MapNode> path = map.shortestPath(start, dest);
         if (path.size() < 2) {
             TextDirectionsTextArea.setText("You are already at your destination");
         } else {
@@ -178,11 +180,25 @@ public class MainController extends Controller {
     public void PopulateInformationDisplay() {
         HospitalProfessional StartProfessional = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
         StartInfo_TextArea.setText(StartProfessional.getTitle()+" "+StartProfessional.getName()+"\n\n"
-                                    +"Offices:\n\n"+StartProfessional.getOffices());
+                                    +"Offices:\n\n"+StartProfessional.getOffices().get(0).getName());
         HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
         EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
-                +"Offices:\n\n"+EndProfessional.getOffices());
+                +"Offices:\n\n"+EndProfessional.getOffices().get(0).getName());
     }
+
+    public void HideTabs(List<MapNode> path){
+        Set<Integer> floors = Map.floorsInPath(path);
+        ObservableList<Tab> tabs = FloorViewsTabPane.getTabs();
+        //Turn all tabs on
+        for(Tab t: tabs){
+            t.setDisable(false);
+        }
+        //disable tabs that are not included in path
+        for(int n: floors){
+            tabs.get(n-1).setDisable(true);
+        }
+    }
+
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
@@ -351,90 +367,49 @@ public class MainController extends Controller {
     //Note that these do not use the switchscreen function because they do not have buttons to pass
     @FXML
     public void toEnglish() throws Exception {
-        //switchScreen("view/Main.fxml", "Faulkner Kiosk", languageMenuButton);
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 1;
     }
 
     @FXML
     public void toSpanish() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_SP.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_SP.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 2;
     }
 
     @FXML
     public void toChinese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_CN.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_CN.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 3;
     }
 
     @FXML
     public void toFrench() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_FR.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
-        // 1: english, 2: spanish, 3: chinese, 4: french
+        switchScreen("view/Main_FR.fxml", "Faulkner Kiosk", AdminToolButton);
         language = 4;
     }
 
     @FXML
     public void toItalian() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_IT.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_IT.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 5;
     }
 
     @FXML
     public void toJapanese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_JP.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_JP.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 6;
     }
 
     @FXML
     public void toPortuguese() throws Exception {
-        Stage stage = (Stage) languageMenuButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main_PG.fxml"));
-        stage.setTitle("Faulkner Kiosk");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.setMaximized(true);
-        stage.show();
+        switchScreen("view/Main_PG.fxml", "Faulkner Kiosk", AdminToolButton);
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 7;
     }
 }
-
 //  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
 //
 //        FirstFloorSlider.valueProperty().addListener(new ChangeListener() {
