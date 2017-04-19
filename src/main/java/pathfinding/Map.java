@@ -1,8 +1,8 @@
 package pathfinding;
 
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import service.NodeService;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,13 +41,13 @@ public class Map {
         return currentAlgo;
     }
 
-    public List<MapNode> shortestPath(MapNode start, MapNode end) throws InvalidStateException {
+    public List<MapNode> shortestPath(MapNode start, MapNode end) throws InvalidArgumentException {
         switch (currentAlgo) {
             case BFS: return PathFinder.BFS(start, end);
             case DFS: return PathFinder.DFS(start, end);
             case ASTAR: return PathFinder.shortestPath(start, end);
         }
-        throw new InvalidStateException("This can't happen.");
+        throw new InvalidArgumentException(new String[]{"Invalid algorithm state."});
     }
 
     public MapNode getNode(Long id) {
