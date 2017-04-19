@@ -12,7 +12,7 @@ public class MapNode implements Node<MapNode> {
     public final static double FEET_PER_PIXEL = 0.2902;
     public final static double SECONDS_PER_FOOT = 0.2975;
     public final static double STEPS_PER_FOOT = 0.5157;
-    private final double ELEVATOR_COST = 0.1;
+    private final double ELEVATOR_COST = 5;
 
     private Set<MapNode> neighbors = new HashSet<>();
     private model.Node modelNode;
@@ -30,8 +30,10 @@ public class MapNode implements Node<MapNode> {
 
     public static double getPixels(List<MapNode> myPath) {
         int totalDistance = 0;
-        for(int i = 0; i < myPath.size()-2;i++){ //Go until 1 before the end
+        for(int i = 0; i < myPath.size()-1;i++){ //Go until 1 before the end
             totalDistance += myPath.get(i).distanceTo(myPath.get(i+1));
+            //Testing
+            // System.out.println("Added " + FEET_PER_PIXEL * myPath.get(i).distanceTo(myPath.get(i+1)));
         }
         return totalDistance;
     }
@@ -97,7 +99,7 @@ public class MapNode implements Node<MapNode> {
     private model.Node closestElevator() {
         NodeService nodeService = new NodeService();
         List<model.Node> elevators = nodeService.getElevatorNodes();
-        model.Node closestElevator = elevators.get(0); // TODO: Don't assume existence of elevators
+        model.Node closestElevator = elevators.get(0);
         for (model.Node e : elevators) {
             if (distanceTo(e.getLocation()) < distanceTo(closestElevator.getLocation())) {
                 closestElevator = e;
