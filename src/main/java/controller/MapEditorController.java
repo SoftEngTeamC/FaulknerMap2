@@ -136,6 +136,9 @@ public class MapEditorController extends Controller {
     private ListView<String> disableEdge_searchResultsList;
 
     @FXML
+    private ListView<String> disableEdge_neighborsList;
+
+    @FXML
     private Text node1NameText;
 
     @FXML
@@ -196,11 +199,11 @@ public class MapEditorController extends Controller {
         }
         editNode_addField.getEntries().addAll(names);
         //Visual Initializations
-        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
-                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
-                 SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
-                 ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
-                 SeventhFloorSlider, FloorViewsTabPane);
+        new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
+                SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
+                ThirdFloorSlider, FourthFloorSlider, FifthFloorSlider, SixthFloorSlider,
+                SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
         editNode_searchResultsList.minWidthProperty().bind(EditNode_AnchorPane.widthProperty());
@@ -232,21 +235,23 @@ public class MapEditorController extends Controller {
 
         editNode_searchResultsList.setItems(obList);
         removeNode_searchList.setItems(obList);
-        disableEdge_searchResultsList.setItems(obList);
+        //disableEdge_searchResultsList.setItems(obList);
 
 
         tabPaneListen();
-        System.out.println("INITRemoveNaighboreListener:");
+        System.out.println("INITRemoveNeighbourListener:");
         setEditNode_searchResultsListening();
+//        System.out.println("INITDisableEdgeListener:");
+//        setDisableEdge_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
-        circlesListen(circles,currFloor);
+        circlesListen(circles, currFloor);
         //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
     //-------------------------------------------Listeners---------------------------------------------
-    public void circlesListen(List<Circle> circles, int floor){
+    public void circlesListen(List<Circle> circles, int floor) {
         System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
         final double[] orgx = new double[1];
@@ -284,7 +289,6 @@ public class MapEditorController extends Controller {
 
                     firstCircle[0] = null;
                     edgeService.persist(edge1);
-                    edgeService.persist(edge2);
 
                     circlesListen(ShowNodesEdgesHelper.showNodes(currFloor), currFloor);
                     return;
@@ -395,8 +399,8 @@ public class MapEditorController extends Controller {
                     Node selectedNode = nodeService.findNodeByName(newValue);
                     currNodes[0] = selectedNode;
                     ObservableList<String> RemoveNodeList = removeNode_searchList.getItems();
-                    int j=0;
-                    for(j=0; !newValue.equals(removeNode_searchList.getItems().get(j));j++){
+                    int j = 0;
+                    for (j = 0; !newValue.equals(removeNode_searchList.getItems().get(j)); j++) {
                         //find the index of the item in the list
                     }
                     removeNode_searchList.getSelectionModel().select(j);
@@ -560,7 +564,7 @@ public class MapEditorController extends Controller {
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         float floor = Float.parseFloat(addNode_floor.getText());
-        Coordinate addCoord = new Coordinate(x, y, (int)floor);
+        Coordinate addCoord = new Coordinate(x, y, (int) floor);
         coordinateService.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
 
@@ -580,17 +584,15 @@ public class MapEditorController extends Controller {
 
     //    // methods for the edit node tab
 //    public void editNode_searchBtnPressed() {
-        //
+    //
 //    }
 
 
     public void editNode_removeNeighborBtnPressed() {
         Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
         Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> currEdges = edgeService.findByNodes(start, end);
-        for (Edge curr : currEdges) {
-            edgeService.remove(curr);
-        }
+        Edge currEdge = edgeService.findByNodes(start, end);
+        edgeService.remove(currEdge);
 
         ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
         editNode_neighborsList.setItems(nList);
@@ -622,7 +624,6 @@ public class MapEditorController extends Controller {
 
         if (newNode != null) {
             edgeService.persist(new Edge(currNodes[0], newNode, 0));
-            edgeService.persist(new Edge(newNode, currNodes[0], 0));
             ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
             editNode_neighborsList.setItems(nList);
         }
@@ -636,57 +637,36 @@ public class MapEditorController extends Controller {
     }
 
 
-    public void disableEdgeSelectedNodeListen() {
-//        disableEdge_searchResultsList.getSelectionModel().selectedItemProperty()
-//                .addListener((observable, oldValue, newValue) -> {
-//                    Node selectedNode = NS.findNodeByName(newValue);
-//
-//                    currNodes[0] = selectedNode;
-
-    }
-
-
-    public void Node1ButtonPressed() {
-        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-        node1NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-    }
-
-
-    public void Node2ButtonPressed() {
-        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-        node2NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-
-    }
-
-
     public void DisableEdgeButtonPressed() {
-        Node node1 = nodeService.findNodeByName(node1NameText.getText());
-        Node node2 = nodeService.findNodeByName(node2NameText.getText());
-        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
+        Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        Edge selectedEdge = edgeService.findByNodes(start, end);
 
-        for (Edge curr : selectedEdges) {
-            edgeService.disableEdge(curr);
-            System.out.println("Disabled : " + curr.getStart().getName() + " " + curr.getEnd().getName());
-        }
+        selectedEdge.setDisabled(true);
+        edgeService.merge(selectedEdge);
+        System.out.println("Disabled : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
+
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+        circlesListen(circles, currFloor);
         System.out.println("successful");
-        ifDisableText.setText("Disable Successful!");
+//        ifDisableText.setText("Disable Successful!");
 
     }
 
 
     public void UndoDisableEdgeButtonPressed() {
+        Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        Edge selectedEdge = edgeService.findByNodes(start, end);
 
-        Node node1 = nodeService.findNodeByName(node1NameText.getText());
-        Node node2 = nodeService.findNodeByName(node2NameText.getText());
-        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
+        selectedEdge.setDisabled(false);
+        edgeService.merge(selectedEdge);
+        System.out.println("Undo disable : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
 
-        for (Edge curr : selectedEdges) {
-            edgeService.ableEdge(curr);
-            System.out.println("Undo disable : " + curr.getStart().getName() + " " + curr.getEnd().getName());
-        }
-
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+        circlesListen(circles, currFloor);
         System.out.println("successful");
-        ifUndoDisableText.setText("Undo Successful!");
+//        ifUndoDisableText.setText("Undo Successful!");
 
     }
 

@@ -1,497 +1,235 @@
-intersection12	intersection11
-intersection11	intersection12
-hallway10	intersection12
-intersection12	hallway10
-hallway10	hallway111
-hallway111	hallway10
-GI Endoscopy	hallway10
-hallway10	GI Endoscopy
-hallway111	Hillside Elevators 1
-Hillside Elevators 1	hallway111
-intersection14	intersection12
-intersection12	intersection14
-hallway11	intersection14
-intersection14	hallway11
-Day Surgery	hallway11
-hallway11	Day Surgery
-intersection12	hallway13
-hallway13	intersection12
-Center for Preoperative Evaluation	hallway13
-hallway13	Center for Preoperative Evaluation
-intersection17	hallway13
-hallway13	intersection17
-intersection15	intersection17
-intersection17	intersection15
-hallway12	intersection15
-intersection15	hallway12
-Radiology	hallway12
-hallway12	Radiology
-hallway11	intersection15
-intersection15	hallway11
-intersection17	hallway14
-hallway14	intersection17
-Blood Draw	hallway14
-hallway14	Blood Draw
-hallway15	hallway14
-hallway14	hallway15
-hallway18	hallway15
-hallway15	hallway18
-Family Center	hallway18
-hallway18	Family Center
-hallway16	hallway18
-hallway18	hallway16
-Emergency Department	hallway16
-hallway16	Emergency Department
-hallway110	intersection17
-intersection17	hallway110
-Atrium Elevators	hallway110
-hallway110	Atrium Elevators
-intersection18	hallway110
-hallway110	intersection18
-Info	intersection18
-intersection18	Info
-Cafe	intersection18
-intersection18	Cafe
-hallway20	2A
-2A	hallway20
-intersection20	hallway20
-hallway20	intersection20
-hallway25	intersection20
-intersection20	hallway25
-Atrium Elevators	hallway25
-hallway25	Atrium Elevators
-hallway25	intersection22
-intersection22	hallway25
-Atrium Elevators	intersection22
-intersection22	Atrium Elevators
-intersection23	intersection22
-intersection22	intersection23
-intersection24	intersection23
-intersection23	intersection24
-intersection25	intersection24
-intersection24	intersection25
-intersection21	intersection23
-intersection23	intersection21
-2B	intersection21
-intersection21	2B
-intersection20	intersection21
-intersection21	intersection20
-hallway21	2B
-2B	hallway21
-intersection21	intersection20
-intersection20	intersection21
-hallway21	intersection20
-intersection20	hallway21
-hallway22	intersection25
-intersection25	hallway22
-Physical Therapy	hallway22
-hallway22	Physical Therapy
-intersection26	hallway22
-hallway22	intersection26
-intersection28	intersection26
-intersection26	intersection28
-intersection27	intersection28
-intersection28	intersection27
-hallway26	intersection27
-intersection27	hallway26
-Hillside Elevators 1	hallway26
-hallway26	Hillside Elevators 1
-hallway27	intersection26
-intersection26	hallway27
-hallway27	Hillside Elevators 2
-Hillside Elevators 2	hallway27
-intersection26	intersection28
-intersection28	intersection26
-hallway24	intersection26
-intersection26	hallway24
-Outpatient Psych	hallway24
-hallway24	Outpatient Psych
-Inpatient Psych	hallway24
-hallway24	Inpatient Psych
-intersection312	intersection311
-intersection311	intersection312
-intersection313	intersection312
-intersection312	intersection313
-intersection325	intersection313
-intersection313	intersection325
-intersection324	intersection325
-intersection325	intersection324
-hallway31	intersection324
-intersection324	hallway31
-intersection323	hallway31
-hallway31	intersection323
-intersection322	intersection323
-intersection323	intersection322
-3C	hallway32
-hallway32	3C
-hallway32	intersection322
-intersection322	hallway32
-hallway32	intersection323
-intersection323	hallway32
-hallway31	3B
-3B	hallway31
-intersection325	3A
-3A	intersection325
-hallway39	intersection325
-intersection325	hallway39
-intersection316	hallway39
-hallway39	intersection316
-intersection320	intersection316
-intersection316	intersection320
-intersection321	intersection320
-intersection320	intersection321
-intersection322	intersection321
-intersection321	intersection322
-intersection316	Atrium Elevators
-Atrium Elevators	intersection316
-intersection320	intersection319
-intersection319	intersection320
-hallway37	intersection319
-intersection319	hallway37
-Patient Relations	hallway37
-hallway37	Patient Relations
-intersection314	intersection319
-intersection319	intersection314
-intersection311	intersection314
-intersection314	intersection311
-intersection38	hallway37
-hallway37	intersection38
-intersection37	intersection38
-intersection38	intersection37
-hallway33	intersection37
-intersection37	hallway33
-Cafeteria	hallway33
-hallway33	Cafeteria
-intersection36	hallway33
-hallway33	intersection36
-hallway35	intersection36
-intersection36	hallway35
-Gift Shop	hallway35
-hallway35	Gift Shop
-intersection35	hallway35
-hallway35	intersection35
-intersection38	hallway36
-hallway36	intersection38
-Auditorium	hallway36
-hallway36	Auditorium
-intersection34	intersection35
-intersection35	intersection34
-hallway311	intersection34
-intersection34	hallway311
-Hillside Elevators 2	hallway311
-hallway311	Hillside Elevators 2
-Hillside Elevators 1	hallway311
-hallway311	Hillside Elevators 1
-hallway34	hallway311
-hallway311	hallway34
-Chapel	hallway34
-hallway34	Chapel
-intersection32	hallway34
-hallway34	intersection32
-intersection32	hallway311
-hallway311	intersection32
-Volunteer	intersection31
-intersection31	Volunteer
-intersection31	hallway38
-hallway38	intersection31
-intersection32	intersection31
-intersection31	intersection32
-hallway49	4N
-4N	hallway49
-intersection413	hallway49
-hallway49	intersection413
-hallway413	intersection413
-intersection413	hallway413
-Hillside Elevators 1	hallway413
-hallway413	Hillside Elevators 1
-Hillside Elevators 2	hallway413
-hallway413	Hillside Elevators 2
-hallway410	intersection413
-intersection413	hallway410
-4S	hallway410
-hallway410	4S
-hallway48	hallway413
-hallway413	hallway48
-4J	hallway48
-hallway48	4J
-hallway47	hallway48
-hallway48	hallway47
-hallway46	hallway47
-hallway47	hallway46
-hallway46	4G
-4G	hallway46
-4H	hallway46
-hallway46	4H
-hallway45	hallway46
-hallway46	hallway45
-4I	hallway47
-hallway47	4I
-hallway45	hallway44
-hallway44	hallway45
-4F	hallway44
-hallway44	4F
-intersection412	hallway44
-hallway44	intersection412
-intersection43	intersection412
-intersection412	intersection43
-intersection42	intersection42
-intersection42	intersection42
-intersection411	intersection412
-intersection412	intersection411
-hallway43	intersection411
-intersection411	hallway43
-4D	hallway43
-hallway43	4D
-hallway42	hallway43
-hallway43	hallway42
-4C	hallway42
-hallway42	4C
-intersection410	hallway42
-hallway42	intersection410
-intersection49	intersection410
-intersection410	intersection49
-intersection48	intersection49
-intersection49	intersection48
-4B	intersection48
-intersection48	4B
-intersection41	intersection48
-intersection48	intersection41
-hallway40	intersection41
-intersection41	hallway40
-intersection46	hallway40
-hallway40	intersection46
-intersection44	intersection46
-intersection46	intersection44
-hallway411	intersection41
-intersection41	hallway411
-Atrium Elevators	hallway411
-hallway411	Atrium Elevators
-intersection412	Atrium Elevators
-Atrium Elevators	intersection412
-hallway411	intersection412
-intersection412	hallway411
-intersection43	intersection44
-intersection44	intersection43
-intersection45	intersection45
-intersection45	intersection45
-hallway516	5 North
-5 North	hallway516
-intersection51	hallway516
-hallway516	intersection51
-hallway513	intersection51
-intersection51	hallway513
-intersection52	hallway513
-hallway513	intersection52
-5N	hallway513
-hallway513	5N
-hallway514	intersection52
-intersection52	hallway514
-5M	hallway514
-hallway514	5M
-hallway515	hallway514
-hallway514	hallway515
-5 South	hallway515
-hallway515	5 South
-intersection53	intersection52
-intersection52	intersection53
-intersection53	Hillside Elevators 1
-Hillside Elevators 1	intersection53
-Hillside Elevators 1	intersection52
-intersection52	Hillside Elevators 1
-hallway518	intersection53
-intersection53	hallway518
-hallway518	intersection52
-intersection52	hallway518
-intersection54	intersection53
-intersection53	intersection54
-intersection55	intersection54
-intersection54	intersection55
-intersection514	intersection55
-intersection55	intersection514
-hallway512	intersection514
-intersection514	hallway512
-5L	hallway512
-hallway512	5L
-hallway511	intersection514
-intersection514	hallway511
-hallway59	hallway511
-hallway511	hallway59
-5G	hallway57
-hallway57	5G
-5F	hallway57
-hallway57	5F
-5I	hallway59
-hallway59	5I
-5H	hallway59
-hallway59	5H
-5J	hallway511
-hallway511	5J
-hallway511	5K
-5K	hallway511
-hallway59	hallway57
-hallway57	hallway59
-hallway57	intersection510
-intersection510	hallway57
-intersection511	intersection510
-intersection510	intersection511
-hallway55	intersection511
-intersection511	hallway55
-5E	hallway55
-hallway55	5E
-intersection512	hallway55
-hallway55	intersection512
-hallway54	intersection512
-intersection512	hallway54
-5D	hallway54
-hallway54	5D
-intersection513	hallway54
-hallway54	intersection513
-5C	intersection513
-intersection513	5C
-hallway52	intersection513
-intersection513	hallway52
-intersection58	hallway52
-hallway52	intersection58
-intersection58	5B
-5B	intersection58
-hallway52	hallway52
-hallway52	hallway52
-hallway51	intersection58
-intersection58	hallway51
-intersection57	hallway51
-hallway51	intersection57
-hallway51	5A
-5A	hallway51
-intersection510	intersection57
-intersection57	intersection510
-hallway517	intersection510
-intersection510	hallway517
-intersection513	hallway517
-hallway517	intersection513
-Atrium Elevators	hallway517
-hallway517	Atrium Elevators
-intersection510	Atrium Elevators
-Atrium Elevators	intersection510
-intersection62	intersection61
-intersection61	intersection62
-intersection63	intersection62
-intersection62	intersection63
-intersection64	intersection63
-intersection63	intersection64
-intersection61	intersection64
-intersection64	intersection61
-intersection65	intersection64
-intersection64	intersection65
-intersection66	intersection65
-intersection65	intersection66
-intersection66	intersection67
-intersection67	intersection66
-intersection68	intersection65
-intersection65	intersection68
-intersection67	intersection68
-intersection68	intersection67
-intersection68	intersection69
-intersection69	intersection68
-hallway60	intersection69
-intersection69	hallway60
-hallway60	Case Management
-Case Management	hallway60
-intersection610	hallway60
-hallway60	intersection610
-intersection612	intersection610
-intersection610	intersection612
-intersection612	intersection621
-intersection621	intersection612
-intersection611	intersection621
-intersection621	intersection611
-hallway62	intersection611
-intersection611	hallway62
-intersection69	hallway62
-hallway62	intersection69
-hallway62	Hillside Elevators 1
-Hillside Elevators 1	hallway62
-intersection613	intersection610
-intersection610	intersection613
-intersection614	intersection613
-intersection613	intersection614
-intersection615	intersection616
-intersection616	intersection615
-intersection615	intersection613
-intersection613	intersection615
-intersection614	intersection616
-intersection616	intersection614
-intersection617	intersection614
-intersection614	intersection617
-intersection620	intersection617
-intersection617	intersection620
-intersection619	intersection620
-intersection620	intersection619
-intersection618	intersection619
-intersection619	intersection618
-intersection617	intersection618
-intersection618	intersection617
-hallway61	intersection621
-intersection621	hallway61
-intersection622	hallway61
-hallway61	intersection622
-intersection623	intersection622
-intersection622	intersection623
-intersection624	intersection623
-intersection623	intersection624
-intersection625	intersection624
-intersection624	intersection625
-hallway61	Pariser Conference Room
-Pariser Conference Room	hallway61
-intersection626	intersection626
-intersection626	intersection626
-intersection71	intersection79
-intersection79	intersection71
-intersection72	intersection71
-intersection71	intersection72
-intersection710	intersection72
-intersection72	intersection710
-intersection79	intersection710
-intersection710	intersection79
-intersection73	intersection72
-intersection72	intersection73
-intersection711	intersection73
-intersection73	intersection711
-intersection712	intersection711
-intersection711	intersection712
-intersection74	intersection712
-intersection712	intersection74
-intersection73	intersection74
-intersection74	intersection73
-intersection75	intersection74
-intersection74	intersection75
-hallway72	intersection75
-intersection75	hallway72
-intersection715	hallway72
-hallway72	intersection715
-Hillside Elevators 1	hallway72
-hallway72	Hillside Elevators 1
-intersection717	intersection715
-intersection715	intersection717
-intersection716	intersection717
-intersection717	intersection716
-intersection76	intersection716
-intersection716	intersection76
-intersection75	intersection76
-intersection76	intersection75
-intersection76	Pain Management Center
-Pain Management Center	intersection76
-intersection76	intersection76
-intersection76	intersection76
-hallway70	hallway70
-hallway70	hallway70
-intersection77	intersection76
-intersection76	intersection77
-intersection713	intersection77
-intersection77	intersection713
-hallway71	intersection717
-intersection717	hallway71
-Human Resources	hallway71
-hallway71	Human Resources
-intersection78	intersection77
-intersection77  intersection78
-intersection714 intersection78
+start end
+74	75
+79	75
+78	79
+73	79
+71	73
+70	71
+60	71
+69	60
+68	69
+83	60
+82	83
+81	83
+80	81
+76	81
+46	81
+59	60
+67	59
+66	67
+65	59
+64	65
+65	58
+58	57
+69	57
+57	56
+63	57
+62	63
+85	63
+84	85
+87	86
+102	87
+97	102
+104	97
+96	97
+105	104
+106	105
+107	106
+103	105
+88	103
+102	103
+91	107
+90	91
+91	108
+108	101
+100	101
+110	108
+109	110
+99	109
+98	99
+95	108
+92	95
+94	95
+145	144
+146	145
+155	146
+111	155
+154	155
+114	154
+153	114
+116	153
+115	116
+116	152
+114	113
+151	152
+150	151
+149	150
+147	149
+144	147
+148	150
+130	148
+155	130
+129	148
+126	149
+125	126
+141	126
+140	141
+124	141
+123	124
+118	140
+117	118
+139	118
+122	139
+121	122
+138	122
+137	138
+134	137
+133	134
+131	134
+120	134
+136	134
+136	120
+119	120
+135	136
+128	135
+127	135
+174	175
+195	175
+183	195
+183	180
+182	183
+177	195
+177	176
+173	183
+172	173
+171	173
+169	171
+169	167
+170	171
+166	169
+168	169
+165	167
+164	165
+165	194
+186	194
+187	186
+188	187
+189	188
+157	189
+184	157
+179	184
+178	179
+194	179
+193	194
+163	193
+163	163
+162	163
+161	163
+160	161
+192	161
+191	192
+190	191
+158	190
+184	190
+226	227
+232	227
+221	232
+220	221
+233	221
+223	233
+222	223
+225	223
+224	225
+233	234
+230	234
+235	234
+236	235
+245	236
+219	245
+218	219
+217	245
+213	217
+216	217
+214	217
+210	213
+213	212
+209	213
+209	206
+208	209
+209	241
+242	241
+205	242
+204	205
+243	205
+243	203
+203	202
+244	203
+200	244
+199	244
+239	199
+239	198
+197	239
+238	197
+196	197
+241	238
+255	252
+254	255
+253	254
+252	253
+256	255
+257	256
+258	257
+259	258
+256	259
+260	259
+247	260
+246	247
+247	261
+251	260
+262	251
+251	250
+272	262
+263	272
+261	263
+249	272
+273	249
+274	273
+274	275
+275	276
+249	248
+264	261
+266	264
+267	266
+265	267
+264	265
+268	265
+269	269
+269	269
+269	270
+269	268
+271	268
+270	271
+285	284
+284	292
+293	292
+285	293
+286	285
+294	286
+286	287
+295	294
+287	295
+288	287
+283	288
+283	298
+300	298
+299	300
+289	299
+278	289
+289	288
+282	283
+281	300
+281	280
+290	289
+290	296
+291	290
+297	291

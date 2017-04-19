@@ -1,8 +1,5 @@
 .tab-label {
-    /*-fx-font-weight: bold;*/
-    /*-fx-font-size: 12px;*/
-    /*-fx-text-fill: white;*/
-    /*-fx-font-family: "Helvetica";*/
+    -fx-text-fill: white;
 }
 
 .tab {
@@ -24,10 +21,8 @@
     -fx-border-width: 1px;
     -fx-background-radius: 3;
     -fx-border-radius: 3;
-    /*-fx-font-size: 12px;*/
     -fx-text-fill: white;
-    /*-fx-font-weight: bold;*/
-    /*-fx-font-family: "Helvetica";*/
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,90) , 7, 0.0 , 2 , 3 );
 }
 
 .button:hover {

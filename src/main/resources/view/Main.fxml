@@ -34,7 +34,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Text>
-            <AutocompletionlTextField fx:id="StartLocationField" />
+           <AutocompletionlTextField fx:id="StartLocationField" />
             <HBox prefWidth="200.0">
                <children>
                   <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" text="Switch Start/End">
@@ -54,7 +54,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Text>
-            <AutocompletionlTextField fx:id="EndLocationField" />
+           <AutocompletionlTextField fx:id="EndLocationField" />
             <Button fx:id="getPathButton" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="GO!">
                <VBox.margin>
                   <Insets bottom="5.0" left="20.0" top="5.0" />

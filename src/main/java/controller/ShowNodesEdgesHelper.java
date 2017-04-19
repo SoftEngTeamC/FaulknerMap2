@@ -1,11 +1,13 @@
 package controller;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -130,17 +132,17 @@ class ShowNodesEdgesHelper {
         FloorScrollPane.setHvalue((FloorScrollPane.getHmax()+FloorScrollPane.getHmin()) / 2);
         FloorScrollPane.setVvalue((FloorScrollPane.getVmax()+FloorScrollPane.getVmin()) / 2);
     }
-/*
-    static void ZoomListener(){
-        int oldValue;
-        int newValue;
-        FifthFloorSlider.valueProperty().addListener();{
-            Imagview.setX(    )
 
+    public void ZoomListener(Slider slider, ScrollPane scrlpn){
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                //find center XY on old zoom based on current XY of scrollpane and old width
 
+                //find center XY on Image relative to full image
+
+                //set XY of scroll pane to be about new imageview
         });
     }
-*/
+
     static ScrollPane checkScroll(int z) {
         switch (z) {
             case 1:
@@ -207,6 +209,10 @@ class ShowNodesEdgesHelper {
         edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        if(e.isDisabled() == true) {
+            edge.getStrokeDashArray().addAll(2d, 10d);
+        }
 
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
