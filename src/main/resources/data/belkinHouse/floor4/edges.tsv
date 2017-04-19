@@ -1,15 +1,15 @@
-stairwellB40 - hallwayB40
-elevatorB40 - hallwayB40
+stairwellB40	hallwayB40
+elevatorB40	hallwayB40
 
-hallwayB40 - Sayoff Breast Imaging Diagnostic Center
+hallwayB40	Sayoff Breast Imaging Diagnostic Center
 
-Sayoff Breast Imaging Diagnostic Center - intersectionB40
+Sayoff Breast Imaging Diagnostic Center	intersectionB40
 
-intersectionB40 - intersectionB41
-intersectionB40 - intersectionB42
+intersectionB40	intersectionB41
+intersectionB40	intersectionB42
 
-intersectionB41 - intersectionB43
+intersectionB41	intersectionB43
 
-stairwellB41 - hallwayB41
-hallwayB41 - intersectionB42
-hallwayB41 - intersectionB43
+stairwellB41	hallwayB41
+hallwayB41	intersectionB42
+hallwayB41	intersectionB43
