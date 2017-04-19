@@ -206,8 +206,8 @@ public class MainController extends Controller {
             HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
             HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
             FindandDisplayPath(HP_Start, HP_Dest);
-            System.out.println("start HP:  " + HP_Start.getName());
-            System.out.println("dest HP:  " + HP_Dest.getName());
+            System.out.println("start HP:  " + HP_Start.getName() +  " Location : " + HP_Start.getOffices().get(0).getName());
+            System.out.println("dest HP:  " + HP_Dest.getName()+  " Location : " + HP_Dest.getOffices().get(0).getName());
             //Set Information Displays
             PopulateInformationDisplay();
         }
