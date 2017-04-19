@@ -109,6 +109,7 @@ public class MapNode implements Node<MapNode> {
     }
 
     public String toString() {
+        if (modelNode == null) return location.toString();
         return modelNode.getName();
     }
 }
