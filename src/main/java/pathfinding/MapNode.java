@@ -32,6 +32,8 @@ public class MapNode implements Node<MapNode> {
         int totalDistance = 0;
         for(int i = 0; i < myPath.size()-1;i++){ //Go until 1 before the end
             totalDistance += myPath.get(i).distanceTo(myPath.get(i+1));
+            //Testing
+            // System.out.println("Added " + FEET_PER_PIXEL * myPath.get(i).distanceTo(myPath.get(i+1)));
         }
         return totalDistance;
     }

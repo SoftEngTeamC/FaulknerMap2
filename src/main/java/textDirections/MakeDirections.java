@@ -49,10 +49,8 @@ public class MakeDirections {
             //System.out.println(direction);
 
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
-                if(nextNode.getLocation().getFloor() == myPath.get(myPath.size()-1).getLocation().getFloor()){
-                    output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
-                    output = output2;
-                }
+                output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
+                output = output2;
             }
 
             else {
