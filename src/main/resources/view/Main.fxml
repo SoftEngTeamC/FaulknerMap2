@@ -34,7 +34,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Text>
-            <AutocompletionlTextField fx:id="StartLocationField" />
+           <AutocompletionlTextField fx:id="StartLocationField" />
             <HBox prefWidth="200.0">
                <children>
                   <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" text="Switch Start/End">
@@ -54,7 +54,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Text>
-            <AutocompletionlTextField fx:id="EndLocationField" />
+           <AutocompletionlTextField fx:id="EndLocationField" />
             <Button fx:id="getPathButton" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="GO!">
                <VBox.margin>
                   <Insets bottom="5.0" left="20.0" top="5.0" />
@@ -118,6 +118,7 @@
                     <children>
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" text="Language">
                             <items>
+                        <MenuItem fx:id="english_button" mnemonicParsing="false" onAction="#toEnglish" text="English" />
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
                                 <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
                                 <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />

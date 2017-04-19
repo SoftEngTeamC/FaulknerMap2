@@ -21,12 +21,15 @@ public class AdminToolController extends Controller{
     private VBox AdminTool_VBox;
     @FXML
     private AnchorPane AdminTool_AnchorPane;
+    @FXML
+    private Button algorithmSelectorBtn;
 
     public void initialize(){
         AdminTool_VBox.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty());
         editDirectoryBtn.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty().multiply(0.3));
         mapEditorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         editHoursBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+        algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
     }
 
     @FXML
@@ -45,6 +48,11 @@ public class AdminToolController extends Controller{
     @FXML
     public void logout() throws Exception{
         switchScreen("view/Main.fxml", "Directory Editor", logoutBtn);
+    }
+
+    @FXML
+    public void algorithmSelectorBtnAction() throws Exception{
+        switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", algorithmSelectorBtn);
     }
 
 }

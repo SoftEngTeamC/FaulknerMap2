@@ -12,7 +12,7 @@ public class MapNode implements Node<MapNode> {
     public final static double FEET_PER_PIXEL = 0.2902;
     public final static double SECONDS_PER_FOOT = 0.2975;
     public final static double STEPS_PER_FOOT = 0.5157;
-    private final double ELEVATOR_COST = 0.1;
+    private final double ELEVATOR_COST = 5;
 
     private Set<MapNode> neighbors = new HashSet<>();
     private model.Node modelNode;
@@ -99,7 +99,7 @@ public class MapNode implements Node<MapNode> {
     private model.Node closestElevator() {
         NodeService nodeService = new NodeService();
         List<model.Node> elevators = nodeService.getElevatorNodes();
-        model.Node closestElevator = elevators.get(0); // TODO: Don't assume existence of elevators
+        model.Node closestElevator = elevators.get(0);
         for (model.Node e : elevators) {
             if (distanceTo(e.getLocation()) < distanceTo(closestElevator.getLocation())) {
                 closestElevator = e;
