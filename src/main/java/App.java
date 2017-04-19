@@ -20,8 +20,7 @@ public class App extends Application {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         Parent root = FXMLLoader.load(mainView);
         primaryStage.setTitle("Faulkner Kiosk");
-        primaryStage.setScene(new Scene(root, 500, 500));
-        primaryStage.setMaximized(true);
+        primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.setFullScreen(true);
         primaryStage.show();
 
