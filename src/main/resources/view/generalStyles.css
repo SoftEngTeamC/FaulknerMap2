@@ -1,3 +1,7 @@
+.tab-label {
+    -fx-text-fill: white;
+}
+
 .tab {
     -fx-background-color: #0058a1;
     -fx-border-color: #2f3332;
