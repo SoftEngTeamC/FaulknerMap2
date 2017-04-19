@@ -24,20 +24,23 @@ public class EdgeService extends AbstractService<Edge> {
         return temp;
     }
 
-    public Edge findByNodes(Node start, Node end){
+    public Edge findByNodes(Node start, Node end) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        Edge temp =  manager.createQuery("SELECT e FROM Edge e WHERE " +
-                "e.start.id = :start AND e.end.id = :end", Edge.class)
-                .setParameter("start", start.getId())
-                .setParameter("end", end.getId())
-                .getSingleResult();
-        if(temp == null){
-            temp =  manager.createQuery("SELECT e FROM Edge e WHERE " +
+        Edge temp = null;
+        try {
+            temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
+                    "e.start.id = :start AND e.end.id = :end", Edge.class)
+                    .setParameter("start", start.getId())
+                    .setParameter("end", end.getId())
+                    .getSingleResult();
+        } catch (Exception e) {
+            temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
                     "e.start.id = :start AND e.end.id = :end", Edge.class)
                     .setParameter("start", end.getId())
                     .setParameter("end", start.getId())
                     .getSingleResult();
         }
+
         System.out.println("start: " + start.getId() + " end: " + end.getId());
         manager.close();
         return temp;
