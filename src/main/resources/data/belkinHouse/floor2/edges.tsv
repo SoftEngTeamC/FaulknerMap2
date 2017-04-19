@@ -1,19 +1,19 @@
-stairwellB20 - hallwayB20
-elevatorB2 - hallwayB20
-stairwellB21 - hallwayB21
+stairwellB20	hallwayB20
+elevatorB2	hallwayB20
+stairwellB21	hallwayB21
 
-hallwayB20 - intersectionB20
-hallwayB20 - intersectionB21
+hallwayB20	intersectionB20
+hallwayB20	intersectionB21
 
-hallwayB22 - intersectionB20
-hallwayB22 - intersectionB23
+hallwayB22	intersectionB20
+hallwayB22	intersectionB23
 
-intersectionB21 - intersectionB22
+intersectionB21	intersectionB22
 
-intersectionB22 - intersectionB23
-intersectionB22 - intersectionB24
+intersectionB22	intersectionB23
+intersectionB22	intersectionB24
 
-intersectionB23 - intersectionB25
+intersectionB23	intersectionB25
 
-hallwayB21 - intersectionB24
-hallwayB21 - intersectionB25
+hallwayB21	intersectionB24
+hallwayB21	intersectionB25

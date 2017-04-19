@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
@@ -11,16 +16,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditPersonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1900.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditPersonController">
    <children>
       <GridPane layoutX="14.0" layoutY="24.0" prefHeight="543.0" prefWidth="806.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="301.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="0.0" prefWidth="234.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="640.0" minWidth="10.0" prefWidth="344.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="527.0" minWidth="10.0" prefWidth="253.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="824.0" minWidth="10.0" prefWidth="342.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="543.0" minWidth="0.0" prefWidth="426.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="362.0" minWidth="0.0" prefWidth="362.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="640.0" minWidth="10.0" prefWidth="399.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="527.0" minWidth="10.0" prefWidth="197.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="824.0" minWidth="10.0" prefWidth="370.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="543.0" minWidth="0.0" prefWidth="271.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -35,16 +40,16 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="titleField" layoutX="300.0" layoutY="134.0" maxWidth="250.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <TextField fx:id="titleField" layoutX="300.0" layoutY="134.0" maxWidth="272.0" prefHeight="45.0" prefWidth="272.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <Text layoutX="147.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Name:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <font>
-                  <Font size="22.0" />
+                  <Font size="32.0" />
                </font>
             </Text>
       
-            <Button fx:id="updateBtn" layoutX="327.0" layoutY="402.0" mnemonicParsing="false" onAction="#updateBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Update" textFill="#4ba418" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+            <Button fx:id="updateBtn" layoutX="327.0" layoutY="402.0" mnemonicParsing="false" onAction="#updateBtnPressed" prefHeight="74.0" prefWidth="175.0" text="Update" textFill="#4ba418" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
                <font>
-                  <Font size="15.0" />
+                  <Font size="34.0" />
                </font>
             </Button>
             <Button fx:id="deleteBtn" layoutX="326.0" layoutY="482.0" mnemonicParsing="false" onAction="#deleteBtnPressed" prefHeight="44.0" prefWidth="98.0" text="Delete" textFill="#4ba418" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
@@ -79,21 +84,24 @@
             </Button>
             <Text layoutX="176.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <font>
-                  <Font size="22.0" />
+                  <Font size="32.0" />
                </font>
             </Text>
-            <TextField fx:id="nameField" layoutX="301.0" layoutY="95.0" maxWidth="250.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <TextField fx:id="nameField" layoutX="301.0" layoutY="95.0" maxWidth="274.0" prefHeight="44.0" prefWidth="274.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Text layoutX="145.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location(s):" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <font>
-                  <Font size="22.0" />
+                  <Font size="32.0" />
                </font>
             </Text>
             <Text layoutX="313.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Edit Person" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                <font>
-                  <Font size="25.0" />
+                  <Font size="59.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="100.0" />
+               </GridPane.margin>
             </Text>
-            <ListView fx:id="locationsList" layoutX="301.0" layoutY="175.0" maxWidth="250.0" prefHeight="66.0" prefWidth="149.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <ListView fx:id="locationsList" layoutX="301.0" layoutY="175.0" maxWidth="280.0" prefHeight="40.0" prefWidth="280.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Text fx:id="deletedText" fill="RED" layoutX="295.0" layoutY="469.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Person deleted from database" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8">
                <font>
                   <Font size="22.0" />
@@ -101,10 +109,10 @@
             </Text>
             <Text layoutX="182.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
                <font>
-                  <Font size="22.0" />
+                  <Font size="32.0" />
                </font>
             </Text>
-            <TextField fx:id="idField" disable="true" layoutX="300.0" layoutY="315.0" maxWidth="250.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <TextField fx:id="idField" disable="true" layoutX="300.0" layoutY="315.0" maxWidth="267.0" prefHeight="46.0" prefWidth="267.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Button fx:id="logoutBtn" layoutX="14.0" layoutY="504.0" mnemonicParsing="false" onAction="#logout" prefHeight="54.0" prefWidth="97.0" text="logout" GridPane.rowIndex="9">
                <font>
                   <Font size="18.0" />
@@ -112,7 +120,7 @@
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin></Button>
-            <ListView fx:id="availableLocationsList" layoutX="582.0" layoutY="175.0" prefHeight="66.0" prefWidth="149.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
+            <ListView fx:id="availableLocationsList" layoutX="582.0" layoutY="175.0" prefHeight="0.0" prefWidth="289.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>

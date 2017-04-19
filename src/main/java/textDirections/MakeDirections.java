@@ -19,7 +19,9 @@ public class MakeDirections {
         double pathLength = MapNode.getFeet(myPath);
         double pathTime = MapNode.getSeconds(myPath);
         String output = "";
-        String output2 = output.concat("Expected Distance: " + pathFormat.format(pathLength) + " feet. \nExpected time: " + pathFormat.format(pathTime) + " seconds.\n\t--------------------------\n");
+        String output2 = output.concat("Approximate Distance: " + pathFormat.format(pathLength) +
+                " feet. \nEstimated time: " + pathFormat.format(Math.floor(pathTime/60)) + " minutes and " +
+                pathFormat.format(Math.floor(pathTime%60)) + " seconds.\n\t--------------------------\n");
         output = output2;
         String direction;
         int i;
@@ -51,10 +53,6 @@ public class MakeDirections {
                     output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
                     output = output2;
                 }
-                //else These aren't the droids you're looking for. Ignore this node. It's a lie!
-                //Assuming we'll never start on floor five, go to floor 4, jump to 1, go back to 4.
-                //System.out.println("Made it here");
-
             }
 
             else {
@@ -76,7 +74,7 @@ public class MakeDirections {
                 } else {
                     //System.out.println(angleShift);
                     DecimalFormat df = new DecimalFormat("#.#");
-                    output2 = output.concat("Move straight " + df.format(totalDistance) + " feet, then take a ");
+                    output2 = output.concat("Move straight " + df.format(Math.round(totalDistance)) + " feet, then take a ");
                     output = output2;
                     totalDistance = 0;
                     if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
@@ -110,19 +108,19 @@ public class MakeDirections {
         if(direction.equals("horizontal")) {
             //System.out.println(direction);
             distance = xDistance(currentNode, nextNode);
-            totalDistance += distance;
+            totalDistance += Math.round(distance);
             //System.out.println(distance);
         }
         else if(direction.equals("vertical")) {
             //System.out.println(direction);
-            totalDistance += yDistance(currentNode, nextNode);
+            totalDistance += Math.round(yDistance(currentNode, nextNode));
         }
         else {
             //System.out.println(direction);
-            totalDistance += distanceBetween(currentNode, nextNode);
+            totalDistance += Math.round(distanceBetween(currentNode, nextNode));
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        output2 = output.concat("Move forward " + df.format(totalDistance) + " feet. You have arrived.");
+        output2 = output.concat("Move forward " + df.format(Math.round(totalDistance)) + " feet. You have arrived.");
         output = output2;
 
         return output;
