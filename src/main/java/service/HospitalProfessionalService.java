@@ -2,7 +2,9 @@ package service;
 
 
 import model.HospitalProfessional;
-import model.Node;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -37,5 +39,20 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
                 .getResultList();
         manager.close();
         return temp;
+    }
+
+    public List<HospitalProfessional> search(String s) {
+        EntityManager manager = managerFactory.createEntityManager();
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
+        manager.getTransaction().begin();
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder().forEntity(HospitalProfessional.class).get();
+        org.apache.lucene.search.Query query = qb.keyword().onFields("title", "name").matching(s).createQuery();
+        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalProfessional.class);
+
+        List<HospitalProfessional> result = JPAQuery.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
+        return result;
     }
 }
