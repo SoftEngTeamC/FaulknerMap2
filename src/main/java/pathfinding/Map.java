@@ -1,6 +1,7 @@
 package pathfinding;
 
 
+import model.Edge;
 import service.AlgorithmSingleton;
 import service.EdgeService;
 import service.NodeService;
@@ -26,7 +27,8 @@ public class Map {
                 if (n == null) continue;
                 MapNode neighbor = nodeMap.get(n.getId());
                 MapNode currentNode = nodeMap.get(id);
-                if (edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId())).isDisabled()) continue;
+                Edge maybeDisabledEdge = edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId()));
+                if (maybeDisabledEdge == null || maybeDisabledEdge.isDisabled()) continue;
                 if (neighbor == null || currentNode == null) continue;
                 currentNode.addNeighbor(neighbor);
             }
