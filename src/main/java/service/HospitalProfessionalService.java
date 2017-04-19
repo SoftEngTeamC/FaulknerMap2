@@ -12,16 +12,20 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
     @Override
     public HospitalProfessional find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.find(HospitalProfessional.class, id);
+        HospitalProfessional temp =  manager.find(HospitalProfessional.class, id);
+        manager.close();
+        return temp;
     }
 
     public HospitalProfessional findHospitalProfessionalByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            return (HospitalProfessional) manager.createQuery(
+            HospitalProfessional temp = (HospitalProfessional) manager.createQuery(
                     "SELECT p FROM HospitalProfessional p WHERE p.name LIKE :name")
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
+            manager.close();
+            return temp;
         } catch (NoResultException e) {
             return null;
         }
@@ -29,7 +33,9 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
 
     public List<HospitalProfessional> getAllProfessionals() {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.createQuery("from HospitalProfessional", HospitalProfessional.class)
+        List<HospitalProfessional> temp = manager.createQuery("from HospitalProfessional", HospitalProfessional.class)
                 .getResultList();
+        manager.close();
+        return temp;
     }
 }

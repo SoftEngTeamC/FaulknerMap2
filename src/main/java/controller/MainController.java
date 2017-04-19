@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,6 +23,7 @@ import pathfinding.PathFinder;
 import service.EMFProvider;
 import textDirections.MakeDirections;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,80 +57,49 @@ public class MainController extends Controller {
     private ScrollPane SeventhFloorScrollPane;
     @FXML
     private Slider SeventhFloorSlider;
-    //---------------------------------------------------
-    @FXML
-    private AnchorPane Map1AnchorPane;
-    @FXML
-    private Button AdminToolButton;
-    @FXML
-    private TextField SearchBarTextField;
-    @FXML
-    private ListView SearchResultsListView;
-    @FXML
-    private TextArea DisplayInformationTextArea;
-    @FXML
-    private Button HelpButton;
     @FXML
     private TabPane FloorViewsTabPane;
-    @FXML
-    private MenuButton languageMenuButton;
+    //---------------------------------------------------
     @FXML
     private VBox MainVbox;
     @FXML
-    private HBox CheckBoxesHBox;
-    @FXML
-    private SplitPane MainSplitPane;
-    @FXML
-    private TextArea Start_location_TextArea;
-    @FXML
-    private TextArea Dest_location_TextArea;
-    @FXML
-    private HBox PathLocationHBox;
-    @FXML
-    private Button SetStartLocationButton;
-    @FXML
-    private Button SetDestLocationButton;
-    @FXML
-    private Button getPathButton;
-
-    //private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
-
-    /* public String hours1;
-     public String minutes1;
-     public String ampm1;
-     public String hours2;
-     public String minutes2;
-     public String ampm2;
-     public String hours3;
-     public String minutes3;
-     public String ampm3;
-     public String hours4;
-     public String minutes4;
-     public String ampm4;
-     */
-    public Hours hours;
-
-    @FXML
     private ImageView LogoImageView;
     @FXML
-    private VBox StartLocationVBox;
+    private AutocompletionlTextField StartLocationField;
+    @FXML
+    private Button SwitchStartEnd_Button;
     @FXML
     private Button StartAtKioskButton;
     @FXML
-    private TabPane DisplayInformationTabPane;
+    private AutocompletionlTextField EndLocationField;
+    @FXML
+    private Button getPathButton;
+    @FXML
+    private TabPane Info_TabPane;
+    @FXML
+    private TextArea StartInfo_TextArea;
+    @FXML
+    private TextArea EndInfo_TextArea;
     @FXML
     private TextArea TextDirectionsTextArea;
     @FXML
+    private Button HelpButton;
+    @FXML
+    private MenuButton languageMenuButton;
+    @FXML
     private Button AboutUsButton;
+    @FXML
+    private Button AdminToolButton;
 
+    public Hours hours;
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
-
+        //Hours initialization
         EMFProvider emf = new EMFProvider();
         hours = emf.hours;
-
+        //-----------------------------Visual inits
         new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
                 SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
@@ -138,45 +107,25 @@ public class MainController extends Controller {
                 SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
-
-        PopulateSearchResults(null);
-        SearchResultsListView.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.2));
-        DisplayInformationTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
         TextDirectionsTextArea.prefWidthProperty().bind(MainVbox.widthProperty());
-        CheckBoxesHBox.setPrefHeight(30);
-        //System.out.println(MainSplitPane.getDividers());
-        //MainSplitPane.setDividerPosition(1,0.3);
-
         Image logo = new Image("images/logo.png");
         LogoImageView.setImage(logo);
         LogoImageView.setPreserveRatio(true);
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
+        Info_TabPane.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.6));
 
-        //TODO: delete
-//        ShowNodesEdgesHelper.MakeCircle(1000,1000,4, new Node());
-
-        //ShowNodesEdgesHelper.MakeLine(1000,1000,2000,2000,2);
-
+        //-----------------------Data initialization
+        List<HospitalProfessional> HPs = professionalService.getAllProfessionals();
+        List<String> names = new ArrayList<>();
+        for (HospitalProfessional HP : HPs) {
+            names.add(HP.getName());
+        }
+        StartLocationField.getEntries().addAll(names);
+        EndLocationField.getEntries().addAll(names);
 
         //default is english
         // 1: english, 2: spanish, 3: chinese, 4: french
         language = 1;
-
-//        List<Node> temp = NS.getNodesByFloor(1);
-//        for(Node n: temp){
-//            ShowNodesEdgesHelper.MakeCircle(n.getLocation().getX(), n.getLocation().getY(), 1, n);
-//        }
-//        EdgeService es = new EdgeService();
-//        List<Edge> edges = es.getAllEdges();
-//        for(Edge e: edges){
-//            if(e.getStart().getLocation().getFloor() == 1){
-//                ShowNodesEdgesHelper.MakeLine(e.getStart().getLocation().getX(), e.getStart().getLocation().getY(),
-//                        e.getEnd().getLocation().getX(), e.getEnd().getLocation().getY(), 1);
-//                TextField text = new TextField();
-//
-//            }
-//        }
-
     }
 
     //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
@@ -202,7 +151,7 @@ public class MainController extends Controller {
             Node end = nodes.get(i+1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
-            Edge e = edgeService.findByNodes(start,end).get(0);
+            Edge e = edgeService.findByNodes(start, end).get(0);
             //only draw if not last node, nodes are on same floor
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
@@ -211,21 +160,12 @@ public class MainController extends Controller {
         }
     }
 
-    //------------------------------------UPDATING VISUAL DATA FUNCTIONS------------------------------------------------
-
-    //This function takes a list of strings and updates the SearchResult ListView to contain those strings
-    public void UpdateSearchResults(LinkedList<String> results) {
-        results.sort(String.CASE_INSENSITIVE_ORDER);
-        ObservableList<String> data = FXCollections.observableArrayList();
-        data.addAll(results);
-        SearchResultsListView.setItems(data);
-    }
-
+    //-----------------------------------FUNCTIONS------------------------------------------
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         Map map = new Map(nodeService.getAllNodes());
 
-        Node nodeStart = (HP_Start.getOffices().get(0));
-        Node nodeEnd = (HP_Dest.getOffices().get(0));
+        Node nodeStart = HP_Start.getOffices().get(0);
+        Node nodeEnd = HP_Dest.getOffices().get(0);
 
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
@@ -236,103 +176,49 @@ public class MainController extends Controller {
         } else {
             TextDirectionsTextArea.setText(MakeDirections.getText(path));
         }
-        System.out.println("HERE");
         DisplayMap(path);
     }
 
-    private void PopulateSearchResults(String S) {
-        System.out.println("Populate Search String");
-        List<HospitalProfessional> Professionals = professionalService.getAllProfessionals();
-        System.out.println(Professionals.size());
-        ObservableList<String> names = FXCollections.observableArrayList();
-        if (S == null) {
-            System.out.println("null case");
-            for (HospitalProfessional HP : Professionals) {
-                names.add(HP.getName());
-            }
-            names.sort(String.CASE_INSENSITIVE_ORDER);
-            SearchResultsListView.setItems(names);
-        } else {
-            for (HospitalProfessional HP : Professionals) {
-                if (HP.getName().contains(S)) {
-                    names.add(HP.getName());
-                }
-            }
-            names.sort(String.CASE_INSENSITIVE_ORDER);
-            SearchResultsListView.setItems(names);
-        }
-    }
-
-    //This function takes a HospitalProfessional edits the DisplayInformation TextArea
-    //with all the HP's associated information
-    public void PopulateInformationDisplay(HospitalProfessional HP) {
-        //System.out.println(hs.find(HP.getId()).getOffices());
-        String offices = "\nOffices:\n" + professionalService.find(HP.getId()).getOffices().get(0).getName();
-        DisplayInformationTextArea.setText(HP.getName() + "\n\n" + HP.getTitle() + "\n" + offices);
+    //This function updates the StartInfo and EndInfo Text Areas
+    public void PopulateInformationDisplay() {
+        HospitalProfessional StartProfessional = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
+        StartInfo_TextArea.setText(StartProfessional.getTitle()+" "+StartProfessional.getName()+"\n\n"
+                                    +"Offices:\n\n"+StartProfessional.getOffices());
+        HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
+        EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
+                +"Offices:\n\n"+EndProfessional.getOffices());
     }
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
-    public void handleClickedOnStartAtKiosk() {
-        System.out.println("start at kiosk");
-        Start_location_TextArea.setText("Floor 1 Kiosk");
+    public void handleClickedOnStartAtKiosk(){
+        //System.out.println("start at kiosk");
+        StartLocationField.setText("Floor 1 Kiosk");
     }
 
-    //This function is called when the user clicks on a Search Result.
-    //Information unique to the ListView Item can be accessed
-    public void handleClickedOnSearchResult() {
-        System.out.println("clicked on " + SearchResultsListView.getSelectionModel().getSelectedItem());
-        PopulateInformationDisplay(professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString()));
-        //FindandDisplayPath();
-    }
-
-
-    // function after clicking set start location
-    public void SetStartLocationButtonClicked() {
-        System.out.println("clicked on Set Start button");
-        professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
-        HospitalProfessional HP = new HospitalProfessional();
-        HP = professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
-        Start_location_TextArea.setText(HP.getName());
-    }
-
-    // function after clicking set destination location
-    public void SetDestLocationButtonClicked() {
-        System.out.println("clicked on Set Dest button");
-        professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
-        HospitalProfessional HP = new HospitalProfessional();
-        HP = professionalService.findHospitalProfessionalByName(SearchResultsListView.getSelectionModel().getSelectedItem().toString());
-        Dest_location_TextArea.setText(HP.getName());
-    }
-
+    //This function switches the text in the StartLocation and EndLocation Fields
     public void switchLocationButtonClicked() {
-        System.out.println("clicked on switch location button");
-
-
-        String tempStorage = Start_location_TextArea.getText();
-        System.out.println("tempStorage is" + tempStorage);
-        Start_location_TextArea.setText(Dest_location_TextArea.getText());
-        Dest_location_TextArea.setText(tempStorage);
-
-        professionalService.findHospitalProfessionalByName(Start_location_TextArea.getText());
+        //System.out.println("clicked on switch location button");
+        String tempStorage = StartLocationField.getText();
+        StartLocationField.setText(EndLocationField.getText());
+        EndLocationField.setText(tempStorage);
     }
 
-
-    public void getPathButtonClicked() {
+    public void getPathButtonClicked(){
         System.out.println("clicked on get path button");
-        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(Start_location_TextArea.getText());
-        HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(Dest_location_TextArea.getText());
-        FindandDisplayPath(HP_Start, HP_Dest);
-
-        System.out.println("start HP:  " + HP_Start.getName());
-        System.out.println("dest HP:  " + HP_Dest.getName());
-    }
-
-
-    public void SearchBarTextField_keyReleased() {
-        System.out.println("Searching");
-        System.out.println(SearchBarTextField.getText().toString());
-        PopulateSearchResults(SearchBarTextField.getText().toString());
+        if(!(StartLocationField.getText().isEmpty() || EndLocationField.getText().isEmpty())){
+            //Do path finding
+            HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
+            HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
+            FindandDisplayPath(HP_Start, HP_Dest);
+            System.out.println("start HP:  " + HP_Start.getName());
+            System.out.println("dest HP:  " + HP_Dest.getName());
+            //Set Information Displays
+            PopulateInformationDisplay();
+        }
+        else{
+            System.out.print("Give a Start and an End");
+        }
     }
 
     //function for Help Button
@@ -352,7 +238,7 @@ public class MainController extends Controller {
 //                System.out.println("Hours:  "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
 //                System.out.println("Hours:  "+hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
 
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                StartInfo_TextArea.setText("To contact a hospital worker\n" +
                         "please call 774-278-8517\n\n"
                         + "Hospital Operating Hour:\n" +
                         "Morning Hours: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
@@ -361,7 +247,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("Para contactar a un empleado\n" +
+                StartInfo_TextArea.setText("Para contactar a un empleado\n" +
                         "porfavor llame 774-278-8517\n\n"
                         + "Horas de operacíon:\n" +
                         "Mañana : " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
@@ -370,7 +256,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
+                StartInfo_TextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
                         + "医院营业时间:\n" +
                         "白日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
                         hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
@@ -378,7 +264,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Contactez un employé de l'hôpital\n" +
+                StartInfo_TextArea.setText("Contactez un employé de l'hôpital\n" +
                         "appelez s'il vous plaît 774-278-8517\n\n"
                         + "Heures d'ouverture:\n" +
                         "Matin: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
@@ -387,7 +273,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 5: //Italian
-                DisplayInformationTextArea.setText("Per contattare un dipendente dell'ospedale\n" +
+                StartInfo_TextArea.setText("Per contattare un dipendente dell'ospedale\n" +
                         "chiamare 774-278-8517\n\n"
                         + "Ore di servizio:\n" +
                         "Mattina: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
@@ -396,7 +282,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 6: //Japanese
-                DisplayInformationTextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
+                StartInfo_TextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
                         + "病院ビジネス時間:\n" +
                         "日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
                         hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
@@ -404,7 +290,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             case 7: //Portuguese
-                DisplayInformationTextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
+                StartInfo_TextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
                         "ligue para 774-278-8517\n\n"
                         + "horas de operação:\n" +
                         "Manhã: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
@@ -413,7 +299,7 @@ public class MainController extends Controller {
                         hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
                 break;
             default:
-                DisplayInformationTextArea.setText("To contact a hospital worker\n" +
+                StartInfo_TextArea.setText("To contact a hospital worker\n" +
                         "please call 774-278-8517");
                 language = 1;
         }
@@ -422,34 +308,34 @@ public class MainController extends Controller {
     //function for Panic Button
     public void HandlePanicButton() {
         System.out.println(language);
-        DisplayInformationTextArea.setText("Don't Panic");
+        StartInfo_TextArea.setText("Don't Panic");
         Map map = new Map(nodeService.getAllNodes());
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
-                DisplayInformationTextArea.setText("Don't Panic! Call 774-278-8517!");
+                StartInfo_TextArea.setText("Don't Panic! Call 774-278-8517!");
                 break;
             case 2: //spanish
-                DisplayInformationTextArea.setText("No se preocupe");
+                StartInfo_TextArea.setText("No se preocupe");
                 break;
             case 3: //chinese
-                DisplayInformationTextArea.setText("不要惊慌");
+                StartInfo_TextArea.setText("不要惊慌");
                 break;
             case 4: //french
-                DisplayInformationTextArea.setText("Ne paniquez pas");
+                StartInfo_TextArea.setText("Ne paniquez pas");
                 break;
             case 5: //Italian
-                DisplayInformationTextArea.setText("Non fatevi prendere dal panico");
+                StartInfo_TextArea.setText("Non fatevi prendere dal panico");
                 break;
             case 6: //Japanese
-                DisplayInformationTextArea.setText("パニックしないでください");
+                StartInfo_TextArea.setText("パニックしないでください");
                 break;
             case 7: //Portuguese
-                DisplayInformationTextArea.setText("Não entre em pânico");
+                StartInfo_TextArea.setText("Não entre em pânico");
                 break;
             default:
-                DisplayInformationTextArea.setText("Don't Panic");
+                StartInfo_TextArea.setText("Don't Panic");
                 language = 1;
         }
         DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("intersection18").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
