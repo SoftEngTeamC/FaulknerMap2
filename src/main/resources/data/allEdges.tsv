@@ -495,3 +495,55 @@ hallway71	Human Resources
 intersection78	intersection77
 intersection77  intersection78
 intersection714 intersection78
+Dialysis Clinic	HallwayB10
+StairsB10	HallwayB11
+StairsB11	HallwayB12
+HallwayB11	HallwayB13
+HallwayB13	IntersectionB10
+IntersectionB10	IntersectionB13
+IntersectionB13	IntersectionB14
+IntersectionB14	IntersectionB12
+IntersectionB12	IntersectionB11
+HallwayB12	IntersectionB11
+stairwellB20	hallwayB20
+elevatorB2	hallwayB20
+stairwellB21	hallwayB21
+hallwayB20	intersectionB20
+hallwayB20	intersectionB21
+hallwayB22	intersectionB20
+hallwayB22	intersectionB23
+intersectionB21	intersectionB22
+intersectionB22	intersectionB23
+intersectionB22	intersectionB24
+intersectionB23	intersectionB25
+hallwayB21	intersectionB24
+hallwayB21	intersectionB25
+stairwellB30	hallwayB30
+elevatorB30	hallwayB30
+hallwayB30	Sayoff Breast Center Surgery
+Sayoff Breast Center Surgery	intersectionB30
+intersectionB30	intersectionB31
+intersectionB30	intersectionB32
+intersectionB31	intersectionB33
+stairwellB31	hallwayB31
+hallwayB31	intersectionB32
+hallwayB31	intersectionB33
+stairwellB40	hallwayB40
+hallwayB40	hallwayB40
+hallwayB40	Sayoff Breast Imaging Diagnostic Center
+Sayoff Breast Imaging Diagnostic Center	intersectionB40
+intersectionB40	intersectionB41
+intersectionB40	intersectionB42
+intersectionB41	intersectionB43
+stairwellB41	hallwayB41
+hallwayB41	intersectionB42
+hallwayB41	intersectionB43
+Valet Parking   Belkin House Entrance
+Valet Parking   Parking1
+Valet Parking   ExternalNode1
+ExternalNode1   Parking2
+ExternalNode1   ExternalNode2
+ExternalNode2   ExternalNode3
+ExternalNode3   ExternalNode4
+ExternalNode4   ExternalNode5
+ExternalNode5   Parking3
