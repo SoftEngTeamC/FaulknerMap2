@@ -45,7 +45,7 @@ public class DataLoader {
 
 //            loadEdges("data/allEdges.tsv");
 
-   //         connectElevators();
+            connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
