@@ -180,9 +180,6 @@ public class MainController extends Controller {
         StartInfo_TextArea.setText(StartProfessional.getTitle()+" "+StartProfessional.getName()+"\n\n"
                                     +"Offices:\n\n"+StartProfessional.getOffices());
         HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
-        System.out.println("END: " + EndProfessional.getTitle());
-        System.out.println("END: " + EndProfessional.getName());
-        System.out.println("END: " + EndProfessional.getOffices());
         EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
                 +"Offices:\n\n"+EndProfessional.getOffices());
     }
