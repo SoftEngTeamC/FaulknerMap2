@@ -1,11 +1,13 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table( name = "NODES" )
 public class Node {
     private Long id;
@@ -64,5 +66,10 @@ public class Node {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + "(" + id.toString() + ")" + " " + location.toString();
     }
 }

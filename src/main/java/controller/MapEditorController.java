@@ -136,6 +136,9 @@ public class MapEditorController extends Controller {
     private ListView<String> disableEdge_searchResultsList;
 
     @FXML
+    private ListView<String> disableEdge_neighborsList;
+
+    @FXML
     private Text node1NameText;
 
     @FXML
@@ -232,12 +235,14 @@ public class MapEditorController extends Controller {
 
         editNode_searchResultsList.setItems(obList);
         removeNode_searchList.setItems(obList);
-        disableEdge_searchResultsList.setItems(obList);
+        //disableEdge_searchResultsList.setItems(obList);
 
 
         tabPaneListen();
-        System.out.println("INITRemoveNaighboreListener:");
+        System.out.println("INITRemoveNeighbourListener:");
         setEditNode_searchResultsListening();
+//        System.out.println("INITDisableEdgeListener:");
+//        setDisableEdge_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
@@ -636,57 +641,38 @@ public class MapEditorController extends Controller {
     }
 
 
-    public void disableEdgeSelectedNodeListen() {
-//        disableEdge_searchResultsList.getSelectionModel().selectedItemProperty()
-//                .addListener((observable, oldValue, newValue) -> {
-//                    Node selectedNode = NS.findNodeByName(newValue);
-//
-//                    currNodes[0] = selectedNode;
-
-    }
-
-
-    public void Node1ButtonPressed() {
-        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-        node1NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-    }
-
-
-    public void Node2ButtonPressed() {
-        //selectedNS.findNodeByName(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-        node2NameText.setText(disableEdge_searchResultsList.getSelectionModel().getSelectedItem().toString());
-
-    }
-
-
     public void DisableEdgeButtonPressed() {
-        Node node1 = nodeService.findNodeByName(node1NameText.getText());
-        Node node2 = nodeService.findNodeByName(node2NameText.getText());
-        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
+        Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        List<Edge> selectedEdges = edgeService.findByNodes(start, end);
 
         for (Edge curr : selectedEdges) {
-            edgeService.disableEdge(curr);
+            curr.setDisabled(true);
+            edgeService.merge(curr);
             System.out.println("Disabled : " + curr.getStart().getName() + " " + curr.getEnd().getName());
         }
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+        circlesListen(circles, currFloor);
         System.out.println("successful");
-        ifDisableText.setText("Disable Successful!");
+//        ifDisableText.setText("Disable Successful!");
 
     }
 
 
     public void UndoDisableEdgeButtonPressed() {
-
-        Node node1 = nodeService.findNodeByName(node1NameText.getText());
-        Node node2 = nodeService.findNodeByName(node2NameText.getText());
-        List<Edge> selectedEdges = edgeService.findByNodes(node1, node2);
+        Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
+        Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
+        List<Edge> selectedEdges = edgeService.findByNodes(start, end);
 
         for (Edge curr : selectedEdges) {
-            edgeService.ableEdge(curr);
+            curr.setDisabled(false);
+            edgeService.merge(curr);
             System.out.println("Undo disable : " + curr.getStart().getName() + " " + curr.getEnd().getName());
         }
-
+        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+        circlesListen(circles, currFloor);
         System.out.println("successful");
-        ifUndoDisableText.setText("Undo Successful!");
+//        ifUndoDisableText.setText("Undo Successful!");
 
     }
 

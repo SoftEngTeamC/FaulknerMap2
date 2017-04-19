@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 public class DataLoader {
     public static void main(String[] args) {
         try {
+            loadLocations("data/belkinHouse/floor1/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor2/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor3/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor4/locations.tsv", 1);
             loadLocations("data/floor1/locations.tsv", 1);
             loadLocations("data/floor2/locations.tsv", 2);
             loadLocations("data/floor3/locations.tsv", 3);
@@ -21,12 +25,17 @@ public class DataLoader {
             loadLocations("data/floor6/locations.tsv", 6);
             loadLocations("data/floor7/locations.tsv", 7);
 
+            loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
             loadPeople("data/floor5/people.tsv");
 
+            loadService("data/belkinHouse/floor1/services.tsv");
+            loadService("data/belkinHouse/floor2/services.tsv");
+            loadService("data/belkinHouse/floor3/services.tsv");
+            loadService("data/belkinHouse/floor4/services.tsv");
             loadService("data/floor1/services.tsv");
             loadService("data/floor2/services.tsv");
             loadService("data/floor3/services.tsv");
@@ -35,15 +44,17 @@ public class DataLoader {
             loadService("data/floor6/services.tsv");
             loadService("data/floor7/services.tsv");
 
-//            loadEdges("data/floor1/edges.tsv");
-//            loadEdges("data/floor2/edges.tsv");
-//            loadEdges("data/floor3/edges.tsv");
-//            loadEdges("data/floor4/edges.tsv");
-//            loadEdges("data/floor5/edges.tsv");
-//            loadEdges("data/floor6/edges.tsv");
-//            loadEdges("data/floor7/edges.tsv");
-
-            loadEdges("data/allEdges.tsv");
+//            loadEdges("data/belkinHouse/floor1/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor2/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor3/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor4/edges.tsv", 1);
+            loadEdges("data/floor1/edges.tsv", 1);
+//            loadEdges("data/floor2/edges.tsv",2);
+//            loadEdges("data/floor3/edges.tsv",3);
+//            loadEdges("data/floor4/edges.tsv",4);
+//            loadEdges("data/floor5/edges.tsv",5);
+//            loadEdges("data/floor6/edges.tsv",6);
+//            loadEdges("data/floor7/edges.tsv",7);
 
    //         connectElevators();
         } catch (FileNotFoundException e) {
@@ -150,7 +161,7 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
-    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath, int floor) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
@@ -165,19 +176,19 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.findNodeByName(startName);
-                Node end = nodeService.findNodeByName(endName);
+                Node start = nodeService.findNodeByName(startName, floor);
+                Node end = nodeService.findNodeByName(endName, floor);
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
-                    return;
+                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                 }
 
+                System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
