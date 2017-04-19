@@ -180,10 +180,10 @@ public class MainController extends Controller {
     public void PopulateInformationDisplay() {
         HospitalProfessional StartProfessional = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
         StartInfo_TextArea.setText(StartProfessional.getTitle()+" "+StartProfessional.getName()+"\n\n"
-                                    +"Offices:\n\n"+StartProfessional.getOffices());
+                                    +"Offices:\n\n"+StartProfessional.getOffices().get(0).getName());
         HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
         EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
-                +"Offices:\n\n"+EndProfessional.getOffices());
+                +"Offices:\n\n"+EndProfessional.getOffices().get(0).getName());
     }
 
     public void HideTabs(List<MapNode> path){
