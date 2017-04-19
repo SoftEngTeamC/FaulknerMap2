@@ -56,7 +56,7 @@ public class DataLoader {
 //            loadEdges("data/floor6/edges.tsv",6);
 //            loadEdges("data/floor7/edges.tsv",7);
 
-   //         connectElevators();
+            //         connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -171,6 +171,10 @@ public class DataLoader {
         ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 2) {
+                    System.out.print("Could not parse edge ");
+                    for(int i = 0; i < row.length; i++){
+                        System.out.print(" " + row[i] + " ");
+                    }
                     return;
                 }
 
