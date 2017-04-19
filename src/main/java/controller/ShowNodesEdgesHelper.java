@@ -114,7 +114,7 @@ class ShowNodesEdgesHelper {
         FloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FloorImageView = new ImageView();
-        Image FirstFloorMapPic = new Image(url);
+        Image FirstFloorMapPic = ImageProvider.getImage(url);
         FloorImageView.setImage(FirstFloorMapPic);
         FloorImageView.setPreserveRatio(true);
         Group FloorGroup = new Group();
@@ -207,6 +207,10 @@ class ShowNodesEdgesHelper {
         edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        if(e.isDisabled() == true) {
+            edge.getStrokeDashArray().addAll(2d, 10d);
+        }
 
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);

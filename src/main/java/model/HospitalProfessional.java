@@ -2,11 +2,13 @@ package model;
 
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Indexed
 @Table(name = "PROFESSIONALS")
 public class HospitalProfessional {
 
@@ -57,7 +59,7 @@ public class HospitalProfessional {
         this.name = name;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "PROFESSIONAL_OFFICE",
             joinColumns = @JoinColumn(name = "PROFESSIONAL_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "OFFICE_ID", referencedColumnName = "ID"))
