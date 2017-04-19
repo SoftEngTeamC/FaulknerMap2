@@ -57,7 +57,7 @@
                   <Font size="22.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordField" prefHeight="18.0" prefWidth="338.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <PasswordField fx:id="passwordField" onAction="#login" prefHeight="18.0" prefWidth="338.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font size="22.0" />
                </font>
