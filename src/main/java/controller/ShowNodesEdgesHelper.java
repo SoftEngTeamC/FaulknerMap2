@@ -210,6 +210,10 @@ class ShowNodesEdgesHelper {
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
+        if(e.isDisabled() == true) {
+            edge.getStrokeDashArray().addAll(2d, 10d);
+        }
+
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
         return edge;
