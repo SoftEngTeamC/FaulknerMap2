@@ -52,8 +52,6 @@ public class DataLoader {
             loadEdges("data/floor6/edges.tsv",6);
             loadEdges("data/floor7/edges.tsv",7);
 
-//            loadEdges("data/allEdges.tsv");
-
    //         connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -178,13 +176,12 @@ public class DataLoader {
                 Node end = nodeService.findNodeByName(endName, floor);
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
-                    return;
+                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                 }
 
                 System.out.println(start.getName());
