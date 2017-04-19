@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import controller.AutocompletionlTextField?>
-
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -20,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <items>
         <VBox fx:id="MainVbox">
             <children>
@@ -37,12 +36,12 @@
            <AutocompletionlTextField fx:id="StartLocationField" />
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" text="Switch Start/End">
+                  <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" onAction="#switchLocationButtonClicked" text="Switch Start/End">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="StartAtKioskButton" mnemonicParsing="false" text="Set Start to this Kiosk">
+                  <Button fx:id="StartAtKioskButton" mnemonicParsing="false" onAction="#handleClickedOnStartAtKiosk" text="Set Start to this Kiosk">
                      <HBox.margin>
                         <Insets left="5.0" top="5.0" />
                      </HBox.margin>
