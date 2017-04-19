@@ -1,7 +1,6 @@
 package pathfinding;
 
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import service.NodeService;
 
 import java.util.Collection;
@@ -41,13 +40,13 @@ public class Map {
         return currentAlgo;
     }
 
-    public List<MapNode> shortestPath(MapNode start, MapNode end) throws InvalidArgumentException {
+    public List<MapNode> shortestPath(MapNode start, MapNode end) {
         switch (currentAlgo) {
             case BFS: return PathFinder.BFS(start, end);
             case DFS: return PathFinder.DFS(start, end);
             case ASTAR: return PathFinder.shortestPath(start, end);
         }
-        throw new InvalidArgumentException(new String[]{"Invalid algorithm state."});
+        return null;
     }
 
     public MapNode getNode(Long id) {
