@@ -609,9 +609,7 @@ public class MapEditorController extends Controller {
         List<String> neighborsS = new ArrayList<>();
 
         for (Node n : neighbors) {
-            if (!Objects.equals(n.getId(), node.getId())) {
                 neighborsS.add(n.getName());
-            }
         }
         Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
         return neighborsS;

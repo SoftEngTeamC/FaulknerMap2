@@ -28,11 +28,16 @@ public class DataLoader {
 
 
             loadPeople("data/belkinHouse/floor1/people.tsv");
+            loadPeople("data/belkinHouse/floor3/people.tsv");
+            loadPeople("data/belkinHouse/floor4/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
+            loadPeople("data/floor1/people.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
             loadPeople("data/floor5/people.tsv");
+            loadPeople("data/floor6/people.tsv");
+            loadPeople("data/floor7/people.tsv");
 
             loadService("data/belkinHouse/floor1/services.tsv");
             loadService("data/belkinHouse/floor2/services.tsv");
@@ -59,8 +64,7 @@ public class DataLoader {
 //            loadEdges("data/floor7/edges.tsv",7);
 
             loadEdges("data/allEdges.tsv", 1);
-
-                     connectElevators();
+            connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
