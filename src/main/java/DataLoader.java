@@ -35,15 +35,15 @@ public class DataLoader {
             loadService("data/floor6/services.tsv");
             loadService("data/floor7/services.tsv");
 
-//            loadEdges("data/floor1/edges.tsv");
-//            loadEdges("data/floor2/edges.tsv");
-//            loadEdges("data/floor3/edges.tsv");
-//            loadEdges("data/floor4/edges.tsv");
-//            loadEdges("data/floor5/edges.tsv");
-//            loadEdges("data/floor6/edges.tsv");
-//            loadEdges("data/floor7/edges.tsv");
+            loadEdges("data/floor1/edges.tsv", 1);
+            loadEdges("data/floor2/edges.tsv",2);
+            loadEdges("data/floor3/edges.tsv",3);
+            loadEdges("data/floor4/edges.tsv",4);
+            loadEdges("data/floor5/edges.tsv",5);
+            loadEdges("data/floor6/edges.tsv",6);
+            loadEdges("data/floor7/edges.tsv",7);
 
-            loadEdges("data/allEdges.tsv");
+//            loadEdges("data/allEdges.tsv");
 
    //         connectElevators();
         } catch (FileNotFoundException e) {
@@ -150,7 +150,7 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
-    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath, int floor) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
@@ -165,8 +165,8 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.findNodeByName(startName);
-                Node end = nodeService.findNodeByName(endName);
+                Node start = nodeService.findNodeByName(startName, floor);
+                Node end = nodeService.findNodeByName(endName, floor);
 
                 if (start == null) {
                     System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");

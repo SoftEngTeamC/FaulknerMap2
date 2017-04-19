@@ -29,11 +29,6 @@
             <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="123.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="username" layoutX="217.0" layoutY="127.0" onAction="#login" prefHeight="46.0" prefWidth="360.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </TextField>
             <Text layoutX="139.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font size="22.0" />
@@ -57,16 +52,21 @@
                   <Font size="22.0" />
                </font>
             </Text>
+            <TextField fx:id="username" layoutX="217.0" layoutY="127.0" onAction="#login" prefHeight="46.0" prefWidth="360.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="passwordField" onAction="#login" prefHeight="18.0" prefWidth="338.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </PasswordField>
             <Button fx:id="loginBtn" layoutX="270.0" layoutY="234.0" mnemonicParsing="false" onAction="#login" prefHeight="63.0" prefWidth="128.0" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                <font>
                   <Font size="27.0" />
                </font>
             </Button>
-            <PasswordField fx:id="passwordField" prefHeight="18.0" prefWidth="338.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </PasswordField>
             <Text fx:id="successText" fill="#27a147" strokeType="OUTSIDE" strokeWidth="0.0" text="Success" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
                <font>
                   <Font size="21.0" />
