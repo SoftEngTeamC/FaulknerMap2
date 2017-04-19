@@ -210,7 +210,7 @@
                   <Font size="43.0" />
                </font>
             </Text>
-            <Text layoutX="424.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+            <Text fx:id="startTimeErrorMorning" layoutX="424.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5">
                <font>
                   <Font size="69.0" />
                </font>
