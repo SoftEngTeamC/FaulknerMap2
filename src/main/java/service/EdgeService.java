@@ -33,17 +33,24 @@ public class EdgeService extends AbstractService<Edge> {
                     .setParameter("start", start.getId())
                     .setParameter("end", end.getId())
                     .getSingleResult();
+            manager.close();
+            return temp;
         } catch (Exception e) {
-            temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
-                    "e.start.id = :start AND e.end.id = :end", Edge.class)
-                    .setParameter("start", end.getId())
-                    .setParameter("end", start.getId())
-                    .getSingleResult();
+            try {
+                temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
+                        "e.start.id = :start AND e.end.id = :end", Edge.class)
+                        .setParameter("start", end.getId())
+                        .setParameter("end", start.getId())
+                        .getSingleResult();
+                manager.close();
+                return temp;
+            } catch (Exception ex){
+                System.out.println("Could not find edge for " + start.getName() + " and " +
+                end.getName());
+                manager.close();
+                return null;
+            }
         }
-
-        System.out.println("start: " + start.getId() + " end: " + end.getId());
-        manager.close();
-        return temp;
     }
 
 }
