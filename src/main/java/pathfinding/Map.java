@@ -1,6 +1,7 @@
 package pathfinding;
 
 
+import service.AlgorithmSingleton;
 import service.NodeService;
 
 import java.util.*;
@@ -8,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class Map {
     public enum algorithm { BFS, DFS, ASTAR }
-    private algorithm currentAlgo = algorithm.ASTAR;
     private java.util.Map<Long, MapNode> nodeMap;
     private NodeService nodeService;
 
@@ -30,16 +30,10 @@ public class Map {
         }
     }
 
-    public void setCurrentAlgo(algorithm algo) {
-        currentAlgo = algo;
-    }
-
-    public algorithm getCurrentAlgo() {
-        return currentAlgo;
-    }
 
     public List<MapNode> shortestPath(MapNode start, MapNode end) {
-        switch (currentAlgo) {
+        System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
+        switch (AlgorithmSingleton.getInstance().getCurrentAlgorithm()) {
             case BFS: return PathFinder.BFS(start, end);
             case DFS: return PathFinder.DFS(start, end);
             case ASTAR: return PathFinder.shortestPath(start, end);

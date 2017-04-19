@@ -135,11 +135,23 @@ class ShowNodesEdgesHelper {
 
     public void ZoomListener(Slider slider, ScrollPane scrlpn){
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
                 //find center XY on old zoom based on current XY of scrollpane and old width
 
                 //find center XY on Image relative to full image
 
                 //set XY of scroll pane to be about new imageview
+        });
+    }
+
+    public void PanningListener(Slider slider, ScrollPane scrlpn){
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+            //find center XY on old zoom based on current XY of scrollpane and old width
+
+            //find center XY on Image relative to full image
+
+            //set XY of scroll pane to be about new imageview
         });
     }
 
@@ -304,5 +316,12 @@ class ShowNodesEdgesHelper {
                 line.setStroke(Color.BLACK);
             }
         }
+    }
+
+    // takes the desired XY and zoom of a map, and applies it to the given
+    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr){
+        sldr.setValue(zoom);
+        scrlpn.setVvalue(y);
+        scrlpn.setHvalue(x);
     }
 }
