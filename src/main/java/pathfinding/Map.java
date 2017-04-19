@@ -5,9 +5,12 @@ import service.NodeService;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class Map {
+    public enum algorithm { BFS, DFS, ASTAR }
+    private algorithm currentAlgo = algorithm.ASTAR;
     private java.util.Map<Long, MapNode> nodeMap;
     private NodeService nodeService;
 
@@ -27,8 +30,23 @@ public class Map {
                 currentNode.addNeighbor(neighbor);
             }
         }
-        // Connect all the elevators vertically
+    }
 
+    public void setCurrentAlgo(algorithm algo) {
+        currentAlgo = algo;
+    }
+
+    public algorithm getCurrentAlgo() {
+        return currentAlgo;
+    }
+
+    public List<MapNode> shortestPath(MapNode start, MapNode end) {
+        switch (currentAlgo) {
+            case BFS: return PathFinder.BFS(start, end);
+            case DFS: return PathFinder.DFS(start, end);
+            case ASTAR: return PathFinder.shortestPath(start, end);
+        }
+        return null;
     }
 
     public MapNode getNode(Long id) {
