@@ -120,7 +120,6 @@
                             <items>
                                 <MenuItem fx:id="english_button" mnemonicParsing="false" onAction="#toEnglish" text="English" />
                                 <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
                                 <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
                                 <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
                                 <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />

@@ -1,76 +1,89 @@
 start	end
-3A	hallway30
-
-3B	hallway31
-
-3C	hallway32
-
-Cafeteria	hallway33
-
-Chapel	hallway34
-
-Gift Shop	hallway35
-
-Auditorium	hallway36
-
-Patient Relations	hallway37
-
-Volunteer	hallway38
-
-Atrium Elevators	hallway39
-
-Hillside Elevators 1	hallway310
-
-Hillside Elevators 2	hallway311
-
-hallway30	intersection325
-
-hallway30	intersection323
-
+intersection312	intersection311
+intersection311	intersection312
+intersection313	intersection312
+intersection312	intersection313
+intersection325	intersection313
+intersection313	intersection325
+intersection324	intersection325
+intersection325	intersection324
 hallway31	intersection324
-
+intersection324	hallway31
+intersection323	hallway31
+hallway31	intersection323
+intersection322	intersection323
+intersection323	intersection322
+3C	hallway32
+hallway32	3C
 hallway32	intersection322
-
+intersection322	hallway32
 hallway32	intersection323
-
-hallway33	intersection36
-
-hallway33	intersection37
-
-hallway34	intersection32
-
-hallway34	intersection34
-
-hallway35	intersection35
-
-hallway35	intersection36
-
-hallway36	intersection37
-
-hallway37	intersection38
-
-hallway37	intersection39
-
-hallway38	intersection31
-
-hallway38	intersection32
-
-hallway310	intersection32
-
-intersection34	intersection35
-
-intersection320	intersection39
-
-intersection320	intersection316
-
-intersection320	intersection321
-
-intersection321	intersection322
-
-hallway39	intersection316
-
+intersection323	hallway32
+hallway31	3B
+3B	hallway31
+intersection325	3A
+3A	intersection325
 hallway39	intersection325
-
-hallway310	intersection34
-
+intersection325	hallway39
+intersection316	hallway39
+hallway39	intersection316
+intersection320	intersection316
+intersection316	intersection320
+intersection321	intersection320
+intersection320	intersection321
+intersection322	intersection321
+intersection321	intersection322
+intersection316	Atrium Elevators
+Atrium Elevators	intersection316
+intersection320	intersection319
+intersection319	intersection320
+hallway37	intersection319
+intersection319	hallway37
+Patient Relations	hallway37
+hallway37	Patient Relations
+intersection314	intersection319
+intersection319	intersection314
+intersection311	intersection314
+intersection314	intersection311
+intersection38	hallway37
+hallway37	intersection38
+intersection37	intersection38
+intersection38	intersection37
+hallway33	intersection37
+intersection37	hallway33
+Cafeteria	hallway33
+hallway33	Cafeteria
+intersection36	hallway33
+hallway33	intersection36
+hallway35	intersection36
+intersection36	hallway35
+Gift Shop	hallway35
+hallway35	Gift Shop
+intersection35	hallway35
+hallway35	intersection35
+intersection38	hallway36
+hallway36	intersection38
+Auditorium	hallway36
+hallway36	Auditorium
+intersection34	intersection35
+intersection35	intersection34
 hallway311	intersection34
+intersection34	hallway311
+Hillside Elevators 2	hallway311
+hallway311	Hillside Elevators 2
+Hillside Elevators 1	hallway311
+hallway311	Hillside Elevators 1
+hallway34	hallway311
+hallway311	hallway34
+Chapel	hallway34
+hallway34	Chapel
+intersection32	hallway34
+hallway34	intersection32
+intersection32	hallway311
+hallway311	intersection32
+Volunteer	intersection31
+intersection31	Volunteer
+intersection31	hallway38
+hallway38	intersection31
+intersection32	intersection31
+intersection31	intersection32
