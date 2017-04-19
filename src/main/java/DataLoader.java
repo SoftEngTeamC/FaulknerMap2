@@ -14,9 +14,9 @@ public class DataLoader {
     public static void main(String[] args) {
         try {
             loadLocations("data/belkinHouse/floor1/locations.tsv", 1);
-            loadLocations("data/belkinHouse/floor2/locations.tsv", 1);
-            loadLocations("data/belkinHouse/floor3/locations.tsv", 1);
-            loadLocations("data/belkinHouse/floor4/locations.tsv", 1);
+            loadLocations("data/belkinHouse/floor2/locations.tsv", 2);
+            loadLocations("data/belkinHouse/floor3/locations.tsv", 3);
+            loadLocations("data/belkinHouse/floor4/locations.tsv", 4);
             loadLocations("data/floor1/locations.tsv", 1);
             loadLocations("data/floor2/locations.tsv", 2);
             loadLocations("data/floor3/locations.tsv", 3);
@@ -45,16 +45,18 @@ public class DataLoader {
             loadService("data/floor7/services.tsv");
 
 //            loadEdges("data/belkinHouse/floor1/edges.tsv", 1);
-//            loadEdges("data/belkinHouse/floor2/edges.tsv", 1);
-//            loadEdges("data/belkinHouse/floor3/edges.tsv", 1);
-//            loadEdges("data/belkinHouse/floor4/edges.tsv", 1);
-            loadEdges("data/floor1/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor2/edges.tsv", 2);
+//            loadEdges("data/belkinHouse/floor3/edges.tsv", 3);
+//            loadEdges("data/belkinHouse/floor4/edges.tsv", 4);
+ //           loadEdges("data/floor1/edges.tsv", 1);
 //            loadEdges("data/floor2/edges.tsv",2);
 //            loadEdges("data/floor3/edges.tsv",3);
 //            loadEdges("data/floor4/edges.tsv",4);
 //            loadEdges("data/floor5/edges.tsv",5);
 //            loadEdges("data/floor6/edges.tsv",6);
 //            loadEdges("data/floor7/edges.tsv",7);
+
+            loadEdges("data/allEdges.tsv", 1);
 
             //         connectElevators();
         } catch (FileNotFoundException e) {
@@ -74,7 +76,15 @@ public class DataLoader {
         ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
-                if (Arrays.asList(row).contains(null) || row.length < 3) return;  // Test for blank line or value
+                if (Arrays.asList(row).contains(null) || row.length < 3) {
+                    System.out.print("Could not parse location ");
+                    for(int i = 0; i < row.length; i++){
+                        System.out.print(" " + row[i] + " ");
+                    }
+                    System.out.println();
+                    return;
+                    // Test for blank line or value
+                }
                 double x = (Double) row[1];
                 double y = (Double) row[2];
                 Coordinate location = new Coordinate(x, y, floor);
@@ -104,7 +114,14 @@ public class DataLoader {
         ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
-                if (Arrays.asList(row).contains(null) || row.length < 3) return;
+                if (Arrays.asList(row).contains(null) || row.length < 3) {
+                    System.out.print("Could not parse doctor ");
+                    for(int i = 0; i < row.length; i++){
+                        System.out.print(" " + row[i] + " ");
+                    }
+                    System.out.println();
+                    return;
+                }
 
                 String name = (String) row[0];
                 String title = (String) row[1];
@@ -138,7 +155,14 @@ public class DataLoader {
         ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
-                if (Arrays.asList(row).contains(null) || row.length < 2) return;
+                if (Arrays.asList(row).contains(null) || row.length < 2) {
+                    System.out.print("Could not parse service  ");
+                    for(int i = 0; i < row.length; i++){
+                        System.out.print(" " + row[i] + " ");
+                    }
+                    System.out.println();
+                    return;
+                }
 
                 String name = (String) row[0];
 
@@ -175,13 +199,14 @@ public class DataLoader {
                     for(int i = 0; i < row.length; i++){
                         System.out.print(" " + row[i] + " ");
                     }
+                    System.out.println();
                     return;
                 }
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.findNodeByName(startName, floor);
-                Node end = nodeService.findNodeByName(endName, floor);
+                Node start = nodeService.find(Long.parseLong((String)row[0]));
+                Node end = nodeService.find(Long.parseLong((String)row[1]));
 
                 if (start == null) {
                     System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
@@ -190,9 +215,10 @@ public class DataLoader {
 
                 if (end == null) {
                     System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
+                    return;
                 }
 
-                System.out.println(start.getName());
+                   System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };

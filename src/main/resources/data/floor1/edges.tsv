@@ -1,30 +1,26 @@
 start	end
+Valet Parking	Belkin House Entrance
+Valet Parking	Parking1
+Valet Parking	ExternalNode1
+ExternalNode1	Parking2
+ExternalNode1	ExternalNode2
+ExternalNode2	ExternalNode3
+ExternalNode3	ExternalNode4
+ExternalNode4	ExternalNode5
+ExternalNode5	Parking3
 intersection12	intersection11
-intersection11	intersection12
 hallway10	intersection12
-intersection12	hallway10
 hallway10	hallway111
-hallway111	hallway10
 GI Endoscopy	hallway10
-hallway10	GI Endoscopy
 hallway111	Hillside Elevators
-Hillside Elevators	hallway111
 intersection14	intersection12
-intersection12	intersection14
 hallway11	intersection14
-intersection14	hallway11
 Day Surgery	hallway11
-hallway11	Day Surgery
 intersection12	hallway13
-hallway13	intersection12
 Center for Preoperative Evaluation	hallway13
-hallway13	Center for Preoperative Evaluation
 intersection17	hallway13
-hallway13	intersection17
 intersection15	intersection17
-intersection17	intersection15
 hallway12	intersection15
-intersection15	hallway12
 Radiology	hallway12
 hallway12	Radiology
 hallway11	intersection15
@@ -53,12 +49,3 @@ Info	intersection18
 intersection18	Info
 Cafe	intersection18
 intersection18	Cafe
-Valet Parking   Belkin House Entrance
-Valet Parking   Parking1
-Valet Parking   ExternalNode1
-ExternalNode1   Parking2
-ExternalNode1   ExternalNode2
-ExternalNode2   ExternalNode3
-ExternalNode3   ExternalNode4
-ExternalNode4   ExternalNode5
-ExternalNode5   Parking3
