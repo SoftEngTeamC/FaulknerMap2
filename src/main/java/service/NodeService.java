@@ -1,12 +1,8 @@
 package service;
 
 
-import model.Coordinate;
 import model.Edge;
 import model.Node;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.type.EntityType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -49,6 +45,14 @@ public class NodeService extends AbstractService<Node> {
         }
     }
 
+    public Node findNodeByName(String name, int floor) {
+        EntityManager manager = this.managerFactory.createEntityManager();
+        return manager.createQuery("SELECT n FROM Node n WHERE n.name LIKE :name AND n.location.floor = :floor", Node.class)
+                .setParameter("name", name)
+                .setParameter("floor", floor)
+                .getSingleResult();
+    }
+
     public List<Node> findNodeIntersectionByFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
         return manager.createQuery(
@@ -87,6 +91,8 @@ public class NodeService extends AbstractService<Node> {
                 )
         );
 
-        return manager.createQuery(elevatorCriteria).getResultList();
+        List<Node> nodes = manager.createQuery(elevatorCriteria).getResultList();
+        System.out.println(nodes);
+        return nodes;
     }
 }

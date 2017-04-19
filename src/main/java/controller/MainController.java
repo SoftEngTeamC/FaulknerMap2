@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -202,7 +201,7 @@ public class MainController extends Controller {
             Node end = nodes.get(i+1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
-            Edge e = edgeService.findByNodes(start,end).get(0);
+            Edge e = edgeService.findByNodes(start, end).get(0);
             //only draw if not last node, nodes are on same floor
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
@@ -224,8 +223,8 @@ public class MainController extends Controller {
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
         Map map = new Map(nodeService.getAllNodes());
 
-        Node nodeStart = (HP_Start.getOffices().get(0));
-        Node nodeEnd = (HP_Dest.getOffices().get(0));
+        Node nodeStart = HP_Start.getOffices().get(0);
+        Node nodeEnd = HP_Dest.getOffices().get(0);
 
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
