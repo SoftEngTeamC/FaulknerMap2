@@ -21,7 +21,8 @@ public class NodeService extends AbstractService<Node> {
     @Override
     public Node find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.find(Node.class, id);
+        Node temp = manager.find(Node.class, id);
+        return temp;
     }
 
     public Set<Node> neighbors(Long id) {
@@ -34,43 +35,52 @@ public class NodeService extends AbstractService<Node> {
         startNeighbors.addAll(endNeighbors);
         startNeighbors.remove(find(id));
         startNeighbors.remove(find(id));
+        manager.close();
         return startNeighbors;
     }
 
     public Node findNodeByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            return manager.createQuery(
+            Node temp = manager.createQuery(
                     "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
+            manager.close();
+            return temp;
         } catch (NoResultException e) {
+            manager.close();
             return null;
         }
     }
 
     public List<Node> findNodeIntersectionByFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.createQuery(
+        List<Node> temp = manager.createQuery(
                 "SELECT n FROM Node n WHERE n.name LIKE :name", Node.class)
                 .setParameter("name", "intersection" + floor + "%")
                 .getResultList();
+        manager.close();
+        return temp;
     }
 
     public List<Node> getAllNodes() {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.createQuery("from Node", Node.class)
+        List<Node> temp = manager.createQuery("from Node", Node.class)
                 .getResultList();
+        manager.close();
+        return temp;
     }
 
     public List<Node> getNodesByFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
-
-        return manager.createQuery("SELECT n FROM Node n," +
+        List<Node> temp = manager.createQuery("SELECT n FROM Node n," +
                 " Coordinate c WHERE n.location.id = c.id AND " +
                 "c.floor = :floor", Node.class)
                 .setParameter("floor", floor)
-            .getResultList();
+                .getResultList();
+        manager.close();
+        return temp;
     }
 
     public List<Node> getElevatorNodes() {
@@ -86,7 +96,8 @@ public class NodeService extends AbstractService<Node> {
                         "%elevator%"
                 )
         );
-
-        return manager.createQuery(elevatorCriteria).getResultList();
+        List<Node> temp = manager.createQuery(elevatorCriteria).getResultList();
+        manager.close();
+        return temp;
     }
 }
