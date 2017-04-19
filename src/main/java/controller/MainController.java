@@ -109,6 +109,9 @@ public class MainController extends Controller {
         LogoImageView.fitHeightProperty().bind(MainVbox.heightProperty().multiply(0.1));
         Info_TabPane.prefHeightProperty().bind(MainVbox.heightProperty().multiply(0.6));
 
+        ShowNodesEdgesHelper.SetMapZoom(0,0,2000,FirstFloorScrollPane,FirstFloorSlider);
+        ShowNodesEdgesHelper.SetMapZoom(1,1,4000,FirstFloorScrollPane,FirstFloorSlider);
+
         //-----------------------Data initialization
         List<HospitalProfessional> HPs = professionalService.getAllProfessionals();
         List<String> names = new ArrayList<>();
