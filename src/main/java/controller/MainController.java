@@ -141,14 +141,14 @@ public class MainController extends Controller {
             ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
         }
 
-        for(int i = 0; i < nodes.size() - 1; i++){
+        for (int i = 0; i < nodes.size() - 1; i++) {
             Node start = nodes.get(i).getModelNode();
-            Node end = nodes.get(i+1).getModelNode();
+            Node end = nodes.get(i + 1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
             Edge e = edgeService.findByNodes(start, end);
             //only draw if not last node, nodes are on same floor
-            if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
+            if ((i < nodes.size() - 1) && (nodes.get(i).getLocation().getFloor() == nodes.get(i + 1).getLocation().getFloor())) {
                 ShowNodesEdgesHelper.MakeLine(e);
             }
 
@@ -166,27 +166,32 @@ public class MainController extends Controller {
         MapNode dest = map.getNode(nodeEnd.getId());
 
         List<MapNode> path = PathFinder.shortestPath(start, dest);
-        if (path.size() < 2) {
+        if (path == null || path.isEmpty()) {
+            TextDirectionsTextArea.setText("Could not find path to your destination.");
+            System.out.println("LOCATION START: " + start.getModelNode().getName());
+            System.out.println("LOCATION END: " + dest.getModelNode().getName());
+        } else if (path.size() < 2) {
             TextDirectionsTextArea.setText("You are already at your destination");
+            DisplayMap(path);
         } else {
             TextDirectionsTextArea.setText(MakeDirections.getText(path));
+            DisplayMap(path);
         }
-        DisplayMap(path);
     }
 
     //This function updates the StartInfo and EndInfo Text Areas
     public void PopulateInformationDisplay() {
         HospitalProfessional StartProfessional = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
-        StartInfo_TextArea.setText(StartProfessional.getTitle()+" "+StartProfessional.getName()+"\n\n"
-                                    +"Offices:\n\n"+StartProfessional.getOffices());
+        StartInfo_TextArea.setText(StartProfessional.getTitle() + " " + StartProfessional.getName() + "\n\n"
+                + "Offices:\n\n" + StartProfessional.getOffices());
         HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
-        EndInfo_TextArea.setText(EndProfessional.getTitle()+" "+EndProfessional.getName()+"\n\n"
-                +"Offices:\n\n"+EndProfessional.getOffices());
+        EndInfo_TextArea.setText(EndProfessional.getTitle() + " " + EndProfessional.getName() + "\n\n"
+                + "Offices:\n\n" + EndProfessional.getOffices());
     }
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
-    public void handleClickedOnStartAtKiosk(){
+    public void handleClickedOnStartAtKiosk() {
         //System.out.println("start at kiosk");
         StartLocationField.setText("Floor 1 Kiosk");
     }
@@ -199,19 +204,18 @@ public class MainController extends Controller {
         EndLocationField.setText(tempStorage);
     }
 
-    public void getPathButtonClicked(){
+    public void getPathButtonClicked() {
         System.out.println("clicked on get path button");
-        if(!(StartLocationField.getText().isEmpty() || EndLocationField.getText().isEmpty())){
+        if (!(StartLocationField.getText().isEmpty() || EndLocationField.getText().isEmpty())) {
             //Do path finding
             HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
             HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
             FindandDisplayPath(HP_Start, HP_Dest);
-            System.out.println("start HP:  " + HP_Start.getName() +  " Location : " + HP_Start.getOffices().get(0).getName());
-            System.out.println("dest HP:  " + HP_Dest.getName()+  " Location : " + HP_Dest.getOffices().get(0).getName());
+            System.out.println("start HP:  " + HP_Start.getName() + " Location : " + HP_Start.getOffices().get(0).getName());
+            System.out.println("dest HP:  " + HP_Dest.getName() + " Location : " + HP_Dest.getOffices().get(0).getName());
             //Set Information Displays
             PopulateInformationDisplay();
-        }
-        else{
+        } else {
             System.out.print("Give a Start and an End");
         }
     }
@@ -333,13 +337,13 @@ public class MainController extends Controller {
                 StartInfo_TextArea.setText("Don't Panic");
                 language = 1;
         }
-        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("intersection18").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
+        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("hallway19").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
     }
-    
+
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() throws Exception {
-        switchScreen("view/LoginPage.fxml","Login", AdminToolButton);
+        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
     }
 
     @FXML
