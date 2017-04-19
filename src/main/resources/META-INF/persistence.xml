@@ -9,6 +9,7 @@
         <class>model.Edge</class>
         <class>model.Node</class>
         <class>model.HospitalService</class>
+        <class>model.Tag</class>
 
         <properties>
             <property name="hibernate.archive.autodetection" value="class" />
@@ -18,6 +19,8 @@
             <!-- <property name="hibernate.show_sql" value="true"/> -->
             <property name="hibernate.flushMode" value="FLUSH_AUTO" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.search.default.directory_provider" value="filesystem"/>
+            <property name="hibernate.search.default.indexBase" value="target/indicies"/>
         </properties>
     </persistence-unit>
 </persistence>

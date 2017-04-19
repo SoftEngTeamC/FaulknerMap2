@@ -1,0 +1,79 @@
+start	end
+hallway49	4N
+4N	hallway49
+intersection413	hallway49
+hallway49	intersection413
+hallway413	intersection413
+intersection413	hallway413
+Hillside Elevators 1	hallway413
+hallway413	Hillside Elevators 1
+Hillside Elevators 2	hallway413
+hallway413	Hillside Elevators 2
+hallway410	intersection413
+intersection413	hallway410
+4S	hallway410
+hallway410	4S
+hallway48	hallway413
+hallway413	hallway48
+4J	hallway48
+hallway48	4J
+hallway47	hallway48
+hallway48	hallway47
+hallway46	hallway47
+hallway47	hallway46
+hallway46	4G
+4G	hallway46
+4H	hallway46
+hallway46	4H
+hallway45	hallway46
+hallway46	hallway45
+4I	hallway47
+hallway47	4I
+hallway45	hallway44
+hallway44	hallway45
+4F	hallway44
+hallway44	4F
+intersection412	hallway44
+hallway44	intersection412
+intersection43	intersection412
+intersection412	intersection43
+intersection42	intersection42
+intersection42	intersection42
+intersection411	intersection412
+intersection412	intersection411
+hallway43	intersection411
+intersection411	hallway43
+4D	hallway43
+hallway43	4D
+hallway42	hallway43
+hallway43	hallway42
+4C	hallway42
+hallway42	4C
+intersection410	hallway42
+hallway42	intersection410
+intersection49	intersection410
+intersection410	intersection49
+intersection48	intersection49
+intersection49	intersection48
+4B	intersection48
+intersection48	4B
+intersection41	intersection48
+intersection48	intersection41
+hallway40	intersection41
+intersection41	hallway40
+intersection46	hallway40
+hallway40	intersection46
+intersection44	intersection46
+intersection46	intersection44
+hallway411	intersection41
+intersection41	hallway411
+Atrium Elevators	hallway411
+hallway411	Atrium Elevators
+intersection412	Atrium Elevators
+Atrium Elevators	intersection412
+hallway411	intersection412
+intersection412	hallway411
+intersection43	intersection44
+intersection44	intersection43
+intersection45	intersection45
+intersection45	intersection45

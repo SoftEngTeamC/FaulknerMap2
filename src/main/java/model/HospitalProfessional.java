@@ -2,22 +2,32 @@ package model;
 
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import java.util.List;
 
+@Entity
+@Indexed
+@Table(name = "PROFESSIONALS")
 public class HospitalProfessional {
+
     private Long id;
 
     private String name;
-    private Node office;
+
+    private List<Node> offices;
+
+    private String title;
 
     public HospitalProfessional() {
         // Left empty for hibernate
     }
 
-    public HospitalProfessional(String name, Node office) {
+    public HospitalProfessional(String name, String title, List<Node> offices) {
         this.name = name;
-        this.office = office;
+        this.offices = offices;
+        this.title = title;
     }
 
     @Id
@@ -31,6 +41,15 @@ public class HospitalProfessional {
         this.id = id;
     }
 
+    @Column(name = "PROF_TITLE")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Column(name = "PROF_NAME")
     public String getName() {
         return name;
@@ -40,13 +59,15 @@ public class HospitalProfessional {
         this.name = name;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "PROF_OFFICES")
-    public Node getOffice() {
-        return office;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "PROFESSIONAL_OFFICE",
+            joinColumns = @JoinColumn(name = "PROFESSIONAL_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "OFFICE_ID", referencedColumnName = "ID"))
+    public List<Node> getOffices() {
+        return offices;
     }
 
-    public void setOffice(Node office) {
-        this.office = office;
+    public void setOffices(List<Node> offices) {
+        this.offices = offices;
     }
 }

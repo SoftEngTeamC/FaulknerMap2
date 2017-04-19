@@ -1,22 +1,27 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Indexed
 @Table( name = "NODES" )
 public class Node {
     private Long id;
 
     private Coordinate location;
     private String name;
+    private List<Tag> tags;
+
 
     public Node() {
         // This is kept empty for hibernate
     }
 
-    public Node(Coordinate location, String name) {
+    public Node(String name, Coordinate location) {
         this.location = location;
         this.name = name;
     }
@@ -49,5 +54,22 @@ public class Node {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "NODE_TAG",
+            joinColumns = @JoinColumn(name = "NODE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "TAG_ID", referencedColumnName = "ID"))
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + "(" + id.toString() + ")" + " " + location.toString();
     }
 }

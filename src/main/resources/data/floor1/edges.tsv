@@ -1,0 +1,51 @@
+start	end
+Valet Parking	Belkin House Entrance
+Valet Parking	Parking1
+Valet Parking	ExternalNode1
+ExternalNode1	Parking2
+ExternalNode1	ExternalNode2
+ExternalNode2	ExternalNode3
+ExternalNode3	ExternalNode4
+ExternalNode4	ExternalNode5
+ExternalNode5	Parking3
+intersection12	intersection11
+hallway10	intersection12
+hallway10	hallway111
+GI Endoscopy	hallway10
+hallway111	Hillside Elevators
+intersection14	intersection12
+hallway11	intersection14
+Day Surgery	hallway11
+intersection12	hallway13
+Center for Preoperative Evaluation	hallway13
+intersection17	hallway13
+intersection15	intersection17
+hallway12	intersection15
+Radiology	hallway12
+hallway12	Radiology
+hallway11	intersection15
+intersection15	hallway11
+intersection17	hallway14
+hallway14	intersection17
+Blood Draw	hallway14
+hallway14	Blood Draw
+hallway15	hallway14
+hallway14	hallway15
+hallway18	hallway15
+hallway15	hallway18
+Family Center	hallway18
+hallway18	Family Center
+hallway16	hallway18
+hallway18	hallway16
+Emergency Department	hallway16
+hallway16	Emergency Department
+hallway110	intersection17
+intersection17	hallway110
+Atrium Elevators	hallway110
+hallway110	Atrium Elevators
+intersection18	hallway110
+hallway110	intersection18
+Info	intersection18
+intersection18	Info
+Cafe	intersection18
+intersection18	Cafe

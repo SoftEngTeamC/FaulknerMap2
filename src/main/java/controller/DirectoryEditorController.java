@@ -1,21 +1,26 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.HospitalProfessional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class DirectoryEditorController {
+public class DirectoryEditorController extends Controller{
     @FXML
     private Button logoutBtn;
     @FXML
@@ -28,30 +33,63 @@ public class DirectoryEditorController {
     private TextField searchField;
     @FXML
     private ListView<String> searchList;
+    @FXML
+    private SplitPane splitPane;
+    @FXML
+    private VBox DirectoryEditor_VBox;
+    @FXML
+    private AnchorPane DirectoryEditor_AnchorPane;
 
-    // database helpers
+    // Arraylist of search results
+    ArrayList<String> searchResults;
+
+    // List of all hospital people
+    List<HospitalProfessional> people;
 
     @FXML
     public void initialize() {
+        //organize visual elements
+        DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
+        searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
+        searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
+        searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
+
+
+        // init search results empty list, hospital professionals list
+        people = professionalService.getAllProfessionals();
+        searchResults = new ArrayList<>();
+
+        // disable the edit person button
+        editPrsnBtn.setDisable(true);
+
+        // add a listener to the listview
+        searchList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                editPrsnBtn.setDisable(false);
+            }
+        });
+
+        // add a listener to the textfield being changed to fix the search lag
+        searchField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                textFieldChanged(newValue);
+            }
+        });
 
     }
 
     @FXML
     public void back() throws Exception {
-        Stage stage = (Stage) backBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AdminToolMenu.fxml"));
-        stage.setTitle("Admin Tool");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+        System.out.println("Directory Editor Back Button");
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
     }
 
     @FXML
     public void logout() throws Exception {
-        Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Main");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+        switchScreen("view/Main.fxml", "Main screen", logoutBtn);
     }
 
     /**
@@ -63,16 +101,21 @@ public class DirectoryEditorController {
      */
     @FXML
     public void editPersonBtnPressed() throws Exception {
+
         // get the current hospital professional that is selected in the list
         String selectedName = searchList.getSelectionModel().getSelectedItem();
-//        HospitalProfessional selectedPerson = HospitalProfessionalsHelper.getHospitalProfessionalByName(selectedName);
+        HospitalProfessional hp = professionalService.findHospitalProfessionalByName(selectedName);
 
         // pass it to the next screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/EditPersonScreen.fxml"));
-        Stage stage = new Stage();
-        stage.setScene(new Scene((Pane)loader.load()));
-        EditPersonController controller = loader.<EditPersonController>getController();
-//        controller.setSelectedUser(selectedPerson);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("view/EditPersonScreen.fxml"));
+        loader.load();
+        Parent p = loader.getRoot();
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        stage.setScene(new Scene(p));
+        EditPersonController controller = loader.getController();
+        controller.setSelectedUser(hp);
+        stage.setFullScreen(true);
         stage.show();
 
     }
@@ -85,37 +128,39 @@ public class DirectoryEditorController {
      */
     @FXML
     public void addPersonBtnCPressed() throws Exception {
-        Stage stage = (Stage) addPrsnBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/AddPerson.fxml"));
-        stage.setTitle("Add Person");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+
+        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+
     }
 
-//
-//    /**
-//     * @author Paul
-//     *
-//     * search field entery event handler
-//     * for now, it just populates the list
-//     * <TODO> query the database and populate list with actual results </TODO>
-//     */
-//    @FXML
-//    public void searchFieldEntered() {
-//
-//        // populate the list with the database
-//        ArrayList<HospitalProfessional> personList = new ArrayList<HospitalProfessional>();
-//        ArrayList<String> nameList = new ArrayList<String>();
-//        personList = HospitalProfessionalsHelper.getHospitalProfessionals(null);
-//        for (HospitalProfessional aPersonList : personList) {
-//            nameList.add(aPersonList.getName());
-//
-//        }
-//
-//        // load into the list
-//        ObservableList<String> oList = FXCollections.observableArrayList(nameList);
-//        searchList.setItems(oList);
-//
-//    }
+
+    /**
+     * @author Paul
+     *
+     * search field key press event handler
+     * queries database for results, populates list
+     *
+     */
+    @FXML
+    public void textFieldChanged(String anew) {
+
+        // get the query from the search field
+        String query = anew;
+
+        // reset list
+        searchResults.removeAll(searchResults);
+
+        // add search results
+        for(HospitalProfessional p : people){
+            if(p.getName().toLowerCase().contains(query.toLowerCase())){
+                searchResults.add(p.getName());
+            }
+        }
+
+        // display the list
+        searchList.setItems(FXCollections.observableList(searchResults));
+
+
+    }
 
 }

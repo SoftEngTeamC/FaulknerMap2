@@ -1,19 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
+
+<AnchorPane fx:id="AdminTool_AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminToolController">
     <children>
-        <Text layoutX="222.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Option">
+        <VBox fx:id="AdminTool_VBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Admin Menu">
+                    <font>
+                        <Font size="47.0" />
+                    </font>
+               <VBox.margin>
+                  <Insets bottom="50.0" top="150.0" />
+               </VBox.margin>
+                </Text>
+                <Button fx:id="editDirectoryBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="82.0" mnemonicParsing="false" onAction="#editDirectory" prefHeight="82.0" prefWidth="225.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Database Editor">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="mapEditorBtn" maxHeight="101.0" maxWidth="-Infinity" minHeight="85.0" mnemonicParsing="false" onAction="#editMap" prefHeight="85.0" prefWidth="222.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Map Editor">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="editHoursBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="94.0" mnemonicParsing="false" onAction="#editHours" prefHeight="100.0" prefWidth="221.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Visiting Hours">
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+                </Button>
+            <Button fx:id="algorithmSelectorBtn" maxHeight="101.0" maxWidth="-Infinity" minHeight="79.0" mnemonicParsing="false" onAction="#algorithmSelectorBtnAction" prefHeight="100.0" prefWidth="221.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Algorithm Selector">
+               <font>
+                  <Font size="21.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="90.0" />
+               </VBox.margin>
+            </Button>
+            </children>
+        </VBox>
+        <Button fx:id="logoutBtn" layoutX="24.0" layoutY="371.0" mnemonicParsing="false" onAction="#logout" prefHeight="50.0" prefWidth="100.0" text="Logout" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0">
             <font>
-                <Font size="26.0" />
+                <Font size="18.0" />
             </font>
-        </Text>
-        <Button fx:id="editDirectoryBtn" layoutX="250.0" layoutY="110.0" mnemonicParsing="false" onAction="#editDirectory" text="Database Editor" />
-        <Button fx:id="mapEditorBtn" layoutX="263.0" layoutY="156.0" mnemonicParsing="false" onAction="#editMap" text="Map Editor" />
-        <Button fx:id="editHoursBtn" layoutX="253.0" layoutY="200.0" mnemonicParsing="false" onAction="#editHours" text="Visiting Hours" />
-        <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+        </Button>
     </children>
 </AnchorPane>

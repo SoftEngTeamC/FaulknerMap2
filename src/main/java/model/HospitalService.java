@@ -1,23 +1,27 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Indexed
 @Table(name = "SERVICES")
 public class HospitalService {
-    private Long id;
+    private long id;
 
-    private Node location;
+    private List<Node> locations;
+
     private String name;
 
     public HospitalService() {
         // This is left empty for hibernate
     }
 
-    public HospitalService(Node location, String name) {
-        this.location = location;
+    public HospitalService(String name, List<Node> locations) {
+        this.locations = locations;
         this.name = name;
     }
 
@@ -32,14 +36,16 @@ public class HospitalService {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "SERVICE_NODES")
-    public Node getLocation() {
-        return location;
+    @ManyToMany
+    @JoinTable(name = "SERVICE_LOCATION",
+            joinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "NODE_ID", referencedColumnName = "ID"))
+    public List<Node> getLocations() {
+        return locations;
     }
 
-    public void setLocation(Node location) {
-        this.location = location;
+    public void setLocations(List<Node> locations) {
+        this.locations = locations;
     }
 
     @Column(name = "SERVICE_NAME")

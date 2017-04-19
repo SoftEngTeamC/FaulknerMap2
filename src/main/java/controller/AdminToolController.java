@@ -1,14 +1,13 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 
-public class AdminToolController {
+
+public class AdminToolController extends Controller{
 
     @FXML
     private Button logoutBtn;
@@ -18,40 +17,42 @@ public class AdminToolController {
     private Button editHoursBtn;
     @FXML
     private Button mapEditorBtn;
+    @FXML
+    private VBox AdminTool_VBox;
+    @FXML
+    private AnchorPane AdminTool_AnchorPane;
+    @FXML
+    private Button algorithmSelectorBtn;
 
+    public void initialize(){
+        AdminTool_VBox.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty());
+        editDirectoryBtn.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty().multiply(0.3));
+        mapEditorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+        editHoursBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+        algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+    }
 
+    @FXML
     public void editMap() throws Exception{
-            Stage stage = (Stage) mapEditorBtn.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/MapEditor.fxml"));
-            stage.setTitle("Map Editor");
-            stage.setScene(new Scene(root, 600, 400));
-            stage.show();
+        switchScreen("view/MapEditor.fxml", "Map Editor", mapEditorBtn);
     }
     @FXML
     public void editHours()throws Exception{
-        Stage stage = (Stage) editHoursBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/HoursEditorScreen.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
+        switchScreen("view/HoursEditorScreen.fxml", "Directory Editor", editHoursBtn);
     }
     @FXML
     public void editDirectory() throws Exception{
-        Stage stage = (Stage) editDirectoryBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/DirectoryEditor.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
-
+        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", editDirectoryBtn);
     }
 
     @FXML
     public void logout() throws Exception{
-        Stage stage = (Stage) logoutBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"));
-        stage.setTitle("Directory Editor");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();;
+        switchScreen("view/Main.fxml", "Directory Editor", logoutBtn);
+    }
+
+    @FXML
+    public void algorithmSelectorBtnAction() throws Exception{
+        switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", algorithmSelectorBtn);
     }
 
 }

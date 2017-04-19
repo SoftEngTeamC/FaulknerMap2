@@ -1,12 +1,23 @@
+import controller.ImageProvider;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import service.EMFProvider;
 
 import java.net.URL;
 
 public class App extends Application {
+
+    public final ImageProvider imageProvider = new ImageProvider();
+
+    public static Image getImage(String url) {
+        return ImageProvider.getImage(url);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -14,9 +25,11 @@ public class App extends Application {
         if (mainView == null) {
             throw new Exception("The root view cannot be null.");
         }
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         Parent root = FXMLLoader.load(mainView);
         primaryStage.setTitle("Faulkner Kiosk");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 800, 500));
+        primaryStage.setFullScreen(true);
         primaryStage.show();
 
     }
@@ -27,6 +40,6 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
-        // TODO: Clean up entity manager
+        EMFProvider.getInstance().getEMFactory().close();
     }
 }

@@ -1,0 +1,57 @@
+start	end
+hallway20	2A
+2A	hallway20
+intersection20	hallway20
+hallway20	intersection20
+hallway25	intersection20
+intersection20	hallway25
+Atrium Elevators	hallway25
+hallway25	Atrium Elevators
+hallway25	intersection22
+intersection22	hallway25
+Atrium Elevators	intersection22
+intersection22	Atrium Elevators
+intersection23	intersection22
+intersection22	intersection23
+intersection24	intersection23
+intersection23	intersection24
+intersection25	intersection24
+intersection24	intersection25
+intersection21	intersection23
+intersection23	intersection21
+2B	intersection21
+intersection21	2B
+intersection20	intersection21
+intersection21	intersection20
+hallway21	2B
+2B	hallway21
+intersection21	intersection20
+intersection20	intersection21
+hallway21	intersection20
+intersection20	hallway21
+hallway22	intersection25
+intersection25	hallway22
+Physical Therapy	hallway22
+hallway22	Physical Therapy
+intersection26	hallway22
+hallway22	intersection26
+intersection28	intersection26
+intersection26	intersection28
+intersection27	intersection28
+intersection28	intersection27
+hallway26	intersection27
+intersection27	hallway26
+Hillside Elevators 1	hallway26
+hallway26	Hillside Elevators 1
+hallway27	intersection26
+intersection26	hallway27
+hallway27	Hillside Elevators 2
+Hillside Elevators 2	hallway27
+intersection26	intersection28
+intersection28	intersection26
+hallway24	intersection26
+intersection26	hallway24
+Outpatient Psych	hallway24
+hallway24	Outpatient Psych
+Inpatient Psych	hallway24
+hallway24	Inpatient Psych
