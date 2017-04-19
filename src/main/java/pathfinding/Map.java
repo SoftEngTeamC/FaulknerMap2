@@ -52,8 +52,17 @@ public class Map {
     }
 
     public static Set<Integer> floorsInPath(List<MapNode> path) {
+        Set<Integer> allFloors = new HashSet<>();
+        allFloors.add(1);
+        allFloors.add(2);
+        allFloors.add(3);
+        allFloors.add(4);
+        allFloors.add(5);
+        allFloors.add(6);
+        allFloors.add(7);
         Set<Integer> floors = new HashSet<>();
         floors.addAll(path.stream().map(n -> n.getLocation().getFloor()).collect(Collectors.toList()));
-        return floors;
+        allFloors.removeAll(floors);
+        return allFloors;
     }
 }
