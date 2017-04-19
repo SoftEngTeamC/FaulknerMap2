@@ -29,6 +29,7 @@ public class DataLoader {
 
             loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
+            loadPeople("data/floor1/people.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
