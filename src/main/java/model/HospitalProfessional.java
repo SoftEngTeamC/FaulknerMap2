@@ -57,7 +57,7 @@ public class HospitalProfessional {
         this.name = name;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "PROFESSIONAL_OFFICE",
             joinColumns = @JoinColumn(name = "PROFESSIONAL_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "OFFICE_ID", referencedColumnName = "ID"))

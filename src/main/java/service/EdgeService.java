@@ -11,13 +11,17 @@ public class EdgeService extends AbstractService<Edge> {
     @Override
     public Edge find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.find(Edge.class, id);
+        Edge temp = manager.find(Edge.class, id);
+        manager.close();
+        return temp;
     }
 
     public List<Edge> getAllEdges() {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.createQuery("from Edge ", Edge.class)
+        List<Edge> temp = manager.createQuery("from Edge ", Edge.class)
                 .getResultList();
+        manager.close();
+        return temp;
     }
 
     public List<Edge> findByNodes(Node start, Node end){
@@ -35,13 +39,14 @@ public class EdgeService extends AbstractService<Edge> {
                 .setParameter("start", end)
                 .setParameter("end", start)
                 .getSingleResult());
-
+        manager.close();
         return temp;
     }
 
     public void disableEdge(Edge temp){
         System.out.println("GO into disable function");
         temp.setDisabled(true);
+
     }
 
     public void ableEdge(Edge temp){

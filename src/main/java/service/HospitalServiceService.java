@@ -13,24 +13,31 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
     @Override
     public HospitalService find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.find(HospitalService.class, id);
+        HospitalService temp = manager.find(HospitalService.class, id);
+        manager.close();
+        return temp;
     }
 
     public HospitalService findHospitalServiceByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            return (HospitalService) manager.createQuery(
+            HospitalService temp = (HospitalService) manager.createQuery(
                     "SELECT s FROM HospitalService s WHERE s.name LIKE :name")
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
+            manager.close();
+            return temp;
         } catch (NoResultException e) {
+            manager.close();
             return null;
         }
     }
 
     public List<HospitalService> getAllServices() {
         EntityManager manager = this.managerFactory.createEntityManager();
-        return manager.createQuery("from HospitalService", HospitalService.class)
+        List<HospitalService> temp = manager.createQuery("from HospitalService", HospitalService.class)
                 .getResultList();
+        manager.close();
+        return temp;
     }
 }
