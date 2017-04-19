@@ -1,8 +1,6 @@
 package model;
 
 
-import service.EMFProvider;
-
 public class Hours {
 
     public String hours1;
@@ -31,7 +29,6 @@ public class Hours {
         this.ampm2=ampm2;
         this.ampm3=ampm3;
         this.ampm4=ampm4;
-        EMFProvider emf = new EMFProvider();
     }
 
 }

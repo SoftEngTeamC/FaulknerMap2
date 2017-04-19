@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+
 <SplitPane fx:id="MapEditor_SplitPane" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
   <items>
       <VBox fx:id="MapEditorVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">

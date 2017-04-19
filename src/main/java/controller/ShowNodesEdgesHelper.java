@@ -1,20 +1,14 @@
 package controller;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import model.Edge;
 import model.Node;
 import service.EdgeService;
@@ -120,7 +114,7 @@ class ShowNodesEdgesHelper {
         FloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FloorImageView = new ImageView();
-        Image FirstFloorMapPic = new Image(url);
+        Image FirstFloorMapPic = ImageProvider.getImage(url);
         FloorImageView.setImage(FirstFloorMapPic);
         FloorImageView.setPreserveRatio(true);
         Group FloorGroup = new Group();
@@ -163,6 +157,27 @@ class ShowNodesEdgesHelper {
                 return SeventhFloorScrollPane;
             default:
                 System.out.println("You gave MakeCircle() a floor that doesn't exist, or it isnt an int");
+                return null;
+        }
+    }
+
+    static Slider checkSlider(int z) {
+        switch (z) {
+            case 1:
+                return FirstFloorSlider;
+            case 2:
+                return SecondFloorSlider;
+            case 3:
+                return ThirdFloorSlider;
+            case 4:
+                return FourthFloorSlider;
+            case 5:
+                return FifthFloorSlider;
+            case 6:
+                return SixthFloorSlider;
+            case 7:
+                return SeventhFloorSlider;
+            default:
                 return null;
         }
     }
@@ -282,5 +297,4 @@ class ShowNodesEdgesHelper {
             }
         }
     }
-
 }
