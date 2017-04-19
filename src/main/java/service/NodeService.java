@@ -30,7 +30,6 @@ public class NodeService extends AbstractService<Node> {
         Set<Node> endNeighbors = edges.stream().map(Edge::getEnd).collect(Collectors.toSet());
         startNeighbors.addAll(endNeighbors);
         startNeighbors.remove(find(id));
-        startNeighbors.remove(find(id));
         manager.close();
         return startNeighbors;
     }
@@ -103,6 +102,5 @@ public class NodeService extends AbstractService<Node> {
         List<Node> nodes = manager.createQuery(elevatorCriteria).getResultList();
         System.out.println(nodes);
         return nodes;
-
     }
 }
