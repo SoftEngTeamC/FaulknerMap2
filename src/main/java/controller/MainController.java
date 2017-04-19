@@ -165,7 +165,7 @@ public class MainController extends Controller {
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
 
-        List<MapNode> path = PathFinder.shortestPath(start, dest);
+        List<MapNode> path = map.shortestPath(start, dest);
         if (path.size() < 2) {
             TextDirectionsTextArea.setText("You are already at your destination");
         } else {

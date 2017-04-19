@@ -305,4 +305,9 @@ class ShowNodesEdgesHelper {
             }
         }
     }
+
+    // takes the desired XY and zoom of a map, and applies it to the given
+    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr){
+
+    }
 }
