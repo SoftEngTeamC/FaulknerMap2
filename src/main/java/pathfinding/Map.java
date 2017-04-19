@@ -4,10 +4,8 @@ package pathfinding;
 import service.AlgorithmSingleton;
 import service.NodeService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Map {
     public enum algorithm { BFS, DFS, ASTAR }
@@ -45,5 +43,20 @@ public class Map {
 
     public MapNode getNode(Long id) {
         return nodeMap.get(id);
+    }
+
+    public static Set<Integer> floorsInPath(List<MapNode> path) {
+        Set<Integer> allFloors = new HashSet<>();
+        allFloors.add(1);
+        allFloors.add(2);
+        allFloors.add(3);
+        allFloors.add(4);
+        allFloors.add(5);
+        allFloors.add(6);
+        allFloors.add(7);
+        Set<Integer> floors = new HashSet<>();
+        floors.addAll(path.stream().map(n -> n.getLocation().getFloor()).collect(Collectors.toList()));
+        allFloors.removeAll(floors);
+        return allFloors;
     }
 }

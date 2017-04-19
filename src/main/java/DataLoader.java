@@ -24,6 +24,8 @@ public class DataLoader {
             loadLocations("data/floor5/locations.tsv", 5);
             loadLocations("data/floor6/locations.tsv", 6);
             loadLocations("data/floor7/locations.tsv", 7);
+            loadLocations("data/locationsTemp.tsv", 1);
+
 
             loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
@@ -218,7 +220,7 @@ public class DataLoader {
                     return;
                 }
 
-                   System.out.println(start.getName());
+              //     System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
