@@ -24,6 +24,8 @@ public class DataLoader {
             loadLocations("data/floor5/locations.tsv", 5);
             loadLocations("data/floor6/locations.tsv", 6);
             loadLocations("data/floor7/locations.tsv", 7);
+            loadLocations("data/locationsTemp.tsv", 1);
+
 
             loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
@@ -44,19 +46,6 @@ public class DataLoader {
             loadService("data/floor6/services.tsv");
             loadService("data/floor7/services.tsv");
 
-<<<<<<< HEAD
-            loadEdges("data/floor1/edges.tsv", 1);
-            loadEdges("data/floor2/edges.tsv",2);
-            loadEdges("data/floor3/edges.tsv",3);
-            loadEdges("data/floor4/edges.tsv",4);
-            loadEdges("data/floor5/edges.tsv",5);
-            loadEdges("data/floor6/edges.tsv",6);
-            loadEdges("data/floor7/edges.tsv",7);
-
-//            loadEdges("data/allEdges.tsv");
-
-            connectElevators();
-=======
 //            loadEdges("data/belkinHouse/floor1/edges.tsv", 1);
 //            loadEdges("data/belkinHouse/floor2/edges.tsv", 2);
 //            loadEdges("data/belkinHouse/floor3/edges.tsv", 3);
@@ -72,7 +61,6 @@ public class DataLoader {
             loadEdges("data/allEdges.tsv", 1);
 
             //         connectElevators();
->>>>>>> 04335459564b9c3db9881876100374922a1e86b4
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -232,7 +220,7 @@ public class DataLoader {
                     return;
                 }
 
-                   System.out.println(start.getName());
+              //     System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
