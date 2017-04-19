@@ -44,15 +44,17 @@ public class DataLoader {
             loadService("data/floor6/services.tsv");
             loadService("data/floor7/services.tsv");
 
+//            loadEdges("data/belkinHouse/floor1/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor2/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor3/edges.tsv", 1);
+//            loadEdges("data/belkinHouse/floor4/edges.tsv", 1);
             loadEdges("data/floor1/edges.tsv", 1);
-            loadEdges("data/floor2/edges.tsv",2);
-            loadEdges("data/floor3/edges.tsv",3);
-            loadEdges("data/floor4/edges.tsv",4);
-            loadEdges("data/floor5/edges.tsv",5);
-            loadEdges("data/floor6/edges.tsv",6);
-            loadEdges("data/floor7/edges.tsv",7);
-
-//            loadEdges("data/allEdges.tsv");
+//            loadEdges("data/floor2/edges.tsv",2);
+//            loadEdges("data/floor3/edges.tsv",3);
+//            loadEdges("data/floor4/edges.tsv",4);
+//            loadEdges("data/floor5/edges.tsv",5);
+//            loadEdges("data/floor6/edges.tsv",6);
+//            loadEdges("data/floor7/edges.tsv",7);
 
    //         connectElevators();
         } catch (FileNotFoundException e) {
@@ -178,13 +180,12 @@ public class DataLoader {
                 Node end = nodeService.findNodeByName(endName, floor);
 
                 if (start == null) {
-                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
+                    System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
                 if (end == null) {
-                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in allEdges.tsv");
-                    return;
+                    System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                 }
 
                 System.out.println(start.getName());
