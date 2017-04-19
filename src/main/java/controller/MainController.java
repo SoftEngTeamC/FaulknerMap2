@@ -146,7 +146,7 @@ public class MainController extends Controller {
             Node end = nodes.get(i+1).getModelNode();
             //find the edge from the database.
             // 0 index because findByNodes returns list of edges, forward and backwards
-            Edge e = edgeService.findByNodes(start, end).get(0);
+            Edge e = edgeService.findByNodes(start, end);
             //only draw if not last node, nodes are on same floor
             if((i<nodes.size()-1)&&(nodes.get(i).getLocation().getFloor() == nodes.get(i+1).getLocation().getFloor())){
                 ShowNodesEdgesHelper.MakeLine(e);
