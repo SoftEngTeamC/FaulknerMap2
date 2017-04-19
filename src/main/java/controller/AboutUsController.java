@@ -55,13 +55,10 @@ public class AboutUsController extends Controller{
 
     @FXML
     public void OpenMeetTheGroup() throws Exception {
-        // goto genres screen
-        System.out.println("Meet the group");
-        Stage stage = (Stage) MeetTheTeamButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/MeetTheGroup.fxml"));
-        stage.setTitle("Meet The Group");
-        stage.setScene(new Scene(root, 300, 300));
-        stage.show();
+
+        // goto meet the group screen
+        switchScreen("view/MeetTheGroup.fxml", "Meet the Group", MeetTheTeamButton);
+
     }
 
 
