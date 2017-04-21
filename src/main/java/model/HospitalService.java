@@ -36,7 +36,7 @@ public class HospitalService {
         this.id = id;
     }
 
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "SERVICE_LOCATION",
             joinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "NODE_ID", referencedColumnName = "ID"))
