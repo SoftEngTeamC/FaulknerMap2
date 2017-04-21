@@ -36,14 +36,14 @@ public class Map {
     }
 
 
-    public List<MapNode> shortestPath(MapNode start, MapNode end) {
+    public Path shortestPath(MapNode start, MapNode end) {
         System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
         switch (AlgorithmSingleton.getInstance().getCurrentAlgorithm()) {
-            case BFS: return PathFinder.BFS(start, end);
-            case DFS: return PathFinder.DFS(start, end);
-            case ASTAR: return PathFinder.shortestPath(start, end);
+            case BFS: return new Path(PathFinder.BFS(start, end));
+            case DFS: return new Path(PathFinder.DFS(start, end));
+            case ASTAR: return new Path(PathFinder.shortestPath(start, end));
         }
-        return null;
+        return null; // TODO: Probably throw an exception
     }
 
     public MapNode getNode(Long id) {

@@ -1,12 +1,13 @@
 package textDirections;
 
 //import org.testng.annotations.Test;
+
 import pathfinding.MapNode;
+import pathfinding.Path;
 import pathfinding.PathFinder;
 import service.NodeService;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * Created by Alex on 4/9/2017.
@@ -14,10 +15,10 @@ import java.util.List;
 public class MakeDirections {
     private NodeService NS = new NodeService();
     private PathFinder pf = new PathFinder();
-    public static String getText(List<MapNode> myPath){
+    public static String getText(Path path){
         DecimalFormat pathFormat = new DecimalFormat("#.#");
-        double pathLength = MapNode.getFeet(myPath);
-        double pathTime = MapNode.getSeconds(myPath);
+        double pathLength = path.distanceInFeet();
+        double pathTime = path.timeInSeconds();
         String output = "";
         String output2 = output.concat("Approximate Distance: " + pathFormat.format(pathLength) +
                 " feet. \nEstimated time: " + pathFormat.format(Math.floor(pathTime/60)) + " minutes and " +
@@ -34,12 +35,12 @@ public class MakeDirections {
         double angleShift;
         double p = Math.PI;
         double distance;
-        for(i = 0; i < myPath.size() - 2; i++) {
+        for(i = 0; i < path.numNodes() - 2; i++) {
            // if(myPath.size()
-            System.out.println("Path: " +myPath.size());
-            currentNode = myPath.get(i);
-            nextNode = myPath.get(i+1);
-            afterNextNode = myPath.get(i+2);
+            System.out.println("Path: " + path.numNodes());
+            currentNode = path.getNode(i);
+            nextNode = path.getNode(i+1);
+            afterNextNode = path.getNode(i+2);
             currentAngle = getAngle(currentNode, nextNode);
             nextAngle = getAngle(nextNode, afterNextNode);
             angleShift = getAngleShift(currentAngle, nextAngle);
@@ -98,8 +99,8 @@ public class MakeDirections {
             }
         }
 
-        currentNode = myPath.get(i);
-        nextNode = myPath.get(i+1);
+        currentNode = path.getNode(i);
+        nextNode = path.getNode(i+1);
         currentAngle = getAngle(currentNode, nextNode);
         direction = getDirection(currentAngle);
 
