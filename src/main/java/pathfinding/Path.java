@@ -80,7 +80,7 @@ public class Path implements Iterable<MapNode> {
 
     public Set<Integer> floorsNotSpanned() {
         Set<Integer> floors = floorsSpanned();
-        List<Integer> notFloors = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+        Set<Integer> notFloors = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         notFloors.removeAll(floors);
         return new HashSet<>(notFloors);
     }
