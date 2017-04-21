@@ -19,6 +19,7 @@ public class Controller {
     protected EdgeService edgeService = new EdgeService();
     protected HospitalProfessionalService professionalService = new HospitalProfessionalService();
     protected HospitalService hospitalService = new HospitalService();
+    protected HospitalServiceService serviceService = new HospitalServiceService();
     protected NodeService nodeService = new NodeService();
     protected TagService tagService = new TagService();
 

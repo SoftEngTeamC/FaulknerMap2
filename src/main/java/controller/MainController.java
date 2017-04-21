@@ -2,18 +2,11 @@ package controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.Edge;
-import model.HospitalProfessional;
-import model.Hours;
-import model.Node;
+import model.*;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.PathFinder;
@@ -88,14 +81,13 @@ public class MainController extends Controller {
     @FXML
     private Button AdminToolButton;
 
-    public Hours hours;
+    private Hours hours;
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
         //Hours initialization
-        EMFProvider emf = new EMFProvider();
-        hours = emf.hours;
+        hours = EMFProvider.hours;
         //-----------------------------Visual inits
         new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
@@ -113,9 +105,13 @@ public class MainController extends Controller {
 
         //-----------------------Data initialization
         List<HospitalProfessional> HPs = professionalService.getAllProfessionals();
+        List<HospitalService> HSs = serviceService.getAllServices();
         List<String> names = new ArrayList<>();
         for (HospitalProfessional HP : HPs) {
             names.add(HP.getName());
+        }
+        for (HospitalService HS : HSs) {
+            names.add(HS.getName());
         }
         StartLocationField.getEntries().addAll(names);
         EndLocationField.getEntries().addAll(names);
@@ -127,9 +123,9 @@ public class MainController extends Controller {
 
     //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-    public void DisplayMap(List<MapNode> nodes) {
-        for (int i = 0; i < nodes.size(); i++) {
-            System.out.println(nodes.get(i).getLocation().getFloor());
+    private void DisplayMap(List<MapNode> nodes) {
+        for (MapNode node1 : nodes) {
+            System.out.println(node1.getLocation().getFloor());
         }
         System.out.println(nodes);
         ShowNodesEdgesHelper.ClearOldPaths();
@@ -158,16 +154,32 @@ public class MainController extends Controller {
     }
 
     //-----------------------------------FUNCTIONS------------------------------------------
-    private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest) {
+    private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
+                                    HospitalService HS_Start, HospitalService HS_Dest) {
         Map map = new Map(nodeService.getAllNodes());
 
-        Node nodeStart = HP_Start.getOffices().get(0);
-        Node nodeEnd = HP_Dest.getOffices().get(0);
+        Node nodeStart, nodeEnd;
+        if(HP_Start != null){
+            nodeStart = HP_Start.getOffices().get(0);
+        } else {
+            nodeStart = HS_Start.getLocations().get(0);
+        }
+
+        if(HP_Dest != null){
+            nodeEnd = HP_Dest.getOffices().get(0);
+        } else {
+            nodeEnd = HS_Dest.getLocations().get(0);
+        }
 
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
 
-            List<MapNode> path = map.shortestPath(start, dest);
+        List<MapNode> path = map.shortestPath(start, dest);
+        pathText(path);
+
+    }
+
+    private void pathText(List<MapNode> path) {
         if (path == null || path.isEmpty()) {
             TextDirectionsTextArea.setText("Could not find path to your destination.");
         } else if (path.size() < 2) {
@@ -179,27 +191,37 @@ public class MainController extends Controller {
         }
     }
 
-    public void HideTabs(List<MapNode> path){
+    private void HideTabs(List<MapNode> path) {
         Set<Integer> floors = Map.floorsInPath(path);
         ObservableList<Tab> tabs = FloorViewsTabPane.getTabs();
         //Turn all tabs on
-        for(Tab t: tabs){
+        for (Tab t : tabs) {
             t.setDisable(false);
         }
         //disable tabs that are not included in path
-        for(int n: floors){
-            tabs.get(n-1).setDisable(true);
+        for (int n : floors) {
+            tabs.get(n - 1).setDisable(true);
         }
     }
 
     //This function updates the StartInfo and EndInfo Text Areas
-    public void PopulateInformationDisplay() {
-        HospitalProfessional StartProfessional = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
-        StartInfo_TextArea.setText(StartProfessional.getTitle() + " " + StartProfessional.getName() + "\n\n"
-                + "Offices:\n\n" + StartProfessional.getOffices());
-        HospitalProfessional EndProfessional = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
-        EndInfo_TextArea.setText(EndProfessional.getTitle() + " " + EndProfessional.getName() + "\n\n"
-                + "Offices:\n\n" + EndProfessional.getOffices());
+    private void PopulateInformationDisplay(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
+                                            HospitalService HS_Start, HospitalService HS_Dest) {
+        if(HP_Start != null){
+            StartInfo_TextArea.setText(HP_Start.getTitle() + " " + HP_Start.getName() + "\n\n"
+                    + "Offices:\n\n" + HP_Start.getOffices());
+        } else {
+            StartInfo_TextArea.setText( HS_Start.getName() + "\n\n"
+                    + "Offices:\n\n" + HS_Start.getLocations());
+        }
+
+        if(HP_Dest != null){
+            EndInfo_TextArea.setText(HP_Dest.getTitle() + " " + HP_Dest.getName() + "\n\n"
+                    + "Location:\n\n" + HP_Dest.getOffices());
+        } else {
+            EndInfo_TextArea.setText(HS_Dest.getName() + "\n\n"
+                    + "Location:\n\n" + HS_Dest.getLocations());
+        }
     }
 
 
@@ -224,11 +246,14 @@ public class MainController extends Controller {
             //Do path finding
             HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
             HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
-            FindandDisplayPath(HP_Start, HP_Dest);
-            System.out.println("start HP:  " + HP_Start.getName() + " Location : " + HP_Start.getOffices().get(0).getName());
-            System.out.println("dest HP:  " + HP_Dest.getName() + " Location : " + HP_Dest.getOffices().get(0).getName());
+            HospitalService HS_Start = serviceService.findHospitalServiceByName(StartLocationField.getText());
+            HospitalService HS_Dest = serviceService.findHospitalServiceByName(EndLocationField.getText());
+
+            FindandDisplayPath(HP_Start, HP_Dest, HS_Start, HS_Dest);
             //Set Information Displays
-            PopulateInformationDisplay();
+
+            PopulateInformationDisplay(HP_Start, HP_Dest, HS_Start, HS_Dest);
+//
         } else {
             System.out.print("Give a Start and an End");
         }
