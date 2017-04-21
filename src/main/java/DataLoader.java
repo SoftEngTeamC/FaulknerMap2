@@ -59,8 +59,8 @@ public class DataLoader {
 //            loadEdges("data/floor6/edges.tsv",6);
 //            loadEdges("data/floor7/edges.tsv",7);
 
-            loadEdges("data/allEdges.tsv", 1);
-            connectElevators();
+            loadEdges("data/tempEdges.tsv", 1);
+    //        connectElevators();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -207,8 +207,8 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.find(Long.parseLong((String)row[0]));
-                Node end = nodeService.find(Long.parseLong((String)row[1]));
+                Node start = nodeService.findNodeByName(startName);
+                Node end = nodeService.findNodeByName(endName);
 
                 if (start == null) {
                     System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
@@ -219,8 +219,6 @@ public class DataLoader {
                     System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
-
-              //     System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
@@ -230,9 +228,41 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
     }
 
+    //call this when you want to make sure there are no duplicate/unnecessary edges
+    private void cleanEdges(){
+        EdgeService edgeService = new EdgeService();
+        List<Edge> edges = edgeService.getAllEdges();
+
+        for(Edge e1: edges){
+            for(Edge e2: edges) {
+                if (e1.getStart().getName().equals(e2.getStart().getName()) &&
+                        !Objects.equals(e1.getId(), e2.getId())) {
+                    if (e1.getEnd().getName().equals(e2.getEnd().getName())) {
+                        System.out.println("Duplicate: " + e1.getStart().getName() + " " + e2.getEnd().getName());
+                        edgeService.remove(e2);
+                    }
+                }
+                if (e1.getStart().getName().equals(e2.getEnd().getName()) &&
+                        !Objects.equals(e1.getId(), e2.getId())) {
+                    if (e1.getStart().getName().equals(e2.getEnd().getName())) {
+                        System.out.println("Duplicate: " + e1.getStart().getName() + " " + e2.getEnd().getName());
+                        edgeService.remove(e2);
+                    }
+                }
+            }
+            if (e1.getStart().getName().equals(e1.getEnd().getName())) {
+                System.out.println("Unnecessary: " + e1.getStart().getName() + " " + e1.getEnd().getName());
+                edgeService.remove(e1);
+            }
+        }
+
+    }
+
     private static void connectElevators() {
         NodeService nodeService = new NodeService();
         EdgeService edgeService = new EdgeService();
+
+        System.out.println();
 
         List<Node> elevators = nodeService.getAllNodes().stream()
                 .filter(n -> n.getName().toLowerCase().contains("elevator"))
@@ -252,28 +282,10 @@ public class DataLoader {
         for (Set<Node> group : elevatorGroups.values()) {
             for (Node n1 : group) {
                 for (Node n2 : group) {
+                    System.out.println(n1.getName());
                     edgeService.persist(new Edge(n1, n2, 0));
                 }
             }
         }
-    }
-
-    private static void addEdgeIntersections(){
-        NodeService nodeService = new NodeService();
-        EdgeService edgeService = new EdgeService();
-        for(int i = 1; i < 8; i ++){
-            List<Node> floor = nodeService.findNodeIntersectionByFloor(i);
-            for(int j = 0; j < floor.size()-1; j ++){
-                edgeService.persist(new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1))));
-                edgeService.persist(new Edge(floor.get(j+1), floor.get(j), getEdgeLength(floor.get(j+1), floor.get(j))));
-
-            }
-        }
-    }
-
-    private static double getEdgeLength(Node from, Node end){
-        double yLen = from.getLocation().getY() - end.getLocation().getY();
-        double xLen = from.getLocation().getX() - end.getLocation().getX();
-        return Math.sqrt(yLen * yLen + xLen * xLen);
     }
 }
