@@ -6,7 +6,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import model.*;
+import model.HospitalProfessional;
+import model.HospitalService;
+import model.Hours;
+import model.Node;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
@@ -163,7 +166,7 @@ public class MainController extends Controller {
         pathText(path);
     }
 
-    private void pathText(List<MapNode> path) {
+    private void pathText(Path path) {
         if (path.isEmpty()) {
             TextDirectionsTextArea.setText("Could not find path to your destination.");
         } else if (path.numNodes() < 2) {
