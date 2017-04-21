@@ -2,21 +2,16 @@ package controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.Edge;
 import model.HospitalProfessional;
 import model.Hours;
 import model.Node;
 import pathfinding.Map;
 import pathfinding.MapNode;
-import pathfinding.PathFinder;
+import pathfinding.Path;
 import service.EMFProvider;
 import textDirections.MakeDirections;
 
@@ -127,34 +122,19 @@ public class MainController extends Controller {
 
     //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
-    public void DisplayMap(List<MapNode> nodes) {
-        for (int i = 0; i < nodes.size(); i++) {
-            System.out.println(nodes.get(i).getLocation().getFloor());
-        }
-        System.out.println(nodes);
+    public void DisplayMap(Path path) {
         ShowNodesEdgesHelper.ClearOldPaths();
 
-        if (nodes.size() < 1) {
-            System.out.println("There is no path.");
+        if (path.numNodes() < 1) {
+            System.err.println("Can't display map because there is no path.");
             return;
         }
 
-        for (MapNode node : nodes) {
-            ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
-        }
+        for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
 
-        for (int i = 0; i < nodes.size() - 1; i++) {
-            Node start = nodes.get(i).getModelNode();
-            Node end = nodes.get(i + 1).getModelNode();
-            //find the edge from the database.
-            // 0 index because findByNodes returns list of edges, forward and backwards
-            Edge e = edgeService.findByNodes(start, end);
-            //only draw if not last node, nodes are on same floor
-            if ((i < nodes.size() - 1) && (nodes.get(i).getLocation().getFloor() == nodes.get(i + 1).getLocation().getFloor())) {
-                ShowNodesEdgesHelper.MakeLine(e);
-            }
-        }
-        HideTabs(nodes);
+        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+
+        HideTabs(path);
     }
 
     //-----------------------------------FUNCTIONS------------------------------------------
@@ -167,10 +147,10 @@ public class MainController extends Controller {
         MapNode start = map.getNode(nodeStart.getId());
         MapNode dest = map.getNode(nodeEnd.getId());
 
-            List<MapNode> path = map.shortestPath(start, dest);
-        if (path == null || path.isEmpty()) {
+        Path path = map.shortestPath(start, dest);
+        if (path.isEmpty()) {
             TextDirectionsTextArea.setText("Could not find path to your destination.");
-        } else if (path.size() < 2) {
+        } else if (path.numNodes() < 2) {
             TextDirectionsTextArea.setText("You are already at your destination");
             DisplayMap(path);
         } else {
@@ -179,8 +159,8 @@ public class MainController extends Controller {
         }
     }
 
-    public void HideTabs(List<MapNode> path){
-        Set<Integer> floors = Map.floorsInPath(path);
+    public void HideTabs(Path path){
+        Set<Integer> floors = path.floorsNotSpanned();
         ObservableList<Tab> tabs = FloorViewsTabPane.getTabs();
         //Turn all tabs on
         for(Tab t: tabs){
@@ -188,7 +168,7 @@ public class MainController extends Controller {
         }
         //disable tabs that are not included in path
         for(int n: floors){
-            tabs.get(n-1).setDisable(true);
+            tabs.get(n - 1).setDisable(true);
         }
     }
 
@@ -351,7 +331,8 @@ public class MainController extends Controller {
                 StartInfo_TextArea.setText("Don't Panic");
                 language = 1;
         }
-        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("hallway19").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
+//        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("hallway19").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
+        //TODO: We should not be hardcoding the current kiosk.
     }
 
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
@@ -412,7 +393,7 @@ public class MainController extends Controller {
         language = 7;
     }
 }
-//  THIS COMMENTED CODE MAY BE NEEDED FOR MAINTAING VIEW OF MAP DURING ZOOM
+//  THIS COMMENTED CODE MAY BE NEEDED FOR VIEW OF MAP DURING ZOOM
 //
 //        FirstFloorSlider.valueProperty().addListener(new ChangeListener() {
 //            @Override

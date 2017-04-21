@@ -1,9 +1,13 @@
 package pathfinding;
 
 
-import java.util.List;
+import model.Edge;
+import service.EdgeService;
 
-public class Path {
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Path implements Iterable<MapNode> {
     private final static double FEET_PER_PIXEL = 0.2902;
     private final static double SECONDS_PER_FOOT = 0.2975;
     private final static double STEPS_PER_FOOT = 0.5157;
@@ -34,5 +38,66 @@ public class Path {
 
     public double distanceInSteps() {
         return distanceInFeet() * STEPS_PER_FOOT;
+    }
+
+    public MapNode getNode(int i) {
+        return path.get(i);
+    }
+
+    public List<Edge> edges() {
+        EdgeService edgeService = new EdgeService();
+
+        List<Edge> edges = new LinkedList<>();
+        MapNode currentNode = null;
+        for (MapNode n : path) {
+            if (currentNode != null) {
+                Edge edge = edgeService.findByNodes(currentNode.getModelNode(), n.getModelNode());
+                edges.add(edge);
+            }
+            currentNode = n;
+        }
+        return edges;
+    }
+
+    public List<Edge> edgesOnFloor(int floor) {
+        return edges().stream()
+                .filter(
+                        edge -> edge.getStart().getLocation().getFloor() == floor
+                                && edge.getStart().getLocation().getFloor() == floor)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @return a set of the floors spanned by this path
+     */
+    public Set<Integer> floorsSpanned() {
+        Set<Integer> floors = new HashSet<>();
+        for (MapNode n : path) {
+            floors.add(n.getLocation().getFloor());
+        }
+        return floors;
+    }
+
+    public Set<Integer> floorsNotSpanned() {
+        Set<Integer> floors = floorsSpanned();
+        List<Integer> notFloors = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+        notFloors.removeAll(floors);
+        return new HashSet<>(notFloors);
+    }
+
+    /**
+     * @return if the path is empty
+     */
+    public boolean isEmpty() {
+        return path == null || path.isEmpty();
+    }
+
+    public int numNodes() {
+        return path.size();
+    }
+
+    @Override
+    public Iterator<MapNode> iterator() {
+        return path.iterator();
     }
 }
