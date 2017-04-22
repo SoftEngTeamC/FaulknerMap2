@@ -13,10 +13,11 @@ import model.Node;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
-import service.EMFProvider;
 import textDirections.MakeDirections;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -84,14 +85,12 @@ public class MainController extends Controller {
     @FXML
     private Button AdminToolButton;
 
-    private Hours hours;
     private static int language; // 1: english, 2: spanish, 3: chinese, 4: french
 
     //-------------------------------------------------INTIALIZE--------------------------------------------------------
     public void initialize() {
         //Hours initialization
-        hours = EMFProvider.hours;
-        //-----------------------------Visual inits
+        //----------------------------- Visual inits
         new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
                 SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
@@ -257,72 +256,63 @@ public class MainController extends Controller {
         System.out.println(language);
         // 1: english, 2: spanish, 3: chinese, 4: french
         //TODO: change once we set what text will actually be shown here
+        Hours hours = hoursService.find(1L);
+        Date morningStart = hours.getVisitingHoursMorningStart();
+        Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+        Date eveningStart = hours.getVisitingHoursEveningStart();
+        Date eveningEnd = hours.getVisitingHorusEveningEnd();
+
+        SimpleDateFormat hoursFormat  = new SimpleDateFormat("h:mm a");
+        String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+        String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
         switch (language) {
             case 1: //english
-//                System.out.println("Hours:  "+hours.hours1+":"+hours.minutes1+" "+hours.ampm1);
-//                System.out.println("Hours:  "+hours.hours2+":"+hours.minutes2+" "+hours.ampm2);
-//                System.out.println("Hours:  "+hours.hours3+":"+hours.minutes3+" "+hours.ampm3);
-//                System.out.println("Hours:  "+hours.hours4+":"+hours.minutes4+" "+hours.ampm4);
-
                 StartInfo_TextArea.setText("To contact a hospital worker\n" +
                         "please call 774-278-8517\n\n"
                         + "Hospital Operating Hour:\n" +
-                        "Morning Hours: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "Evening Hours: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "Morning Hours: " + morningHours + "\n" +
+                        "Evening Hours: " + eveningHours);
                 break;
             case 2: //spanish
                 StartInfo_TextArea.setText("Para contactar a un empleado\n" +
                         "porfavor llame 774-278-8517\n\n"
                         + "Horas de operacíon:\n" +
-                        "Mañana : " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "Atardecer : " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "Mañana : " + morningHours + "\n" +
+                        "Atardecer : " + eveningHours);
                 break;
             case 3: //chinese
                 StartInfo_TextArea.setText("拨打电话 774-278-8517 呼叫医院工作人员\n\n"
                         + "医院营业时间:\n" +
-                        "白日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "夜晚: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "白日: " + morningHours + "\n" +
+                        "夜晚: " + eveningHours);
                 break;
             case 4: //french
                 StartInfo_TextArea.setText("Contactez un employé de l'hôpital\n" +
                         "appelez s'il vous plaît 774-278-8517\n\n"
                         + "Heures d'ouverture:\n" +
-                        "Matin: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "Soir: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "Matin: " + morningHours + "\n" +
+                        "Soir: " + eveningHours);
                 break;
             case 5: //Italian
                 StartInfo_TextArea.setText("Per contattare un dipendente dell'ospedale\n" +
                         "chiamare 774-278-8517\n\n"
                         + "Ore di servizio:\n" +
-                        "Mattina: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "Notte: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "Mattina: " + morningHours + "\n" +
+                        "Notte: " + eveningHours);
                 break;
             case 6: //Japanese
                 StartInfo_TextArea.setText("病院のスタッフを呼び出し、電話番号：774-278-8617\n\n"
                         + "病院ビジネス時間:\n" +
-                        "日: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "夜: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "日: " + morningHours + "\n" +
+                        "夜: " + eveningHours);
                 break;
             case 7: //Portuguese
                 StartInfo_TextArea.setText("Para entrar em contato com um funcionário do hospital\n" +
                         "ligue para 774-278-8517\n\n"
                         + "horas de operação:\n" +
-                        "Manhã: " + hours.hours1 + ":" + hours.minutes1 + " " + hours.ampm1 + "-" +
-                        hours.hours2 + ":" + hours.minutes2 + " " + hours.ampm2 + "\n" +
-                        "Tarde: " + hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                        hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4);
+                        "Manhã: " + morningHours + "\n" +
+                        "Tarde: " + eveningHours);
                 break;
             default:
                 StartInfo_TextArea.setText("To contact a hospital worker\n" +

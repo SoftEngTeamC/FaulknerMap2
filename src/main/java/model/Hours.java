@@ -1,34 +1,93 @@
 package model;
 
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "HOURS")
 public class Hours {
+    private Long id;
 
-    public String hours1;
-    public String minutes1;
-    public String ampm1;
-    public String hours2;
-    public String minutes2;
-    public String ampm2;
-    public String hours3;
-    public String minutes3;
-    public String ampm3;
-    public String hours4;
-    public String minutes4;
-    public String ampm4;
+    private String name;
 
-    public Hours(String hours1, String hours2, String hours3, String hours4, String minutes1, String minutes2, String minutes3, String minutes4, String ampm1, String ampm2, String ampm3, String ampm4){
-        this.hours1=hours1;
-        this.hours2=hours2;
-        this.hours3=hours3;
-        this.hours4=hours4;
-        this.minutes1=minutes1;
-        this.minutes2=minutes2;
-        this.minutes3=minutes3;
-        this.minutes4=minutes4;
-        this.ampm1=ampm1;
-        this.ampm2=ampm2;
-        this.ampm3=ampm3;
-        this.ampm4=ampm4;
+    private Date visitingHoursMorningStart;
+    private Date visitingHoursMorningEnd;
+
+    private Date visitingHoursEveningStart;
+    private Date visitingHorusEveningEnd;
+
+    public Hours() {
+        // Left empty for hibernate
+    }
+
+    public Hours(String name, Date visitingHoursMorningStart, Date visitingHoursMorningEnd, Date visitingHoursEveningStart, Date visitingHorusEveningEnd) {
+        this.name = name;
+        this.visitingHoursMorningStart = visitingHoursMorningStart;
+        this.visitingHoursMorningEnd = visitingHoursMorningEnd;
+        this.visitingHoursEveningStart = visitingHoursEveningStart;
+        this.visitingHorusEveningEnd = visitingHorusEveningEnd;
+    }
+
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column(name = "NAME")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(name = "MORNING_START")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getVisitingHoursMorningStart() {
+        return visitingHoursMorningStart;
+    }
+
+    public void setVisitingHoursMorningStart(Date visitingHoursMorningStart) {
+        this.visitingHoursMorningStart = visitingHoursMorningStart;
+    }
+
+    @Column(name = "MORNING_END")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getVisitingHoursMorningEnd() {
+        return visitingHoursMorningEnd;
+    }
+
+    public void setVisitingHoursMorningEnd(Date visitingHoursMorningEnd) {
+        this.visitingHoursMorningEnd = visitingHoursMorningEnd;
+    }
+
+    @Column(name = "EVENING_START")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getVisitingHoursEveningStart() {
+        return visitingHoursEveningStart;
+    }
+
+    public void setVisitingHoursEveningStart(Date visitingHoursEveningStart) {
+        this.visitingHoursEveningStart = visitingHoursEveningStart;
+    }
+
+    @Column(name = "EVENING_END")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getVisitingHorusEveningEnd() {
+        return visitingHorusEveningEnd;
+    }
+
+    public void setVisitingHorusEveningEnd(Date visitingHorusEveningEnd) {
+        this.visitingHorusEveningEnd = visitingHorusEveningEnd;
     }
 
 }

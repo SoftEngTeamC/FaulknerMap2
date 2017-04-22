@@ -10,6 +10,7 @@
         <class>model.Node</class>
         <class>model.HospitalService</class>
         <class>model.Tag</class>
+        <class>model.Hours</class>
 
         <properties>
             <property name="hibernate.archive.autodetection" value="class" />
