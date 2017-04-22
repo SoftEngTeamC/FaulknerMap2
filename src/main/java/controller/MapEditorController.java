@@ -252,7 +252,7 @@ public class MapEditorController extends Controller {
 
     //-------------------------------------------Listeners---------------------------------------------
     public void circlesListen(List<Circle> circles, int floor) {
-        System.out.println("circlesListen:");
+    //    System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
         final double[] orgx = new double[1];
         final double[] orgy = new double[1];
@@ -355,12 +355,12 @@ public class MapEditorController extends Controller {
 
     //This Listener is triggered when a different MapTab is selected
     public void tabPaneListen() {
-        System.out.println("TabPaneListener");
+     //   System.out.println("TabPaneListener");
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                        System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
+                 //       System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
                         //Update Current Floor
                         currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
                         //Update EditTab Listviews with new floors data
@@ -642,11 +642,11 @@ public class MapEditorController extends Controller {
 
         selectedEdge.setDisabled(true);
         edgeService.merge(selectedEdge);
-        System.out.println("Disabled : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
+      //  System.out.println("Disabled : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-        System.out.println("successful");
+    //    System.out.println("successful");
 //        ifDisableText.setText("Disable Successful!");
 
     }
@@ -659,11 +659,11 @@ public class MapEditorController extends Controller {
 
         selectedEdge.setDisabled(false);
         edgeService.merge(selectedEdge);
-        System.out.println("Undo disable : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
+      //  System.out.println("Undo disable : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-        System.out.println("successful");
+     //   System.out.println("successful");
 //        ifUndoDisableText.setText("Undo Successful!");
 
     }

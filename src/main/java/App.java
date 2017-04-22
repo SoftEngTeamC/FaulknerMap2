@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import service.EMFProvider;
 
 import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class App extends Application {
 
@@ -19,14 +21,19 @@ public class App extends Application {
         return ImageProvider.getImage(url);
     }
 
+    public Stage stage;
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
+
         URL mainView = getClass().getClassLoader().getResource("view/Main.fxml");
         if (mainView == null) {
             throw new Exception("The root view cannot be null.");
         }
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        Parent root = FXMLLoader.load(mainView);
+        Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"),
+                ResourceBundle.getBundle("Lang", new Locale("en", "US")));
         primaryStage.setTitle("Faulkner Kiosk");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.setFullScreen(true);
@@ -43,3 +50,4 @@ public class App extends Application {
         EMFProvider.getInstance().getEMFactory().close();
     }
 }
+

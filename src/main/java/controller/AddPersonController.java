@@ -192,7 +192,7 @@ public class AddPersonController extends Controller{
         // get the node referenced by string
         Node n = nodeService.findNodeByName(selected);
 
-        System.out.println(n.getName());
+     //   System.out.println(n.getName());
 
         // remove from current
         deleteNode(n, currentLocationsList);
@@ -219,7 +219,7 @@ public class AddPersonController extends Controller{
         // populate nameslist
         for(Node n: nodeList){
             nameList.add(n.getName());
-            System.out.println(n.getName());
+         //   System.out.println(n.getName());
         }
 
         // populate listview

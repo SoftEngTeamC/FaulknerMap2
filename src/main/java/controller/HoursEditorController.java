@@ -118,9 +118,9 @@ public class HoursEditorController extends Controller{
     }
 
     public boolean validateEqualMorning() {
-        System.out.println();
-        System.out.print(morninghrs1);
-        System.out.println();
+//        System.out.println();
+//        System.out.print(morninghrs1);
+//        System.out.println();
         //if all the boxes have numbers and all the numbers are equal to each other
         if((!morninghrs1.getText().trim().equals("") &&
             !morninghrs2.getText().trim().equals("") &&

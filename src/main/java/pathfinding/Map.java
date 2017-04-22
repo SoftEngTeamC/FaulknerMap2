@@ -37,7 +37,7 @@ public class Map {
 
 
     public Path shortestPath(MapNode start, MapNode end) {
-        System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
+//        System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
         switch (AlgorithmSingleton.getInstance().getCurrentAlgorithm()) {
             case BFS: return new Path(PathFinder.BFS(start, end));
             case DFS: return new Path(PathFinder.DFS(start, end));
