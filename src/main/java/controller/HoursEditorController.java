@@ -77,8 +77,8 @@ public class HoursEditorController extends Controller {
         try {
             Date newMorningStart = dateParser.parse(morninghrs1.getText() + ":" + morningmin1.getText() + " " + selectedAMPM(ampm1));
             Date newMorningEnd = dateParser.parse(morninghrs2.getText() + ":" + morningmin2.getText() + " " + selectedAMPM(ampm2));
-            Date newEveningStart = dateParser.parse(eveninghrs1.getText() + ":" + eveninghrs1.getText() + " " + selectedAMPM(ampm3));
-            Date newEveningEnd = dateParser.parse(eveninghrs2.getText() + ":" + eveninghrs2.getText() + " " + selectedAMPM(ampm4));
+            Date newEveningStart = dateParser.parse(eveninghrs1.getText() + ":" + eveningmin1.getText() + " " + selectedAMPM(ampm3));
+            Date newEveningEnd = dateParser.parse(eveninghrs2.getText() + ":" + eveningmin2.getText() + " " + selectedAMPM(ampm4));
 
             currentHours.setVisitingHoursMorningStart(newMorningStart);
             currentHours.setVisitingHoursMorningEnd(newMorningEnd);
