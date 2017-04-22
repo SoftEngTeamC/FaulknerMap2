@@ -53,64 +53,32 @@ public class MainController extends Controller implements Initializable{
     @FXML private Button AdminToolButton;
     @FXML private SplitPane MainSplitPane;
 
-    @FXML
-    MenuItem english_button;
-    @FXML
-    MenuItem spanish_button;
-    @FXML
-    MenuItem french_button;
-    @FXML
-    MenuItem japanese_button;
-    @FXML
-    MenuItem chinese_button;
-    @FXML
-    MenuItem portuguese_button;
-    @FXML
-    MenuItem italian_button;
+    @FXML private MenuItem english_button;
+    @FXML private  MenuItem spanish_button;
+    @FXML private  MenuItem french_button;
+    @FXML private MenuItem japanese_button;
+    @FXML private MenuItem chinese_button;
+    @FXML private MenuItem portuguese_button;
+    @FXML private MenuItem italian_button;
 
     private Hours hours;
     private static int language;
 
     private ResourceBundle bundle;
 
-    private void loadView(Locale locale) {
-        Stage stage = (Stage) MainSplitPane.getScene().getWindow();
-        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader();
-//            fxmlLoader.setResources(ResourceBundle.getBundle("Lang", locale));
-
-           // root = (AnchorPane) loader.load(this.getClass().getResource(fxml).openStream());
-
-            SplitPane root = (SplitPane) FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
-                    ResourceBundle.getBundle("Lang", locale));
-            stage.setTitle("Faulkner Kiosk");
-            stage.getScene().setRoot(root);
-            stage.setFullScreen(true);
-            stage.show();
-
-//            SplitPane pane = (SplitPane) fxmlLoader.load(getClass().getResource("view/Main.fxml").openStream());
-//            // replace the content
-//            StackPane content = (StackPane) ((VBox) stage.getScene().getRoot()).getChildren().get(1);
-//            content.getChildren().clear();
-//            content.getChildren().add(pane);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        english_button.setOnAction(event -> loadView(new Locale("en", "EN")));
-        spanish_button.setOnAction(event -> loadView(new Locale("sp", "SP")));
+        english_button.setOnAction(event -> loadView(new Locale("en", "US")));
+        spanish_button.setOnAction(event -> loadView(new Locale("es", "PR")));
         french_button.setOnAction(event -> loadView(new Locale("fr", "FR")));
         japanese_button.setOnAction(event -> loadView(new Locale("jp", "JP")));
-        chinese_button.setOnAction(event -> loadView(new Locale("cn", "CN")));
-        portuguese_button.setOnAction(event -> loadView(new Locale("pg", "PG")));
+        chinese_button.setOnAction(event -> loadView(new Locale("zh", "CN")));
+        portuguese_button.setOnAction(event -> loadView(new Locale("pt", "BR")));
         italian_button.setOnAction(event -> loadView(new Locale("it", "IT")));
 
         bundle = resources;
+
       //  lblTextByController.setText(bundle.getString("key1"));
 
         hours = EMFProvider.hours;
@@ -132,6 +100,21 @@ public class MainController extends Controller implements Initializable{
         initializeStartAndEnd();
 
         language = 1; //default language is English
+    }
+
+    public void loadView(Locale locale) {
+        Stage stage = (Stage) MainSplitPane.getScene().getWindow();
+        try {
+            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
+                    ResourceBundle.getBundle("Lang", locale));
+            stage.setTitle("Faulkner Kiosk");
+            stage.getScene().setRoot(root);
+            stage.setFullScreen(true);
+            stage.show();
+            System.out.println("Switching to language: " + locale.getLanguage());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void initializeStartAndEnd() {
@@ -327,12 +310,13 @@ public class MainController extends Controller implements Initializable{
 
     //--------------------Buttons that have language--------------------------//
     public void HandleHelpButton() {
-        language = LanguageController.HandleHelpButton(language,
-                StartInfo_TextArea, hours);
+        //TODO: change once we set what te public void HandleHelpButton() {
+        //TODO: change once we set what text will actually be shown here
+        StartInfo_TextArea.setText(bundle.getString("helpMessage"));
     }
 
     public void HandlePanicButton() {
-        language = LanguageController.HandlePanicButton(StartInfo_TextArea, nodeService, language);
+        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
     }
 
 }

@@ -2,47 +2,15 @@ package controller;
 
 import javafx.scene.control.TextArea;
 import model.Hours;
-import pathfinding.Map;
-import service.NodeService;
+
 
 public class LanguageController {
-
-    public static String[] initializeTextPathfinding(int language){
-        String[] directions = new String[20];
-        switch (language){
-            case 1:
-
-                return directions;
-            case 2:
-
-                return directions;
-            case 3:
-
-                return directions;
-            case 4:
-
-                return directions;
-            case 5:
-
-                return directions;
-            case 6:
-
-                return directions;
-            case 7:
-
-                return directions;
-            default:
-                return initializeTextPathfinding(1); //default English
-        }
-    }
 
     /**
      * Function for main screen help button
      */
     static int HandleHelpButton(int language, TextArea StartInfo_TextArea,
                                 Hours hours) {
-        //TODO: change once we set what te public void HandleHelpButton() {
-        //TODO: change once we set what text will actually be shown here
         switch (language) {
             case 1: //english
                 StartInfo_TextArea.setText("To contact a hospital worker\n" +
@@ -110,42 +78,5 @@ public class LanguageController {
                         "please call 774-278-8517");
                 return 1;
         }
-    }
-
-    //function for Panic Button
-    static int HandlePanicButton(TextArea StartInfo_TextArea, NodeService nodeService,
-                                  int language) {
-        StartInfo_TextArea.setText("Don't Panic");
-        Map map = new Map(nodeService.getAllNodes());
-        // 1: english, 2: spanish, 3: chinese, 4: french
-        //TODO: change once we set what text will actually be shown here
-        switch (language) {
-            case 1: //english
-                StartInfo_TextArea.setText("Don't Panic! Call 774-278-8517!");
-               return language;
-            case 2: //spanish
-                StartInfo_TextArea.setText("No se preocupe");
-                return language;
-            case 3: //chinese
-                StartInfo_TextArea.setText("不要惊慌");
-                return language;
-            case 4: //french
-                StartInfo_TextArea.setText("Ne paniquez pas");
-                return language;
-            case 5: //Italian
-                StartInfo_TextArea.setText("Non fatevi prendere dal panico");
-                return language;
-            case 6: //Japanese
-                StartInfo_TextArea.setText("パニックしないでください");
-                return language;
-            case 7: //Portuguese
-                StartInfo_TextArea.setText("Não entre em pânico");
-                return language;
-            default:
-                StartInfo_TextArea.setText("Don't Panic");
-                return 1;
-        }
-//        DisplayMap(PathFinder.shortestPath(map.getNode(nodeService.findNodeByName("hallway19").getId()), map.getNode(nodeService.findNodeByName("Emergency Department").getId())));
-        //TODO: We should not be hardcoding the current kiosk.
     }
 }

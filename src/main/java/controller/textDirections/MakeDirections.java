@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 public class MakeDirections {
 
     public static String getText(Path path, int language) {
-        String[] directions = LanguageController.initializeTextPathfinding(language);
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
         double pathTime = path.timeInSeconds();

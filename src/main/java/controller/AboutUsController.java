@@ -1,7 +1,13 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class AboutUsController extends Controller{
@@ -23,6 +29,6 @@ public class AboutUsController extends Controller{
 
       @FXML
       public void back() throws Exception {
-          switchScreen("view/Main.fxml", "Main", backbtn);
+        switchToMainScreen(MeetTheTeamButton);
       }
 }
