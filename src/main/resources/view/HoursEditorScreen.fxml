@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.paint.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
    <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -63,93 +53,52 @@
                   <Font size="17.0" />
                </font>
             </Button>
-             <TextField fx:id="morninghrs1" alignment="CENTER" layoutX="389.0" layoutY="107.0" onKeyReleased="#validateEqualMorning" prefHeight="53.0" prefWidth="335.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+             <TextField fx:id="morninghrs1" alignment="CENTER" layoutX="389.0" layoutY="107.0" prefHeight="53.0" prefWidth="335.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <TextField fx:id="morningmin1" alignment="CENTER" layoutX="437.0" layoutY="107.0" onKeyReleased="#validateEqualMorning" prefHeight="49.0" prefWidth="223.0" GridPane.columnIndex="5" GridPane.rowIndex="2">
+             <TextField fx:id="morningmin1" alignment="CENTER" layoutX="437.0" layoutY="107.0" prefHeight="49.0" prefWidth="223.0" GridPane.columnIndex="5" GridPane.rowIndex="2">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <MenuButton fx:id="ampm1" layoutX="479.0" layoutY="107.0" mnemonicParsing="false" onKeyReleased="#validateEqualMorning" onMouseDragReleased="#validateEqualMorning" onMouseReleased="#validateEqualMorning" onTouchReleased="#validateEqualMorning" prefHeight="48.0" prefWidth="110.0" text="Time" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-                 <items>
-                     <MenuItem fx:id="am1" mnemonicParsing="false" onAction="#settoam1" text="AM" />
-                     <MenuItem fx:id="pm1" mnemonicParsing="false" onAction="#settopm1" text="PM" />
-                 </items>
-                 <font>
-                     <Font size="22.0" />
-                 </font>
-             </MenuButton>
 
-             <TextField fx:id="morninghrs2" alignment="CENTER" layoutX="389.0" layoutY="154.0" onKeyReleased="#validateEqualMorning" prefHeight="56.0" prefWidth="319.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+             <TextField fx:id="morninghrs2" alignment="CENTER" layoutX="389.0" layoutY="154.0" prefHeight="56.0" prefWidth="319.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <TextField fx:id="morningmin2" alignment="CENTER" layoutX="437.0" layoutY="154.0" onKeyReleased="#validateEqualMorning" prefHeight="49.0" prefWidth="226.0" GridPane.columnIndex="5" GridPane.rowIndex="3">
+             <TextField fx:id="morningmin2" alignment="CENTER" layoutX="437.0" layoutY="154.0" prefHeight="49.0" prefWidth="226.0" GridPane.columnIndex="5" GridPane.rowIndex="3">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <MenuButton fx:id="ampm2" layoutX="479.0" layoutY="153.0" mnemonicParsing="false" onKeyReleased="#validateEqualMorning" onMouseDragReleased="#validateEqualMorning" onMouseReleased="#validateEqualMorning" onTouchReleased="#validateEqualMorning" text="Time" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-                 <items>
-                     <MenuItem mnemonicParsing="false" onAction="#settoam2" text="AM" />
-                     <MenuItem mnemonicParsing="false" onAction="#settopm2" text="PM" />
-                 </items>
-                 <font>
-                     <Font size="22.0" />
-                 </font>
-             </MenuButton>
-             <TextField fx:id="eveninghrs1" alignment="CENTER" layoutX="389.0" layoutY="232.0" onKeyReleased="#validateEqualEvening" prefHeight="54.0" prefWidth="334.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+             <TextField fx:id="eveninghrs1" alignment="CENTER" layoutX="389.0" layoutY="232.0" prefHeight="54.0" prefWidth="334.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <TextField fx:id="eveningmin1" alignment="CENTER" layoutX="437.0" layoutY="232.0" onKeyReleased="#validateEqualEvening" prefHeight="50.0" prefWidth="216.0" GridPane.columnIndex="5" GridPane.rowIndex="4">
+             <TextField fx:id="eveningmin1" alignment="CENTER" layoutX="437.0" layoutY="232.0" prefHeight="50.0" prefWidth="216.0" GridPane.columnIndex="5" GridPane.rowIndex="4">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <MenuButton fx:id="ampm3" layoutX="479.0" layoutY="230.0" mnemonicParsing="false" onKeyReleased="#validateEqualEvening" onMouseDragReleased="#validateEqualEvening" onMouseReleased="#validateEqualEvening" onTouchReleased="#validateEqualEvening" text="Time" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4">
-                 <items>
-                     <MenuItem mnemonicParsing="false" onAction="#settoam3" text="AM" />
-                     <MenuItem mnemonicParsing="false" onAction="#settopm3" text="PM" />
-                 </items>
-                 <font>
-                     <Font size="22.0" />
-                 </font>
-             </MenuButton>
-             <TextField fx:id="eveninghrs2" alignment="CENTER" layoutX="389.0" layoutY="281.0" onKeyReleased="#validateEqualEvening" prefHeight="53.0" prefWidth="328.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+             <TextField fx:id="eveninghrs2" alignment="CENTER" layoutX="389.0" layoutY="281.0" prefWidth="328.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <TextField fx:id="eveningmin2" alignment="CENTER" layoutX="437.0" layoutY="281.0" onKeyReleased="#validateEqualEvening" prefHeight="52.0" prefWidth="219.0" GridPane.columnIndex="5" GridPane.rowIndex="5">
+             <TextField fx:id="eveningmin2" alignment="CENTER" layoutX="437.0" layoutY="281.0" prefHeight="52.0" prefWidth="219.0" GridPane.columnIndex="5" GridPane.rowIndex="5">
                  <font>
                      <Font size="15.0" />
                  </font>
              </TextField>
-             <MenuButton fx:id="ampm4" layoutX="479.0" layoutY="281.0" mnemonicParsing="false" onKeyReleased="#validateEqualEvening" onMouseDragReleased="#validateEqualEvening" onMouseReleased="#validateEqualEvening" onTouchReleased="#validateEqualEvening" text="Time" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-                 <items>
-                     <MenuItem mnemonicParsing="false" onAction="#settoam4" text="AM" />
-                     <MenuItem mnemonicParsing="false" onAction="#settopm4" text="PM" />
-                 </items>
-                 <font>
-                     <Font size="22.0" />
-                 </font>
-             </MenuButton>
              <Button fx:id="submitbtn" layoutX="357.0" layoutY="345.0" mnemonicParsing="false" onAction="#SubmitChanges" prefHeight="73.0" prefWidth="201.0" text="Submit Changes" textFill="#049e1b" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                  <font>
                      <Font size="21.0" />
                  </font>
              </Button>
-            <Text fx:id="startTimeErrorEvening" fill="RED" layoutX="306.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Time must not equal End Time" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="6">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Text>
             <Text layoutX="335.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <font>
                   <Font size="22.0" />
@@ -200,27 +149,9 @@
                   <Insets right="20.0" />
                </GridPane.margin>
             </Text>
-             <Text fx:id="displayerror" fill="RED" layoutX="33.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong Format" textAlignment="CENTER" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
-               <font>
-                  <Font size="46.0" />
-               </font>
-            </Text>
             <Text layoutX="211.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Visiting Hours Editor" GridPane.columnIndex="3">
                <font>
                   <Font size="43.0" />
-               </font>
-            </Text>
-            <Text fx:id="startTimeErrorMorning" layoutX="424.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-               <font>
-                  <Font size="69.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets bottom="20.0" />
-               </GridPane.margin>
-            </Text>
-            <Text fx:id="displaySuccess" fill="GREEN" layoutX="75.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Accepted!" textAlignment="CENTER" visible="false" wrappingWidth="314.7626953125" GridPane.columnIndex="2" GridPane.rowIndex="5">
-               <font>
-                  <Font size="46.0" />
                </font>
             </Text>
              <Button fx:id="logoutBtn" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#logout" prefHeight="56.0" prefWidth="87.0" text="Logout" GridPane.rowIndex="7" GridPane.valignment="BOTTOM">
@@ -231,6 +162,42 @@
                      <Font size="17.0" />
                  </font>
              </Button>
+            <ButtonBar GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <buttons>
+                   <fx:define>
+                       <ToggleGroup fx:id="ampm1"/>
+                   </fx:define>
+                  <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm1" />
+                  <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm1" />
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="887.0" layoutY="165.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
+               <buttons>
+                   <fx:define>
+                       <ToggleGroup fx:id="ampm2"/>
+                   </fx:define>
+                  <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm2" />
+                  <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm2" />
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="888.0" layoutY="290.0" prefHeight="48.0" prefWidth="180.0" GridPane.columnIndex="6" GridPane.rowIndex="4">
+               <buttons>
+                   <fx:define>
+                       <ToggleGroup fx:id="ampm3"/>
+                   </fx:define>
+                  <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm3"/>
+                  <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm3" />
+               </buttons>
+            </ButtonBar>
+            <ButtonBar layoutX="888.0" layoutY="415.0" GridPane.columnIndex="6" GridPane.rowIndex="5">
+               <buttons>
+                   <fx:define>
+                       <ToggleGroup fx:id="ampm4"/>
+                   </fx:define>
+                  <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm4" />
+                  <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm4" />
+               </buttons>
+            </ButtonBar>
          </children>
       </GridPane>
    </children>

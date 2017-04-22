@@ -1,20 +1,12 @@
 package textDirections;
 
-//import org.testng.annotations.Test;
-
 import pathfinding.MapNode;
 import pathfinding.Path;
-import pathfinding.PathFinder;
-import service.NodeService;
 
 import java.text.DecimalFormat;
 
-/**
- * Created by Alex on 4/9/2017.
- */
+
 public class MakeDirections {
-    private NodeService NS = new NodeService();
-    private PathFinder pf = new PathFinder();
     public static String getText(Path path){
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
@@ -36,7 +28,6 @@ public class MakeDirections {
         double p = Math.PI;
         double distance;
         for(i = 0; i < path.numNodes() - 2; i++) {
-           // if(myPath.size()
             System.out.println("Path: " + path.numNodes());
             currentNode = path.getNode(i);
             nextNode = path.getNode(i+1);
@@ -44,10 +35,8 @@ public class MakeDirections {
             currentAngle = getAngle(currentNode, nextNode);
             nextAngle = getAngle(nextNode, afterNextNode);
             angleShift = getAngleShift(currentAngle, nextAngle);
-            //System.out.println(angleShift);
             direction = getDirection(currentAngle);
 
-            //System.out.println(direction);
 
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
                 output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
@@ -55,23 +44,20 @@ public class MakeDirections {
             }
 
             else {
-                if (direction.equals("horizontal")) {
-                    //System.out.println(direction);
-                    distance = xDistance(currentNode, nextNode);
-                    totalDistance += distance;
-                    //System.out.println(distance);
-                } else if (direction.equals("vertical")) {
-                    //System.out.println(direction);
-                    totalDistance += yDistance(currentNode, nextNode);
-                } else {
-                    //System.out.println(direction);
-                    totalDistance += distanceBetween(currentNode, nextNode);
+                switch (direction) {
+                    case "horizontal":
+                        distance = xDistance(currentNode, nextNode);
+                        totalDistance += distance;
+                        break;
+                    case "vertical":
+                        totalDistance += yDistance(currentNode, nextNode);
+                        break;
+                    default:
+                        totalDistance += distanceBetween(currentNode, nextNode);
+                        break;
                 }
 
-                if (angleShift >= -1 * p / 6 && angleShift <= p / 6) {
-
-                } else {
-                    //System.out.println(angleShift);
+                if (angleShift < -1 * p / 6 || angleShift > p / 6) {
                     DecimalFormat df = new DecimalFormat("#.#");
                     output2 = output.concat("Move straight " + df.format(Math.round(totalDistance)) + " feet, then take a ");
                     output = output2;
@@ -104,19 +90,17 @@ public class MakeDirections {
         currentAngle = getAngle(currentNode, nextNode);
         direction = getDirection(currentAngle);
 
-        if(direction.equals("horizontal")) {
-            //System.out.println(direction);
-            distance = xDistance(currentNode, nextNode);
-            totalDistance += Math.round(distance);
-            //System.out.println(distance);
-        }
-        else if(direction.equals("vertical")) {
-            //System.out.println(direction);
-            totalDistance += Math.round(yDistance(currentNode, nextNode));
-        }
-        else {
-            //System.out.println(direction);
-            totalDistance += Math.round(distanceBetween(currentNode, nextNode));
+        switch (direction) {
+            case "horizontal":
+                distance = xDistance(currentNode, nextNode);
+                totalDistance += Math.round(distance);
+                break;
+            case "vertical":
+                totalDistance += Math.round(yDistance(currentNode, nextNode));
+                break;
+            default:
+                totalDistance += Math.round(distanceBetween(currentNode, nextNode));
+                break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
         output2 = output.concat("Move forward " + df.format(Math.round(totalDistance)) + " feet. You have arrived.");
@@ -134,8 +118,6 @@ public class MakeDirections {
     private static double xDistance(MapNode a, MapNode b) {
         double x1 = a.getLocation().getX();
         double x2 = b.getLocation().getX();
-        //System.out.println(x1);
-        //System.out.println(x2);
         return Math.abs(x1 - x2) * MapNode.FEET_PER_PIXEL;
     }
 
@@ -177,25 +159,4 @@ public class MakeDirections {
             return "diagonal";
         }
     }
-
-    /*@Test
-    public void printDirectionsTest1() {
-        Map map = new Map(NS.getAllNodes());
-        PathFinder pf = new PathFinder();
-        Node testNode1 = NS.findNodeByName("4N");
-        Node testNode2 = NS.findNodeByName("5N");
-
-        MapNode mNode1 = map.getNode(testNode1.getId());
-        MapNode mNode2 = map.getNode(testNode2.getId());
-
-        List<MapNode> path = pf.shortestPath(mNode1, mNode2);
-
-        String directions = getText(path);
-        if(directions.equals("")) {
-            System.out.println("no directions");
-        }
-        System.out.println(directions);
-    }
-    */
-
 }

@@ -22,6 +22,7 @@ public class Controller {
     protected HospitalServiceService serviceService = new HospitalServiceService();
     protected NodeService nodeService = new NodeService();
     protected TagService tagService = new TagService();
+    protected HoursService hoursService = new HoursService();
 
     public void switchScreen(String file, String title,Button b) throws IOException {
         Stage stage = (Stage) b.getScene().getWindow();
