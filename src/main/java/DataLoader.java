@@ -7,8 +7,9 @@ import model.*;
 import service.*;
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DataLoader {
     public static void main(String[] args) {
@@ -28,43 +29,30 @@ public class DataLoader {
 
 
             loadPeople("data/belkinHouse/floor1/people.tsv");
-            loadPeople("data/belkinHouse/floor3/people.tsv");
-            loadPeople("data/belkinHouse/floor4/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
-            loadPeople("data/floor1/people.tsv");
             loadPeople("data/floor2/people.tsv");
             loadPeople("data/floor3/people.tsv");
             loadPeople("data/floor4/people.tsv");
             loadPeople("data/floor5/people.tsv");
-            loadPeople("data/floor6/people.tsv");
             loadPeople("data/floor7/people.tsv");
 
-            loadService("data/belkinHouse/floor1/services.tsv");
-            loadService("data/belkinHouse/floor2/services.tsv");
-            loadService("data/belkinHouse/floor3/services.tsv");
-            loadService("data/belkinHouse/floor4/services.tsv");
-            loadService("data/floor1/services.tsv");
-            loadService("data/floor2/services.tsv");
-            loadService("data/floor3/services.tsv");
-            loadService("data/floor4/services.tsv");
-            loadService("data/floor5/services.tsv");
-            loadService("data/floor6/services.tsv");
-            loadService("data/floor7/services.tsv");
+            loadServices("data/belkinHouse/floor1/services.tsv");
+            loadServices("data/belkinHouse/floor2/services.tsv");
+            loadServices("data/belkinHouse/floor3/services.tsv");
+            loadServices("data/belkinHouse/floor4/services.tsv");
+            loadServices("data/floor1/services.tsv");
+            loadServices("data/floor2/services.tsv");
+            loadServices("data/floor3/services.tsv");
+            loadServices("data/floor4/services.tsv");
+            loadServices("data/floor5/services.tsv");
+            loadServices("data/floor6/services.tsv");
+            loadServices("data/floor7/services.tsv");
 
-//            loadEdges("data/belkinHouse/floor1/edges.tsv", 1);
-//            loadEdges("data/belkinHouse/floor2/edges.tsv", 2);
-//            loadEdges("data/belkinHouse/floor3/edges.tsv", 3);
-//            loadEdges("data/belkinHouse/floor4/edges.tsv", 4);
- //           loadEdges("data/floor1/edges.tsv", 1);
-//            loadEdges("data/floor2/edges.tsv",2);
-//            loadEdges("data/floor3/edges.tsv",3);
-//            loadEdges("data/floor4/edges.tsv",4);
-//            loadEdges("data/floor5/edges.tsv",5);
-//            loadEdges("data/floor6/edges.tsv",6);
-//            loadEdges("data/floor7/edges.tsv",7);
 
-            loadEdges("data/allEdges.tsv", 1);
-            connectElevators();
+            loadEdges("data/tempEdges.tsv");
+
+            loadHours("data/hours.tsv");
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -84,8 +72,8 @@ public class DataLoader {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 3) {
                     System.out.print("Could not parse location ");
-                    for(int i = 0; i < row.length; i++){
-                        System.out.print(" " + row[i] + " ");
+                    for (Object aRow : row) {
+                        System.out.print(" " + aRow + " ");
                     }
                     System.out.println();
                     return;
@@ -122,8 +110,8 @@ public class DataLoader {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 3) {
                     System.out.print("Could not parse doctor ");
-                    for(int i = 0; i < row.length; i++){
-                        System.out.print(" " + row[i] + " ");
+                    for (Object aRow : row) {
+                        System.out.print(" " + aRow + " ");
                     }
                     System.out.println();
                     return;
@@ -151,7 +139,7 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(peopleFilePath));
     }
 
-    private static void loadService(String serviceFilePath) throws FileNotFoundException {
+    private static void loadServices(String serviceFilePath) throws FileNotFoundException {
         HospitalServiceService serviceService = new HospitalServiceService();
         NodeService nodeService = new NodeService();
 
@@ -163,8 +151,8 @@ public class DataLoader {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 2) {
                     System.out.print("Could not parse service  ");
-                    for(int i = 0; i < row.length; i++){
-                        System.out.print(" " + row[i] + " ");
+                    for (Object aRow : row) {
+                        System.out.print(" " + aRow + " ");
                     }
                     System.out.println();
                     return;
@@ -191,7 +179,7 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
-    private static void loadEdges(String locationsFilePath, int floor) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
@@ -202,8 +190,8 @@ public class DataLoader {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 2) {
                     System.out.print("Could not parse edge ");
-                    for(int i = 0; i < row.length; i++){
-                        System.out.print(" " + row[i] + " ");
+                    for (Object aRow : row) {
+                        System.out.print(" " + aRow + " ");
                     }
                     System.out.println();
                     return;
@@ -211,8 +199,8 @@ public class DataLoader {
 
                 String startName = (String) row[0];
                 String endName = (String) row[1];
-                Node start = nodeService.find(Long.parseLong((String)row[0]));
-                Node end = nodeService.find(Long.parseLong((String)row[1]));
+                Node start = nodeService.findNodeByName(startName);
+                Node end = nodeService.findNodeByName(endName);
 
                 if (start == null) {
                     System.err.println("Couldn't find a node with name " + startName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
@@ -223,8 +211,6 @@ public class DataLoader {
                     System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
-
-              //     System.out.println(start.getName());
                 edgeService.persist(new Edge(start, end, 0));
             }
         };
@@ -234,50 +220,77 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(locationsFilePath));
     }
 
-    private static void connectElevators() {
-        NodeService nodeService = new NodeService();
-        EdgeService edgeService = new EdgeService();
+    private static void loadHours(String hoursFilePath) throws FileNotFoundException {
+        HoursService hoursService = new HoursService();
 
-        List<Node> elevators = nodeService.getAllNodes().stream()
-                .filter(n -> n.getName().toLowerCase().contains("elevator"))
-                .collect(Collectors.toList());
-        // Group elevators by name
-        Map<String, Set<Node>> elevatorGroups = new HashMap<>();
-        for (Node elevator : elevators) {
-            if (elevatorGroups.containsKey(elevator.getName())) {
-                elevatorGroups.get(elevator.getName()).add(elevator);
-            } else {
-                Set<Node> newGroup = new HashSet<>();
-                newGroup.add(elevator);
-                elevatorGroups.put(elevator.getName(), newGroup);
+        TsvParserSettings parserSettings = new TsvParserSettings();
+        parserSettings.setHeaderExtractionEnabled(true);
+
+        SimpleDateFormat dateParser = new SimpleDateFormat("H:m");
+
+        ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
+            @Override
+            public void rowProcessed(Object[] row, ParsingContext context) {
+                if (Arrays.asList(row).contains(null) || row.length < 5) {
+                    System.err.println("couldn't parse hours on line " + context.currentLine() + "because there was missing information.");
+                    return;
+                }
+
+                String name = (String) row[0];
+
+                String morningStart = (String) row[1];
+                String morningEnd = (String) row[2];
+                String eveningStart = (String) row[3];
+                String eveningEnd = (String) row[4];
+
+                try {
+                    Date morningStartTime = dateParser.parse(morningStart);
+                    Date morningEndTime = dateParser.parse(morningEnd);
+                    Date eveningStartTime = dateParser.parse(eveningStart);
+                    Date eveningEndTime = dateParser.parse(eveningEnd);
+
+                    hoursService.persist(new Hours(name, morningStartTime, morningEndTime, eveningStartTime, eveningEndTime));
+
+                } catch (ParseException e) {
+                    System.err.println("Couldn't parse hours on line " + context.currentLine());
+                    e.printStackTrace();
+                }
+
             }
-        }
-        // Connect all the groups
-        for (Set<Node> group : elevatorGroups.values()) {
-            for (Node n1 : group) {
-                for (Node n2 : group) {
-                    edgeService.persist(new Edge(n1, n2, 0));
+        };
+        parserSettings.setProcessor(rowProcessor);
+
+        TsvParser parser = new TsvParser(parserSettings);
+        parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(hoursFilePath));
+    }
+
+    //call this when you want to make sure there are no duplicate/unnecessary edges
+    private void cleanEdges(){
+        EdgeService edgeService = new EdgeService();
+        List<Edge> edges = edgeService.getAllEdges();
+
+        for(Edge e1: edges){
+            for(Edge e2: edges) {
+                if (e1.getStart().getName().equals(e2.getStart().getName()) &&
+                        !Objects.equals(e1.getId(), e2.getId())) {
+                    if (e1.getEnd().getName().equals(e2.getEnd().getName())) {
+                        System.out.println("Duplicate: " + e1.getStart().getName() + " " + e2.getEnd().getName());
+                        edgeService.remove(e2);
+                    }
+                }
+                if (e1.getStart().getName().equals(e2.getEnd().getName()) &&
+                        !Objects.equals(e1.getId(), e2.getId())) {
+                    if (e1.getStart().getName().equals(e2.getEnd().getName())) {
+                        System.out.println("Duplicate: " + e1.getStart().getName() + " " + e2.getEnd().getName());
+                        edgeService.remove(e2);
+                    }
                 }
             }
-        }
-    }
-
-    private static void addEdgeIntersections(){
-        NodeService nodeService = new NodeService();
-        EdgeService edgeService = new EdgeService();
-        for(int i = 1; i < 8; i ++){
-            List<Node> floor = nodeService.findNodeIntersectionByFloor(i);
-            for(int j = 0; j < floor.size()-1; j ++){
-                edgeService.persist(new Edge(floor.get(j), floor.get(j+1), getEdgeLength(floor.get(j), floor.get(j+1))));
-                edgeService.persist(new Edge(floor.get(j+1), floor.get(j), getEdgeLength(floor.get(j+1), floor.get(j))));
-
+            if (e1.getStart().getName().equals(e1.getEnd().getName())) {
+                System.out.println("Unnecessary: " + e1.getStart().getName() + " " + e1.getEnd().getName());
+                edgeService.remove(e1);
             }
         }
-    }
 
-    private static double getEdgeLength(Node from, Node end){
-        double yLen = from.getLocation().getY() - end.getLocation().getY();
-        double xLen = from.getLocation().getX() - end.getLocation().getX();
-        return Math.sqrt(yLen * yLen + xLen * xLen);
     }
 }

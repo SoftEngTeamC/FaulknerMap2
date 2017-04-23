@@ -47,7 +47,7 @@ public class AdminToolController extends Controller{
 
     @FXML
     public void logout() throws Exception{
-        switchScreen("view/Main.fxml", "Directory Editor", logoutBtn);
+        switchToMainScreen(logoutBtn);
     }
 
     @FXML

@@ -45,8 +45,8 @@ public class EdgeService extends AbstractService<Edge> {
                 manager.close();
                 return temp;
             } catch (Exception ex){
-                System.out.println("Could not find edge for " + start.getName() + " and " +
-                end.getName());
+              //  System.out.println("Could not find edge for " + start.getName() + " and " +
+           //     end.getName());
                 manager.close();
                 return null;
             }

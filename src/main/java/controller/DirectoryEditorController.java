@@ -89,7 +89,7 @@ public class DirectoryEditorController extends Controller{
 
     @FXML
     public void logout() throws Exception {
-        switchScreen("view/Main.fxml", "Main screen", logoutBtn);
+        switchToMainScreen(logoutBtn);
     }
 
     /**

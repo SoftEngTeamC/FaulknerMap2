@@ -28,7 +28,7 @@
                   <Insets bottom="5.0" left="5.0" top="5.0" />
                </VBox.margin>
             </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Starting Location:">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%selectLocation">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -36,32 +36,32 @@
            <AutocompletionlTextField fx:id="StartLocationField" />
             <HBox prefWidth="200.0">
                <children>
-                  <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" onAction="#switchLocationButtonClicked" text="Switch Start/End">
+                  <Button fx:id="SwitchStartEnd_Button" mnemonicParsing="false" onAction="#switchLocationButtonClicked" text="%switch">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="StartAtKioskButton" mnemonicParsing="false" onAction="#handleClickedOnStartAtKiosk" text="Set Start to this Kiosk">
+                  <Button fx:id="StartAtKioskButton" mnemonicParsing="false" onAction="#handleClickedOnStartAtKiosk" text="%setKiosk">
                      <HBox.margin>
                         <Insets left="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a Destination:">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%selectDestination">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Text>
            <AutocompletionlTextField fx:id="EndLocationField" />
-            <Button fx:id="getPathButton" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="GO!">
+            <Button fx:id="getPathButton" mnemonicParsing="false" onMouseClicked="#getPathButtonClicked" text="%go">
                <VBox.margin>
                   <Insets bottom="5.0" left="20.0" top="5.0" />
                </VBox.margin>
             </Button>
             <TabPane fx:id="Info_TabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Start Info">
+                <Tab text="%startInfo">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                            <children>
@@ -70,7 +70,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab text="End Info">
+                  <Tab text="%endInfo">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -79,7 +79,7 @@
                         </AnchorPane>
                     </content>
                   </Tab>
-                <Tab text="Text Directions">
+                <Tab text="%textDirections">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -92,22 +92,22 @@
             </TabPane>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="Panic">
+                        <Button fx:id="PanicButton" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#HandlePanicButton" text="%panic">
                             <HBox.margin>
                                 <Insets bottom="5.0" right="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="AdminToolButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Tool">
+                        <Button fx:id="AdminToolButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OpenAdminTool" text="%adminTool">
                             <HBox.margin>
                                 <Insets bottom="5.0" right="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#HandleHelpButton" text="Help">
+                        <Button fx:id="HelpButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#HandleHelpButton" text="%help">
                             <HBox.margin>
                                 <Insets bottom="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
-                  <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" prefHeight="25.0" text="About Us">
+                  <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" prefHeight="25.0" text="%aboutUs">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin></Button>
@@ -115,14 +115,15 @@
                 </HBox>
                 <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" text="Language">
+                        <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" text="%language">
                             <items>
-                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
-                                <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
-                                <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
-                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />
-                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Español" />
+                                <MenuItem fx:id="english_button" mnemonicParsing="false"  text="English" />
+                                <MenuItem fx:id="chinese_button" mnemonicParsing="false"  text="中文" />
+                                <MenuItem fx:id="french_button" mnemonicParsing="false"  text="Français" />
+                                <MenuItem fx:id="italian_button" mnemonicParsing="false"  text="Italiano" />
+                                <MenuItem fx:id="japanese_button" mnemonicParsing="false"  text="日本語" />
+                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false"  text="Português" />
+                                <MenuItem fx:id="spanish_button" mnemonicParsing="false"  text="Español" />
                             </items>
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" />
@@ -135,7 +136,7 @@
         </VBox>
         <TabPane fx:id="FloorViewsTabPane" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab text="Floor 1">
+                <Tab text="%floor1">
                     <content>
                         <AnchorPane fx:id="FirstFloorTabAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -152,7 +153,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 2">
+                <Tab text="%floor2">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -166,7 +167,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 3">
+                <Tab text="%floor3">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -180,7 +181,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 4">
+                <Tab text="%floor4">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -194,7 +195,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 5">
+                <Tab text="%floor5">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -208,7 +209,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 6">
+                <Tab text="%floor6">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
@@ -222,7 +223,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Floor 7">
+                <Tab text="%floor7">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
