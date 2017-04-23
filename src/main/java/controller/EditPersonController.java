@@ -107,7 +107,7 @@ public class EditPersonController extends Controller{
      */
     public void logout() throws Exception {
 
-        switchScreen("view/Main.fxml", "Main menu", logoutBtn);
+        switchToMainScreen(logoutBtn);
 
     }
 

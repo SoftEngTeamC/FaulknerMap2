@@ -259,7 +259,6 @@ class ShowNodesEdgesHelper {
     }
 
     static List<Circle> showNodes(int currFloor) {
-        System.out.println("ShowNodes");
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
@@ -273,7 +272,7 @@ class ShowNodesEdgesHelper {
     }
 
     static void showEdges(int currFloor) {
-        System.out.println("ShowEdges");
+     //   System.out.println("ShowEdges");
         //Desired Clear old lines
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();

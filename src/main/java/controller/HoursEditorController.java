@@ -66,7 +66,7 @@ public class HoursEditorController extends Controller {
 
     @FXML
     public void logout() throws Exception {
-        switchScreen("view/Main.fxml", "Main", logoutBtn);
+        switchToMainScreen(logoutBtn);
     }
 
     @FXML
