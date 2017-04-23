@@ -117,13 +117,13 @@
                     <children>
                         <MenuButton fx:id="languageMenuButton" mnemonicParsing="false" prefHeight="27.0" text="%language">
                             <items>
-                                <MenuItem fx:id="english_button" mnemonicParsing="false" onAction="#toEnglish" text="English" />
-                                <MenuItem fx:id="chinese_button" mnemonicParsing="false" onAction="#toChinese" text="中文" />
-                                <MenuItem fx:id="french_button" mnemonicParsing="false" onAction="#toFrench" text="Français" />
-                                <MenuItem fx:id="italian_button" mnemonicParsing="false" onAction="#toItalian" text="Italiano" />
-                                <MenuItem fx:id="japanese_button" mnemonicParsing="false" onAction="#toJapanese" text="日本語" />
-                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false" onAction="#toPortuguese" text="Português" />
-                                <MenuItem fx:id="spanish_button" mnemonicParsing="false" onAction="#toSpanish" text="Español" />
+                                <MenuItem fx:id="english_button" mnemonicParsing="false"  text="English" />
+                                <MenuItem fx:id="chinese_button" mnemonicParsing="false"  text="中文" />
+                                <MenuItem fx:id="french_button" mnemonicParsing="false"  text="Français" />
+                                <MenuItem fx:id="italian_button" mnemonicParsing="false"  text="Italiano" />
+                                <MenuItem fx:id="japanese_button" mnemonicParsing="false"  text="日本語" />
+                                <MenuItem fx:id="portuguese_button" mnemonicParsing="false"  text="Português" />
+                                <MenuItem fx:id="spanish_button" mnemonicParsing="false"  text="Español" />
                             </items>
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" />

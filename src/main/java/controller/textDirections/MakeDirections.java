@@ -1,17 +1,14 @@
 package controller.textDirections;
-import controller.LanguageController;
 import controller.MainController;
-import javafx.fxml.Initializable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class MakeDirections {
 
-    public static String getText(Path path, int language) {
+    public static String getText(Path path) {
         ResourceBundle bundle = MainController.getBundle();
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();

@@ -4,8 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -62,7 +60,6 @@ public class MainController extends Controller implements Initializable{
     @FXML private MenuItem italian_button;
 
     private Hours hours;
-    private static int language;
 
     private static ResourceBundle bundle;
 
@@ -99,7 +96,6 @@ public class MainController extends Controller implements Initializable{
 
         initializeStartAndEnd();
 
-        language = 1; //default language is English
     }
 
     public void loadView(Locale locale) {
@@ -175,12 +171,12 @@ public class MainController extends Controller implements Initializable{
 
     private void pathText(Path path) {
         if (path.isEmpty()) {
-            TextDirectionsTextArea.setText("Could not find path to your destination.");
+            TextDirectionsTextArea.setText(bundle.getString("noPath"));
         } else if (path.numNodes() < 2) {
-            TextDirectionsTextArea.setText("You are already at your destination");
+            TextDirectionsTextArea.setText(bundle.getString("alreadyThere"));
             DisplayMap(path);
         } else {
-            TextDirectionsTextArea.setText(MakeDirections.getText(path, language));
+            TextDirectionsTextArea.setText(MakeDirections.getText(path));
             DisplayMap(path);
         }
     }
@@ -203,19 +199,19 @@ public class MainController extends Controller implements Initializable{
     private void PopulateInformationDisplay(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
                                             HospitalService HS_Start, HospitalService HS_Dest) {
         if (HP_Start != null) {
-            StartInfo_TextArea.setText(HP_Start.getTitle() + " " + HP_Start.getName() + "\n\n"
-                    + "Offices:\n\n" + HP_Start.getOffices());
+            StartInfo_TextArea.setText(HP_Start.getTitle() + " " + HP_Start.getName() + "\n\n" +
+                    bundle.getString("offices") + "\n\n" + HP_Start.getOffices());
         } else {
-            StartInfo_TextArea.setText(HS_Start.getName() + "\n\n"
-                    + "Offices:\n\n" + HS_Start.getLocations());
+            StartInfo_TextArea.setText(HS_Start.getName() + "\n\n" +
+                    bundle.getString("offices") + "\n\n" + HS_Start.getLocations());
         }
 
         if (HP_Dest != null) {
-            EndInfo_TextArea.setText(HP_Dest.getTitle() + " " + HP_Dest.getName() + "\n\n"
-                    + "Location:\n\n" + HP_Dest.getOffices());
+            EndInfo_TextArea.setText(HP_Dest.getTitle() + " " + HP_Dest.getName() + "\n\n" +
+                    bundle.getString("location") + "\n\n" + HP_Dest.getOffices());
         } else {
-            EndInfo_TextArea.setText(HS_Dest.getName() + "\n\n"
-                    + "Location:\n\n" + HS_Dest.getLocations());
+            EndInfo_TextArea.setText(HS_Dest.getName() + "\n\n" +
+                     bundle.getString("location") + "\n\n" + HS_Dest.getLocations());
         }
     }
 
@@ -262,50 +258,6 @@ public class MainController extends Controller implements Initializable{
     @FXML
     public void OpenAboutUs() throws Exception {
         switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
-    }
-
-    //LANGUAGE CHANGES
-    //Note that these do not use the switchscreen function because they do not have buttons to pass
-    @FXML
-    public void toEnglish() throws Exception {
-    //    switchScreen("view/Main.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 1;
-    }
-
-    @FXML
-    public void toSpanish() throws Exception {
-     //   switchScreen("view/Main_SP.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 2;
-    }
-
-    @FXML
-    public void toChinese() throws Exception {
-      //  switchScreen("view/Main_CN.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 3;
-    }
-
-    @FXML
-    public void toFrench() throws Exception {
-     //   switchScreen("view/Main_FR.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 4;
-    }
-
-    @FXML
-    public void toItalian() throws Exception {
-        //switchScreen("view/Main_IT.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 5;
-    }
-
-    @FXML
-    public void toJapanese() throws Exception {
-       // switchScreen("view/Main_JP.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 6;
-    }
-
-    @FXML
-    public void toPortuguese() throws Exception {
-     //   switchScreen("view/Main_PG.fxml", "Faulkner Kiosk", AdminToolButton);
-        language = 7;
     }
 
     //--------------------Buttons that have language--------------------------//
