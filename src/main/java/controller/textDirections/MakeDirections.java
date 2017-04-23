@@ -1,20 +1,26 @@
 package controller.textDirections;
 import controller.LanguageController;
+import controller.MainController;
+import javafx.fxml.Initializable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ResourceBundle;
 
 public class MakeDirections {
 
     public static String getText(Path path, int language) {
+        ResourceBundle bundle = MainController.getBundle();
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
         double pathTime = path.timeInSeconds();
         String output = "";
-        String output2 = output.concat("Approximate Distance: " + pathFormat.format(pathLength) +
-                " feet. \nEstimated time: " + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
-                pathFormat.format(Math.floor(pathTime % 60)) + " seconds.\n\t--------------------------\n");
+        String output2 = output.concat(bundle.getString("approximateDistance") + " " +
+                pathFormat.format(pathLength) + " " + bundle.getString("feetEstimatedTime")  + " "
+                + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
+                pathFormat.format(Math.floor(pathTime % 60)) + bundle.getString("seconds"));
         output = output2;
         String direction;
         int i;
@@ -33,7 +39,7 @@ public class MakeDirections {
 
 
             if (currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
-                output2 = output.concat("Take elevator to floor: " + nextNode.getLocation().getFloor() + "\n");
+                output2 = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
                 output = output2;
             } else {
                 switch (direction) {
@@ -58,26 +64,27 @@ public class MakeDirections {
                 } else {
                     //System.out.println(angleShift);
                     DecimalFormat df = new DecimalFormat("#.#");
-                    output2 = output.concat("Move straight " + df.format(Math.round(totalDistance)) + " feet, then take a ");
+                    output2 = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
+                            + " " + bundle.getString("feetThen"));
                     output = output2;
                     totalDistance = 0;
                     if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
-                        output2 = output.concat("slight right turn\n");
+                        output2 = output.concat(bundle.getString("slightRight") + "\n");
                         output = output2;
                     } else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
-                        output2 = output.concat("right turn\n");
+                        output2 = output.concat(bundle.getString("rightTurn") + "\n");
                         output = output2;
                     } else if (angleShift > 7 * p / 12 && angleShift <= p) {
-                        output2 = output.concat("sharp right turn\n");
+                        output2 = output.concat(bundle.getString("sharpRight") + "\n");
                         output = output2;
                     } else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
-                        output2 = output.concat("slight left turn\n");
+                        output2 = output.concat(bundle.getString("slightLeft") + "\n");
                         output = output2;
                     } else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
-                        output2 = output.concat("left turn\n");
+                        output2 = output.concat(bundle.getString("leftTurn") + "\n");
                         output = output2;
                     } else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
-                        output2 = output.concat("sharp left turn\n");
+                        output2 = output.concat(bundle.getString("sharpLeft") + "\n");
                         output = output2;
                     }
                 }
@@ -106,7 +113,8 @@ public class MakeDirections {
                 break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        output2 = output.concat("Move forward " + df.format(Math.round(totalDistance)) + " feet. You have arrived.");
+        output2 = output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
+                " " + bundle.getString("arrived"));
         output = output2;
 
         return output;

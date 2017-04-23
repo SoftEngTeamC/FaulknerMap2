@@ -33,7 +33,7 @@ public class App extends Application {
         }
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"),
-                ResourceBundle.getBundle("Lang", new Locale("en", "US")));
+                ResourceBundle.getBundle("Language", new Locale("en", "US")));
         primaryStage.setTitle("Faulkner Kiosk");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.setFullScreen(true);

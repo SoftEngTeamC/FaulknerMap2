@@ -64,7 +64,7 @@ public class MainController extends Controller implements Initializable{
     private Hours hours;
     private static int language;
 
-    private ResourceBundle bundle;
+    private static ResourceBundle bundle;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -106,7 +106,7 @@ public class MainController extends Controller implements Initializable{
         Stage stage = (Stage) MainSplitPane.getScene().getWindow();
         try {
             SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
-                    ResourceBundle.getBundle("Lang", locale));
+                    ResourceBundle.getBundle("Language", locale));
             stage.setTitle("Faulkner Kiosk");
             stage.getScene().setRoot(root);
             stage.setFullScreen(true);
@@ -312,11 +312,26 @@ public class MainController extends Controller implements Initializable{
     public void HandleHelpButton() {
         //TODO: change once we set what te public void HandleHelpButton() {
         //TODO: change once we set what text will actually be shown here
-        StartInfo_TextArea.setText(bundle.getString("helpMessage"));
+        String message = bundle.getString("helpMessage") + "\n\n" +
+                bundle.getString("operatingHours") + "\n" +
+                bundle.getString("morningHours") + hours.hours1 + ":" + hours.minutes1
+                + " " + hours.ampm1 + "-" + hours.hours2 + ":" + hours.minutes2 + " " +
+                hours.ampm2 + "\n" + bundle.getString("eveningHours")  +
+                hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
+                hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4;
+        StartInfo_TextArea.setText(message);
     }
 
     public void HandlePanicButton() {
         StartInfo_TextArea.setText(bundle.getString("panicMessage"));
+        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
+        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
+
+        FindandDisplayPath(HP_Start, null, null, HS_Dest);
+    }
+
+    public static ResourceBundle getBundle(){
+        return bundle;
     }
 
 }

@@ -38,7 +38,7 @@ public class Controller {
         Stage stage = (Stage) button.getScene().getWindow();
         try {
             SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
-                    ResourceBundle.getBundle("Lang", new Locale("en", "US")));
+                    ResourceBundle.getBundle("Language", new Locale("en", "US")));
             stage.setTitle("Faulkner Kiosk");
             stage.getScene().setRoot(root);
             stage.setFullScreen(true);
