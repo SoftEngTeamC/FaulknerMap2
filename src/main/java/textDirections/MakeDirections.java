@@ -1,4 +1,5 @@
-package controller.textDirections;
+package textDirections;
+
 import controller.MainController;
 import pathfinding.MapNode;
 import pathfinding.Path;
@@ -6,9 +7,9 @@ import pathfinding.Path;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-public class MakeDirections {
 
-    public static String getText(Path path) {
+public class MakeDirections {
+    public static String getText(Path path){
         ResourceBundle bundle = MainController.getBundle();
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
@@ -21,45 +22,46 @@ public class MakeDirections {
         output = output2;
         String direction;
         int i;
-        MapNode currentNode, nextNode, afterNextNode;
+        MapNode currentNode;
+        MapNode nextNode;
+        MapNode afterNextNode;
         double totalDistance = 0;
-        double currentAngle, nextAngle, angleShift, distance;
+        double currentAngle;
+        double nextAngle;
+        double angleShift;
         double p = Math.PI;
-        for (i = 0; i < path.numNodes() - 2; i++) {
+        double distance;
+        for(i = 0; i < path.numNodes() - 2; i++) {
+       //     System.out.println("Path: " + path.numNodes());
             currentNode = path.getNode(i);
-            nextNode = path.getNode(i + 1);
-            afterNextNode = path.getNode(i + 2);
+            nextNode = path.getNode(i+1);
+            afterNextNode = path.getNode(i+2);
             currentAngle = getAngle(currentNode, nextNode);
             nextAngle = getAngle(nextNode, afterNextNode);
             angleShift = getAngleShift(currentAngle, nextAngle);
             direction = getDirection(currentAngle);
 
 
-            if (currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
+            if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
                 output2 = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
                 output = output2;
-            } else {
+            }
+
+            else {
                 switch (direction) {
                     case "horizontal":
-                        //System.out.println(direction);
                         distance = xDistance(currentNode, nextNode);
                         totalDistance += distance;
-                        //System.out.println(distance);
                         break;
                     case "vertical":
-                        //System.out.println(direction);
                         totalDistance += yDistance(currentNode, nextNode);
                         break;
                     default:
-                        //System.out.println(direction);
                         totalDistance += distanceBetween(currentNode, nextNode);
                         break;
                 }
 
-                if (angleShift >= -1 * p / 6 && angleShift <= p / 6) {
-
-                } else {
-                    //System.out.println(angleShift);
+                if (angleShift < -1 * p / 6 || angleShift > p / 6) {
                     DecimalFormat df = new DecimalFormat("#.#");
                     output2 = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
                             + " " + bundle.getString("feetThen"));
@@ -89,23 +91,19 @@ public class MakeDirections {
         }
 
         currentNode = path.getNode(i);
-        nextNode = path.getNode(i + 1);
+        nextNode = path.getNode(i+1);
         currentAngle = getAngle(currentNode, nextNode);
         direction = getDirection(currentAngle);
 
         switch (direction) {
             case "horizontal":
-                //System.out.println(direction);
                 distance = xDistance(currentNode, nextNode);
                 totalDistance += Math.round(distance);
-                //System.out.println(distance);
                 break;
             case "vertical":
-                //System.out.println(direction);
                 totalDistance += Math.round(yDistance(currentNode, nextNode));
                 break;
             default:
-                //System.out.println(direction);
                 totalDistance += Math.round(distanceBetween(currentNode, nextNode));
                 break;
         }
@@ -126,8 +124,6 @@ public class MakeDirections {
     private static double xDistance(MapNode a, MapNode b) {
         double x1 = a.getLocation().getX();
         double x2 = b.getLocation().getX();
-        //System.out.println(x1);
-        //System.out.println(x2);
         return Math.abs(x1 - x2) * MapNode.FEET_PER_PIXEL;
     }
 
@@ -135,14 +131,12 @@ public class MakeDirections {
         return Math.abs(a.getLocation().getY() - b.getLocation().getY()) * MapNode.FEET_PER_PIXEL;
     }
 
-    /**
-     * Angle from starting node A to ending node B
-     *
+    /** Angle from starting node A to ending node B
      * @param a First node
      * @param b Second node
      * @return Angle in radians
      */
-    private static double getAngle(MapNode a, MapNode b) {
+    private static double getAngle(MapNode a, MapNode b){
         double deltaY = b.getLocation().getY() - a.getLocation().getY();
         double deltaX = b.getLocation().getX() - a.getLocation().getX();
         return Math.atan2(deltaY, deltaX);
@@ -153,7 +147,7 @@ public class MakeDirections {
         if (angle > Math.PI) {
             angle -= 2 * Math.PI;
         }
-        if (angle < -1 * Math.PI) {
+        if(angle < -1 * Math.PI) {
             angle += 2 * Math.PI;
         }
         return angle;
@@ -161,11 +155,13 @@ public class MakeDirections {
 
     private static String getDirection(double angle) {
         double p = Math.PI;
-        if (angle >= p / (-6) && angle <= p / 6 || angle >= 5 * p / 6 || angle <= -5 * p / 6) {
+        if(angle >= p/(-6) && angle <= p/6 || angle >= 5 * p/6 || angle <= -5 * p/6) {
             return "horizontal";
-        } else if (angle >= 5 * p / 12 && angle <= 7 * p / 12 || angle >= -7 * p / 12 && angle <= -5 * p / 12) {
+        }
+        else if(angle >= 5 * p/12 && angle <= 7 * p/12 || angle >= -7 * p/12 && angle <= -5 * p/12) {
             return "vertical";
-        } else {
+        }
+        else {
             return "diagonal";
         }
     }

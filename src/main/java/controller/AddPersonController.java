@@ -242,7 +242,7 @@ public class AddPersonController extends Controller{
     public void logoutBtnPressed() throws java.io.IOException{
 
         // switch screens to main
-        switchScreen("view/Main.fxml", "Main screen", logoutBtn);
+        switchToMainScreen(logoutBtn);
 
     }
 

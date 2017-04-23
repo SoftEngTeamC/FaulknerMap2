@@ -73,7 +73,7 @@ public class LoginPageController extends Controller{
         else if (attempts>=3){
             displayerror2.setText(Integer.toString(attempts));
             flashErrorMessage();
-            switchScreen("view/Main.fxml", "Faulkner Kiosk", backBtn);
+            switchToMainScreen(backBtn);
         }
 
         else if(username.getText().trim().isEmpty() && passwordField.getText().trim().isEmpty()){

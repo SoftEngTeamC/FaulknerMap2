@@ -98,7 +98,7 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
 
     @FXML
     void logoutBtnAction(ActionEvent event) throws Exception{
-        switchScreen("view/Main.fxml", "Main menu", logoutBtn);
+        switchToMainScreen(logoutBtn);
     }
 
 }

@@ -16,8 +16,14 @@ import model.Node;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
+import textDirections.MakeDirections;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import service.EMFProvider;
-import controller.textDirections.MakeDirections;
 
 import java.io.IOException;
 import java.net.URL;
@@ -76,10 +82,6 @@ public class MainController extends Controller implements Initializable{
 
         bundle = resources;
 
-      //  lblTextByController.setText(bundle.getString("key1"));
-
-        hours = EMFProvider.hours;
-        //-----------------------------Visual inits
         new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
                 FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
                 SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
@@ -176,7 +178,7 @@ public class MainController extends Controller implements Initializable{
             TextDirectionsTextArea.setText(bundle.getString("alreadyThere"));
             DisplayMap(path);
         } else {
-            TextDirectionsTextArea.setText(MakeDirections.getText(path));
+            TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
             DisplayMap(path);
         }
     }
@@ -262,15 +264,40 @@ public class MainController extends Controller implements Initializable{
 
     //--------------------Buttons that have language--------------------------//
     public void HandleHelpButton() {
-        //TODO: change once we set what te public void HandleHelpButton() {
-        //TODO: change once we set what text will actually be shown here
-        String message = bundle.getString("helpMessage") + "\n\n" +
-                bundle.getString("operatingHours") + "\n" +
-                bundle.getString("morningHours") + hours.hours1 + ":" + hours.minutes1
-                + " " + hours.ampm1 + "-" + hours.hours2 + ":" + hours.minutes2 + " " +
-                hours.ampm2 + "\n" + bundle.getString("eveningHours")  +
-                hours.hours3 + ":" + hours.minutes3 + " " + hours.ampm3 + "-" +
-                hours.hours4 + ":" + hours.minutes4 + " " + hours.ampm4;
+        Hours hours = hoursService.find(1L);
+        String message;
+        if(hours != null) {
+            Date morningStart = hours.getVisitingHoursMorningStart();
+            Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+            Date eveningStart = hours.getVisitingHoursEveningStart();
+            Date eveningEnd = hours.getVisitingHorusEveningEnd();
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+
+        } else {
+            Date morningStart = new Date(0,0,0,9,30);
+            Date morningEnd = new Date(0,0,0,12,0);
+
+            Date eveningStart = new Date(0,0,0,14,0);
+            Date eveningEnd = new Date(0,0,0,17,45);
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+        }
         StartInfo_TextArea.setText(message);
     }
 

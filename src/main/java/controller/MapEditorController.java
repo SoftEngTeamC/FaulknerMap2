@@ -716,7 +716,7 @@ public class MapEditorController extends Controller {
      * Action event handler for logout button being pressed. Goes to main screen.
      */
     public void logout() throws IOException {
-        switchScreen("view/Main.fxml", "Main", logoutBtn);
+        switchToMainScreen(logoutBtn);
     }
 
     public static int getCurrFloor() {
