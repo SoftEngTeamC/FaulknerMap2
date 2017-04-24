@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * Created by Paul on 4/9/2017.
- * edited by JVB on 4/17/17
- */
+
 public class Controller {
 
     protected CoordinateService coordinateService = new CoordinateService();

@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,17 +121,9 @@ public class DirectoryEditorController extends Controller{
 
     }
 
-    /**
-     * @throws Exception
-     * @author Paul
-     * <p>
-     * add person button event handler for press
-     */
     @FXML
-    public void addPersonBtnCPressed() throws Exception {
-
+    public void addPersonBtnCPressed() throws IOException {
         switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
-
     }
 
 

@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,12 +71,12 @@ public class NodeService extends AbstractService<Node> {
         return temp;
     }
 
-    public List<Node> getAllNodes() {
+    public Set<Node> getAllNodes() {
         EntityManager manager = this.managerFactory.createEntityManager();
         List<Node> temp = manager.createQuery("from Node", Node.class)
                 .getResultList();
         manager.close();
-        return temp;
+        return new HashSet<>(temp);
     }
 
     public List<Node> getNodesByFloor(int floor) {
