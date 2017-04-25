@@ -5,21 +5,24 @@ import pathfinding.MapNode;
 import pathfinding.Path;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 
 public class MakeDirections {
-    public static String getText(Path path){
+    public static LinkedList<Step> getText(Path path){
         ResourceBundle bundle = MainController.getBundle();
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
         double pathTime = path.timeInSeconds();
+        LinkedList<Step> TextDirectionSteps = new LinkedList<Step>();
         String output = "";
         String output2 = output.concat(bundle.getString("approximateDistance") + " " +
                 pathFormat.format(pathLength) + " " + bundle.getString("feetEstimatedTime")  + " "
                 + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
                 pathFormat.format(Math.floor(pathTime % 60)) + bundle.getString("seconds"));
         output = output2;
+        TextDirectionSteps.add(new Step(output));
         String direction;
         int i;
         MapNode currentNode;
@@ -45,6 +48,7 @@ public class MakeDirections {
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
                 output2 = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
                 output = output2;
+                TextDirectionSteps.add(new Step(output));
             }
 
             else {
@@ -66,25 +70,32 @@ public class MakeDirections {
                     output2 = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
                             + " " + bundle.getString("feetThen"));
                     output = output2;
+                    TextDirectionSteps.add(new Step(output));
                     totalDistance = 0;
                     if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
                         output2 = output.concat(bundle.getString("slightRight") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     } else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
                         output2 = output.concat(bundle.getString("rightTurn") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     } else if (angleShift > 7 * p / 12 && angleShift <= p) {
                         output2 = output.concat(bundle.getString("sharpRight") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     } else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
                         output2 = output.concat(bundle.getString("slightLeft") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     } else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
                         output2 = output.concat(bundle.getString("leftTurn") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     } else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
                         output2 = output.concat(bundle.getString("sharpLeft") + "\n");
                         output = output2;
+                        TextDirectionSteps.add(new Step(output));
                     }
                 }
             }
@@ -111,8 +122,9 @@ public class MakeDirections {
         output2 = output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
                 " " + bundle.getString("arrived"));
         output = output2;
+        TextDirectionSteps.add(new Step(output));
 
-        return output;
+        return TextDirectionSteps;
     }
 
     private static double distanceBetween(MapNode a, MapNode b) {

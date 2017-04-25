@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
@@ -22,7 +23,19 @@ public class HomeController {
     private SplitPane Home_MainSplit;
 
     @FXML
-    private VBox Home_VBox;
+    private VBox Main_VBox;
+
+    @FXML
+    private ImageView Logo_ImageView;
+
+    @FXML
+    private ScrollPane Search_ScrollPane;
+
+    @FXML
+    private VBox Searching_VBox;
+
+    @FXML
+    private ButtonBar Options_ButtonBar;
 
     @FXML
     private SplitPane Map_Split;
@@ -41,6 +54,6 @@ public class HomeController {
 
     @FXML
     void initialize() {
-        
+
     }
 }
