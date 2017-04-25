@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FaulkerMap.iml" filepath="$PROJECT_DIR$/.idea/modules/FaulkerMap.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FaulkerMap_main.iml" filepath="$PROJECT_DIR$/.idea/modules/FaulkerMap_main.iml" group="FaulkerMap" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FaulkerMap_test.iml" filepath="$PROJECT_DIR$/.idea/modules/FaulkerMap_test.iml" group="FaulkerMap" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-FaulkerMap_main.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-FaulkerMap_main.iml" group="FaulkerMap" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-FaulkerMap_test.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-FaulkerMap_test.iml" group="FaulkerMap" />
     </modules>
   </component>
 </project>

@@ -20,22 +20,22 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
  * Created by sam on 4/21/17.
  */
 public class makeQRCode {
-
     /**
      * @author sccoache
      *
      * @param directions
      * @throws IOException
      */
-    public static void main(String directions) throws IOException, WriterException {
+    public void buildQR(String directions) throws IOException, WriterException {
+        //directions = "Successful"; //testing string
         String qrDisplayedText = directions;
-        String filePath = "~/src/main/resources/images";  //The path the .png will be saved to
+        String filePath = "~/src/main/resources/images/qr.png";  //The path the .png will be saved to
         int size = 125;
         //String charset = "UTF-8";
         String fileType = "png";
         File qrFile = new File(filePath);
 
-        buildQR(qrFile, qrDisplayedText, size, fileType);
+        buildImage(qrFile, qrDisplayedText, size, fileType);
     }
 
     /**
@@ -48,7 +48,7 @@ public class makeQRCode {
      * @throws IOException
      * @throws WriterException
      */
-    private static void buildQR(File qrFile, String QRText, int size, String fileType) throws IOException,
+    private static void buildImage(File qrFile, String QRText, int size, String fileType) throws IOException,
             WriterException {
 
         // Create the BitMatrix

@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="FaulkerMap_main" target="1.8" />
       <module name="FaulkerMap_test" target="1.8" />
+      <module name="IdeaProjects-FaulkerMap_main" target="1.8" />
+      <module name="IdeaProjects-FaulkerMap_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
