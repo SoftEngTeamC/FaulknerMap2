@@ -13,6 +13,7 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'javafx-gradle-plugin'
@@ -41,6 +42,7 @@ dependencies {
     compile 'org.hibernate:hibernate-search-orm:5.7.0.Final'
     compile 'org.apache.derby:derby:10.13.1.1'
     compile 'com.univocity:univocity-parsers:2.4.1'
+    compile 'com.github.kenglxn.QRGen:javase:2.2.0'
     testCompile 'junit:junit:4.11'
 }
 

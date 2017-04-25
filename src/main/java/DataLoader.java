@@ -71,11 +71,11 @@ public class DataLoader {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 3) {
-                    System.out.print("Could not parse location ");
+                    System.err.print("Could not parse location ");
                     for (Object aRow : row) {
-                        System.out.print(" " + aRow + " ");
+                        System.err.print(" " + aRow + " ");
                     }
-                    System.out.println();
+                    System.err.println();
                     return;
                     // Test for blank line or value
                 }
@@ -109,11 +109,11 @@ public class DataLoader {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 3) {
-                    System.out.print("Could not parse doctor ");
+                    System.err.print("Could not parse doctor ");
                     for (Object aRow : row) {
-                        System.out.print(" " + aRow + " ");
+                        System.err.print(" " + aRow + " ");
                     }
-                    System.out.println();
+                    System.err.println();
                     return;
                 }
 
@@ -150,11 +150,11 @@ public class DataLoader {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 2) {
-                    System.out.print("Could not parse service  ");
+                    System.err.print("Could not parse service  ");
                     for (Object aRow : row) {
-                        System.out.print(" " + aRow + " ");
+                        System.err.print(" " + aRow + " ");
                     }
-                    System.out.println();
+                    System.err.println();
                     return;
                 }
 
@@ -189,11 +189,11 @@ public class DataLoader {
         ObjectRowProcessor rowProcessor = new ObjectRowProcessor() {
             public void rowProcessed(Object[] row, ParsingContext context) {
                 if (Arrays.asList(row).contains(null) || row.length < 2) {
-                    System.out.print("Could not parse edge ");
+                    System.err.print("Could not parse edge ");
                     for (Object aRow : row) {
-                        System.out.print(" " + aRow + " ");
+                        System.err.print(" " + aRow + " ");
                     }
-                    System.out.println();
+                    System.err.println();
                     return;
                 }
 

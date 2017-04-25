@@ -1,6 +1,7 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -47,6 +48,7 @@ public class Node {
         this.location = location;
     }
 
+    @Field
     @Column(name = "NODE_NAME")
     public String getName() {
         return name;

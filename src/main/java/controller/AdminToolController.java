@@ -33,25 +33,25 @@ public class AdminToolController extends Controller{
     }
 
     @FXML
-    public void editMap() throws Exception{
+    public void editMap() {
         switchScreen("view/MapEditor.fxml", "Map Editor", mapEditorBtn);
     }
     @FXML
-    public void editHours()throws Exception{
+    public void editHours() {
         switchScreen("view/HoursEditorScreen.fxml", "Directory Editor", editHoursBtn);
     }
     @FXML
-    public void editDirectory() throws Exception{
+    public void editDirectory() {
         switchScreen("view/DirectoryEditor.fxml", "Directory Editor", editDirectoryBtn);
     }
 
     @FXML
-    public void logout() throws Exception{
+    public void logout() {
         switchToMainScreen(logoutBtn);
     }
 
     @FXML
-    public void algorithmSelectorBtnAction() throws Exception{
+    public void algorithmSelectorBtnAction() {
         switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", algorithmSelectorBtn);
     }
 
