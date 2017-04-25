@@ -4,6 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.Group;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -83,6 +88,11 @@ public class HomeController {
         searchBox.textProperty().addListener((observable, oldValue, query) -> {
             // TODO: Populate searchResults with the
         });
+        ImageView Map = new ImageView();
+//        Image MapPic =
+
+        Group MapGroup = new Group();
+
     }
 
 }
