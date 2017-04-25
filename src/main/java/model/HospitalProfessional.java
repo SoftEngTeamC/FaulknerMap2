@@ -78,7 +78,7 @@ public class HospitalProfessional implements Navigable {
     @Override
     public Node getNode() {
         // TODO: Make this robust
-        return offices.get(1);
+        return offices.get(0);
     }
 
     @Override
