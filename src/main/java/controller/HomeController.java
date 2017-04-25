@@ -1,7 +1,7 @@
 package controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ButtonBar;
@@ -9,14 +9,20 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import pathfinding.MapNode;
-import pathfinding.Node;
+import model.Node;
 import pathfinding.Path;
+import model.Navigable;
+import textDirections.Step;
+import util.MappedList;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class HomeController {
 
@@ -63,10 +69,41 @@ public class HomeController {
     private HBox Map_HBox;
 
     ImageView MapImageView = new ImageView();
+
+    private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
+    private ListView<Navigable> directoryView = new ListView<>(searchResults);
+
+    private ObservableList<Step> steps = FXCollections.observableArrayList();
+    private ListView<Step> stepsView = new ListView<>(steps);
+
+    private ObservableList<Node> destinations = FXCollections.observableArrayList();
+    private MappedList<javafx.scene.Node, Node> destinationNodes = new MappedList<>(destinations, HomeController::destinationNode);
+
+    private TextField searchBox = new TextField();
+
     @FXML
     void initialize() {
         InitializeMap();
-    }
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                destinations.add(newValue.getNode());
+                showDirections();
+            }
+        });
+
+        showSearch();
+        //TODO: Populate the searchBox with hot spots
+
+        searchBox.textProperty().addListener((observable, oldValue, query) -> {
+            // TODO: Populate searchResults from the query
+        });
+
+        ImageView Map = new ImageView();
+//        Image MapPic =
+
     private void InitializeMap(){
         Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
         Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
@@ -109,5 +146,25 @@ public class HomeController {
         return circle;
     }
 
+    private void showSearch() {
+        Searching_VBox.getChildren().clear();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(directoryView);
+    }
+
+    private void showDirections() {
+        Searching_VBox.getChildren().clear();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(stepsView);
+    }
+
+    private static javafx.scene.Node destinationNode(Node node) {
+        HBox hbox = new HBox();
+        TextField name = new TextField();
+        name.setText(node.getName());
+        Button deleteButton = new Button();
+        deleteButton.setText("X");
+        return hbox;
+    }
 
 }

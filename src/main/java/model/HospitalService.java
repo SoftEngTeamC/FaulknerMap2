@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Indexed
 @Table(name = "SERVICES")
-public class HospitalService {
+public class HospitalService implements Navigable {
     private long id;
 
     private List<Node> locations;
@@ -55,5 +55,11 @@ public class HospitalService {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Transient
+    @Override
+    public Node getNode() {
+        return locations.get(1);
     }
 }
