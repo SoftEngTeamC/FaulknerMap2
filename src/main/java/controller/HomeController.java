@@ -184,19 +184,19 @@ public class HomeController {
 
     private void InitializeFloorButtons(){
         FirstFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));ClearMapGroup();});
         SecondFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));ClearMapGroup();});
         ThirdFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));ClearMapGroup();});
         FourthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));ClearMapGroup();});
         FifthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));ClearMapGroup();});
         SixthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));ClearMapGroup();});
         SeventhFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));});
+            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));ClearMapGroup();});
     }
 
     //--------------------------------------------------------------------------------------------------
