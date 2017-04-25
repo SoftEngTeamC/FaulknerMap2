@@ -24,7 +24,7 @@ public class Controller {
     protected TagService tagService = new TagService();
     protected HoursService hoursService = new HoursService();
 
-    public void switchScreen(String file, String title,Button b) throws IOException {
+    public void switchScreen(String file, String title, Button b) throws IOException {
         Stage stage = (Stage) b.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
         stage.setTitle(title);

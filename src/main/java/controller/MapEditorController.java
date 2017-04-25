@@ -21,7 +21,10 @@ import model.Edge;
 import model.Node;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 
 public class MapEditorController extends Controller {
@@ -230,7 +233,7 @@ public class MapEditorController extends Controller {
         for (Node n : nodeService.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
         }
-        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
+        nameList.sort(String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
         editNode_searchResultsList.setItems(obList);
@@ -252,7 +255,6 @@ public class MapEditorController extends Controller {
 
     //-------------------------------------------Listeners---------------------------------------------
     public void circlesListen(List<Circle> circles, int floor) {
-    //    System.out.println("circlesListen:");
         final Circle[] firstCircle = new Circle[1];
         final double[] orgx = new double[1];
         final double[] orgy = new double[1];
@@ -261,13 +263,7 @@ public class MapEditorController extends Controller {
         final boolean[] set = {false};
         for (Circle circle : circles) {
             circle.setOnMouseClicked(event -> {
-                System.out.println("slider: " + ShowNodesEdgesHelper.checkSlider(currFloor).getValue());
-                System.out.println("X: " + circle.getCenterX());
-                System.out.println("Y: " + circle.getCenterY());
-
-                System.out.println("Clicked on node: " + nodeService.find(Long.parseLong(circle.getId())).getName());
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
-                System.out.println(ItemsInListView);
                 int i = 0;
                 for (i = 0; !(ItemsInListView.get(i).equals(nodeService.find(Long.parseLong(circle.getId())).getName())); i++) {
                     //System.out.println(ItemsInListView.get(i));
@@ -291,7 +287,6 @@ public class MapEditorController extends Controller {
                     edgeService.persist(edge1);
 
                     circlesListen(ShowNodesEdgesHelper.showNodes(currFloor), currFloor);
-                    return;
                 }
             });
 
@@ -354,44 +349,41 @@ public class MapEditorController extends Controller {
 
 
     //This Listener is triggered when a different MapTab is selected
-    public void tabPaneListen() {
+    private void tabPaneListen() {
      //   System.out.println("TabPaneListener");
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Tab>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                 //       System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
-                        //Update Current Floor
-                        currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
-                        //Update EditTab Listviews with new floors data
-                        ArrayList<String> nameList = new ArrayList<>();
-                        for (Node n : nodeService.getNodesByFloor(currFloor)) {
-                            nameList.add(n.getName());
-                        }
-                        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
-                        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
-                        editNode_searchResultsList.setItems(obList);
-                        removeNode_searchList.setItems(obList);
-                        //Update AutoComplete suggestion of neighbors with new data
-                        List<Node> nodes = nodeService.getNodesByFloor(currFloor);
-                        List<String> names = new ArrayList<>();
-                        for (Node n : nodes) {
-                            names.add(n.getName());
-                        }
-                        editNode_addField.getEntries().clear();
-                        editNode_addField.getEntries().addAll(names);
-
-                        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-                        List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
-
-                        circlesListen(circles, currFloor);
+                (ov, t, t1) -> {
+             //       System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
+                    //Update Current Floor
+                    currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
+                    //Update EditTab Listviews with new floors data
+                    ArrayList<String> nameList = new ArrayList<>();
+                    for (Node n : nodeService.getNodesByFloor(currFloor)) {
+                        nameList.add(n.getName());
                     }
+                    Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
+                    ObservableList<String> obList = FXCollections.observableArrayList(nameList);
+                    editNode_searchResultsList.setItems(obList);
+                    removeNode_searchList.setItems(obList);
+                    //Update AutoComplete suggestion of neighbors with new data
+                    List<Node> nodes = nodeService.getNodesByFloor(currFloor);
+                    List<String> names = new ArrayList<>();
+                    for (Node n : nodes) {
+                        names.add(n.getName());
+                    }
+                    editNode_addField.getEntries().clear();
+                    editNode_addField.getEntries().addAll(names);
+
+                    List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+                    List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
+
+                    circlesListen(circles, currFloor);
                 }
         );
     }
 
     //This Listener is triggered when an item in the EditNode_SearchResults List is selected
-    public void setEditNode_searchResultsListening() {
+    private void setEditNode_searchResultsListening() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     System.out.println("editNode_SearchResultsList Listener");

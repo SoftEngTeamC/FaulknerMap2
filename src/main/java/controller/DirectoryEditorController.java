@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -18,7 +17,7 @@ import model.HospitalProfessional;
 import java.io.IOException;
 
 
-public class DirectoryEditorController extends Controller{
+public class DirectoryEditorController extends Controller {
     @FXML
     private Button logoutBtn;
     @FXML
@@ -31,8 +30,6 @@ public class DirectoryEditorController extends Controller{
     private TextField searchField;
     @FXML
     private ListView<HospitalProfessional> searchList;
-    @FXML
-    private SplitPane splitPane;
     @FXML
     private VBox DirectoryEditor_VBox;
     @FXML
@@ -65,13 +62,12 @@ public class DirectoryEditorController extends Controller{
     }
 
     @FXML
-    public void back() throws Exception {
-        System.out.println("Directory Editor Back Button");
+    public void back() throws IOException {
         switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
     }
 
     @FXML
-    public void logout() throws Exception {
+    public void logout() {
         switchToMainScreen(logoutBtn);
     }
 
