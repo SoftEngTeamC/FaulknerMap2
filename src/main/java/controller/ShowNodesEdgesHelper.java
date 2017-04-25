@@ -17,9 +17,7 @@ import service.NodeService;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gina on 4/13/17.
- */
+
 class ShowNodesEdgesHelper {
     private static ScrollPane FirstFloorScrollPane;
     private static ScrollPane SecondFloorScrollPane;
@@ -170,7 +168,6 @@ class ShowNodesEdgesHelper {
             case 7:
                 return SeventhFloorScrollPane;
             default:
-                System.out.println("You gave MakeCircle() a floor that doesn't exist, or it isnt an int");
                 return null;
         }
     }
@@ -233,7 +230,7 @@ class ShowNodesEdgesHelper {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
-        // initial size of image and the image ratior
+        // initial size of image and the image ratio
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         //  System.out.println(Scrolly.getContent());

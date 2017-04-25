@@ -7,7 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
 import model.HospitalService;
@@ -16,17 +16,10 @@ import model.Node;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
-import textDirections.MakeDirections;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import service.EMFProvider;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainController extends Controller implements Initializable{
@@ -109,7 +102,6 @@ public class MainController extends Controller implements Initializable{
             stage.getScene().setRoot(root);
             stage.setFullScreen(true);
             stage.show();
-            System.out.println("Switching to language: " + locale.getLanguage());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -247,18 +239,18 @@ public class MainController extends Controller implements Initializable{
             PopulateInformationDisplay(HP_Start, HP_Dest, HS_Start, HS_Dest);
 //
         } else {
-            System.out.print("Give a Start and an End");
+            System.out.print("Give a Start and an End"); // TODO: make this meaningful in the gui
         }
     }
 
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
-    public void OpenAdminTool() throws Exception {
+    public void OpenAdminTool() {
         switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
     }
 
     @FXML
-    public void OpenAboutUs() throws Exception {
+    public void OpenAboutUs() {
         switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
     }
 

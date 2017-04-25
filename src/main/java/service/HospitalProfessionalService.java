@@ -2,6 +2,7 @@ package service;
 
 
 import model.HospitalProfessional;
+import org.hibernate.search.exception.EmptyQueryException;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -47,12 +48,15 @@ public class HospitalProfessionalService extends AbstractService<HospitalProfess
         manager.getTransaction().begin();
         QueryBuilder qb = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder().forEntity(HospitalProfessional.class).get();
-        org.apache.lucene.search.Query query = qb.keyword().onFields("title", "name").matching(s).createQuery();
-        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalProfessional.class);
-
-        List<HospitalProfessional> result = JPAQuery.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
-        return result;
+        try {
+            org.apache.lucene.search.Query query = qb.keyword().wildcard().onFields("name", "title").matching("*" + s + "*").createQuery();
+            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalProfessional.class);
+            return JPAQuery.getResultList();
+        } catch (EmptyQueryException e) {
+            return getAllProfessionals();
+        } finally {
+            manager.getTransaction().commit();
+            fullTextEntityManager.close();
+        }
     }
 }
