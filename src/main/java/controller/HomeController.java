@@ -137,7 +137,7 @@ public class HomeController extends Controller {
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
-    
+
     private void InitializeMap(){
         Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
         Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
@@ -148,6 +148,11 @@ public class HomeController extends Controller {
         MapGroup.getChildren().add(MapImageView);
         Map_ScrollPane.setContent(MapGroup);
         Map_ScrollPane.setPannable(true);
+        //Set the scroll min and max values to the pixel size of the Image View / scrollPane
+        Map_ScrollPane.hmaxProperty().bind(MapImageView.fitWidthProperty().subtract(Map_ScrollPane.widthProperty()));
+        Map_ScrollPane.setHmin(0);
+        Map_ScrollPane.vmaxProperty().bind(MapImageView.fitHeightProperty().subtract(Map_ScrollPane.heightProperty()));
+        Map_ScrollPane.setVmin(0);
         Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_Slider.minProperty().bind(Map_Split.widthProperty());
@@ -155,26 +160,35 @@ public class HomeController extends Controller {
         MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
 
-    private void BuildMapGroup(Image map, Path path){
-        MapImageView.setImage(map);
-        Map_Slider.setMax(map.getWidth());
-
-        if (path.numNodes() < 1) {
-            System.err.println("Can't display map because there is no path.");
-            return;
-        }
-
-        for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
-        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
-        //HideTabs(path);
+    private void PanToPoint(double X, Double Y){
+        double Width = MapImageView.getImage().getWidth();
+        double Height = MapImageView.getImage().getHeight();
+        double currWidth = MapImageView.getFitWidth();
+        double currHeight = MapImageView.getFitHeight();
+        double Xprime = X*(currWidth/Width);
+        double Yprime = Y*(currHeight/Height);
+        Map_ScrollPane.setHvalue(Xprime - Map_ScrollPane.getWidth());
+        Map_ScrollPane.setVvalue(Yprime - Map_ScrollPane.getHeight());
     }
+
+//    private void BuildMapGroup(Image map, Path path){
+//        MapImageView.setImage(map);
+//        Map_Slider.setMax(map.getWidth());
+//
+//        if (path.numNodes() < 1) {
+//            System.err.println("Can't display map because there is no path.");
+//            return;
+//        }
+//        for (MapNode node : path) MakeCircleInGroup(node);
+//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+//    }
 
     private void ClearMapGroup(){
         Group group1 = (Group) Map_ScrollPane.getContent();
         group1.getChildren().remove(1, group1.getChildren().size());
     }
 
-    private void MakeCircleInGroup (model.Node N){
+    private void MakeCircleInGroup (MapNode N){
         //This function trusts that it is only being called to build circles on the displayed floor
         double x = N.getLocation().getX();
         double y = N.getLocation().getY();
@@ -193,7 +207,6 @@ public class HomeController extends Controller {
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
         circle.fillProperty().setValue(Color.RED);
 
-        circle.setId(N.getId().toString());
         MapGroup.getChildren().addAll(circle);
     }
 
@@ -215,8 +228,6 @@ public class HomeController extends Controller {
     }
 
     //--------------------------------------------------------------------------------------------------
-
-
 
     private void showSearch() {
         Searching_VBox.getChildren().clear();
