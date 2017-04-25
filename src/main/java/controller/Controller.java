@@ -24,12 +24,17 @@ public class Controller {
     protected TagService tagService = new TagService();
     protected HoursService hoursService = new HoursService();
 
-    public void switchScreen(String file, String title, Button b) throws IOException {
-        Stage stage = (Stage) b.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
-        stage.setTitle(title);
-        stage.getScene().setRoot(root);
-        stage.show();
+    public void switchScreen(String file, String title, Button b) {
+        try {
+            Stage stage = (Stage) b.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
+            stage.setTitle(title);
+            stage.getScene().setRoot(root);
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Couldn't find file at " + file);
+        }
+
     }
 
     public void switchToMainScreen(Button button){

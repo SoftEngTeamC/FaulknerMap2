@@ -62,7 +62,7 @@ public class DirectoryEditorController extends Controller {
     }
 
     @FXML
-    public void back() throws IOException {
+    public void back() {
         switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
     }
 
@@ -92,7 +92,7 @@ public class DirectoryEditorController extends Controller {
     }
 
     @FXML
-    public void addPersonBtnCPressed() throws IOException {
+    public void addPersonBtnCPressed() {
         switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
     }
 

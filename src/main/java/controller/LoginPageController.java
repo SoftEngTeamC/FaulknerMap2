@@ -35,12 +35,12 @@ public class LoginPageController extends Controller{
     @FXML
     private Text successText;
 
-    String UserName= "Admin";
-    String Password= "Admin";
-    int attempts =0;
+    private String UserName= "Admin";
+    private String Password= "Admin";
+    private int attempts =0;
 
     @FXML
-    public void back() throws Exception {
+    public void back() {
         switchToMainScreen(backBtn);
     }
     @FXML
@@ -52,7 +52,7 @@ public class LoginPageController extends Controller{
     }
 
     @FXML
-    public void login() throws Exception {
+    public void login() {
         attempts++;
 
         if(username.getText().equals(UserName) && passwordField.getText().equals(Password)){

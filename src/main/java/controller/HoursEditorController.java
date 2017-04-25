@@ -60,12 +60,12 @@ public class HoursEditorController extends Controller {
     }
 
     @FXML
-    public void back() throws Exception {
+    public void back() {
         switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
     }
 
     @FXML
-    public void logout() throws Exception {
+    public void logout() {
         switchToMainScreen(logoutBtn);
     }
 

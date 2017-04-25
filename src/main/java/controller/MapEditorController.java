@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,7 +18,6 @@ import model.Coordinate;
 import model.Edge;
 import model.Node;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -254,7 +251,7 @@ public class MapEditorController extends Controller {
     }
 
     //-------------------------------------------Listeners---------------------------------------------
-    public void circlesListen(List<Circle> circles, int floor) {
+    private void circlesListen(List<Circle> circles, int floor) {
         final Circle[] firstCircle = new Circle[1];
         final double[] orgx = new double[1];
         final double[] orgy = new double[1];
@@ -518,32 +515,21 @@ public class MapEditorController extends Controller {
     /**
      * method that populates the search results with the search query
      */
-    public void removeNode_searchFieldValueListener() {
+    private void removeNode_searchFieldValueListener() {
         removeNode_searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             // get the query from the field
-            String query = newValue;
             ArrayList<String> queryList = new ArrayList<>();
             // add each query to the list
             List<Node> nodeList = this.nodeService.getNodesByFloor(currFloor);
             for (Node n : nodeList) {
-                if (n.getName().contains(query)) {
+                if (n.getName().contains(newValue)) {
                     queryList.add(n.getName());
                 }
             }
             // Make the list view show the results
-            Collections.sort(queryList, String.CASE_INSENSITIVE_ORDER);
+            queryList.sort(String.CASE_INSENSITIVE_ORDER);
             removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
         });
-    }
-
-
-    /**
-     * @author Samuel Coache
-     * <p>
-     * add node tab: connect button event handler
-     */
-    public void addNode_connectToNodeBtnPressed() {
-
     }
 
 
@@ -574,11 +560,6 @@ public class MapEditorController extends Controller {
     }
 
 
-    //    // methods for the edit node tab
-//    public void editNode_searchBtnPressed() {
-    //
-//    }
-
 
     public void editNode_removeNeighborBtnPressed() {
         Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
@@ -603,7 +584,7 @@ public class MapEditorController extends Controller {
         for (Node n : neighbors) {
                 neighborsS.add(n.getName());
         }
-        Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
+        neighborsS.sort(String.CASE_INSENSITIVE_ORDER);
         return neighborsS;
 
     }
@@ -634,12 +615,10 @@ public class MapEditorController extends Controller {
 
         selectedEdge.setDisabled(true);
         edgeService.merge(selectedEdge);
-      //  System.out.println("Disabled : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-    //    System.out.println("successful");
-//        ifDisableText.setText("Disable Successful!");
+
 
     }
 
@@ -651,48 +630,20 @@ public class MapEditorController extends Controller {
 
         selectedEdge.setDisabled(false);
         edgeService.merge(selectedEdge);
-      //  System.out.println("Undo disable : " + selectedEdge.getStart().getName() + " " + selectedEdge.getEnd().getName());
 
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-     //   System.out.println("successful");
-//        ifUndoDisableText.setText("Undo Successful!");
 
     }
 
     //----------------------------------Indicator Text Listeners------------------------------------
 
-    public void InitializeIndicatorTextListeners() {
-        addNode_xPos.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_yPos.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_floor.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_nameField.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        removeNode_searchField.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
+    private void InitializeIndicatorTextListeners() {
+        addNode_xPos.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_yPos.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_floor.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_nameField.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        removeNode_searchField.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
     }
 
     //----------------------------------Screen Changing Functions-------------------------------------
@@ -700,19 +651,15 @@ public class MapEditorController extends Controller {
     /**
      * Back button action event handler. Opens the Admin page
      */
-    public void back() throws IOException {
+    public void back() {
         switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
     }
 
     /**
      * Action event handler for logout button being pressed. Goes to main screen.
      */
-    public void logout() throws IOException {
+    public void logout() {
         switchToMainScreen(logoutBtn);
-    }
-
-    public static int getCurrFloor() {
-        return currFloor;
     }
 }
 

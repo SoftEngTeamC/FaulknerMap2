@@ -245,12 +245,12 @@ public class MainController extends Controller implements Initializable{
 
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
-    public void OpenAdminTool() throws Exception {
+    public void OpenAdminTool() {
         switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
     }
 
     @FXML
-    public void OpenAboutUs() throws Exception {
+    public void OpenAboutUs() {
         switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
     }
 
