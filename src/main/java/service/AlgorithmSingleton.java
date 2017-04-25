@@ -2,9 +2,6 @@ package service;
 
 import pathfinding.Map;
 
-/**
- * Created by Paul on 4/18/2017.
- */
 public class AlgorithmSingleton {
 
     private static AlgorithmSingleton ourInstance = new AlgorithmSingleton();

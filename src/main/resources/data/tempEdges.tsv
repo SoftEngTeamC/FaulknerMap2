@@ -1,0 +1,345 @@
+start end
+2B	intersection21
+3A	intersection325
+3C	hallway32
+4B	intersection48
+4C	hallway42
+4D	hallway43
+4F	hallway44
+4G	hallway46
+4H	hallway46
+4I	hallway47
+4J	hallway48
+4N	hallway49
+5 North	hallway516
+5 South	hallway515
+5A	hallway51
+5C	intersection513
+5E	hallway55
+5G	hallway57
+5H	hallway59
+5J	hallway511
+5K	hallway511
+5L	hallway512
+5M	hallway514
+5N	hallway513
+Atrium Elevators 1	Atrium Elevators 2
+Atrium Elevators 1	Atrium Elevators 3
+Atrium Elevators 1	Atrium Elevators 4
+Atrium Elevators 1	Atrium Elevators 5
+Atrium Elevators 1	hallway110
+Atrium Elevators 2	Atrium Elevators 3
+Atrium Elevators 2	Atrium Elevators 4
+Atrium Elevators 2	Atrium Elevators 5
+Atrium Elevators 2	hallway25
+Atrium Elevators 3	Atrium Elevators 4
+Atrium Elevators 3	Atrium Elevators 5
+Atrium Elevators 3	intersection316
+Atrium Elevators 4	Atrium Elevators 5
+Atrium Elevators 4	hallway411
+Auditorium	hallway36
+Blood Draw	hallway14
+Cafe	hallway19
+Cafeteria	hallway33
+Case Management	hallway60
+Center for Preoperative Evaluation	hallway13
+Chapel	hallway34
+Day Surgery	hallway11
+Dialysis Clinic	HallwayB15
+elevatorB2	intersectionB20
+elevatorB2	elevatorB30
+elevatorB2	elevatorB40
+elevatorB30	elevatorB40
+Emergency Department	hallway16
+External Node 6	External Node 7
+External Node 7	Belkin House Entrance
+External Node 8	ExternalNode2
+ExternalNode1	External Node 8
+ExternalNode1	Parking2
+ExternalNode2	External Node 9
+ExternalNode4	External Node 9
+ExternalNode4	Parking3
+ExternalNode5	ExternalNode3
+ExternalNode5	ExternalNode4
+Family Center	hallway18
+GI Endoscopy	hallway10
+Gift Shop	hallway35
+hallway10	intersection12
+hallway11	intersection14
+hallway11	intersection15
+hallway110	intersection17
+hallway111	hallway10
+hallway12	intersection15
+hallway13	intersection12
+hallway13	intersection17
+hallway14	hallway15
+hallway15	hallway18
+hallway18	hallway16
+hallway19	hallway110
+hallway20	2A
+hallway22	intersection25
+hallway22	intersection26
+hallway24	intersection26
+hallway25	intersection20
+hallway26	intersection27
+hallway31	3B
+hallway31	intersection324
+hallway311	intersection34
+hallway32	intersection322
+hallway32	intersection323
+hallway33	intersection37
+hallway34	hallway311
+hallway35	intersection36
+hallway36	intersection38
+hallway37	intersection319
+hallway38	intersection31
+hallway39	intersection316
+hallway40	intersection46
+hallway410	4S
+hallway410	intersection413
+hallway411	intersection41
+hallway413	Hillside Elevators 41
+hallway413	intersection413
+hallway42	hallway43
+hallway43	intersection411
+hallway44	hallway45
+hallway44	intersection412
+hallway46	hallway45
+hallway46	hallway47
+hallway47	hallway48
+hallway48	hallway413
+hallway51	intersection58
+hallway511	intersection514
+hallway512	intersection514
+hallway513	intersection51
+hallway514	intersection52
+hallway515	hallway514
+hallway52	intersection513
+hallway54	5D
+hallway55	intersection511
+hallway57	5F
+hallway57	hallway59
+hallway57	intersection510
+hallway59	5I
+hallway59	hallway511
+hallway60	intersection610
+hallway60	intersection69
+hallway61	intersection621
+hallway61	Pariser Conference Room
+hallway62	Hillside Elevators 61
+hallway62	intersection69
+hallway71	Human Resources
+hallway71	intersection717
+hallway72	intersection715
+hallway72	intersection75
+HallwayB10	Dialysis Clinic
+HallwayB11	StairsB10
+HallwayB12	IntersectionB11
+HallwayB13	HallwayB11
+HallwayB14	StairsB12
+HallwayB15	HallwayB14
+hallwayB20	elevatorB2
+hallwayB20	intersectionB20
+hallwayB20	stairwellB20
+hallwayB21	intersectionB25
+hallwayB21	stairwellB21
+hallwayB22	Sagoff Breast Imaging
+hallwayB30	elevatorB30
+hallwayB31	intersectionB32
+hallwayB31	intersectionB33
+hallwayB31	stairwellB31
+hallwayB40	elevatorB40
+hallwayB40	stairwellB40
+hallwayB41	intersectionB42
+hallwayB41	stairwellB41
+Hillside Elevators 1	hallway111
+Hillside Elevators 1	Hillside Elevators 21
+Hillside Elevators 1	Hillside Elevators 31
+Hillside Elevators 1	Hillside Elevators 41
+Hillside Elevators 1	Hillside Elevators 51
+Hillside Elevators 1	Hillside Elevators 61
+Hillside Elevators 1	Hillside Elevators 71
+Hillside Elevators 21	hallway26
+Hillside Elevators 21	Hillside Elevators 31
+Hillside Elevators 21	Hillside Elevators 41
+Hillside Elevators 21	Hillside Elevators 51
+Hillside Elevators 21	Hillside Elevators 61
+Hillside Elevators 21	Hillside Elevators 71
+Hillside Elevators 22	hallway27
+Hillside Elevators 22	Hillside Elevators 32
+Hillside Elevators 22	Hillside Elevators 42
+Hillside Elevators 31	hallway311
+Hillside Elevators 31	Hillside Elevators 41
+Hillside Elevators 31	Hillside Elevators 51
+Hillside Elevators 31	Hillside Elevators 61
+Hillside Elevators 31	Hillside Elevators 71
+Hillside Elevators 32	hallway311
+Hillside Elevators 32	Hillside Elevators 42
+Hillside Elevators 41	Hillside Elevators 51
+Hillside Elevators 41	Hillside Elevators 61
+Hillside Elevators 41	Hillside Elevators 71
+Hillside Elevators 42	hallway413
+Hillside Elevators 51	Hillside Elevators 61
+Hillside Elevators 51	Hillside Elevators 71
+Hillside Elevators 51	intersection53
+Hillside Elevators 61	Hillside Elevators 71
+Hillside Elevators 71	hallway72
+Info	hallway19
+Inpatient Psych	hallway24
+intersection12	intersection11
+intersection14	intersection12
+intersection15	intersection17
+intersection17	hallway14
+intersection20	hallway20
+intersection20	intersection21
+intersection21	intersection23
+intersection22	hallway25
+intersection23	intersection22
+intersection24	intersection23
+intersection25	intersection24
+intersection26	hallway27
+intersection27	intersection28
+intersection28	intersection26
+intersection31	intersection32
+intersection311	intersection314
+intersection312	intersection311
+intersection313	intersection312
+intersection314	intersection319
+intersection316	intersection320
+intersection319	intersection320
+intersection32	hallway311
+intersection32	hallway34
+intersection320	intersection321
+intersection321	intersection322
+intersection323	hallway31
+intersection324	intersection325
+intersection325	hallway39
+intersection325	intersection313
+intersection34	intersection35
+intersection35	hallway35
+intersection36	hallway33
+intersection37	intersection38
+intersection38	hallway37
+intersection41	hallway40
+intersection41	intersection48
+intersection410	hallway42
+intersection411	intersection412
+intersection412	hallway411
+intersection413	hallway49
+intersection43	intersection412
+intersection44	intersection43
+intersection45	intersection44
+intersection46	intersection45
+intersection48	intersection49
+intersection49	intersection410
+intersection51	hallway516
+intersection510	intersection57
+intersection511	intersection510
+intersection512	hallway54
+intersection512	hallway55
+intersection513	hallway54
+intersection514	intersection55
+intersection52	hallway513
+intersection52	intersection53
+intersection54	intersection53
+intersection55	intersection54
+intersection57	hallway51
+intersection58	5B
+intersection58	hallway52
+intersection61	intersection62
+intersection610	intersection612
+intersection611	hallway62
+intersection612	intersection621
+intersection613	intersection610
+intersection613	intersection614
+intersection614	intersection616
+intersection615	intersection613
+intersection616	intersection615
+intersection617	intersection614
+intersection618	intersection617
+intersection618	intersection619
+intersection619	intersection620
+intersection62	intersection63
+intersection620	intersection617
+intersection621	intersection611
+intersection622	hallway61
+intersection623	intersection622
+intersection623	intersection624
+intersection624	intersection625
+intersection63	intersection64
+intersection64	intersection61
+intersection65	intersection64
+intersection65	intersection68
+intersection66	intersection65
+intersection67	intersection66
+intersection68	intersection67
+intersection69	intersection68
+intersection71	intersection79
+intersection710	intersection79
+intersection711	intersection73
+intersection712	intersection711
+intersection714	intersection78
+intersection716	intersection717
+intersection717	intersection715
+intersection72	intersection71
+intersection72	intersection710
+intersection73	intersection72
+intersection73	intersection74
+intersection74	intersection712
+intersection75	intersection74
+intersection76	intersection716
+intersection76	intersection75
+intersection77	intersection713
+intersection77	intersection76
+intersection78	intersection77
+IntersectionB10	HallwayB13
+IntersectionB11	IntersectionB12
+IntersectionB12	HallwayB10
+IntersectionB12	IntersectionB14
+IntersectionB13	IntersectionB10
+IntersectionB14	IntersectionB13
+intersectionB20	hallwayB22
+intersectionB21	hallwayB20
+intersectionB21	stairwellB20
+intersectionB22	intersectionB21
+intersectionB22	intersectionB24
+intersectionB23	hallwayB22
+intersectionB23	intersectionB22
+intersectionB24	hallwayB21
+intersectionB25	intersectionB23
+intersectionB30	intersectionB31
+intersectionB30	Sagoff Breast Center Surgery
+intersectionB32	intersectionB30
+intersectionB33	intersectionB31
+intersectionB40	intersectionB41
+intersectionB41	intersectionB43
+intersectionB42	intersectionB40
+intersectionB43	hallwayB41
+Outpatient Psych	hallway24
+Pain Management Center	intersection76
+Parking1	External Node 6
+Parking2	External Node 8
+Parking3	ExternalNode5
+Patient Relations	hallway37
+Physical Therapy	hallway22
+Radiology	hallway12
+Sagoff Breast Imaging Diagnostic Center	intersectionB40
+StairsB10	stairwellB20
+StairsB10	stairwellB30
+StairsB10	stairwellB40
+StairsB11	HallwayB12
+StairsB11	stairwellB21
+StairsB11	stairwellB31
+StairsB11	stairwellB41
+StairsB12	Belkin House Entrance
+stairwellB20	elevatorB2
+stairwellB20	stairwellB30
+stairwellB20	stairwellB40
+stairwellB21	stairwellB31
+stairwellB21	stairwellB41
+stairwellB30	hallwayB30
+stairwellB30	stairwellB40
+stairwellB31	stairwellB41
+Valet Parking	hallway19
+Valet Parking	Parking1
+Volunteer	intersection31

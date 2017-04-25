@@ -35,13 +35,13 @@ public class LoginPageController extends Controller{
     @FXML
     private Text successText;
 
-    String UserName= "Admin";
-    String Password= "Admin";
-    int attempts =0;
+    private String UserName= "Admin";
+    private String Password= "Admin";
+    private int attempts =0;
 
     @FXML
-    public void back() throws Exception {
-        switchScreen("view/Main.fxml", "Faulkner Kiosk", backBtn);
+    public void back() {
+        switchToMainScreen(backBtn);
     }
     @FXML
     public void initialize(){
@@ -52,8 +52,7 @@ public class LoginPageController extends Controller{
     }
 
     @FXML
-    public void login() throws Exception {
-    System.out.print(attempts);
+    public void login() {
         attempts++;
 
         if(username.getText().equals(UserName) && passwordField.getText().equals(Password)){
@@ -66,7 +65,7 @@ public class LoginPageController extends Controller{
         else if (attempts>=3){
             displayerror2.setText(Integer.toString(attempts));
             flashErrorMessage();
-            switchScreen("view/Main.fxml", "Faulkner Kiosk", backBtn);
+            switchToMainScreen(backBtn);
         }
 
         else if(username.getText().trim().isEmpty() && passwordField.getText().trim().isEmpty()){

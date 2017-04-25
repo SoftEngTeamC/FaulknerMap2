@@ -4,7 +4,6 @@ import model.Edge;
 import model.Node;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EdgeService extends AbstractService<Edge> {
@@ -25,8 +24,9 @@ public class EdgeService extends AbstractService<Edge> {
     }
 
     public Edge findByNodes(Node start, Node end) {
+        // TODO: clean this up
         EntityManager manager = this.managerFactory.createEntityManager();
-        Edge temp = null;
+        Edge temp;
         try {
             temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
                     "e.start.id = :start AND e.end.id = :end", Edge.class)
@@ -45,8 +45,6 @@ public class EdgeService extends AbstractService<Edge> {
                 manager.close();
                 return temp;
             } catch (Exception ex){
-                System.out.println("Could not find edge for " + start.getName() + " and " +
-                end.getName());
                 manager.close();
                 return null;
             }

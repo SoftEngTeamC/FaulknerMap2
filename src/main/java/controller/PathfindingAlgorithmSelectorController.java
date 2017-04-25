@@ -3,19 +3,15 @@
  * controller for pathfinding algorithm selector
  */
 package controller;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import pathfinding.Map;
 import service.AlgorithmSingleton;
-import service.EMFProvider;
 
 public class PathfindingAlgorithmSelectorController  extends Controller{
 
@@ -92,13 +88,13 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
 
 
     @FXML
-    void backBtnAction(ActionEvent event) throws Exception{
+    void backBtnAction(ActionEvent event) {
         switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
     }
 
     @FXML
-    void logoutBtnAction(ActionEvent event) throws Exception{
-        switchScreen("view/Main.fxml", "Main menu", logoutBtn);
+    void logoutBtnAction(ActionEvent event) {
+        switchToMainScreen(logoutBtn);
     }
 
 }

@@ -1,13 +1,11 @@
 package controller;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -19,9 +17,7 @@ import service.NodeService;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gina on 4/13/17.
- */
+
 class ShowNodesEdgesHelper {
     private static ScrollPane FirstFloorScrollPane;
     private static ScrollPane SecondFloorScrollPane;
@@ -172,7 +168,6 @@ class ShowNodesEdgesHelper {
             case 7:
                 return SeventhFloorScrollPane;
             default:
-                System.out.println("You gave MakeCircle() a floor that doesn't exist, or it isnt an int");
                 return null;
         }
     }
@@ -222,7 +217,7 @@ class ShowNodesEdgesHelper {
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
-        if(e.isDisabled() == true) {
+        if(e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
@@ -235,7 +230,7 @@ class ShowNodesEdgesHelper {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
-        // initial size of image and the image ratior
+        // initial size of image and the image ratio
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         //  System.out.println(Scrolly.getContent());
@@ -261,7 +256,6 @@ class ShowNodesEdgesHelper {
     }
 
     static List<Circle> showNodes(int currFloor) {
-        System.out.println("ShowNodes");
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
@@ -275,7 +269,7 @@ class ShowNodesEdgesHelper {
     }
 
     static void showEdges(int currFloor) {
-        System.out.println("ShowEdges");
+     //   System.out.println("ShowEdges");
         //Desired Clear old lines
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
