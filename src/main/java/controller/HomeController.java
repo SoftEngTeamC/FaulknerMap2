@@ -4,15 +4,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Navigable;
+import javafx.scene.shape.Circle;
+import pathfinding.MapNode;
 import model.Node;
+import pathfinding.Path;
+import model.Navigable;
 import textDirections.Step;
 import util.MappedList;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -46,6 +54,9 @@ public class HomeController {
     private SplitPane Map_Split;
 
     @FXML
+    private AnchorPane Map_AnchorPane;
+
+    @FXML
     private ScrollPane Map_ScrollPane;
 
     @FXML
@@ -56,6 +67,8 @@ public class HomeController {
 
     @FXML
     private HBox Map_HBox;
+
+    ImageView MapImageView = new ImageView();
 
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> directoryView = new ListView<>(searchResults);
@@ -70,6 +83,8 @@ public class HomeController {
 
     @FXML
     void initialize() {
+        InitializeMap();
+
         directoryView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
         directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -90,9 +105,48 @@ public class HomeController {
 
         ImageView Map = new ImageView();
 //        Image MapPic =
+    }
 
+    private void InitializeMap(){
+        Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
+        Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
+        MapImageView.setPreserveRatio(true);
+
+        Image MapPic = ImageProvider.getImage("images/1_thefirstfloor.png");
+        MapImageView.setImage(MapPic);
         Group MapGroup = new Group();
+        MapGroup.getChildren().add(MapImageView);
+        Map_ScrollPane.setContent(MapGroup);
+        Map_ScrollPane.setPannable(true);
+        Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Map_Slider.minProperty().bind(Map_Split.widthProperty());
+        Map_Slider.setMax(MapPic.getWidth());
+        MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
+    }
 
+    private void BuildMapGroup(Image map, Path path){
+        MapImageView.setImage(map);
+        Map_Slider.setMax(map.getWidth());
+
+        if (path.numNodes() < 1) {
+            System.err.println("Can't display map because there is no path.");
+            return;
+        }
+
+        for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
+        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+        //HideTabs(path);
+    }
+
+    private void ClearMapGroup(){
+        Group group1 = (Group) Map_ScrollPane.getContent();
+        group1.getChildren().remove(1, group1.getChildren().size());
+    }
+
+    private Circle MakeCircle (model.Node N){
+        Circle circle = new Circle();
+        return circle;
     }
 
     private void showSearch() {
