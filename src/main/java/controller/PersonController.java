@@ -7,9 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import model.Node;
 
-import java.io.IOException;
-
-public class PersonController extends Controller {
+public abstract class PersonController extends Controller {
     @FXML
     protected Button backBtn;
     @FXML
@@ -74,12 +72,6 @@ public class PersonController extends Controller {
 
     @FXML
     protected void back() {
-        try {
             switchScreen("view/DirectoryEditor.fxml","Directory Editor", backBtn);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Couldn't go back to directory editor.");
-        }
-
     }
 }

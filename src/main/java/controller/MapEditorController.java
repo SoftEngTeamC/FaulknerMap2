@@ -19,7 +19,6 @@ import model.Edge;
 import model.Node;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -235,19 +234,15 @@ public class MapEditorController extends Controller {
 
         editNode_searchResultsList.setItems(obList);
         removeNode_searchList.setItems(obList);
-        //disableEdge_searchResultsList.setItems(obList);
 
 
         tabPaneListen();
         System.out.println("INITRemoveNeighbourListener:");
         setEditNode_searchResultsListening();
-//        System.out.println("INITDisableEdgeListener:");
-//        setDisableEdge_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
         circlesListen(circles, currFloor);
-        //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
     }
 
     //-------------------------------------------Listeners---------------------------------------------
@@ -263,7 +258,6 @@ public class MapEditorController extends Controller {
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
                 int i = 0;
                 for (i = 0; !(ItemsInListView.get(i).equals(nodeService.find(Long.parseLong(circle.getId())).getName())); i++) {
-                    //System.out.println(ItemsInListView.get(i));
                 }
                 editNode_searchResultsList.getSelectionModel().select(i);
                 removeNode_searchList.getSelectionModel().select(i);
@@ -347,18 +341,16 @@ public class MapEditorController extends Controller {
 
     //This Listener is triggered when a different MapTab is selected
     private void tabPaneListen() {
-     //   System.out.println("TabPaneListener");
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> {
-             //       System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
-                    //Update Current Floor
+                    // Update Current Floor
                     currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
-                    //Update EditTab Listviews with new floors data
+                    // Update EditTab Listviews with new floors data
                     ArrayList<String> nameList = new ArrayList<>();
                     for (Node n : nodeService.getNodesByFloor(currFloor)) {
                         nameList.add(n.getName());
                     }
-                    Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
+                    nameList.sort(String.CASE_INSENSITIVE_ORDER);
                     ObservableList<String> obList = FXCollections.observableArrayList(nameList);
                     editNode_searchResultsList.setItems(obList);
                     removeNode_searchList.setItems(obList);
@@ -414,6 +406,7 @@ public class MapEditorController extends Controller {
                             }
                             //found an edge instead
                             catch (Exception e) {
+                                // TODO: This should do something
                             }
                         }
                     }
@@ -452,6 +445,7 @@ public class MapEditorController extends Controller {
                     }
                     //Found a circle Instead
                     catch (Exception e) {
+                        // TODO: This should also do something
                     }
                 }
             }
@@ -476,7 +470,6 @@ public class MapEditorController extends Controller {
                 removeNode_searchList.setItems(allOList);
             }
         } catch (Exception e) {
-            //System.out.println("Searching Error");
             e.printStackTrace();
         }
 
@@ -578,7 +571,6 @@ public class MapEditorController extends Controller {
     private List<String> neighborNames(Node node) {
 
         Set<Node> neighbors = nodeService.neighbors(node.getId());
-        //System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
 
         for (Node n : neighbors) {

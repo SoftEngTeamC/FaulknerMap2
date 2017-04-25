@@ -14,20 +14,20 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
     @Override
     public HospitalService find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        HospitalService temp = manager.find(HospitalService.class, id);
+        HospitalService service = manager.find(HospitalService.class, id);
         manager.close();
-        return temp;
+        return service;
     }
 
     public HospitalService findHospitalServiceByName(String name) {
         EntityManager manager = this.managerFactory.createEntityManager();
         try {
-            HospitalService temp = (HospitalService) manager.createQuery(
+            HospitalService service = (HospitalService) manager.createQuery(
                     "SELECT s FROM HospitalService s WHERE s.name LIKE :name")
                     .setParameter("name", name)
                     .setMaxResults(1).getSingleResult();
             manager.close();
-            return temp;
+            return service;
         } catch (NoResultException e) {
             manager.close();
             return null;
@@ -36,10 +36,10 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
 
     public List<HospitalService> getAllServices() {
         EntityManager manager = this.managerFactory.createEntityManager();
-        List<HospitalService> temp = manager.createQuery("from HospitalService", HospitalService.class)
+        List<HospitalService> services = manager.createQuery("from HospitalService", HospitalService.class)
                 .getResultList();
         manager.close();
-        return temp;
+        return services;
     }
 
     public List<HospitalService> search(String s) {
