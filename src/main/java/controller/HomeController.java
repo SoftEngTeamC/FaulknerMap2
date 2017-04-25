@@ -3,18 +3,15 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.Group;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Navigable;
 import model.Node;
 import textDirections.Step;
+import util.MappedList;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -67,6 +64,7 @@ public class HomeController {
     private ListView<Step> stepsView = new ListView<>(steps);
 
     private ObservableList<Node> destinations = FXCollections.observableArrayList();
+    private MappedList<javafx.scene.Node, Node> destinationNodes = new MappedList<>(destinations, HomeController::destinationNode);
 
     private TextField searchBox = new TextField();
 
@@ -88,11 +86,33 @@ public class HomeController {
         searchBox.textProperty().addListener((observable, oldValue, query) -> {
             // TODO: Populate searchResults with the
         });
+
         ImageView Map = new ImageView();
 //        Image MapPic =
 
         Group MapGroup = new Group();
 
+    }
+
+    private void showSearch() {
+        Searching_VBox.getChildren().clear();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(directoryView);
+    }
+
+    private void showDirections() {
+        Searching_VBox.getChildren().clear();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(stepsView);
+    }
+
+    private static javafx.scene.Node destinationNode(Node node) {
+        HBox hbox = new HBox();
+        TextField name = new TextField();
+        name.setText(node.getName());
+        Button deleteButton = new Button();
+        deleteButton.setText("X");
+        return hbox;
     }
 
 }
