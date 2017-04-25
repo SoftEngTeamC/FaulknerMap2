@@ -16,11 +16,11 @@ public class MakeDirections {
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
         double pathTime = path.timeInSeconds();
-        //String outputTemp = "";
-        String output = /*outputTemp.concat(*/bundle.getString("approximateDistance") + " " +
+        String output = bundle.getString("approximateDistance") + " " +
                 pathFormat.format(Math.floor(pathLength)) + " " + bundle.getString("feetEstimatedTime")  + " "
                 + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
-                pathFormat.format(Math.floor(pathTime % 60)) + " " +bundle.getString("seconds")/*)*/;
+                pathFormat.format(Math.floor(pathTime % 60)) + " " +bundle.getString("seconds");
+
         String direction;
 
         MapNode currentNode, nextNode, afterNextNode;
@@ -31,7 +31,6 @@ public class MakeDirections {
         double currentAngle, nextAngle, angleShift, distance;
 
         for(i = 0; i < path.numNodes() - 2; i++) {
-            //System.out.println("Path: " + path.numNodes());
             currentNode = path.getNode(i);
             nextNode = path.getNode(i+1);
             afterNextNode = path.getNode(i+2);
@@ -39,7 +38,6 @@ public class MakeDirections {
             nextAngle = getAngle(nextNode, afterNextNode);
             angleShift = getAngleShift(currentAngle, nextAngle);
             direction = getDirection(currentAngle);
-
 
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
                 output = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
@@ -80,7 +78,7 @@ public class MakeDirections {
                 }
             }
         }
-///////////////////////////Why ain't this in the loop?
+
         currentNode = path.getNode(i);
         nextNode = path.getNode(i+1);
         currentAngle = getAngle(currentNode, nextNode);
