@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -54,6 +55,10 @@ public class HomeController {
 
     @FXML
     void initialize() {
+        ImageView Map = new ImageView();
+//        Image MapPic =
+
+        Group MapGroup = new Group();
 
     }
 }
