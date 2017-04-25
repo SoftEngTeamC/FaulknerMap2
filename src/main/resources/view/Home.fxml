@@ -9,25 +9,25 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<SplitPane dividerPositions="0.342809364548495" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane fx:id="Home_MainSplit" dividerPositions="0.342809364548495" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
    <items>
-      <VBox prefHeight="200.0" prefWidth="100.0" />
-      <SplitPane dividerPositions="0.871859296482412" orientation="VERTICAL" prefHeight="398.0" prefWidth="391.0">
+      <VBox fx:id="Home_VBox" prefHeight="200.0" prefWidth="100.0" />
+      <SplitPane fx:id="Map_Split" dividerPositions="0.871859296482412" orientation="VERTICAL" prefHeight="398.0" prefWidth="391.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <ScrollPane prefHeight="344.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ScrollPane fx:id="Map_ScrollPane" prefHeight="344.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                     </content>
                   </ScrollPane>
-                  <Slider layoutX="362.0" layoutY="190.0" orientation="VERTICAL" prefHeight="107.0" prefWidth="14.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <ImageView fitHeight="48.0" fitWidth="44.0" layoutX="331.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                  <Slider fx:id="Map_Slider" layoutX="362.0" layoutY="190.0" orientation="VERTICAL" prefHeight="107.0" prefWidth="14.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <ImageView fx:id="SnapToHome_ImageView" fitHeight="48.0" fitWidth="44.0" layoutX="331.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                </children>
             </AnchorPane>
           <AnchorPane prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <HBox layoutY="4.0" prefHeight="63.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <HBox fx:id="Map_HBox" layoutY="4.0" prefHeight="63.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
         </items>
