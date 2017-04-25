@@ -76,15 +76,15 @@ public class HomeController {
         directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 destinations.add(newValue.getNode());
-                // TODO: change the view to show the steps and list of destinations
+                showDirections();
             }
         });
 
-        Searching_VBox.getChildren().add(searchBox);
-        Searching_VBox.getChildren().add(directoryView);
+        showSearch();
         //TODO: Populate the searchBox with hot spots
+
         searchBox.textProperty().addListener((observable, oldValue, query) -> {
-            // TODO: Populate searchResults with the
+            // TODO: Populate searchResults from the query
         });
 
         ImageView Map = new ImageView();
