@@ -7,6 +7,8 @@ import pathfinding.Path;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import static java.lang.Math.PI;
+
 
 public class MakeDirections {
     public static String getText(Path path){
@@ -14,25 +16,21 @@ public class MakeDirections {
         DecimalFormat pathFormat = new DecimalFormat("#.#");
         double pathLength = path.distanceInFeet();
         double pathTime = path.timeInSeconds();
-        String output = "";
-        String output2 = output.concat(bundle.getString("approximateDistance") + " " +
-                pathFormat.format(pathLength) + " " + bundle.getString("feetEstimatedTime")  + " "
+        String output = bundle.getString("approximateDistance") + " " +
+                pathFormat.format(Math.floor(pathLength)) + " " + bundle.getString("feetEstimatedTime")  + " "
                 + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
-                pathFormat.format(Math.floor(pathTime % 60)) + bundle.getString("seconds"));
-        output = output2;
+                pathFormat.format(Math.floor(pathTime % 60)) + " " +bundle.getString("seconds");
+
         String direction;
+
+        MapNode currentNode, nextNode, afterNextNode;
+
         int i;
-        MapNode currentNode;
-        MapNode nextNode;
-        MapNode afterNextNode;
+
         double totalDistance = 0;
-        double currentAngle;
-        double nextAngle;
-        double angleShift;
-        double p = Math.PI;
-        double distance;
+        double currentAngle, nextAngle, angleShift, distance;
+
         for(i = 0; i < path.numNodes() - 2; i++) {
-       //     System.out.println("Path: " + path.numNodes());
             currentNode = path.getNode(i);
             nextNode = path.getNode(i+1);
             afterNextNode = path.getNode(i+2);
@@ -41,10 +39,8 @@ public class MakeDirections {
             angleShift = getAngleShift(currentAngle, nextAngle);
             direction = getDirection(currentAngle);
 
-
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
-                output2 = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
-                output = output2;
+                output = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
             }
 
             else {
@@ -61,30 +57,23 @@ public class MakeDirections {
                         break;
                 }
 
-                if (angleShift < -1 * p / 6 || angleShift > p / 6) {
+                if (angleShift < -1 * PI / 6 || angleShift > PI / 6) {
                     DecimalFormat df = new DecimalFormat("#.#");
-                    output2 = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
+                    output = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
                             + " " + bundle.getString("feetThen"));
-                    output = output2;
                     totalDistance = 0;
-                    if (angleShift > p / 6 && angleShift <= 5 * p / 12) {
-                        output2 = output.concat(bundle.getString("slightRight") + "\n");
-                        output = output2;
-                    } else if (angleShift > 5 * p / 12 && angleShift <= 7 * p / 12) {
-                        output2 = output.concat(bundle.getString("rightTurn") + "\n");
-                        output = output2;
-                    } else if (angleShift > 7 * p / 12 && angleShift <= p) {
-                        output2 = output.concat(bundle.getString("sharpRight") + "\n");
-                        output = output2;
-                    } else if (angleShift < -1 * p / 6 && angleShift >= -5 * p / 12) {
-                        output2 = output.concat(bundle.getString("slightLeft") + "\n");
-                        output = output2;
-                    } else if (angleShift < -5 * p / 12 && angleShift >= -7 * p / 12) {
-                        output2 = output.concat(bundle.getString("leftTurn") + "\n");
-                        output = output2;
-                    } else if (angleShift < -7 * p / 12 && angleShift >= -1 * p) {
-                        output2 = output.concat(bundle.getString("sharpLeft") + "\n");
-                        output = output2;
+                    if (angleShift > PI / 6 && angleShift <= 5 * PI / 12) {
+                        output = output.concat(bundle.getString("slightRight") + "\n");
+                    } else if (angleShift > 5 * PI / 12 && angleShift <= 7 * PI / 12) {
+                        output = output.concat(bundle.getString("rightTurn") + "\n");
+                    } else if (angleShift > 7 * PI / 12 && angleShift <= PI) {
+                        output = output.concat(bundle.getString("sharpRight") + "\n");
+                    } else if (angleShift < -1 * PI / 6 && angleShift >= -5 * PI / 12) {
+                        output = output.concat(bundle.getString("slightLeft") + "\n");
+                    } else if (angleShift < -5 * PI / 12 && angleShift >= -7 * PI / 12) {
+                        output = output.concat(bundle.getString("leftTurn") + "\n");
+                    } else if (angleShift < -7 * PI / 12 && angleShift >= -1 * PI) {
+                        output = output.concat(bundle.getString("sharpLeft") + "\n");
                     }
                 }
             }
@@ -108,11 +97,8 @@ public class MakeDirections {
                 break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        output2 = output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
+        return output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
                 " " + bundle.getString("arrived"));
-        output = output2;
-
-        return output;
     }
 
     private static double distanceBetween(MapNode a, MapNode b) {
@@ -144,25 +130,22 @@ public class MakeDirections {
 
     private static double getAngleShift(double firstAngle, double secondAngle) {
         double angle = secondAngle - firstAngle;
-        if (angle > Math.PI) {
-            angle -= 2 * Math.PI;
+        if (angle > PI) {
+            angle -= 2 * PI;
         }
-        if(angle < -1 * Math.PI) {
-            angle += 2 * Math.PI;
+        else if(angle < -1 * PI) {
+            angle += 2 * PI;
         }
         return angle;
     }
 
     private static String getDirection(double angle) {
-        double p = Math.PI;
-        if(angle >= p/(-6) && angle <= p/6 || angle >= 5 * p/6 || angle <= -5 * p/6) {
+        if(angle >= PI/(-6) && angle <= PI/6 || angle >= 5 * PI/6 || angle <= -5 * PI/6) {
             return "horizontal";
         }
-        else if(angle >= 5 * p/12 && angle <= 7 * p/12 || angle >= -7 * p/12 && angle <= -5 * p/12) {
+        else if(angle >= 5 * PI/12 && angle <= 7 * PI/12 || angle >= -7 * PI/12 && angle <= -5 * PI/12) {
             return "vertical";
         }
-        else {
-            return "diagonal";
-        }
+        return "diagonal";
     }
 }
