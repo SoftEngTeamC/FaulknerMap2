@@ -1,15 +1,18 @@
 package controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Navigable;
+import model.Node;
+import textDirections.Step;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class HomeController {
 
@@ -52,8 +55,34 @@ public class HomeController {
     @FXML
     private HBox Map_HBox;
 
+    private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
+    private ListView<Navigable> directoryView = new ListView<>(searchResults);
+
+    private ObservableList<Step> steps = FXCollections.observableArrayList();
+    private ListView<Step> stepsView = new ListView<>(steps);
+
+    private ObservableList<Node> destinations = FXCollections.observableArrayList();
+
+    private TextField searchBox = new TextField();
+
     @FXML
     void initialize() {
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                destinations.add(newValue.getNode());
+                // TODO: change the view to show the steps and list of destinations
+            }
+        });
+
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(directoryView);
+        //TODO: Populate the searchBox with hot spots
+        searchBox.textProperty().addListener((observable, oldValue, query) -> {
+            // TODO: Populate searchResults with the
+        });
     }
+
 }
