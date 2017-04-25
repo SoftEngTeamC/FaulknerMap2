@@ -60,12 +60,12 @@ public class HoursEditorController extends Controller {
     }
 
     @FXML
-    public void back() throws Exception {
+    public void back() {
         switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
     }
 
     @FXML
-    public void logout() throws Exception {
+    public void logout() {
         switchToMainScreen(logoutBtn);
     }
 
@@ -87,10 +87,10 @@ public class HoursEditorController extends Controller {
 
             hoursService.merge(currentHours);
 
-            System.out.println("Changes saved!");
         } catch (ParseException e) {
-            System.err.println("Couldn't parse hours.");
             e.printStackTrace();
+            System.err.println("Couldn't parse hours.");
+
         }
     }
 

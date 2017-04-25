@@ -12,10 +12,9 @@ import java.util.stream.Collectors;
 public class Map {
     public enum algorithm { BFS, DFS, ASTAR }
     private java.util.Map<Long, MapNode> nodeMap;
-    private NodeService nodeService;
 
     public Map(Collection<model.Node> nodes) {
-        nodeService = new NodeService();
+        NodeService nodeService = new NodeService();
         EdgeService edgeService = new EdgeService();
         nodeMap = new HashMap<>();
         for (model.Node n : nodes) {

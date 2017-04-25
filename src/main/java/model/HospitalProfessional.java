@@ -2,6 +2,7 @@ package model;
 
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class HospitalProfessional {
         this.id = id;
     }
 
+    @Field
     @Column(name = "PROF_TITLE")
     public String getTitle() {
         return title;
@@ -50,6 +52,7 @@ public class HospitalProfessional {
         this.title = title;
     }
 
+    @Field
     @Column(name = "PROF_NAME")
     public String getName() {
         return name;
@@ -69,5 +72,10 @@ public class HospitalProfessional {
 
     public void setOffices(List<Node> offices) {
         this.offices = offices;
+    }
+
+    @Override
+    public String toString() {
+        return name + (title.equals("") ? "" : " (" + title + ")");
     }
 }
