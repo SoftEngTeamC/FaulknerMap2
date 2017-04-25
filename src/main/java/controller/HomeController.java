@@ -4,28 +4,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import pathfinding.MapNode;
-import model.Node;
-import pathfinding.Path;
 import model.Navigable;
+import model.Node;
+import pathfinding.MapNode;
+import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController {
+public class HomeController extends Controller {
 
     @FXML
     private ResourceBundle resources;
@@ -97,9 +94,14 @@ public class HomeController {
     private ListView<Step> stepsView = new ListView<>(steps);
 
     private ObservableList<Node> destinations = FXCollections.observableArrayList();
-    private MappedList<javafx.scene.Node, Node> destinationNodes = new MappedList<>(destinations, HomeController::destinationNode);
+    private MappedList<javafx.scene.Node, Node> destinationNodes = new MappedList<>(destinations, this::destinationNode);
 
     private TextField searchBox = new TextField();
+
+    private Button addDestinationButton = new Button();
+
+    private TextField currentSearchField;
+    private int currentDestinationIndex = -1;
 
     @FXML
     void initialize() {
@@ -107,22 +109,35 @@ public class HomeController {
         InitializeFloorButtons();
         // Only allow one destination to be selected at a time
         directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        directoryView.setPlaceholder(new Label("No matches :("));
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        searchResults.addAll(professionalService.getAllProfessionals());
+
         directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                destinations.add(newValue.getNode());
+                if (currentDestinationIndex >= 0) {
+                    destinations.set(currentDestinationIndex, newValue.getNode());
+                    currentDestinationIndex = -1;
+                } else {
+                    destinations.add(newValue.getNode());
+                }
                 showDirections();
             }
         });
 
         showSearch();
         //TODO: Populate the searchBox with hot spots
-
+        Searching_VBox.prefWidthProperty().bind(Search_ScrollPane.widthProperty());
         searchBox.textProperty().addListener((observable, oldValue, query) -> {
             // TODO: Populate searchResults from the query
         });
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
+    
     private void InitializeMap(){
         Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
         Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
@@ -207,20 +222,58 @@ public class HomeController {
         Searching_VBox.getChildren().clear();
         Searching_VBox.getChildren().add(searchBox);
         Searching_VBox.getChildren().add(directoryView);
+        setCurrentSearchField(searchBox);
+    }
+
+    private void showSearch(TextField field) {
+        // Called while in Destination sate
+        Searching_VBox.getChildren().remove(stepsView);
+        Searching_VBox.getChildren().add(directoryView);
+        setCurrentSearchField(field);
+    }
+
+    private void setCurrentSearchField(TextField field) {
+        currentSearchField = field;
+        currentSearchField.textProperty().addListener((observable, oldValue, query) -> {
+            searchResults.clear();
+            searchResults.addAll(professionalService.search(query));
+        });
     }
 
     private void showDirections() {
+        System.out.println("Showing directions. (Wipe Vbox)");
         Searching_VBox.getChildren().clear();
+        currentSearchField = null;
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(stepsView);
     }
 
-    private static javafx.scene.Node destinationNode(Node node) {
+    private javafx.scene.Node destinationNode(Node node) {
+        System.out.println("Converting DB node to jfx representation. " + node.toString());
         HBox hbox = new HBox();
+
         TextField name = new TextField();
         name.setText(node.getName());
+        name.setOnMouseClicked(e -> {
+            if (currentSearchField == null) {
+                name.setEditable(true);
+                showSearch(name);
+                currentDestinationIndex = destinations.indexOf(node);
+            }
+        });
+        hbox.getChildren().add(name);
+
         Button deleteButton = new Button();
+        deleteButton.setOnAction(e -> {
+            if (destinations.size() == 1) { // Check if we are the only destination
+                showSearch();
+                destinations.clear();
+            }
+            destinations.remove(node);
+        });
         deleteButton.setText("X");
+        hbox.getChildren().add(deleteButton);
+
         return hbox;
     }
 
