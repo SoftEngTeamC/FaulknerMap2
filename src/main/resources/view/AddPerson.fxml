@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPersonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddPersonController">
    <children>
       <GridPane layoutY="24.0" prefHeight="1200.0" prefWidth="1900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -19,8 +19,8 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="116.0" minHeight="10.0" prefHeight="115.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -117,11 +117,11 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></ListView>
-            <ListView fx:id="availableLocationsListView" prefHeight="0.0" prefWidth="380.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
+            <ListView fx:id="availableLocationsListView" prefHeight="0.0" prefWidth="280.0" GridPane.columnIndex="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></ListView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Available locations" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Available locations" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
                <font>
                   <Font size="28.0" />
                </font>
@@ -137,7 +137,7 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></Button>
-            <TextField fx:id="locationsSearchField" onKeyPressed="#locationsSearchFieldKeyPressed" prefHeight="38.0" prefWidth="380.0" promptText="Search" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.valignment="TOP">
+            <TextField fx:id="locationsSearchField" onKeyPressed="#locationsSearchFieldKeyPressed" prefHeight="38.0" prefWidth="380.0" promptText="Search" GridPane.columnIndex="4" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></TextField>

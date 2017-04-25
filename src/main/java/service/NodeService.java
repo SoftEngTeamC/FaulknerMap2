@@ -3,6 +3,7 @@ package service;
 
 import model.Edge;
 import model.Node;
+import org.hibernate.search.exception.EmptyQueryException;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -13,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -114,12 +116,16 @@ public class NodeService extends AbstractService<Node> {
         manager.getTransaction().begin();
         QueryBuilder qb = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder().forEntity(Node.class).get();
-        org.apache.lucene.search.Query query = qb.keyword().onFields("name").matching(s).createQuery();
-        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, Node.class);
+        try {
+            org.apache.lucene.search.Query query = qb.keyword().wildcard().onFields("name").matching("*" + s + "*").createQuery();
+            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, Node.class);
+            return JPAQuery.getResultList();
+        } catch (EmptyQueryException e) {
+            return new LinkedList<>(getAllNodes());
+        } finally {
+            manager.getTransaction().commit();
+            fullTextEntityManager.close();
+        }
 
-        List<Node> result = JPAQuery.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
-        return result;
     }
 }

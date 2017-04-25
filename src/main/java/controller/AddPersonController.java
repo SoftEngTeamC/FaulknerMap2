@@ -1,7 +1,6 @@
 package controller;
 
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -38,6 +37,10 @@ public class AddPersonController extends PersonController {
     public void initialize() {
         currentLocationsListView.setItems(currentLocations);
         availableLocationsListView.setItems(availableLocations);
+
+        locationsSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            locationsSearchFieldKeyPressed();
+        });
     }
 
     public void logoutBtnPressed() {
@@ -56,7 +59,8 @@ public class AddPersonController extends PersonController {
 
     public void locationsSearchFieldKeyPressed(){
         String query = locationsSearchField.getText();
-        availableLocations = FXCollections.observableArrayList(nodeService.search(query));
+        availableLocations.clear();
+        availableLocations.addAll(nodeService.search(query));
     }
 
 }
