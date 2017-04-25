@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,8 +16,6 @@ import javafx.stage.Stage;
 import model.HospitalProfessional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class DirectoryEditorController extends Controller{
@@ -31,7 +30,7 @@ public class DirectoryEditorController extends Controller{
     @FXML
     private TextField searchField;
     @FXML
-    private ListView<String> searchList;
+    private ListView<HospitalProfessional> searchList;
     @FXML
     private SplitPane splitPane;
     @FXML
@@ -39,11 +38,8 @@ public class DirectoryEditorController extends Controller{
     @FXML
     private AnchorPane DirectoryEditor_AnchorPane;
 
-    // Arraylist of search results
-    ArrayList<String> searchResults;
+    private ObservableList<HospitalProfessional> professionals = FXCollections.observableArrayList();
 
-    // List of all hospital people
-    List<HospitalProfessional> people;
 
     @FXML
     public void initialize() {
@@ -53,17 +49,14 @@ public class DirectoryEditorController extends Controller{
         searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
         searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
 
-
-        // init search results empty list, hospital professionals list
-        people = professionalService.getAllProfessionals();
-        searchResults = new ArrayList<>();
+        searchList.setItems(professionals);
 
         // disable the edit person button
         editPrsnBtn.setDisable(true);
 
         // add a listener to the listview
         searchList.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> editPrsnBtn.setDisable(false));
+                .addListener((observable, oldValue, newValue) -> editPrsnBtn.setDisable(newValue == null));
 
         // add a listener to the textfield being changed to fix the search lag
         searchField.textProperty()
@@ -82,19 +75,11 @@ public class DirectoryEditorController extends Controller{
         switchToMainScreen(logoutBtn);
     }
 
-    /**
-     * @throws Exception
-     * @author Paul
-     * <p>
-     * event handler for edit person
-     * passes selected person into the edit person screen
-     */
     @FXML
     public void editPersonBtnPressed() throws IOException {
 
         // get the current hospital professional that is selected in the list
-        String selectedName = searchList.getSelectionModel().getSelectedItem();
-        HospitalProfessional hp = professionalService.findHospitalProfessionalByName(selectedName);
+        HospitalProfessional hp = searchList.getSelectionModel().getSelectedItem();
 
         // pass it to the next screen
         FXMLLoader loader = new FXMLLoader();
@@ -124,24 +109,9 @@ public class DirectoryEditorController extends Controller{
      *
      */
     @FXML
-    public void textFieldChanged(String anew) {
-
-        // get the query from the search field
-        String query = anew;
-
-        // reset list
-        searchResults.removeAll(searchResults);
-
-        // add search results
-        for(HospitalProfessional p : people){
-            if(p.getName().toLowerCase().contains(query.toLowerCase())){
-                searchResults.add(p.getName());
-            }
-        }
-
-        // display the list
-        searchList.setItems(FXCollections.observableList(searchResults));
-
+    public void textFieldChanged(String query) {
+        professionals.clear();
+        professionals.addAll(professionalService.search(query));
 
     }
 
