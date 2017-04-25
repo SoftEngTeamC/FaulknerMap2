@@ -70,6 +70,7 @@ public class HomeController {
 
     @FXML
     void initialize() {
+        directoryView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
         directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 

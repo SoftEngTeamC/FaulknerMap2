@@ -170,7 +170,7 @@ public class MainController extends Controller implements Initializable{
             TextDirectionsTextArea.setText(bundle.getString("alreadyThere"));
             DisplayMap(path);
         } else {
-            TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+//            TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
             DisplayMap(path);
         }
     }
