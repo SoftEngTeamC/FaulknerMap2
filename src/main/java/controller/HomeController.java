@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import pathfinding.MapNode;
 import model.Node;
@@ -60,15 +61,34 @@ public class HomeController {
     private ScrollPane Map_ScrollPane;
 
     @FXML
-    private Slider Map_Slider;
-
-    @FXML
-    private ImageView SnapToHome_ImageView;
-
-    @FXML
     private HBox Map_HBox;
 
+
+    //Content inside ScrollPane
+    @FXML
+    private ImageView SnapToHome_ImageView;
+    @FXML
+    private Slider Map_Slider;
+    @FXML
+    private VBox FloorButtons_VBox;
+    @FXML
+    private Button FirstFloor_Button;
+    @FXML
+    private Button SecondFloor_Button;
+    @FXML
+    private Button ThirdFloor_Button;
+    @FXML
+    private Button FourthFloor_Button;
+    @FXML
+    private Button FifthFloor_Button;
+    @FXML
+    private Button SixthFloor_Button;
+    @FXML
+    private Button SeventhFloor_Button;
+
     ImageView MapImageView = new ImageView();
+    Group MapGroup = new Group();
+    //---------
 
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> directoryView = new ListView<>(searchResults);
@@ -84,9 +104,9 @@ public class HomeController {
     @FXML
     void initialize() {
         InitializeMap();
+        InitializeFloorButtons();
         // Only allow one destination to be selected at a time
         directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
         directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 destinations.add(newValue.getNode());
@@ -100,10 +120,9 @@ public class HomeController {
         searchBox.textProperty().addListener((observable, oldValue, query) -> {
             // TODO: Populate searchResults from the query
         });
+    }
 
-        ImageView Map = new ImageView();
-//        Image MapPic =
-
+    //------------------------------------MAP FUNCTIONS----------------------------------------
     private void InitializeMap(){
         Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
         Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
@@ -111,7 +130,6 @@ public class HomeController {
 
         Image MapPic = ImageProvider.getImage("images/1_thefirstfloor.png");
         MapImageView.setImage(MapPic);
-        Group MapGroup = new Group();
         MapGroup.getChildren().add(MapImageView);
         Map_ScrollPane.setContent(MapGroup);
         Map_ScrollPane.setPannable(true);
@@ -141,10 +159,49 @@ public class HomeController {
         group1.getChildren().remove(1, group1.getChildren().size());
     }
 
-    private Circle MakeCircle (model.Node N){
+    private void MakeCircleInGroup (model.Node N){
+        //This function trusts that it is only being called to build circles on the displayed floor
+        double x = N.getLocation().getX();
+        double y = N.getLocation().getY();
+
+        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+        // initial size of image and the image ratio
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
         Circle circle = new Circle();
-        return circle;
+        //These bind the center positions relative to the width property of the image
+        //the new center is calculated using the initial ratios
+        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
+        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
+        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
+        circle.fillProperty().setValue(Color.RED);
+
+        circle.setId(N.getId().toString());
+        MapGroup.getChildren().addAll(circle);
     }
+
+    private void InitializeFloorButtons(){
+        FirstFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));});
+        SecondFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));});
+        ThirdFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));});
+        FourthFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));});
+        FifthFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));});
+        SixthFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));});
+        SeventhFloor_Button.setOnMouseClicked(e -> {
+            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));});
+    }
+
+    //--------------------------------------------------------------------------------------------------
+
+
 
     private void showSearch() {
         Searching_VBox.getChildren().clear();
