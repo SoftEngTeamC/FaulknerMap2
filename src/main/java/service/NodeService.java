@@ -23,8 +23,7 @@ public class NodeService extends AbstractService<Node> {
     @Override
     public Node find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        Node temp = manager.find(Node.class, id);
-        return temp;
+        return manager.find(Node.class, id);
     }
 
     public Set<Node> neighbors(Long id) {

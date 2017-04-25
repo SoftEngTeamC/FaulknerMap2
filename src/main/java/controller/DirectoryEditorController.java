@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,21 +62,12 @@ public class DirectoryEditorController extends Controller{
         editPrsnBtn.setDisable(true);
 
         // add a listener to the listview
-        searchList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-
-                editPrsnBtn.setDisable(false);
-            }
-        });
+        searchList.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> editPrsnBtn.setDisable(false));
 
         // add a listener to the textfield being changed to fix the search lag
-        searchField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                textFieldChanged(newValue);
-            }
-        });
+        searchField.textProperty()
+                .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
 
     }
 
@@ -101,7 +90,7 @@ public class DirectoryEditorController extends Controller{
      * passes selected person into the edit person screen
      */
     @FXML
-    public void editPersonBtnPressed() throws Exception {
+    public void editPersonBtnPressed() throws IOException {
 
         // get the current hospital professional that is selected in the list
         String selectedName = searchList.getSelectionModel().getSelectedItem();

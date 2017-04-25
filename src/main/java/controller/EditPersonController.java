@@ -28,16 +28,10 @@ public class EditPersonController extends PersonController {
 
     @FXML
     public void initialize() {
+        super.initialize();
         updateText.setVisible(false);
         deletedText.setVisible(false);
-        currentLocationsListView.setItems(currentLocations);
-        availableLocationsListView.setItems(availableLocations);
 
-        currentLocationsListView.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> removeNodeBtn.setDisable(newValue == null));
-
-        availableLocationsListView.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> addNodeBtn.setDisable(newValue == null));
 
         nameField.textProperty()
                 .addListener((observable, oldValue, newValue) -> updateBtn.setDisable(false));

@@ -26,6 +26,17 @@ public class PersonController extends Controller {
     ObservableList<Node> currentLocations = FXCollections.observableArrayList();
     ObservableList<Node> availableLocations = FXCollections.observableArrayList();
 
+    public void initialize() {
+        currentLocationsListView.setItems(currentLocations);
+        availableLocationsListView.setItems(availableLocations);
+
+        currentLocationsListView.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> removeNodeBtn.setDisable(newValue == null));
+
+        availableLocationsListView.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> addNodeBtn.setDisable(newValue == null));
+    }
+
     private void sendNodeToCurrent(Node node) {
         if (node == null) {
             System.err.println("Cannot move null node to current nodes.");

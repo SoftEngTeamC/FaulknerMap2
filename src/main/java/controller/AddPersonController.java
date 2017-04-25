@@ -35,9 +35,9 @@ public class AddPersonController extends PersonController {
 
     @FXML
     public void initialize() {
-        currentLocationsListView.setItems(currentLocations);
-        availableLocationsListView.setItems(availableLocations);
-
+        super.initialize();
+        successText.setVisible(false);
+        errorText.setVisible(false);
         locationsSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             locationsSearchFieldKeyPressed();
         });
