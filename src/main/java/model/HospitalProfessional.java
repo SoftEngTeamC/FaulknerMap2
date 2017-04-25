@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Indexed
 @Table(name = "PROFESSIONALS")
-public class HospitalProfessional {
+public class HospitalProfessional implements Navigable {
 
     private Long id;
 
@@ -72,6 +72,12 @@ public class HospitalProfessional {
 
     public void setOffices(List<Node> offices) {
         this.offices = offices;
+    }
+
+    @Transient
+    @Override
+    public Node getNode() {
+        return offices.get(1);
     }
 
     @Override
