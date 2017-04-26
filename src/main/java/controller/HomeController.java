@@ -308,6 +308,7 @@ public class HomeController extends Controller {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().add(searchBox);
         Searching_VBox.getChildren().add(searchResultsView);
+        searchResultsView.getSelectionModel().clearSelection();
         setCurrentSearchField(searchBox);
     }
 
@@ -370,11 +371,9 @@ public class HomeController extends Controller {
         deleteButton.setOnAction(e -> {
             destinations.remove(location);
             destinationNodeCache.remove(location);
-            showDirections();
-            if (destinations.isEmpty()) { // Check if we are the only destination
-                currentDestinationIndex = -1;
-                showSearch();
-            }
+            currentDestinationIndex = -1;
+            if (destinations.isEmpty()) showSearch();
+            else showDirections();
         });
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
