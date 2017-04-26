@@ -208,16 +208,22 @@ public class HomeController extends Controller {
         // Only allow one destination to be selected at a time
         directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
+        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedDestination) -> {
+            if (selectedDestination != null) {
                 if (currentDestinationIndex >= 0) {
-                    destinations.set(currentDestinationIndex, newValue);
+                    destinations.set(currentDestinationIndex, selectedDestination);
                     currentDestinationIndex = -1;
                 } else {
-                    destinations.add(newValue);
+                    destinations.add(selectedDestination);
                 }
                 showDirections();
             }
+        });
+
+        addDestinationButton.setText("+");
+        addDestinationButton.setOnAction(e -> {
+            currentDestinationIndex = -1;
+            addDestination();
         });
 
         //TODO: Populate the searchBox with hot spots
@@ -236,6 +242,7 @@ public class HomeController extends Controller {
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestinationButton);
         Searching_VBox.getChildren().add(stepsView);
         currentSearchField = null;
     }
@@ -247,12 +254,19 @@ public class HomeController extends Controller {
         setCurrentSearchField(searchBox);
     }
 
-    private void showSearch(TextField field) {
-        // Called while in Destination sate
+    private void editDestination(TextField field) {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(directoryView);
         setCurrentSearchField(field);
+    }
+
+    private void addDestination() {
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(directoryView);
+        setCurrentSearchField(searchBox);
     }
 
     private void setCurrentSearchField(TextField field) {
@@ -265,31 +279,42 @@ public class HomeController extends Controller {
 
     private HBox destinationNode(Navigable location) {
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
-        HBox hbox = new HBox();
+        HBox destinationView = makeDestinationNodeElement(location);
+        destinationNodeCache.put(location, destinationView);
+        return destinationView;
+    }
 
-        TextField name = new TextField();
-        name.setText(location.toString() + " - " + location.getNode().getName());
-        name.setOnMouseClicked(e -> {
+    private HBox makeDestinationNodeElement(Navigable location) {
+        HBox container = new HBox();
+        container.getChildren().add(makeDestinationField(location));
+        container.getChildren().add(makeDeleteButton(location));
+        return container;
+    }
+
+    private TextField makeDestinationField(Navigable location) {
+        TextField field = new TextField();
+        field.setText(location.toString() + " - " + location.getNode().getName());
+        field.setOnMouseClicked(e -> {
             if (currentSearchField == null) {
-                name.setEditable(true);
-                name.setText("");
-                showSearch(name);
+                field.setText("");
+                editDestination(field);
                 currentDestinationIndex = destinations.indexOf(location);
             }
         });
-        hbox.getChildren().add(name);
+        return field;
+    }
 
+    private Button makeDeleteButton(Navigable location) {
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
             destinations.remove(location);
-            if (destinations.size() == 0) { // Check if we are the only destination
+            showDirections();
+            if (destinations.isEmpty()) { // Check if we are the only destination
                 currentDestinationIndex = -1;
                 showSearch();
             }
         });
         deleteButton.setText("X");
-        hbox.getChildren().add(deleteButton);
-        destinationNodeCache.put(location, hbox);
-        return hbox;
+        return deleteButton;
     }
 }
