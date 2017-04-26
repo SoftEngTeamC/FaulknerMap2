@@ -88,10 +88,9 @@ public class DirectoryEditorController extends Controller {
         loader.load();
         Parent p = loader.getRoot();
         Stage stage = (Stage) backBtn.getScene().getWindow();
-        stage.setScene(new Scene(p));
+        stage.getScene().setRoot(p);
         EditPersonController controller = loader.getController();
         controller.setSelectedUser(hp);
-        stage.setFullScreen(true);
         stage.show();
 
     }
