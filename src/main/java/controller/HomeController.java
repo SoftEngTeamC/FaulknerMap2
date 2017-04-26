@@ -13,9 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.Navigable;
-import model.Node;
 import pathfinding.MapNode;
-import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
 
@@ -83,8 +81,8 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
-    ImageView MapImageView = new ImageView();
-    Group MapGroup = new Group();
+    private ImageView MapImageView = new ImageView();
+    private Group MapGroup = new Group();
     //---------
 
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
@@ -93,8 +91,8 @@ public class HomeController extends Controller {
     private ObservableList<Step> steps = FXCollections.observableArrayList();
     private ListView<Step> stepsView = new ListView<>(steps);
 
-    private ObservableList<Node> destinations = FXCollections.observableArrayList();
-    private MappedList<javafx.scene.Node, Node> destinationNodes = new MappedList<>(destinations, this::destinationNode);
+    private ObservableList<Navigable> destinations = FXCollections.observableArrayList();
+    private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::destinationNode);
 
     private TextField searchBox = new TextField();
 
@@ -107,33 +105,7 @@ public class HomeController extends Controller {
     void initialize() {
         InitializeMap();
         InitializeFloorButtons();
-        // Only allow one destination to be selected at a time
-        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        directoryView.setPlaceholder(new Label("No matches :("));
-        // Only allow one destination to be selected at a time
-        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        searchResults.addAll(professionalService.getAllProfessionals());
-
-        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (currentDestinationIndex >= 0) {
-                    destinations.set(currentDestinationIndex, newValue.getNode());
-                    currentDestinationIndex = -1;
-                } else {
-                    destinations.add(newValue.getNode());
-                }
-                showDirections();
-            }
-        });
-
-        showSearch();
-        //TODO: Populate the searchBox with hot spots
-        Searching_VBox.prefWidthProperty().bind(Search_ScrollPane.widthProperty());
-        searchBox.textProperty().addListener((observable, oldValue, query) -> {
-            // TODO: Populate searchResults from the query
-        });
+        initializeDirectory();
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -228,9 +200,45 @@ public class HomeController extends Controller {
     }
 
     //--------------------------------------------------------------------------------------------------
+    private void initializeDirectory() {
+        directoryView.setPlaceholder(new Label("No matches :("));
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (currentDestinationIndex >= 0) {
+                    destinations.set(currentDestinationIndex, newValue);
+                    currentDestinationIndex = -1;
+                } else {
+                    destinations.add(newValue);
+                }
+                showDirections();
+            }
+        });
+
+        //TODO: Populate the searchBox with hot spots
+        searchResults.addAll(professionalService.getAllProfessionals());
+        Searching_VBox = makeVBox();
+        showSearch();
+    }
+
+    private VBox makeVBox() {
+        VBox newVBox = new VBox();
+        newVBox.prefWidthProperty().bind(Search_ScrollPane.widthProperty());
+        Search_ScrollPane.setContent(newVBox);
+        return newVBox;
+    }
+
+    private void showDirections() {
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(stepsView);
+        currentSearchField = null;
+    }
 
     private void showSearch() {
-        Searching_VBox.getChildren().clear();
+        Searching_VBox = makeVBox();
         Searching_VBox.getChildren().add(searchBox);
         Searching_VBox.getChildren().add(directoryView);
         setCurrentSearchField(searchBox);
@@ -238,7 +246,8 @@ public class HomeController extends Controller {
 
     private void showSearch(TextField field) {
         // Called while in Destination sate
-        Searching_VBox.getChildren().remove(stepsView);
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(directoryView);
         setCurrentSearchField(field);
     }
@@ -251,41 +260,37 @@ public class HomeController extends Controller {
         });
     }
 
-    private void showDirections() {
-        System.out.println("Showing directions. (Wipe Vbox)");
-        Searching_VBox.getChildren().clear();
-        currentSearchField = null;
-        Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(stepsView);
-    }
-
-    private javafx.scene.Node destinationNode(Node node) {
-        System.out.println("Converting DB node to jfx representation. " + node.toString());
+    private HBox destinationNode(Navigable location) {
         HBox hbox = new HBox();
 
         TextField name = new TextField();
-        name.setText(node.getName());
+        name.setText(location.toString() + " - " + location.getNode().getName());
         name.setOnMouseClicked(e -> {
             if (currentSearchField == null) {
                 name.setEditable(true);
+                name.setText("");
                 showSearch(name);
-                currentDestinationIndex = destinations.indexOf(node);
+                currentDestinationIndex = destinations.indexOf(location);
+            }
+            if (currentDestinationIndex == destinations.indexOf(location)) {
+                name.setEditable(true);
+                name.setText("");
+                setCurrentSearchField(name);
             }
         });
         hbox.getChildren().add(name);
 
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
-            if (destinations.size() == 1) { // Check if we are the only destination
+            destinations.remove(location);
+            if (destinations.size() == 0) { // Check if we are the only destination
+                currentDestinationIndex = -1;
                 showSearch();
-                destinations.clear();
             }
-            destinations.remove(node);
         });
         deleteButton.setText("X");
         hbox.getChildren().add(deleteButton);
 
         return hbox;
     }
-
 }
