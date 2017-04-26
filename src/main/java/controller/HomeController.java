@@ -18,6 +18,8 @@ import textDirections.Step;
 import util.MappedList;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class HomeController extends Controller {
@@ -93,6 +95,7 @@ public class HomeController extends Controller {
 
     private ObservableList<Navigable> destinations = FXCollections.observableArrayList();
     private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::destinationNode);
+    private Map<Navigable, HBox> destinationNodeCache = new HashMap<>();
 
     private TextField searchBox = new TextField();
 
@@ -261,6 +264,7 @@ public class HomeController extends Controller {
     }
 
     private HBox destinationNode(Navigable location) {
+        if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox hbox = new HBox();
 
         TextField name = new TextField();
@@ -271,11 +275,6 @@ public class HomeController extends Controller {
                 name.setText("");
                 showSearch(name);
                 currentDestinationIndex = destinations.indexOf(location);
-            }
-            if (currentDestinationIndex == destinations.indexOf(location)) {
-                name.setEditable(true);
-                name.setText("");
-                setCurrentSearchField(name);
             }
         });
         hbox.getChildren().add(name);
@@ -290,7 +289,7 @@ public class HomeController extends Controller {
         });
         deleteButton.setText("X");
         hbox.getChildren().add(deleteButton);
-
+        destinationNodeCache.put(location, hbox);
         return hbox;
     }
 }
