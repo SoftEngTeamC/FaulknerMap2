@@ -10,10 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HospitalProfessional;
-import model.HospitalService;
-import model.Hours;
-import model.Node;
+import model.*;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
@@ -170,7 +167,8 @@ public class MainController extends Controller implements Initializable {
 
         for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
 
-        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+        for(Edge e : path.edges()) ShowNodesEdgesHelper.MakeLine(e);
+//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
 
         HideTabs(path);
     }
