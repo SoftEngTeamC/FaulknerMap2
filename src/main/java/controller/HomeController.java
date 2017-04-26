@@ -123,33 +123,6 @@ public class HomeController extends Controller {
         System.out.println(Map_Slider.getValue());
         //PanToPoint(2000,2000);
 
-        // Only allow one destination to be selected at a time
-        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        directoryView.setPlaceholder(new Label("No matches :("));
-        // Only allow one destination to be selected at a time
-        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        searchResults.addAll(professionalService.getAllProfessionals());
-
-        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (currentDestinationIndex >= 0) {
-                    destinations.set(currentDestinationIndex, newValue.getNode());
-                    currentDestinationIndex = -1;
-                } else {
-                    destinations.add(newValue.getNode());
-                }
-                showDirections();
-            }
-        });
-
-        showSearch();
-        //TODO: Populate the searchBox with hot spots
-        Searching_VBox.prefWidthProperty().bind(Search_ScrollPane.widthProperty());
-        searchBox.textProperty().addListener((observable, oldValue, query) -> {
-            // TODO: Populate searchResults from the query
-        });
         initializeDirectory();
     }
 
@@ -302,10 +275,17 @@ public class HomeController extends Controller {
             showAddDestination();
         });
 
-        setSearchResults(professionalService.getAllProfessionals()); // TODO: Populate the searchBox with hot spots
+        search(""); // TODO: Populate the searchBox with hot spots
 
         Searching_VBox = makeVBox();
         showSearch();
+    }
+
+    private void search(String query) {
+        List<? extends Navigable> results = professionalService.search(query);
+        searchResults.clear();
+        searchResults.addAll(results);
+        searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
     }
 
     private void setSearchResults(List<? extends Navigable> results) {
@@ -357,8 +337,7 @@ public class HomeController extends Controller {
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
         currentSearchField.textProperty()
-                .addListener((observable, oldValue, query) ->
-                        setSearchResults(professionalService.search(query.toLowerCase())));
+                .addListener((observable, oldValue, query) -> search(query.toLowerCase()));
         currentSearchField.requestFocus();
     }
 
@@ -379,11 +358,13 @@ public class HomeController extends Controller {
 
     private TextField makeDestinationField(Navigable location) {
         TextField field = new TextField();
+        field.setEditable(false);
         field.setText(location.toString() + " - " + location.getNode().getName());
         field.setOnMouseClicked(e -> {
             if (currentSearchField == null) {
-                destinationNodeCache.remove(location);
+                field.setEditable(true);
                 field.setText("");
+                search("");
                 showEditDestination(field);
                 currentDestinationIndex = destinations.indexOf(location);
             }
