@@ -1,7 +1,6 @@
 package controller;
 
 
-import javafx.beans.property.DoubleProperty;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
@@ -272,6 +271,7 @@ public class HomeController extends Controller {
         addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
         addDestinationButton.setOnAction(e -> {
             searchBox.setText("");
+            search("");
             showAddDestination();
         });
 
@@ -285,13 +285,6 @@ public class HomeController extends Controller {
         List<? extends Navigable> results = professionalService.search(query);
         searchResults.clear();
         searchResults.addAll(results);
-        searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
-    }
-
-    private void setSearchResults(List<? extends Navigable> results) {
-        searchResults.clear();
-        searchResults.addAll(results);
-        // Remove any objects with matching strings.
         searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
     }
 
