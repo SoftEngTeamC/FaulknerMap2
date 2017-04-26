@@ -18,7 +18,7 @@ public class MakeDirections {
         double pathTime = path.timeInSeconds();
         String output = bundle.getString("approximateDistance") + " " +
                 pathFormat.format(Math.floor(pathLength)) + " " + bundle.getString("feetEstimatedTime")  + " "
-                + pathFormat.format(Math.floor(pathTime / 60)) + " minutes and " +
+                + pathFormat.format(Math.floor(pathTime / 60)) + " " + bundle.getString("minute") + " " +
                 pathFormat.format(Math.floor(pathTime % 60)) + " " +bundle.getString("seconds");
 
         String direction;
