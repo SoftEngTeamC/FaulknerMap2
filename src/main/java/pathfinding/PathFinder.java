@@ -26,7 +26,7 @@ public class PathFinder {
             T currentNode = fringe.poll();
 
             if (currentNode.equals(goal)) {
-                System.out.println("Goal Node: " + goal);
+            //    System.out.println("Goal Node: " + goal);
                 return reconstructPath(currentNode, cameFrom);
             }
 
