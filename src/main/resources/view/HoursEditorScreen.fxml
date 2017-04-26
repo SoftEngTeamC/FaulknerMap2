@@ -44,15 +44,6 @@
                   <Insets right="20.0" />
                </GridPane.margin>
             </Text>
-
-            <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" prefHeight="49.0" prefWidth="88.0" text="Back" GridPane.valignment="TOP">
-               <GridPane.margin>
-                  <Insets left="50.0" top="50.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Button>
              <TextField fx:id="morninghrs1" alignment="CENTER" layoutX="389.0" layoutY="107.0" prefHeight="53.0" prefWidth="335.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                  <font>
                      <Font size="15.0" />
@@ -63,7 +54,15 @@
                      <Font size="15.0" />
                  </font>
              </TextField>
-
+             <ButtonBar GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                 <buttons>
+                     <fx:define>
+                         <ToggleGroup fx:id="ampm1"/>
+                     </fx:define>
+                     <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm1" />
+                     <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm1" />
+                 </buttons>
+             </ButtonBar>
              <TextField fx:id="morninghrs2" alignment="CENTER" layoutX="389.0" layoutY="154.0" prefHeight="56.0" prefWidth="319.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                  <font>
                      <Font size="15.0" />
@@ -74,6 +73,15 @@
                      <Font size="15.0" />
                  </font>
              </TextField>
+             <ButtonBar layoutX="887.0" layoutY="165.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                 <buttons>
+                     <fx:define>
+                         <ToggleGroup fx:id="ampm2"/>
+                     </fx:define>
+                     <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm2" />
+                     <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm2" />
+                 </buttons>
+             </ButtonBar>
              <TextField fx:id="eveninghrs1" alignment="CENTER" layoutX="389.0" layoutY="232.0" prefHeight="54.0" prefWidth="334.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
                  <font>
                      <Font size="15.0" />
@@ -84,6 +92,15 @@
                      <Font size="15.0" />
                  </font>
              </TextField>
+             <ButtonBar layoutX="888.0" layoutY="290.0" prefHeight="48.0" prefWidth="180.0" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                 <buttons>
+                     <fx:define>
+                         <ToggleGroup fx:id="ampm3"/>
+                     </fx:define>
+                     <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm3"/>
+                     <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm3" />
+                 </buttons>
+             </ButtonBar>
              <TextField fx:id="eveninghrs2" alignment="CENTER" layoutX="389.0" layoutY="281.0" prefWidth="328.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                  <font>
                      <Font size="15.0" />
@@ -94,6 +111,15 @@
                      <Font size="15.0" />
                  </font>
              </TextField>
+             <ButtonBar layoutX="888.0" layoutY="415.0" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                 <buttons>
+                     <fx:define>
+                         <ToggleGroup fx:id="ampm4"/>
+                     </fx:define>
+                     <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm4" />
+                     <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm4" />
+                 </buttons>
+             </ButtonBar>
              <Button fx:id="submitbtn" layoutX="357.0" layoutY="345.0" mnemonicParsing="false" onAction="#SubmitChanges" prefHeight="73.0" prefWidth="201.0" text="Submit Changes" textFill="#049e1b" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                  <font>
                      <Font size="21.0" />
@@ -162,42 +188,14 @@
                      <Font size="17.0" />
                  </font>
              </Button>
-            <ButtonBar GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-               <buttons>
-                   <fx:define>
-                       <ToggleGroup fx:id="ampm1"/>
-                   </fx:define>
-                  <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm1" />
-                  <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm1" />
-               </buttons>
-            </ButtonBar>
-            <ButtonBar layoutX="887.0" layoutY="165.0" GridPane.columnIndex="6" GridPane.rowIndex="3">
-               <buttons>
-                   <fx:define>
-                       <ToggleGroup fx:id="ampm2"/>
-                   </fx:define>
-                  <RadioButton mnemonicParsing="false" selected="true" text="AM" toggleGroup="$ampm2" />
-                  <RadioButton mnemonicParsing="false" text="PM" toggleGroup="$ampm2" />
-               </buttons>
-            </ButtonBar>
-            <ButtonBar layoutX="888.0" layoutY="290.0" prefHeight="48.0" prefWidth="180.0" GridPane.columnIndex="6" GridPane.rowIndex="4">
-               <buttons>
-                   <fx:define>
-                       <ToggleGroup fx:id="ampm3"/>
-                   </fx:define>
-                  <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm3"/>
-                  <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm3" />
-               </buttons>
-            </ButtonBar>
-            <ButtonBar layoutX="888.0" layoutY="415.0" GridPane.columnIndex="6" GridPane.rowIndex="5">
-               <buttons>
-                   <fx:define>
-                       <ToggleGroup fx:id="ampm4"/>
-                   </fx:define>
-                  <RadioButton mnemonicParsing="false" text="AM" toggleGroup="$ampm4" />
-                  <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm4" />
-               </buttons>
-            </ButtonBar>
+             <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" prefHeight="49.0" prefWidth="88.0" text="Back" GridPane.valignment="TOP">
+                 <GridPane.margin>
+                     <Insets left="50.0" top="50.0" />
+                 </GridPane.margin>
+                 <font>
+                     <Font size="17.0" />
+                 </font>
+             </Button>
          </children>
       </GridPane>
    </children>
