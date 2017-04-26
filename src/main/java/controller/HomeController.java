@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
 
@@ -91,7 +92,7 @@ public class HomeController extends Controller {
     //---------
 
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
-    private ListView<Navigable> directoryView = new ListView<>(searchResults);
+    private ListView<Navigable> searchResultsView = new ListView<>(searchResults);
 
     private ObservableList<Step> steps = FXCollections.observableArrayList();
     private ListView<Step> stepsView = new ListView<>(steps);
@@ -207,11 +208,11 @@ public class HomeController extends Controller {
 
     //--------------------------------------------------------------------------------------------------
     private void initializeDirectory() {
-        directoryView.setPlaceholder(new Label("No matches :("));
+        searchResultsView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
-        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        searchResultsView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedDestination) -> {
+        searchResultsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedDestination) -> {
             if (selectedDestination != null) {
                 if (currentDestinationIndex >= 0) {
                     destinations.set(currentDestinationIndex, selectedDestination);
@@ -239,7 +240,8 @@ public class HomeController extends Controller {
     private void setSearchResults(List<? extends Navigable> results) {
         searchResults.clear();
         searchResults.addAll(results);
-        searchResults.removeAll(destinations); // Don't allow loops
+        // Remove any objects with matching strings.
+        searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
     }
 
     private VBox makeVBox() {
@@ -261,14 +263,14 @@ public class HomeController extends Controller {
     private void showSearch() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().add(searchBox);
-        Searching_VBox.getChildren().add(directoryView);
+        Searching_VBox.getChildren().add(searchResultsView);
         setCurrentSearchField(searchBox);
     }
 
     private void showEditDestination(TextField field) {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(directoryView);
+        Searching_VBox.getChildren().add(searchResultsView);
         setCurrentSearchField(field);
     }
 
@@ -276,15 +278,16 @@ public class HomeController extends Controller {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(searchBox);
-        Searching_VBox.getChildren().add(directoryView);
+        Searching_VBox.getChildren().add(searchResultsView);
         setCurrentSearchField(searchBox);
     }
 
+
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
-        currentSearchField.textProperty().addListener((observable, oldValue, query) -> {
-            setSearchResults(professionalService.search(query.toLowerCase()));
-        });
+        currentSearchField.textProperty()
+                .addListener((observable, oldValue, query) ->
+                        setSearchResults(professionalService.search(query.toLowerCase())));
         currentSearchField.requestFocus();
     }
 
@@ -308,6 +311,7 @@ public class HomeController extends Controller {
         field.setText(location.toString() + " - " + location.getNode().getName());
         field.setOnMouseClicked(e -> {
             if (currentSearchField == null) {
+                destinationNodeCache.remove(location);
                 field.setText("");
                 showEditDestination(field);
                 currentDestinationIndex = destinations.indexOf(location);
@@ -320,6 +324,7 @@ public class HomeController extends Controller {
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
             destinations.remove(location);
+            destinationNodeCache.remove(location);
             showDirections();
             if (destinations.isEmpty()) { // Check if we are the only destination
                 currentDestinationIndex = -1;
