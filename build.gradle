@@ -13,10 +13,8 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
-    maven {
-        url  "http://dl.bintray.com/jerady/maven"
-        url  "https://jitpack.io"
-    }
+    maven { url "http://dl.bintray.com/jerady/maven" }
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'javafx-gradle-plugin'
