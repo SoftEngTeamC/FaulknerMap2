@@ -4,6 +4,7 @@ package controller;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -17,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.Navigable;
 import pathfinding.MapNode;
+import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
 
@@ -112,6 +114,9 @@ public class HomeController extends Controller {
 
     private TextField currentSearchField;
     private int currentDestinationIndex = -1;
+
+    private pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes());
+    private ObservableList<Path> paths = FXCollections.observableArrayList();
 
     @FXML
     void initialize() {
@@ -276,6 +281,24 @@ public class HomeController extends Controller {
         });
 
         search(""); // TODO: Populate the searchBox with hot spots
+
+        // Recalculate the path
+        destinations.addListener(new ListChangeListener<Navigable>() {
+            @Override
+            public void onChanged(Change<? extends Navigable> c) {
+                while (c.next()) {} // Apply all the changes
+                ObservableList<? extends Navigable> dests = c.getList();
+                paths.clear();
+                if (c.getList().size() >= 2) {
+                    Navigable start = dests.get(0);
+                    for (Navigable dest : dests.subList(1, dests.size())) {
+                        paths.add(map.shortestPath(start.getNode(), dest.getNode()));
+                        start = dest;
+                    }
+                }
+                System.out.println(paths);
+            }
+        });
 
         Searching_VBox = makeVBox();
         showSearch();
