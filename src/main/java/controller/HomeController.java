@@ -1,5 +1,7 @@
 package controller;
 
+
+import javafx.beans.property.DoubleProperty;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
@@ -87,10 +89,14 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
-    private ImageView MapImageView = new ImageView();
-    private Group MapGroup = new Group();
-    //---------
+    ImageView MapImageView = new ImageView();
+    Group MapGroup = new Group();
+    //Center ScrollPane relative to Image Coordinates
+    double CenterX;
+    double CenterY;
+    boolean CenterLocked = false;
 
+    //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> searchResultsView = new ListView<>(searchResults);
 
@@ -112,6 +118,38 @@ public class HomeController extends Controller {
     void initialize() {
         InitializeMap();
         InitializeFloorButtons();
+        InitializeZoomListener();
+        Map_Slider.setValue(1000);
+        System.out.println(Map_Slider.getValue());
+        //PanToPoint(2000,2000);
+
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        directoryView.setPlaceholder(new Label("No matches :("));
+        // Only allow one destination to be selected at a time
+        directoryView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        searchResults.addAll(professionalService.getAllProfessionals());
+
+        directoryView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (currentDestinationIndex >= 0) {
+                    destinations.set(currentDestinationIndex, newValue.getNode());
+                    currentDestinationIndex = -1;
+                } else {
+                    destinations.add(newValue.getNode());
+                }
+                showDirections();
+            }
+        });
+
+        showSearch();
+        //TODO: Populate the searchBox with hot spots
+        Searching_VBox.prefWidthProperty().bind(Search_ScrollPane.widthProperty());
+        searchBox.textProperty().addListener((observable, oldValue, query) -> {
+            // TODO: Populate searchResults from the query
+        });
         initializeDirectory();
     }
 
@@ -127,11 +165,6 @@ public class HomeController extends Controller {
         MapGroup.getChildren().add(MapImageView);
         Map_ScrollPane.setContent(MapGroup);
         Map_ScrollPane.setPannable(true);
-        //Set the scroll min and max values to the pixel size of the Image View / scrollPane
-        Map_ScrollPane.hmaxProperty().bind(MapImageView.fitWidthProperty().subtract(Map_ScrollPane.widthProperty()));
-        Map_ScrollPane.setHmin(0);
-        Map_ScrollPane.vmaxProperty().bind(MapImageView.fitHeightProperty().subtract(Map_ScrollPane.heightProperty()));
-        Map_ScrollPane.setVmin(0);
         Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_Slider.minProperty().bind(Map_Split.widthProperty());
@@ -139,15 +172,53 @@ public class HomeController extends Controller {
         MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
 
-    private void PanToPoint(double X, Double Y){
+    private void InitializeZoomListener(){
+        //This event is triggered when the Map Slider is moved
+        //It locks the center coordinate, and as it is zoomed it pans to the desired position
+        Map_Slider.valueProperty().addListener((original,oldValue, newValue) -> {
+            CenterLocked=true;
+            System.out.println("Zooming On: " + CenterX+", "+CenterY);
+            PanToPoint(CenterX,CenterY);
+            });
+
+        //This event is triggered when the mouse is released from the slider
+        Map_Slider.setOnMouseReleased(e->{CenterLocked=false;});
+
+        //These events are triggered when the scrollpane view is panned
+        Map_ScrollPane.hvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
+        Map_ScrollPane.vvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
+    }
+    //This function is meant to be called whenever the user is panning around the map
+    //ie on click and drag, not on zoom, Controlled by CenterLocked Boolean
+    private void Panning(){
         double Width = MapImageView.getImage().getWidth();
         double Height = MapImageView.getImage().getHeight();
+        double ImageRatio = Height / Width;
         double currWidth = MapImageView.getFitWidth();
-        double currHeight = MapImageView.getFitHeight();
+        double currHeight = currWidth * ImageRatio;
+        double ScrollX = Map_ScrollPane.getHvalue();
+        double ScrollY = Map_ScrollPane.getVvalue();
+
+        double Xprime = ((ScrollX + ((Map_ScrollPane.getWidth() / currWidth) / 2)) * (currWidth - Map_ScrollPane.getWidth()));
+        double Yprime = ((ScrollY + ((Map_ScrollPane.getHeight() / currHeight) / 2)) * (currHeight - Map_ScrollPane.getHeight()));
+
+        CenterX = Xprime / (currWidth / Width);
+        CenterY = Yprime / (currHeight / Height);
+        System.out.println(CenterX+", "+CenterY);
+    }
+
+    private void PanToPoint(double X, double Y){
+        System.out.println("Panning To Point");
+        double Width = MapImageView.getImage().getWidth();
+        double Height = MapImageView.getImage().getHeight();
+        double ImageRatio = Height/Width;
+        double currWidth = MapImageView.getFitWidth();
+        double currHeight = currWidth*ImageRatio;
         double Xprime = X*(currWidth/Width);
         double Yprime = Y*(currHeight/Height);
-        Map_ScrollPane.setHvalue(Xprime - Map_ScrollPane.getWidth());
-        Map_ScrollPane.setVvalue(Yprime - Map_ScrollPane.getHeight());
+
+        Map_ScrollPane.setHvalue((Xprime/(currWidth-Map_ScrollPane.getWidth()))-((Map_ScrollPane.getWidth()/currWidth)/2));
+        Map_ScrollPane.setVvalue((Yprime/(currHeight-Map_ScrollPane.getHeight()))-((Map_ScrollPane.getHeight()/currHeight)/2));
     }
 
 //    private void BuildMapGroup(Image map, Path path){
