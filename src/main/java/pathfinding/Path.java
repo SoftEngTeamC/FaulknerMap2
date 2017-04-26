@@ -100,4 +100,9 @@ public class Path implements Iterable<MapNode> {
     public Iterator<MapNode> iterator() {
         return path.iterator();
     }
+
+    @Override
+    public String toString() {
+        return path.toString();
+    }
 }

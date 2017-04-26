@@ -13,7 +13,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"),
+            Parent root = FXMLLoader.load(getClass().getResource("view/Home.fxml"),
                     ResourceBundle.getBundle("Language", new Locale("en", "US")));
             primaryStage.setTitle("Faulkner Kiosk");
             primaryStage.setScene(new Scene(root, 800, 500));
