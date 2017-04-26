@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
+import static java.lang.Math.PI;
+
 
 public class MakeDirections {
     public static LinkedList<Step> getText(Path path){
@@ -23,19 +25,17 @@ public class MakeDirections {
                 pathFormat.format(Math.floor(pathTime % 60)) + bundle.getString("seconds"));
         output = output2;
         TextDirectionSteps.add(new Step(output));
+
         String direction;
+
+        MapNode currentNode, nextNode, afterNextNode;
+
         int i;
-        MapNode currentNode;
-        MapNode nextNode;
-        MapNode afterNextNode;
+
         double totalDistance = 0;
-        double currentAngle;
-        double nextAngle;
-        double angleShift;
-        double p = Math.PI;
-        double distance;
+        double currentAngle, nextAngle, angleShift, distance;
+
         for(i = 0; i < path.numNodes() - 2; i++) {
-       //     System.out.println("Path: " + path.numNodes());
             currentNode = path.getNode(i);
             nextNode = path.getNode(i+1);
             afterNextNode = path.getNode(i+2);
@@ -44,11 +44,11 @@ public class MakeDirections {
             angleShift = getAngleShift(currentAngle, nextAngle);
             direction = getDirection(currentAngle);
 
-
             if(currentNode.getLocation().getFloor() != nextNode.getLocation().getFloor()) {
                 output2 = output.concat(bundle.getString("elevator") + " " + nextNode.getLocation().getFloor() + "\n");
                 output = output2;
                 TextDirectionSteps.add(new Step(output));
+
             }
 
             else {
@@ -65,9 +65,9 @@ public class MakeDirections {
                         break;
                 }
 
-                if (angleShift < -1 * p / 6 || angleShift > p / 6) {
+                if (angleShift < -1 * PI / 6 || angleShift > PI / 6) {
                     DecimalFormat df = new DecimalFormat("#.#");
-                    output2 = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
+                    output = output.concat(bundle.getString("straight") + df.format(Math.round(totalDistance))
                             + " " + bundle.getString("feetThen"));
                     output = output2;
                     TextDirectionSteps.add(new Step(output));
@@ -119,12 +119,13 @@ public class MakeDirections {
                 break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        output2 = output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
+        return output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
                 " " + bundle.getString("arrived"));
         output = output2;
         TextDirectionSteps.add(new Step(output));
 
         return TextDirectionSteps;
+
     }
 
     private static double distanceBetween(MapNode a, MapNode b) {
@@ -156,25 +157,22 @@ public class MakeDirections {
 
     private static double getAngleShift(double firstAngle, double secondAngle) {
         double angle = secondAngle - firstAngle;
-        if (angle > Math.PI) {
-            angle -= 2 * Math.PI;
+        if (angle > PI) {
+            angle -= 2 * PI;
         }
-        if(angle < -1 * Math.PI) {
-            angle += 2 * Math.PI;
+        else if(angle < -1 * PI) {
+            angle += 2 * PI;
         }
         return angle;
     }
 
     private static String getDirection(double angle) {
-        double p = Math.PI;
-        if(angle >= p/(-6) && angle <= p/6 || angle >= 5 * p/6 || angle <= -5 * p/6) {
+        if(angle >= PI/(-6) && angle <= PI/6 || angle >= 5 * PI/6 || angle <= -5 * PI/6) {
             return "horizontal";
         }
-        else if(angle >= 5 * p/12 && angle <= 7 * p/12 || angle >= -7 * p/12 && angle <= -5 * p/12) {
+        else if(angle >= 5 * PI/12 && angle <= 7 * PI/12 || angle >= -7 * PI/12 && angle <= -5 * PI/12) {
             return "vertical";
         }
-        else {
-            return "diagonal";
-        }
+        return "diagonal";
     }
 }

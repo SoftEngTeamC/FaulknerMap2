@@ -105,7 +105,7 @@ public class NodeService extends AbstractService<Node> {
                 )
         );
         List<Node> nodes = manager.createQuery(elevatorCriteria).getResultList();
-        System.out.println(nodes);
+       // System.out.println(nodes);
         return nodes;
     }
 

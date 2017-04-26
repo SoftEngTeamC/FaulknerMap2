@@ -3,8 +3,6 @@
   <component name="ResourceBundleManager">
     <file url="file://$PROJECT_DIR$/src/main/resources/Language.properties" />
     <file url="file://$PROJECT_DIR$/src/main/resources/Language_en_US.properties" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/Language_es_PR.properties" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/Language_fr_FR.properties" />
     <file url="file://$PROJECT_DIR$/src/main/resources/Language_it_IT.properties" />
     <file url="file://$PROJECT_DIR$/src/main/resources/Language_pt_BR.properties" />
     <file url="file://$PROJECT_DIR$/src/main/resources/Language_zh_CN.properties" />

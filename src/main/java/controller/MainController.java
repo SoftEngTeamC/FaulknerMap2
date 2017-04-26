@@ -8,11 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.HospitalProfessional;
-import model.HospitalService;
-import model.Hours;
-import model.Node;
+import model.*;
 import pathfinding.Map;
 import pathfinding.MapNode;
 import pathfinding.Path;
@@ -22,43 +20,80 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class MainController extends Controller implements Initializable{
-    @FXML private ScrollPane FirstFloorScrollPane;
-    @FXML private Slider FirstFloorSlider;
-    @FXML private ScrollPane SecondFloorScrollPane;
-    @FXML private Slider SecondFloorSlider;
-    @FXML private ScrollPane ThirdFloorScrollPane;
-    @FXML private Slider ThirdFloorSlider;
-    @FXML private ScrollPane FourthFloorScrollPane;
-    @FXML private Slider FourthFloorSlider;
-    @FXML private ScrollPane FifthFloorScrollPane;
-    @FXML private Slider FifthFloorSlider;
-    @FXML private ScrollPane SixthFloorScrollPane;
-    @FXML private Slider SixthFloorSlider;
-    @FXML private ScrollPane SeventhFloorScrollPane;
-    @FXML private Slider SeventhFloorSlider;
-    @FXML private TabPane FloorViewsTabPane;
-    @FXML private VBox MainVbox;
-    @FXML private ImageView LogoImageView;
-    @FXML private AutocompletionlTextField StartLocationField;
-    @FXML private AutocompletionlTextField EndLocationField;
-    @FXML private TabPane Info_TabPane;
-    @FXML private TextArea StartInfo_TextArea;
-    @FXML private TextArea EndInfo_TextArea;
-    @FXML private TextArea TextDirectionsTextArea;
-    @FXML private Button AboutUsButton;
-    @FXML private Button AdminToolButton;
-    @FXML private SplitPane MainSplitPane;
 
-    @FXML private MenuItem english_button;
-    @FXML private  MenuItem spanish_button;
-    @FXML private  MenuItem french_button;
-    @FXML private MenuItem japanese_button;
-    @FXML private MenuItem chinese_button;
-    @FXML private MenuItem portuguese_button;
-    @FXML private MenuItem italian_button;
+public class MainController extends Controller implements Initializable {
+    @FXML
+    public VBox middleLocation;
+    @FXML
+    private ScrollPane FirstFloorScrollPane;
+    @FXML
+    private Slider FirstFloorSlider;
+    @FXML
+    private ScrollPane SecondFloorScrollPane;
+    @FXML
+    private Slider SecondFloorSlider;
+    @FXML
+    private ScrollPane ThirdFloorScrollPane;
+    @FXML
+    private Slider ThirdFloorSlider;
+    @FXML
+    private ScrollPane FourthFloorScrollPane;
+    @FXML
+    private Slider FourthFloorSlider;
+    @FXML
+    private ScrollPane FifthFloorScrollPane;
+    @FXML
+    private Slider FifthFloorSlider;
+    @FXML
+    private ScrollPane SixthFloorScrollPane;
+    @FXML
+    private Slider SixthFloorSlider;
+    @FXML
+    private ScrollPane SeventhFloorScrollPane;
+    @FXML
+    private Slider SeventhFloorSlider;
+    @FXML
+    private TabPane FloorViewsTabPane;
+    @FXML
+    private VBox MainVbox;
+    @FXML
+    private ImageView LogoImageView;
+    @FXML
+    private AutocompletionlTextField StartLocationField;
+    @FXML
+    private AutocompletionlTextField EndLocationField;
+    @FXML
+    private TabPane Info_TabPane;
+    @FXML
+    private TextArea StartInfo_TextArea;
+    @FXML
+    private TextArea EndInfo_TextArea;
+    @FXML
+    private TextArea TextDirectionsTextArea;
+    @FXML
+    private Button AboutUsButton;
+    @FXML
+    private Button AdminToolButton;
+    @FXML
+    private SplitPane MainSplitPane;
 
-    private Hours hours;
+    @FXML
+    private MenuItem english_button;
+    @FXML
+    private MenuItem spanish_button;
+    @FXML
+    private MenuItem french_button;
+    @FXML
+    private MenuItem japanese_button;
+    @FXML
+    private MenuItem chinese_button;
+    @FXML
+    private MenuItem portuguese_button;
+    @FXML
+    private MenuItem italian_button;
+
+    private static int destCount;
+    private ArrayList<AutocompletionlTextField> midTexts = new ArrayList<>();
 
     private static ResourceBundle bundle;
 
@@ -91,6 +126,7 @@ public class MainController extends Controller implements Initializable{
 
         initializeStartAndEnd();
 
+        destCount = 0;
     }
 
     public void loadView(Locale locale) {
@@ -124,8 +160,6 @@ public class MainController extends Controller implements Initializable{
     //-------------------------------------------DISPLAY PATH DRAWING FUNCTIONS---------------------------------------------
     //DisplayMap function takes a list of points(X,Y) and creates circles at all their positions and lines between them
     private void DisplayMap(Path path) {
-        ShowNodesEdgesHelper.ClearOldPaths();
-
         if (path.numNodes() < 1) {
             System.err.println("Can't display map because there is no path.");
             return;
@@ -133,7 +167,8 @@ public class MainController extends Controller implements Initializable{
 
         for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
 
-        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+        for(Edge e : path.edges()) ShowNodesEdgesHelper.MakeLine(e);
+//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
 
         HideTabs(path);
     }
@@ -165,12 +200,27 @@ public class MainController extends Controller implements Initializable{
 
     private void pathText(Path path) {
         if (path.isEmpty()) {
-            TextDirectionsTextArea.setText(bundle.getString("noPath"));
+            if (destCount > 0) {
+                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
+                        + "\n\n" + bundle.getString("noPath"));
+            } else {
+                TextDirectionsTextArea.setText(bundle.getString("noPath"));
+            }
         } else if (path.numNodes() < 2) {
-            TextDirectionsTextArea.setText(bundle.getString("alreadyThere"));
+            if (destCount > 0) {
+                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
+                        + "\n\n" + bundle.getString("alreadyThere"));
+            } else {
+                TextDirectionsTextArea.setText(bundle.getString("alreadyThere"));
+            }
             DisplayMap(path);
         } else {
-//            TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+            if (destCount > 0) {
+                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
+                        + "\n\n" + textDirections.MakeDirections.getText(path));
+            } else {
+                TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+            }
             DisplayMap(path);
         }
     }
@@ -192,20 +242,12 @@ public class MainController extends Controller implements Initializable{
     //This function updates the StartInfo and EndInfo Text Areas
     private void PopulateInformationDisplay(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
                                             HospitalService HS_Start, HospitalService HS_Dest) {
-        if (HP_Start != null) {
-            StartInfo_TextArea.setText(HP_Start.getTitle() + " " + HP_Start.getName() + "\n\n" +
-                    bundle.getString("offices") + "\n\n" + HP_Start.getOffices());
-        } else {
-            StartInfo_TextArea.setText(HS_Start.getName() + "\n\n" +
-                    bundle.getString("offices") + "\n\n" + HS_Start.getLocations());
-        }
-
         if (HP_Dest != null) {
             EndInfo_TextArea.setText(HP_Dest.getTitle() + " " + HP_Dest.getName() + "\n\n" +
                     bundle.getString("location") + "\n\n" + HP_Dest.getOffices());
         } else {
             EndInfo_TextArea.setText(HS_Dest.getName() + "\n\n" +
-                     bundle.getString("location") + "\n\n" + HS_Dest.getLocations());
+                    bundle.getString("location") + "\n\n" + HS_Dest.getLocations());
         }
     }
 
@@ -226,14 +268,35 @@ public class MainController extends Controller implements Initializable{
     }
 
     public void getPathButtonClicked() {
+        ShowNodesEdgesHelper.ClearOldPaths();
+        TextDirectionsTextArea.setText("");
+
         if (!(StartLocationField.getText().isEmpty() || EndLocationField.getText().isEmpty())) {
-            //Do path finding
+
             HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName(StartLocationField.getText());
             HospitalProfessional HP_Dest = professionalService.findHospitalProfessionalByName(EndLocationField.getText());
             HospitalService HS_Start = serviceService.findHospitalServiceByName(StartLocationField.getText());
             HospitalService HS_Dest = serviceService.findHospitalServiceByName(EndLocationField.getText());
 
+            if (HP_Start != null) {
+                StartInfo_TextArea.setText(HP_Start.getTitle() + " " + HP_Start.getName() + "\n\n" +
+                        bundle.getString("offices") + "\n\n" + HP_Start.getOffices());
+            } else {
+                StartInfo_TextArea.setText(HS_Start.getName() + "\n\n" +
+                        bundle.getString("offices") + "\n\n" + HS_Start.getLocations());
+            }
+
+            for (int i = 0; i < destCount; i++) {
+                System.out.println("finding middle loc " + (i + 1));
+                HospitalProfessional HP_Midd = professionalService.findHospitalProfessionalByName(midTexts.get(i).getText());
+                HospitalService HS_Midd = serviceService.findHospitalServiceByName(midTexts.get(i).getText());
+                FindandDisplayPath(HP_Start, HP_Midd, HS_Start, HS_Midd);
+                HP_Start = HP_Midd;
+                HS_Start = HS_Midd;
+            }
+
             FindandDisplayPath(HP_Start, HP_Dest, HS_Start, HS_Dest);
+
             //Set Information Displays
 
             PopulateInformationDisplay(HP_Start, HP_Dest, HS_Start, HS_Dest);
@@ -258,7 +321,7 @@ public class MainController extends Controller implements Initializable{
     public void HandleHelpButton() {
         Hours hours = hoursService.find(1L);
         String message;
-        if(hours != null) {
+        if (hours != null) {
             Date morningStart = hours.getVisitingHoursMorningStart();
             Date morningEnd = hours.getVisitingHoursMorningEnd();
 
@@ -275,11 +338,11 @@ public class MainController extends Controller implements Initializable{
                     bundle.getString("eveningHours") + eveningHours;
 
         } else {
-            Date morningStart = new Date(0,0,0,9,30);
-            Date morningEnd = new Date(0,0,0,12,0);
+            Date morningStart = new Date(0, 0, 0, 9, 30);
+            Date morningEnd = new Date(0, 0, 0, 12, 0);
 
-            Date eveningStart = new Date(0,0,0,14,0);
-            Date eveningEnd = new Date(0,0,0,17,45);
+            Date eveningStart = new Date(0, 0, 0, 14, 0);
+            Date eveningEnd = new Date(0, 0, 0, 17, 45);
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
@@ -301,8 +364,36 @@ public class MainController extends Controller implements Initializable{
         FindandDisplayPath(HP_Start, null, null, HS_Dest);
     }
 
-    public static ResourceBundle getBundle(){
+    public static ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public void addOtherLocation() {
+        javafx.scene.text.Text tx = new Text(bundle.getString("selectMiddleLocation"));
+        AutocompletionlTextField auto = new AutocompletionlTextField();
+
+        List<HospitalProfessional> HPs = professionalService.getAllProfessionals();
+        List<HospitalService> HSs = serviceService.getAllServices();
+        List<String> names = new ArrayList<>();
+        for (HospitalProfessional HP : HPs) {
+            names.add(HP.getName());
+        }
+        for (HospitalService HS : HSs) {
+            names.add(HS.getName());
+        }
+        auto.getEntries().addAll(names);
+
+        midTexts.add(auto);
+
+        middleLocation.getChildren().addAll(tx, auto);
+
+        destCount++;
+    }
+
+    public void clearMiddleLocations(){
+        destCount = 0;
+        midTexts.clear();
+        middleLocation.getChildren().clear();
     }
 
 }
