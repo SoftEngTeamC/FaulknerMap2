@@ -4,20 +4,33 @@ import java.util.ArrayList;
 
 /**
  * Created by Paul on 4/26/2017.
+ * originator class. Used to set and save mementos.
  */
 public class LoginStatusEditor {
 
-    protected ArrayList<Boolean> status;
+    private boolean status;
 
-    public void edit(boolean status){
-        this.status.add(status);
+    /**
+     * changes the current status to given status
+     * @param status boolean
+     */
+    public void setStatus(boolean status){
+        this.status = status;
     }
 
-    public boolean getContent(){
-        return this.status.get(status.size()-1);
+    /**
+     * sets the local status from given memento
+     */
+    public void restore(LoginStatusMemento m){
+        status = m.getStatus();
     }
 
-    public LoginStatusMemento memento(){
-        return new LoginStatusMemento(this.status);
+    /**
+     * Saves to a new memento with current status
+     * @return memento object
+     */
+    public LoginStatusMemento save(){
+        return new LoginStatusMemento(status);
     }
+
 }
