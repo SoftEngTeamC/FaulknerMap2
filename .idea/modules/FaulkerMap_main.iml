@@ -25,6 +25,8 @@
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-search-orm:5.7.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.derby:derby:10.13.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.univocity:univocity-parsers:2.4.1" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx-commons:8.15" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx-fontawesome:4.7.0-5" level="project" />
     <orderEntry type="library" name="Gradle: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.javassist:javassist:3.20.0-GA" level="project" />

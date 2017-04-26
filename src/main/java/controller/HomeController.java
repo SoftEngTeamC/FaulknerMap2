@@ -1,5 +1,7 @@
 package controller;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import util.MappedList;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -94,7 +97,7 @@ public class HomeController extends Controller {
     private ListView<Step> stepsView = new ListView<>(steps);
 
     private ObservableList<Navigable> destinations = FXCollections.observableArrayList();
-    private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::destinationNode);
+    private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::makeDestinationView);
     private Map<Navigable, HBox> destinationNodeCache = new HashMap<>();
 
     private TextField searchBox = new TextField();
@@ -220,16 +223,23 @@ public class HomeController extends Controller {
             }
         });
 
-        addDestinationButton.setText("+");
+        addDestinationButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
         addDestinationButton.setOnAction(e -> {
-            currentDestinationIndex = -1;
-            addDestination();
+            searchBox.setText("");
+            showAddDestination();
         });
 
-        //TODO: Populate the searchBox with hot spots
-        searchResults.addAll(professionalService.getAllProfessionals());
+        setSearchResults(professionalService.getAllProfessionals()); // TODO: Populate the searchBox with hot spots
+
         Searching_VBox = makeVBox();
         showSearch();
+    }
+
+    private void setSearchResults(List<? extends Navigable> results) {
+        searchResults.clear();
+        searchResults.addAll(results);
+        searchResults.removeAll(destinations); // Don't allow loops
     }
 
     private VBox makeVBox() {
@@ -239,6 +249,7 @@ public class HomeController extends Controller {
         return newVBox;
     }
 
+    // --------------- View State Changers --------------- //
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
@@ -254,14 +265,14 @@ public class HomeController extends Controller {
         setCurrentSearchField(searchBox);
     }
 
-    private void editDestination(TextField field) {
+    private void showEditDestination(TextField field) {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(directoryView);
         setCurrentSearchField(field);
     }
 
-    private void addDestination() {
+    private void showAddDestination() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(searchBox);
@@ -272,12 +283,13 @@ public class HomeController extends Controller {
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
         currentSearchField.textProperty().addListener((observable, oldValue, query) -> {
-            searchResults.clear();
-            searchResults.addAll(professionalService.search(query));
+            setSearchResults(professionalService.search(query.toLowerCase()));
         });
+        currentSearchField.requestFocus();
     }
 
-    private HBox destinationNode(Navigable location) {
+    // ----------- Destination View Factories ------------ //
+    private HBox makeDestinationView(Navigable location) {
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
@@ -297,7 +309,7 @@ public class HomeController extends Controller {
         field.setOnMouseClicked(e -> {
             if (currentSearchField == null) {
                 field.setText("");
-                editDestination(field);
+                showEditDestination(field);
                 currentDestinationIndex = destinations.indexOf(location);
             }
         });
@@ -314,7 +326,8 @@ public class HomeController extends Controller {
                 showSearch();
             }
         });
-        deleteButton.setText("X");
+        deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
     }
 }
