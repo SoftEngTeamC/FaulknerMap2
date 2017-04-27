@@ -53,8 +53,8 @@ public class HomeController extends Controller {
     @FXML
     private VBox Searching_VBox;
 
-    @FXML
-    private ButtonBar Options_ButtonBar;
+    //@FXML
+    //private ButtonBar Options_ButtonBar;
 
     @FXML
     private SplitPane Map_Split;
