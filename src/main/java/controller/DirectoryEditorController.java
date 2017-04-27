@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 import model.HospitalProfessional;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DirectoryEditorController extends Controller {
@@ -35,7 +38,7 @@ public class DirectoryEditorController extends Controller {
     @FXML
     private AnchorPane DirectoryEditor_AnchorPane;
 
-    private ObservableList<HospitalProfessional> professionals = FXCollections.observableArrayList();
+    private ObservableList<HospitalProfessional> professionals;
 
 
     @FXML
@@ -46,6 +49,8 @@ public class DirectoryEditorController extends Controller {
         searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
         searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
 
+        List<HospitalProfessional> hp = professionalService.getAllProfessionals();
+        professionals = FXCollections.observableArrayList(hp);
         searchList.setItems(professionals);
 
         // disable the edit person button
@@ -83,10 +88,9 @@ public class DirectoryEditorController extends Controller {
         loader.load();
         Parent p = loader.getRoot();
         Stage stage = (Stage) backBtn.getScene().getWindow();
-        stage.setScene(new Scene(p));
+        stage.getScene().setRoot(p);
         EditPersonController controller = loader.getController();
         controller.setSelectedUser(hp);
-        stage.setFullScreen(true);
         stage.show();
 
     }
