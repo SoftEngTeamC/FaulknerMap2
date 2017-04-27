@@ -5,20 +5,23 @@ import model.Coordinate;
 import model.Edge;
 import model.Node;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class NodeServiceTest {
 
+    // Create services
+    NodeService nodeService = new NodeService();
+    CoordinateService coordinateService = new CoordinateService();
+    EdgeService edgeService = new EdgeService();
+    double x, y, x2, y2, x3, y3;
+    Node testNodeA, testNodeB, testNodeC;
+
     // Set Up and Tear Down
     @Before
     public void setUp() throws Exception {
-        // Create a nodeService
         EMFProvider.getInstance().useTest();
-        NodeService nodeService = new NodeService();
-        CoordinateService coordinateService = new CoordinateService();
-        EdgeService edgeService = new EdgeService();
-
         // Diagram
         // NodeB(10,20)---NodeC(20,20)
         //     |         /
@@ -76,7 +79,97 @@ public class NodeServiceTest {
 
     // Tests
     @Test
-    public void find() throws Exception {
+    public void addNodeToService() throws Exception {
+        double x = 10;
+        double y = 10;
+        int floor = 4;
+        Coordinate locationD = new Coordinate(x, y, floor);
+        String nameD = "testNodeD";
+        Node testNodeD = new Node(nameD, locationD);
+        coordinateService.persist(locationD);
+        try{
+            nodeService.persist(testNodeD);
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
 
+    @Test
+    public void removeNodeFromService() throws Exception {
+        double x = 10;
+        double y = 10;
+        int floor = 3;
+        Coordinate locationE = new Coordinate(x, y, floor);
+        String nameE = "testNodeE";
+        Node testNodeE = new Node(nameE, locationE);
+        coordinateService.persist(locationE);
+        nodeService.persist(testNodeE);
+        try{
+            nodeService.remove(testNodeE);
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
+
+    @Test
+    public void find() throws Exception {
+        double x = 10;
+        double y = 10;
+        int floor = 3;
+        Coordinate locationF = new Coordinate(x, y, floor);
+        String nameF = "testNodeF";
+        Node testNodeF = new Node(nameF, locationF);
+        coordinateService.persist(locationF);
+        nodeService.persist(testNodeF);
+
+        try{
+            nodeService.find(testNodeF.getId());
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void testNeighbors() throws Exception {
+        try{
+            nodeService.neighbors(testNodeB.getId());
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFindByName() throws Exception{
+        try{
+            Assert.assertEquals(testNodeC, nodeService.findNodeByName("testNodeC"));
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
+
+    @Test
+    public void findNodeByNameAndFloor() throws Exception {
+    }
+
+    @Test
+    public void findNodeIntersectionByFloor() throws Exception {
+    }
+
+    @Test
+    public void getAllNodes() throws Exception {
+    }
+
+    @Test
+    public void getNodesByFloor() throws Exception {
+    }
+
+    @Test
+    public void getElevatorNodes() throws Exception {
     }
 }
