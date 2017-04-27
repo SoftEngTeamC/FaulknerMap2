@@ -1,21 +1,21 @@
 package pathfinding;
 
 
+import model.Edge;
+import service.AlgorithmSingleton;
+import service.EdgeService;
 import service.NodeService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Map {
     public enum algorithm { BFS, DFS, ASTAR }
-    private algorithm currentAlgo = algorithm.ASTAR;
     private java.util.Map<Long, MapNode> nodeMap;
-    private NodeService nodeService;
 
     public Map(Collection<model.Node> nodes) {
-        nodeService = new NodeService();
+        NodeService nodeService = new NodeService();
+        EdgeService edgeService = new EdgeService();
         nodeMap = new HashMap<>();
         for (model.Node n : nodes) {
             nodeMap.put(n.getId(), new MapNode(n));
@@ -26,30 +26,41 @@ public class Map {
                 if (n == null) continue;
                 MapNode neighbor = nodeMap.get(n.getId());
                 MapNode currentNode = nodeMap.get(id);
+                Edge maybeDisabledEdge = edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId()));
+                if (maybeDisabledEdge == null || maybeDisabledEdge.isDisabled()) continue;
                 if (neighbor == null || currentNode == null) continue;
                 currentNode.addNeighbor(neighbor);
             }
         }
     }
 
-    public void setCurrentAlgo(algorithm algo) {
-        currentAlgo = algo;
-    }
 
-    public algorithm getCurrentAlgo() {
-        return currentAlgo;
-    }
-
-    public List<MapNode> shortestPath(MapNode start, MapNode end) {
-        switch (currentAlgo) {
-            case BFS: return PathFinder.BFS(start, end);
-            case DFS: return PathFinder.DFS(start, end);
-            case ASTAR: return PathFinder.shortestPath(start, end);
+    public Path shortestPath(MapNode start, MapNode end) {
+//        System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
+        switch (AlgorithmSingleton.getInstance().getCurrentAlgorithm()) {
+            case BFS: return new Path(PathFinder.BFS(start, end));
+            case DFS: return new Path(PathFinder.DFS(start, end));
+            case ASTAR: return new Path(PathFinder.shortestPath(start, end));
         }
-        return null;
+        return null; // TODO: Probably throw an exception
     }
 
     public MapNode getNode(Long id) {
         return nodeMap.get(id);
+    }
+
+    public static Set<Integer> floorsInPath(List<MapNode> path) {
+        Set<Integer> allFloors = new HashSet<>();
+        allFloors.add(1);
+        allFloors.add(2);
+        allFloors.add(3);
+        allFloors.add(4);
+        allFloors.add(5);
+        allFloors.add(6);
+        allFloors.add(7);
+        Set<Integer> floors = new HashSet<>();
+        floors.addAll(path.stream().map(n -> n.getLocation().getFloor()).collect(Collectors.toList()));
+        allFloors.removeAll(floors);
+        return allFloors;
     }
 }

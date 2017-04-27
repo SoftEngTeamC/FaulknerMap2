@@ -1,14 +1,16 @@
 package controller;
 
+import Singleton.LoginStatusSingleton;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,8 +22,9 @@ import model.Coordinate;
 import model.Edge;
 import model.Node;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 public class MapEditorController extends Controller {
@@ -122,6 +125,19 @@ public class MapEditorController extends Controller {
     @FXML
     private AnchorPane EditNode_AnchorPane;
 
+    // objects for the timeout editor
+    @FXML
+    private Button timeoutEditor_submitBtn;
+
+    @FXML
+    private TextField timeoutEditor_textField;
+
+    @FXML
+    private Text loginTimeout_errorText;
+
+    @FXML
+    private Text loginTimeout_SuccessText;
+
     @FXML
     protected TabPane tabPane;
 
@@ -199,11 +215,11 @@ public class MapEditorController extends Controller {
         }
         editNode_addField.getEntries().addAll(names);
         //Visual Initializations
-        new ShowNodesEdgesHelper( FirstFloorScrollPane,  SecondFloorScrollPane, ThirdFloorScrollPane,
-                FourthFloorScrollPane, FifthFloorScrollPane,  SixthFloorScrollPane,
-                 SeventhFloorScrollPane, FirstFloorSlider,  SecondFloorSlider,
-                 ThirdFloorSlider,  FourthFloorSlider, FifthFloorSlider,  SixthFloorSlider,
-                 SeventhFloorSlider, FloorViewsTabPane);
+        new ShowNodesEdgesHelper(FirstFloorScrollPane, SecondFloorScrollPane, ThirdFloorScrollPane,
+                FourthFloorScrollPane, FifthFloorScrollPane, SixthFloorScrollPane,
+                SeventhFloorScrollPane, FirstFloorSlider, SecondFloorSlider,
+                ThirdFloorSlider, FourthFloorSlider, FifthFloorSlider, SixthFloorSlider,
+                SeventhFloorSlider, FloorViewsTabPane);
 
         ShowNodesEdgesHelper.InitializeMapViews();
         editNode_searchResultsList.minWidthProperty().bind(EditNode_AnchorPane.widthProperty());
@@ -230,29 +246,34 @@ public class MapEditorController extends Controller {
         for (Node n : nodeService.getNodesByFloor(currFloor)) {
             nameList.add(n.getName());
         }
-        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
+        nameList.sort(String.CASE_INSENSITIVE_ORDER);
         ObservableList<String> obList = FXCollections.observableArrayList(nameList);
 
         editNode_searchResultsList.setItems(obList);
         removeNode_searchList.setItems(obList);
-        //disableEdge_searchResultsList.setItems(obList);
 
 
         tabPaneListen();
         System.out.println("INITRemoveNeighbourListener:");
         setEditNode_searchResultsListening();
-//        System.out.println("INITDisableEdgeListener:");
-//        setDisableEdge_searchResultsListening();
         System.out.println("INITShowNodes:");
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
-        circlesListen(circles,currFloor);
-        //List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
+        circlesListen(circles, currFloor);
+
+        // make timeout button disabled
+        timeoutEditor_submitBtn.setDisable(true);
+        loginTimeout_errorText.setVisible(false);
+        loginTimeout_SuccessText.setVisible(false);
+
+
+
+        timeoutEditor_textField.textProperty().addListener((observable, oldValue, newValue) -> timeoutTextFieldChanged());
+
     }
 
     //-------------------------------------------Listeners---------------------------------------------
-    public void circlesListen(List<Circle> circles, int floor){
-        System.out.println("circlesListen:");
+    private void circlesListen(List<Circle> circles, int floor) {
         final Circle[] firstCircle = new Circle[1];
         final double[] orgx = new double[1];
         final double[] orgy = new double[1];
@@ -261,16 +282,9 @@ public class MapEditorController extends Controller {
         final boolean[] set = {false};
         for (Circle circle : circles) {
             circle.setOnMouseClicked(event -> {
-                System.out.println("slider: " + ShowNodesEdgesHelper.checkSlider(currFloor).getValue());
-                System.out.println("X: " + circle.getCenterX());
-                System.out.println("Y: " + circle.getCenterY());
-
-                System.out.println("Clicked on node: " + nodeService.find(Long.parseLong(circle.getId())).getName());
                 List<String> ItemsInListView = editNode_searchResultsList.getItems();
-                System.out.println(ItemsInListView);
                 int i = 0;
                 for (i = 0; !(ItemsInListView.get(i).equals(nodeService.find(Long.parseLong(circle.getId())).getName())); i++) {
-                    //System.out.println(ItemsInListView.get(i));
                 }
                 editNode_searchResultsList.getSelectionModel().select(i);
                 removeNode_searchList.getSelectionModel().select(i);
@@ -289,10 +303,8 @@ public class MapEditorController extends Controller {
 
                     firstCircle[0] = null;
                     edgeService.persist(edge1);
-                    edgeService.persist(edge2);
 
                     circlesListen(ShowNodesEdgesHelper.showNodes(currFloor), currFloor);
-                    return;
                 }
             });
 
@@ -355,44 +367,50 @@ public class MapEditorController extends Controller {
 
 
     //This Listener is triggered when a different MapTab is selected
-    public void tabPaneListen() {
-        System.out.println("TabPaneListener");
+    private void tabPaneListen() {
         FloorViewsTabPane.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Tab>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                        System.out.println("Tab Selection changed " + t.getText() + " to " + t1.getText());
-                        //Update Current Floor
-                        currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
-                        //Update EditTab Listviews with new floors data
-                        ArrayList<String> nameList = new ArrayList<>();
-                        for (Node n : nodeService.getNodesByFloor(currFloor)) {
-                            nameList.add(n.getName());
-                        }
-                        Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
-                        ObservableList<String> obList = FXCollections.observableArrayList(nameList);
-                        editNode_searchResultsList.setItems(obList);
-                        removeNode_searchList.setItems(obList);
-                        //Update AutoComplete suggestion of neighbors with new data
-                        List<Node> nodes = nodeService.getNodesByFloor(currFloor);
-                        List<String> names = new ArrayList<>();
-                        for (Node n : nodes) {
-                            names.add(n.getName());
-                        }
-                        editNode_addField.getEntries().clear();
-                        editNode_addField.getEntries().addAll(names);
-
-                        List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
-                        List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
-
-                        circlesListen(circles, currFloor);
+                (ov, t, t1) -> {
+                    // Update Current Floor
+                    currFloor = Integer.parseInt(t1.getText().charAt(6) + "");
+                    // Update EditTab Listviews with new floors data
+                    ArrayList<String> nameList = new ArrayList<>();
+                    for (Node n : nodeService.getNodesByFloor(currFloor)) {
+                        nameList.add(n.getName());
                     }
+                    nameList.sort(String.CASE_INSENSITIVE_ORDER);
+                    ObservableList<String> obList = FXCollections.observableArrayList(nameList);
+                    editNode_searchResultsList.setItems(obList);
+                    removeNode_searchList.setItems(obList);
+                    //Update AutoComplete suggestion of neighbors with new data
+                    List<Node> nodes = nodeService.getNodesByFloor(currFloor);
+                    List<String> names = new ArrayList<>();
+                    for (Node n : nodes) {
+                        names.add(n.getName());
+                    }
+                    editNode_addField.getEntries().clear();
+                    editNode_addField.getEntries().addAll(names);
+
+                    List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
+                    List<Edge> Edges = ShowNodesEdgesHelper.getEdges(currFloor);
+
+                    circlesListen(circles, currFloor);
                 }
         );
     }
 
+    /**
+     *
+     * ensures submit button is on or off
+     */
+    public void timeoutTextFieldChanged() {
+        // check to see if there's stuff in the textfield, if so, enable button, else disable it
+        if(timeoutEditor_textField.getText().isEmpty()){
+            timeoutEditor_submitBtn.setDisable(true);
+        } else timeoutEditor_submitBtn.setDisable(false);
+    }
+
     //This Listener is triggered when an item in the EditNode_SearchResults List is selected
-    public void setEditNode_searchResultsListening() {
+    private void setEditNode_searchResultsListening() {
         editNode_searchResultsList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     System.out.println("editNode_SearchResultsList Listener");
@@ -400,8 +418,8 @@ public class MapEditorController extends Controller {
                     Node selectedNode = nodeService.findNodeByName(newValue);
                     currNodes[0] = selectedNode;
                     ObservableList<String> RemoveNodeList = removeNode_searchList.getItems();
-                    int j=0;
-                    for(j=0; !newValue.equals(removeNode_searchList.getItems().get(j));j++){
+                    int j = 0;
+                    for (j = 0; !newValue.equals(removeNode_searchList.getItems().get(j)); j++) {
                         //find the index of the item in the list
                     }
                     removeNode_searchList.getSelectionModel().select(j);
@@ -426,6 +444,7 @@ public class MapEditorController extends Controller {
                             }
                             //found an edge instead
                             catch (Exception e) {
+                                // TODO: This should do something
                             }
                         }
                     }
@@ -464,6 +483,7 @@ public class MapEditorController extends Controller {
                     }
                     //Found a circle Instead
                     catch (Exception e) {
+                        // TODO: This should also do something
                     }
                 }
             }
@@ -488,7 +508,6 @@ public class MapEditorController extends Controller {
                 removeNode_searchList.setItems(allOList);
             }
         } catch (Exception e) {
-            //System.out.println("Searching Error");
             e.printStackTrace();
         }
 
@@ -523,36 +542,58 @@ public class MapEditorController extends Controller {
 
     }
 
-
     /**
-     * method that populates the search results with the search query
+     * @author Paul
+     *
+     * event handler for the submit button.
+     * if input is in the valid format, changes the timeout time in the memento singleton.
+     *
      */
-    public void removeNode_searchFieldValueListener() {
-        removeNode_searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // get the query from the field
-            String query = newValue;
-            ArrayList<String> queryList = new ArrayList<>();
-            // add each query to the list
-            List<Node> nodeList = this.nodeService.getNodesByFloor(currFloor);
-            for (Node n : nodeList) {
-                if (n.getName().contains(query)) {
-                    queryList.add(n.getName());
-                }
-            }
-            // Make the list view show the results
-            Collections.sort(queryList, String.CASE_INSENSITIVE_ORDER);
-            removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
-        });
+    public void timeoutEditor_submitBtnAction() {
+
+        double seconds;
+
+        // check valid input
+        try {
+            seconds = Double.parseDouble(timeoutEditor_textField.getText());
+        } catch (NumberFormatException E) {
+            seconds = -1;
+        }
+
+        // Either proceed, or throw error
+        if(seconds < 0){
+            // error
+            loginTimeout_errorText.setVisible(true);
+            loginTimeout_SuccessText.setVisible(false);
+        } else{
+            // submit
+            LoginStatusSingleton status = LoginStatusSingleton.getInstance();
+            status.setTimeout((int)seconds);
+            loginTimeout_errorText.setVisible(false);
+            loginTimeout_SuccessText.setVisible(true);
+        }
+
     }
 
 
     /**
-     * @author Samuel Coache
-     * <p>
-     * add node tab: connect button event handler
+     * method that populates the search results with the search query
      */
-    public void addNode_connectToNodeBtnPressed() {
-
+    private void removeNode_searchFieldValueListener() {
+        removeNode_searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // get the query from the field
+            ArrayList<String> queryList = new ArrayList<>();
+            // add each query to the list
+            List<Node> nodeList = this.nodeService.getNodesByFloor(currFloor);
+            for (Node n : nodeList) {
+                if (n.getName().contains(newValue)) {
+                    queryList.add(n.getName());
+                }
+            }
+            // Make the list view show the results
+            queryList.sort(String.CASE_INSENSITIVE_ORDER);
+            removeNode_searchList.setItems(FXCollections.observableArrayList(queryList));
+        });
     }
 
 
@@ -565,7 +606,7 @@ public class MapEditorController extends Controller {
         float x = Float.parseFloat(addNode_xPos.getText());
         float y = Float.parseFloat(addNode_yPos.getText());
         float floor = Float.parseFloat(addNode_floor.getText());
-        Coordinate addCoord = new Coordinate(x, y, (int)floor);
+        Coordinate addCoord = new Coordinate(x, y, (int) floor);
         coordinateService.persist(addCoord);
         Node newNode = new Node(addNode_nameField.getText(), addCoord);
 
@@ -583,19 +624,12 @@ public class MapEditorController extends Controller {
     }
 
 
-    //    // methods for the edit node tab
-//    public void editNode_searchBtnPressed() {
-        //
-//    }
-
 
     public void editNode_removeNeighborBtnPressed() {
         Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
         Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> currEdges = edgeService.findByNodes(start, end);
-        for (Edge curr : currEdges) {
-            edgeService.remove(curr);
-        }
+        Edge currEdge = edgeService.findByNodes(start, end);
+        edgeService.remove(currEdge);
 
         ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
         editNode_neighborsList.setItems(nList);
@@ -608,15 +642,12 @@ public class MapEditorController extends Controller {
     private List<String> neighborNames(Node node) {
 
         Set<Node> neighbors = nodeService.neighbors(node.getId());
-        //System.out.println("currNode: " + node.getId());
         List<String> neighborsS = new ArrayList<>();
 
         for (Node n : neighbors) {
-            if (!Objects.equals(n.getId(), node.getId())) {
                 neighborsS.add(n.getName());
-            }
         }
-        Collections.sort(neighborsS, String.CASE_INSENSITIVE_ORDER);
+        neighborsS.sort(String.CASE_INSENSITIVE_ORDER);
         return neighborsS;
 
     }
@@ -627,7 +658,6 @@ public class MapEditorController extends Controller {
 
         if (newNode != null) {
             edgeService.persist(new Edge(currNodes[0], newNode, 0));
-            edgeService.persist(new Edge(newNode, currNodes[0], 0));
             ObservableList<String> nList = FXCollections.observableArrayList(neighborNames(currNodes[0]));
             editNode_neighborsList.setItems(nList);
         }
@@ -644,17 +674,14 @@ public class MapEditorController extends Controller {
     public void DisableEdgeButtonPressed() {
         Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
         Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> selectedEdges = edgeService.findByNodes(start, end);
+        Edge selectedEdge = edgeService.findByNodes(start, end);
 
-        for (Edge curr : selectedEdges) {
-            curr.setDisabled(true);
-            edgeService.merge(curr);
-            System.out.println("Disabled : " + curr.getStart().getName() + " " + curr.getEnd().getName());
-        }
+        selectedEdge.setDisabled(true);
+        edgeService.merge(selectedEdge);
+
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-        System.out.println("successful");
-//        ifDisableText.setText("Disable Successful!");
+
 
     }
 
@@ -662,53 +689,24 @@ public class MapEditorController extends Controller {
     public void UndoDisableEdgeButtonPressed() {
         Node start = nodeService.findNodeByName(editNode_searchResultsList.getSelectionModel().getSelectedItem());
         Node end = nodeService.findNodeByName(editNode_neighborsList.getSelectionModel().getSelectedItem());
-        List<Edge> selectedEdges = edgeService.findByNodes(start, end);
+        Edge selectedEdge = edgeService.findByNodes(start, end);
 
-        for (Edge curr : selectedEdges) {
-            curr.setDisabled(false);
-            edgeService.merge(curr);
-            System.out.println("Undo disable : " + curr.getStart().getName() + " " + curr.getEnd().getName());
-        }
+        selectedEdge.setDisabled(false);
+        edgeService.merge(selectedEdge);
+
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         circlesListen(circles, currFloor);
-        System.out.println("successful");
-//        ifUndoDisableText.setText("Undo Successful!");
 
     }
 
     //----------------------------------Indicator Text Listeners------------------------------------
 
-    public void InitializeIndicatorTextListeners() {
-        addNode_xPos.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_yPos.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_floor.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        addNode_nameField.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
-        removeNode_searchField.textProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
-                AddNodeIndicatorText.setText("");
-            }
-        });
+    private void InitializeIndicatorTextListeners() {
+        addNode_xPos.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_yPos.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_floor.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        addNode_nameField.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
+        removeNode_searchField.textProperty().addListener((arg0, arg1, arg2) -> AddNodeIndicatorText.setText(""));
     }
 
     //----------------------------------Screen Changing Functions-------------------------------------
@@ -716,19 +714,15 @@ public class MapEditorController extends Controller {
     /**
      * Back button action event handler. Opens the Admin page
      */
-    public void back() throws IOException {
+    public void back() {
         switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
     }
 
     /**
      * Action event handler for logout button being pressed. Goes to main screen.
      */
-    public void logout() throws IOException {
-        switchScreen("view/Main.fxml", "Main", logoutBtn);
-    }
-
-    public static int getCurrFloor() {
-        return currFloor;
+    public void logout() {
+        switchToMainScreen(logoutBtn);
     }
 }
 

@@ -1,13 +1,11 @@
 package controller;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -19,9 +17,7 @@ import service.NodeService;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gina on 4/13/17.
- */
+
 class ShowNodesEdgesHelper {
     private static ScrollPane FirstFloorScrollPane;
     private static ScrollPane SecondFloorScrollPane;
@@ -135,11 +131,23 @@ class ShowNodesEdgesHelper {
 
     public void ZoomListener(Slider slider, ScrollPane scrlpn){
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
                 //find center XY on old zoom based on current XY of scrollpane and old width
 
                 //find center XY on Image relative to full image
 
                 //set XY of scroll pane to be about new imageview
+        });
+    }
+
+    public void PanningListener(Slider slider, ScrollPane scrlpn){
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
+            //find center XY on old zoom based on current XY of scrollpane and old width
+
+            //find center XY on Image relative to full image
+
+            //set XY of scroll pane to be about new imageview
         });
     }
 
@@ -160,7 +168,6 @@ class ShowNodesEdgesHelper {
             case 7:
                 return SeventhFloorScrollPane;
             default:
-                System.out.println("You gave MakeCircle() a floor that doesn't exist, or it isnt an int");
                 return null;
         }
     }
@@ -210,7 +217,7 @@ class ShowNodesEdgesHelper {
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
-        if(e.isDisabled() == true) {
+        if(e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
@@ -219,11 +226,11 @@ class ShowNodesEdgesHelper {
         return edge;
     }
 
-    public static Circle MakeCircle(Node node) {
+    public static Circle MakeCircle(Node node, Color color) {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
-        // initial size of image and the image ratior
+        // initial size of image and the image ratio
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         //  System.out.println(Scrolly.getContent());
@@ -241,7 +248,7 @@ class ShowNodesEdgesHelper {
         circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Color.RED);
+        circle.fillProperty().setValue(color);
 
         circle.setId(node.getId().toString());
         group1.getChildren().addAll(circle);
@@ -249,13 +256,12 @@ class ShowNodesEdgesHelper {
     }
 
     static List<Circle> showNodes(int currFloor) {
-        System.out.println("ShowNodes");
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
         List<Circle> circles = new ArrayList<Circle>();
         for (Node n : temp){
-            Circle circle = ShowNodesEdgesHelper.MakeCircle(n);
+            Circle circle = ShowNodesEdgesHelper.MakeCircle(n, Color.RED);
             circles.add(circle);
         }
         showEdges(currFloor);
@@ -263,7 +269,7 @@ class ShowNodesEdgesHelper {
     }
 
     static void showEdges(int currFloor) {
-        System.out.println("ShowEdges");
+     //   System.out.println("ShowEdges");
         //Desired Clear old lines
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
@@ -304,5 +310,12 @@ class ShowNodesEdgesHelper {
                 line.setStroke(Color.BLACK);
             }
         }
+    }
+
+    // takes the desired XY and zoom of a map, and applies it to the given
+    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr){
+        sldr.setValue(zoom);
+        scrlpn.setVvalue(y);
+        scrlpn.setHvalue(x);
     }
 }

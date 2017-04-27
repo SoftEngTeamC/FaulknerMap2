@@ -3,12 +3,18 @@ package service;
 
 import model.Edge;
 import model.Node;
+import org.hibernate.search.exception.EmptyQueryException;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,8 +23,7 @@ public class NodeService extends AbstractService<Node> {
     @Override
     public Node find(Long id) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        Node temp = manager.find(Node.class, id);
-        return temp;
+        return manager.find(Node.class, id);
     }
 
     public Set<Node> neighbors(Long id) {
@@ -29,7 +34,6 @@ public class NodeService extends AbstractService<Node> {
         Set<Node> startNeighbors = edges.stream().map(Edge::getStart).collect(Collectors.toSet());
         Set<Node> endNeighbors = edges.stream().map(Edge::getEnd).collect(Collectors.toSet());
         startNeighbors.addAll(endNeighbors);
-        startNeighbors.remove(find(id));
         startNeighbors.remove(find(id));
         manager.close();
         return startNeighbors;
@@ -68,12 +72,12 @@ public class NodeService extends AbstractService<Node> {
         return temp;
     }
 
-    public List<Node> getAllNodes() {
+    public Set<Node> getAllNodes() {
         EntityManager manager = this.managerFactory.createEntityManager();
         List<Node> temp = manager.createQuery("from Node", Node.class)
                 .getResultList();
         manager.close();
-        return temp;
+        return new HashSet<>(temp);
     }
 
     public List<Node> getNodesByFloor(int floor) {
@@ -101,8 +105,26 @@ public class NodeService extends AbstractService<Node> {
                 )
         );
         List<Node> nodes = manager.createQuery(elevatorCriteria).getResultList();
-        System.out.println(nodes);
+       // System.out.println(nodes);
         return nodes;
+    }
+
+    public List<Node> search(String s) {
+        EntityManager manager = managerFactory.createEntityManager();
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
+        manager.getTransaction().begin();
+        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+                .buildQueryBuilder().forEntity(Node.class).get();
+        try {
+            org.apache.lucene.search.Query query = qb.keyword().wildcard().onFields("name").matching("*" + s + "*").createQuery();
+            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, Node.class);
+            return JPAQuery.getResultList();
+        } catch (EmptyQueryException e) {
+            return new LinkedList<>(getAllNodes());
+        } finally {
+            manager.getTransaction().commit();
+            fullTextEntityManager.close();
+        }
 
     }
 }

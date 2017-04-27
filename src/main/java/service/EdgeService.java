@@ -4,7 +4,6 @@ import model.Edge;
 import model.Node;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EdgeService extends AbstractService<Edge> {
@@ -24,23 +23,32 @@ public class EdgeService extends AbstractService<Edge> {
         return temp;
     }
 
-    public List<Edge> findByNodes(Node start, Node end){
+    public Edge findByNodes(Node start, Node end) {
+        // TODO: clean this up
         EntityManager manager = this.managerFactory.createEntityManager();
-        List<Edge> temp = new ArrayList<>();
-        System.out.println("start: " + start.getId() + " end: " + end.getId());
-        temp.add(manager.createQuery(
-                "SELECT e FROM Edge e WHERE e.start.id = :start AND e.end.id = :end", Edge.class)
-                .setParameter("start", start.getId())
-                .setParameter("end", end.getId())
-                .getSingleResult());
-        System.out.println("getting a list of edge ");
-        temp.add(manager.createQuery(
-                "SELECT e FROM Edge e WHERE e.start.id = :start AND e.end.id = :end", Edge.class)
-                .setParameter("start", end.getId())
-                .setParameter("end", start.getId())
-                .getSingleResult());
-        manager.close();
-        return temp;
+        Edge temp;
+        try {
+            temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
+                    "e.start.id = :start AND e.end.id = :end", Edge.class)
+                    .setParameter("start", start.getId())
+                    .setParameter("end", end.getId())
+                    .getSingleResult();
+            manager.close();
+            return temp;
+        } catch (Exception e) {
+            try {
+                temp = manager.createQuery("SELECT e FROM Edge e WHERE " +
+                        "e.start.id = :start AND e.end.id = :end", Edge.class)
+                        .setParameter("start", end.getId())
+                        .setParameter("end", start.getId())
+                        .getSingleResult();
+                manager.close();
+                return temp;
+            } catch (Exception ex){
+                manager.close();
+                return null;
+            }
+        }
     }
 
 }

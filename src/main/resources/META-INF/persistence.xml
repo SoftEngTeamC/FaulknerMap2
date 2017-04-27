@@ -10,17 +10,18 @@
         <class>model.Node</class>
         <class>model.HospitalService</class>
         <class>model.Tag</class>
+        <class>model.Hours</class>
 
         <properties>
             <property name="hibernate.archive.autodetection" value="class" />
-            <!--<property name="hibernate.dialect" value="com.mysema.query.jpa.support.ExtendedDerbyDialect" />-->
+            <!--<property name="hibernate.dialect" value="com.mysema.query.hql.support.ExtendedDerbyDialect" />-->
             <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
             <property name="hibernate.connection.url" value="jdbc:derby:target/derbydb;create=true" />
-            <!-- <property name="hibernate.show_sql" value="true"/> -->
+             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.flushMode" value="FLUSH_AUTO" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="hibernate.search.default.directory_provider" value="filesystem"/>
-            <property name="hibernate.search.default.indexBase" value="indicies"/>
+            <property name="hibernate.search.default.indexBase" value="target/indicies"/>
         </properties>
     </persistence-unit>
 </persistence>
