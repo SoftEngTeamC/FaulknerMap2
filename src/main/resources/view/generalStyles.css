@@ -15,6 +15,10 @@
     -fx-background-color: #0090ad;
 }
 
+.tab:hover {
+    -fx-background-color: #0090ad;
+}
+
 .button {
     -fx-background-color: #0058a1;
     -fx-border-color: #2f3332;
