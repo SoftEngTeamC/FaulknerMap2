@@ -13,12 +13,14 @@ import java.util.ArrayList;
 public class LoginStatusSingleton {
 
     private static LoginStatusSingleton ourInstance = new LoginStatusSingleton();
+    // init to 2 minutes
+    private int timeout = 120;
+    // this is our list of mementos
+    private ArrayList<LoginStatusMemento> mentos = new ArrayList<>();
+
     public static LoginStatusSingleton getInstance() {
         return ourInstance;
     }
-
-    // this is our list of mementos
-    private ArrayList<LoginStatusMemento> mentos = new ArrayList<>();
 
     private LoginStatusSingleton(){}
 
@@ -30,9 +32,31 @@ public class LoginStatusSingleton {
         mentos.add(m);
     }
 
+    /**
+     * getter for the memento
+     * @return most recent memento
+     */
     public LoginStatusMemento getMemento(){
         return mentos.get(1);
     }
+
+    /**
+     * getter for the timeout
+     * @return timeout: int
+     */
+    public int getTimeout(){
+        return this.timeout;
+    }
+
+    /**
+     * setter for the timeout
+     * @param timeout
+     */
+    public void setTimeout(int timeout){
+        this.timeout = timeout;
+    }
+
+
 
 
 }
