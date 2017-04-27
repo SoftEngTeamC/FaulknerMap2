@@ -118,6 +118,7 @@ public class HomeController extends Controller {
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
     private ObjectProperty<Rectangle2D> currentViewport = new SimpleObjectProperty<>();
+    private ObjectProperty<Integer> currentFloor = new SimpleObjectProperty<>();
 
     private void initializeMap() {
         makeFloorImageView(1, imageContainer);
@@ -144,6 +145,8 @@ public class HomeController extends Controller {
 
     private static final int MIN_PIXELS = 400;
     private ImageView makeFloorImageView(int floor, Pane container) {
+        currentFloor.set(floor);
+
         Image floorImage = ImageProvider.getImage(images.get(floor - 1));
         ImageView floorView = new ImageView(floorImage);
         floorView.setPreserveRatio(true);
@@ -289,20 +292,16 @@ public class HomeController extends Controller {
         search(""); // TODO: Populate the searchBox with hot spots
 
         // Recalculate the path
-        destinations.addListener(new ListChangeListener<Navigable>() {
-            @Override
-            public void onChanged(Change<? extends Navigable> c) {
-                while (c.next()) {} // Apply all the changes
-                ObservableList<? extends Navigable> dests = c.getList();
-                paths.clear();
-                if (c.getList().size() >= 2) {
-                    Navigable start = dests.get(0);
-                    for (Navigable dest : dests.subList(1, dests.size())) {
-                        paths.add(map.shortestPath(start.getNode(), dest.getNode()));
-                        start = dest;
-                    }
+        destinations.addListener((ListChangeListener<Navigable>) c -> {
+            while (c.next()) {} // Apply all the changes
+            ObservableList<? extends Navigable> destinations = c.getList();
+            paths.clear();
+            if (c.getList().size() >= 2) {
+                Navigable start = destinations.get(0);
+                for (Navigable dest : destinations.subList(1, destinations.size())) {
+                    paths.add(map.shortestPath(start.getNode(), dest.getNode()));
+                    start = dest;
                 }
-                System.out.println(paths);
             }
         });
 

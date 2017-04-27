@@ -67,6 +67,22 @@ public class Path implements Iterable<MapNode> {
                 .collect(Collectors.toList());
     }
 
+    public List<Path> groupedByFloor() {
+        List<Path> subPaths = new LinkedList<>();
+        List<MapNode> currentSubPath = new LinkedList<>();
+        MapNode prevNode = null;
+        for (MapNode node : path) {
+            if (prevNode != null && node.getLocation().getFloor() != prevNode.getLocation().getFloor()) {
+                subPaths.add(new Path(currentSubPath));
+                currentSubPath = new LinkedList<>();
+            } else {
+                currentSubPath.add(node);
+            }
+            prevNode = node;
+        }
+        return subPaths;
+    }
+
     /**
      * @return a set of the floors spanned by this path
      */
