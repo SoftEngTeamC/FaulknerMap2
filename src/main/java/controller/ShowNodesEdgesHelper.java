@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -7,8 +8,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import model.Edge;
@@ -36,6 +36,7 @@ class ShowNodesEdgesHelper {
     private static Slider SixthFloorSlider;
     private static Slider SeventhFloorSlider;
     private static TabPane FloorViewsTabPane;
+    private static Group group;
 
 
     ShowNodesEdgesHelper(ScrollPane FirstFloorScrollPane, ScrollPane SecondFloorScrollPane,
@@ -205,6 +206,7 @@ class ShowNodesEdgesHelper {
 
         assert Scrolly != null;
         Group group1 = (Group) Scrolly.getContent();
+        group = group1;
         ImageView Map1 = (ImageView) group1.getChildren().get(0);
 
         double ImgW = Map1.getImage().getWidth();
@@ -212,6 +214,7 @@ class ShowNodesEdgesHelper {
         double ImgR = ImgH / ImgW;
 
         Line edge = new Line();
+
         //the points are bound to the fit width property of the image and scaled by the initial image ratio
         edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
         edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
@@ -226,18 +229,79 @@ class ShowNodesEdgesHelper {
         group1.getChildren().add(edge);
     }
 
-    void drawArrow(int x1, int y1, int x2, int y2) {
-        double dx = x2 - x1, dy = y2 - y1;
-        double angle = Math.atan2(dy, dx);
-        int len = (int) Math.sqrt(dx * dx + dy * dy);
+    public static void arrow(Edge e) {
 
-        Transform transform = Transform.translate(x1, y1);
-        transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
-    //    gc.setTransform(new Affine(transform));
+        double arrowLength = 4;
+        double arrowWidth = 7;
 
-//        gc.strokeLine(0, 0, len, 0);
-//        gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
-//                4);
+        double ex = e.getEnd().getLocation().getX();
+        double ey = e.getEnd().getLocation().getY();
+        double sx = e.getStart().getLocation().getX();
+        double sy = e.getStart().getLocation().getY();
+
+        Line arrow1 = new Line(0, 0, ex, ey);
+        Line arrow2 = new Line(0, 0, ex, ey);
+
+        arrow1.setEndX(ex);
+        arrow1.setEndY(ey);
+        arrow2.setEndX(ex);
+        arrow2.setEndY(ey);
+
+        if (ex == sx && ey == sy) {
+            // arrow parts of length 0
+            arrow1.setStartX(ex);
+            arrow1.setStartY(ey);
+            arrow2.setStartX(ex);
+            arrow2.setStartY(ey);
+        } else {
+            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
+            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+
+            double dx = (sx - ex) * factor;
+            double dy = (sy - ey) * factor;
+
+            double ox = (sx - ex) * factorO;
+            double oy = (sy - ey) * factorO;
+
+            arrow1.setStartX(ex + dx - oy);
+            arrow1.setStartY(ey + dy + ox);
+            arrow2.setStartX(ex + dx + oy);
+            arrow2.setStartY(ey + dy - ox);
+        }
+
+        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
+        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
+
+        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
+        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
+
+
+        double x1 = e.getEnd().getLocation().getX();
+        double y1 = e.getEnd().getLocation().getY();
+        double x2 = x1 + xdiff1;
+        double y2 = y1 + ydiff1;
+
+        double x3 = x1 + xdiff2;
+        double y3 = y1 + ydiff2;
+
+        ImageView Map1 = (ImageView) group.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
+        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
+
+        group.getChildren().addAll(arrow1, arrow2);
+
     }
 
     static Circle MakeCircle(Node node, Color color) {
