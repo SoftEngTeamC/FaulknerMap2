@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
 <SplitPane fx:id="Home_MainSplit" dividerPositions="0.35618729096989965" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
    <items>
       <AnchorPane>
@@ -28,13 +36,8 @@
         <items>
           <AnchorPane fx:id="Map_AnchorPane">
                <children>
-                  <ScrollPane fx:id="Map_ScrollPane" pannable="true" prefHeight="344.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-                    </content>
-                  </ScrollPane>
+                  <Pane fx:id="imageContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <Slider fx:id="Map_Slider" layoutX="362.0" layoutY="190.0" orientation="VERTICAL" prefHeight="107.0" prefWidth="14.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                  <ImageView fx:id="SnapToHome_ImageView" fitHeight="48.0" fitWidth="44.0" layoutX="331.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                   <VBox fx:id="FloorButtons_VBox" AnchorPane.bottomAnchor="125.0" AnchorPane.rightAnchor="10.0">
                      <children>
                         <Button fx:id="FirstFloor_Button" mnemonicParsing="false" text="1" />

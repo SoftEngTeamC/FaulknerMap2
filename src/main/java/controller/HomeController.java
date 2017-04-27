@@ -11,19 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.layout.*;
 import model.Navigable;
-import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
@@ -69,6 +61,9 @@ public class HomeController extends Controller {
 
     @FXML
     private HBox Map_HBox;
+
+    @FXML
+    private Pane imageContainer;
 
 
     //Content inside ScrollPane
@@ -116,13 +111,25 @@ public class HomeController extends Controller {
 
     @FXML
     void initialize() {
-        InitializeMap();
+        initializeMap();
         initializeDirectory();
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private void InitializeMap(){
+    private ObjectProperty<Rectangle2D> currentViewport = new SimpleObjectProperty<>();
+
+    private void initializeMap() {
+        makeFloorImageView(1, imageContainer);
+
+        // Setup listeners for floor change
+        FirstFloor_Button.setOnAction(event -> makeFloorImageView(1, imageContainer));
+        SecondFloor_Button.setOnAction(event -> makeFloorImageView(2, imageContainer));
+        ThirdFloor_Button.setOnAction(event -> makeFloorImageView(3, imageContainer));
+        FourthFloor_Button.setOnAction(event -> makeFloorImageView(4, imageContainer));
+        FifthFloor_Button.setOnAction(event -> makeFloorImageView(5, imageContainer));
+        SixthFloor_Button.setOnAction(event -> makeFloorImageView(6, imageContainer));
+        SeventhFloor_Button.setOnAction(event -> makeFloorImageView(7, imageContainer));
 
     }
 
@@ -135,11 +142,12 @@ public class HomeController extends Controller {
             "images/6_thesixthfloor.png",
             "images/7_theseventhfloor.png"));
 
-    private static final int MIN_PIXELS = 10;
-    private ImageView makeFloorImageView(int floor, Region container) {
+    private static final int MIN_PIXELS = 400;
+    private ImageView makeFloorImageView(int floor, Pane container) {
         Image floorImage = ImageProvider.getImage(images.get(floor - 1));
         ImageView floorView = new ImageView(floorImage);
         floorView.setPreserveRatio(true);
+        resetFloorView(floorView);
 
         ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
@@ -159,7 +167,7 @@ public class HomeController extends Controller {
             Rectangle2D viewport = floorView.getViewport();
             double width = floorImage.getWidth();
             double height = floorImage.getHeight();
-            double delta = e.getDeltaY();
+            double delta = -e.getDeltaY();
             double scale = clamp(Math.pow(1.01, delta),
                     // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
                     Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
@@ -189,7 +197,7 @@ public class HomeController extends Controller {
                     height - newHeight
             );
 
-            floorView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            setViewport(floorView, new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
         });
 
         floorView.setOnMouseClicked(e -> {
@@ -199,13 +207,25 @@ public class HomeController extends Controller {
         floorView.fitWidthProperty().bind(container.widthProperty());
         floorView.fitHeightProperty().bind(container.heightProperty());
 
+        container.getChildren().clear();
+        container.getChildren().add(floorView);
+
         return floorView;
+    }
+
+    private void setViewport(ImageView floorView, Rectangle2D viewport) {
+        currentViewport.set(viewport);
+        floorView.setViewport(viewport);
     }
 
     private void resetFloorView(ImageView floorView) {
         double width = floorView.getImage().getWidth();
         double height = floorView.getImage().getHeight();
-        floorView.setViewport(new Rectangle2D(0, 0, width, height));
+        if (currentViewport.get() == null) {
+            setViewport(floorView, new Rectangle2D(0, 0, width, height));
+        } else {
+            setViewport(floorView, currentViewport.get());
+        }
     }
 
     private void shift(ImageView floorView, Point2D delta) {
@@ -220,7 +240,7 @@ public class HomeController extends Controller {
         double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
         double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
 
-        floorView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+        setViewport(floorView, new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
     }
 
     private double clamp(double val, double min, double max) {
