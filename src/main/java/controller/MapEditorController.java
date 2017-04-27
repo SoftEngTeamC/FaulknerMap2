@@ -1,12 +1,16 @@
 package controller;
 
+import Singleton.LoginStatusSingleton;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -120,6 +124,19 @@ public class MapEditorController extends Controller {
     private VBox EditNode_VBox;
     @FXML
     private AnchorPane EditNode_AnchorPane;
+
+    // objects for the timeout editor
+    @FXML
+    private Button timeoutEditor_submitBtn;
+
+    @FXML
+    private TextField timeoutEditor_textField;
+
+    @FXML
+    private Text loginTimeout_errorText;
+
+    @FXML
+    private Text loginTimeout_SuccessText;
 
     @FXML
     protected TabPane tabPane;
@@ -243,6 +260,16 @@ public class MapEditorController extends Controller {
         List<Circle> circles = ShowNodesEdgesHelper.showNodes(currFloor);
         System.out.println("INITcirclesListen:");
         circlesListen(circles, currFloor);
+
+        // make timeout button disabled
+        timeoutEditor_submitBtn.setDisable(true);
+        loginTimeout_errorText.setVisible(false);
+        loginTimeout_SuccessText.setVisible(false);
+
+
+
+        timeoutEditor_textField.textProperty().addListener((observable, oldValue, newValue) -> timeoutTextFieldChanged());
+
     }
 
     //-------------------------------------------Listeners---------------------------------------------
@@ -369,6 +396,17 @@ public class MapEditorController extends Controller {
                     circlesListen(circles, currFloor);
                 }
         );
+    }
+
+    /**
+     *
+     * ensures submit button is on or off
+     */
+    public void timeoutTextFieldChanged() {
+        // check to see if there's stuff in the textfield, if so, enable button, else disable it
+        if(timeoutEditor_textField.getText().isEmpty()){
+            timeoutEditor_submitBtn.setDisable(true);
+        } else timeoutEditor_submitBtn.setDisable(false);
     }
 
     //This Listener is triggered when an item in the EditNode_SearchResults List is selected
@@ -501,6 +539,39 @@ public class MapEditorController extends Controller {
         //repopulate the search list
         ObservableList<String> OList = FXCollections.observableArrayList(this.searchList);
         removeNode_searchList.setItems(OList);
+
+    }
+
+    /**
+     * @author Paul
+     *
+     * event handler for the submit button.
+     * if input is in the valid format, changes the timeout time in the memento singleton.
+     *
+     */
+    public void timeoutEditor_submitBtnAction() {
+
+        double seconds;
+
+        // check valid input
+        try {
+            seconds = Double.parseDouble(timeoutEditor_textField.getText());
+        } catch (NumberFormatException E) {
+            seconds = -1;
+        }
+
+        // Either proceed, or throw error
+        if(seconds < 0){
+            // error
+            loginTimeout_errorText.setVisible(true);
+            loginTimeout_SuccessText.setVisible(false);
+        } else{
+            // submit
+            LoginStatusSingleton status = LoginStatusSingleton.getInstance();
+            status.setTimeout((int)seconds);
+            loginTimeout_errorText.setVisible(false);
+            loginTimeout_SuccessText.setVisible(true);
+        }
 
     }
 
