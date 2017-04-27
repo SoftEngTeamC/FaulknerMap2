@@ -9,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NodeServiceTest {
 
     // Create services
@@ -154,19 +157,54 @@ public class NodeServiceTest {
     }
 
     @Test
-    public void findNodeByNameAndFloor() throws Exception {
+    public void testFindNodeByNameAndFloor() throws Exception {
+        try{
+            Assert.assertEquals(testNodeC, nodeService.findNodeByName("testNodeC", 2));
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
     }
 
     @Test
-    public void findNodeIntersectionByFloor() throws Exception {
+    public void testFindNodeIntersectionByFloor() throws Exception {
+        try{
+            nodeService.findNodeIntersectionByFloor(2);
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
     }
 
     @Test
     public void getAllNodes() throws Exception {
+        try{
+            nodeService.getAllNodes();
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
     }
 
     @Test
     public void getNodesByFloor() throws Exception {
+        List<Node> onFloor = new ArrayList<>();
+        double x = 10;
+        double y = 10;
+        int floor = 1;
+        Coordinate locationK = new Coordinate(x, y, floor);
+        String nameK = "testNodeK";
+        Node testNodeK = new Node(nameK, locationK);
+        coordinateService.persist(locationK);
+        nodeService.persist(testNodeK);
+        onFloor.add(testNodeK);
+
+        try{
+            Assert.assertEquals(onFloor, nodeService.getNodesByFloor(1));
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
     }
 
     @Test
