@@ -1,8 +1,8 @@
 package controller;
 
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -125,8 +125,6 @@ public class HomeController extends Controller {
         InitializeFloorButtons();
         InitializeZoomListener();
         Map_Slider.setValue(1000);
-        System.out.println(Map_Slider.getValue());
-        //PanToPoint(2000,2000);
 
         initializeDirectory();
     }
@@ -319,7 +317,8 @@ public class HomeController extends Controller {
         });
 
         addDestinationButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
+        //TODO Fix fonts
+        //addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
         addDestinationButton.setOnAction(e -> {
             searchBox.setText("");
             search("");
@@ -446,6 +445,7 @@ public class HomeController extends Controller {
             else showDirections();
         });
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        //TODO fix fonts
         deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
     }

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import controller.AutocompletionlTextField?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
@@ -14,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<SplitPane fx:id="MapEditor_SplitPane" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
+<SplitPane fx:id="MapEditor_SplitPane" dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1038.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapEditorController">
   <items>
       <VBox fx:id="MapEditorVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
@@ -105,6 +111,20 @@
                         </AnchorPane>
                   </content>
                 </Tab>
+                  <Tab text="Login Timeout">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login Timeout Editor" />
+                              <Text layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter time for login timeout (seconds):" />
+                              <TextField fx:id="timeoutEditor_textField" layoutX="14.0" layoutY="65.0" />
+                              <Button fx:id="timeoutEditor_submitBtn" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#timeoutEditor_submitBtnAction" text="Submit" />
+                              <Text fx:id="loginTimeout_errorText" fill="RED" layoutX="102.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter valid format." />
+                              <Text fx:id="loginTimeout_SuccessText" fill="#00ff09" layoutX="20.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Success!" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
               </tabs>
                <VBox.margin>
                   <Insets />

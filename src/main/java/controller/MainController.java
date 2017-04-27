@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.*;
@@ -165,7 +166,12 @@ public class MainController extends Controller implements Initializable {
             return;
         }
 
-        for (MapNode node : path) ShowNodesEdgesHelper.MakeCircle(node.getModelNode());
+        for(int i = 1; i < path.numNodes()-1; i++){
+            System.out.println(i);
+            ShowNodesEdgesHelper.MakeCircle(path.getNode(i).getModelNode(), Color.RED);
+        }
+        ShowNodesEdgesHelper.MakeCircle(path.getNode(0).getModelNode(), Color.BLUE);
+        ShowNodesEdgesHelper.MakeCircle(path.getNode(path.numNodes()-1).getModelNode(), Color.BLUE);
 
         for(Edge e : path.edges()) ShowNodesEdgesHelper.MakeLine(e);
 //        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
