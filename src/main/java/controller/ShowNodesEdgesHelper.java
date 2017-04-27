@@ -226,7 +226,7 @@ class ShowNodesEdgesHelper {
         return edge;
     }
 
-    public static Circle MakeCircle(Node node) {
+    public static Circle MakeCircle(Node node, Color color) {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
@@ -248,7 +248,7 @@ class ShowNodesEdgesHelper {
         circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
         circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Color.RED);
+        circle.fillProperty().setValue(color);
 
         circle.setId(node.getId().toString());
         group1.getChildren().addAll(circle);
@@ -261,7 +261,7 @@ class ShowNodesEdgesHelper {
         List<Node> temp = NS.getNodesByFloor(currFloor);
         List<Circle> circles = new ArrayList<Circle>();
         for (Node n : temp){
-            Circle circle = ShowNodesEdgesHelper.MakeCircle(n);
+            Circle circle = ShowNodesEdgesHelper.MakeCircle(n, Color.RED);
             circles.add(circle);
         }
         showEdges(currFloor);
