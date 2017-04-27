@@ -173,7 +173,11 @@ public class MainController extends Controller implements Initializable {
         ShowNodesEdgesHelper.MakeCircle(path.getNode(0).getModelNode(), Color.BLUE);
         ShowNodesEdgesHelper.MakeCircle(path.getNode(path.numNodes()-1).getModelNode(), Color.BLUE);
 
-        for(Edge e : path.edges()) ShowNodesEdgesHelper.MakeLine(e);
+        String first = StartLocationField.getText();
+        String last = StartLocationField.getText();
+        for(Edge e : path.edges()) {
+            ShowNodesEdgesHelper.MakeLine(e);
+        }
 
         //TODO: figure out start and end of path
 
