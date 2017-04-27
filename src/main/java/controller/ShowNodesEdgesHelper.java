@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import model.Edge;
 import model.Node;
 import service.EdgeService;
@@ -35,7 +37,6 @@ class ShowNodesEdgesHelper {
     private static Slider SeventhFloorSlider;
     private static TabPane FloorViewsTabPane;
 
-    private static NodeService ns;
 
     ShowNodesEdgesHelper(ScrollPane FirstFloorScrollPane, ScrollPane SecondFloorScrollPane,
                          ScrollPane ThirdFloorScrollPane, ScrollPane FourthFloorScrollPane,
@@ -62,7 +63,6 @@ class ShowNodesEdgesHelper {
         ShowNodesEdgesHelper.SeventhFloorSlider = SeventhFloorSlider;
         ShowNodesEdgesHelper.FloorViewsTabPane = FloorViewsTabPane;
 
-        ns = new NodeService();
     }
 
     static void ClearOldPaths() {
@@ -107,8 +107,8 @@ class ShowNodesEdgesHelper {
         bindFloor(SeventhFloorScrollPane, SeventhFloorSlider, FloorViewsTabPane, "images/7_theseventhfloor.png");
     }
 
-    static void bindFloor(ScrollPane FloorScrollPane, Slider FloorSlider, TabPane FloorViewsTabPane,
-                          String url) {
+    private static void bindFloor(ScrollPane FloorScrollPane, Slider FloorSlider, TabPane FloorViewsTabPane,
+                                  String url) {
         FloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FloorImageView = new ImageView();
@@ -125,22 +125,22 @@ class ShowNodesEdgesHelper {
         FloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
         FloorImageView.fitWidthProperty().bind(FloorSlider.valueProperty());
         FloorSlider.setValue(FloorSlider.getMin() + ((FloorSlider.getMax() - FloorSlider.getMin()) * 0.25));
-        FloorScrollPane.setHvalue((FloorScrollPane.getHmax()+FloorScrollPane.getHmin()) / 2);
-        FloorScrollPane.setVvalue((FloorScrollPane.getVmax()+FloorScrollPane.getVmin()) / 2);
+        FloorScrollPane.setHvalue((FloorScrollPane.getHmax() + FloorScrollPane.getHmin()) / 2);
+        FloorScrollPane.setVvalue((FloorScrollPane.getVmax() + FloorScrollPane.getVmin()) / 2);
     }
 
-    public void ZoomListener(Slider slider, ScrollPane scrlpn){
+    public void ZoomListener(Slider slider, ScrollPane scrlpn) {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
-                //find center XY on old zoom based on current XY of scrollpane and old width
+            //find center XY on old zoom based on current XY of scrollpane and old width
 
-                //find center XY on Image relative to full image
+            //find center XY on Image relative to full image
 
-                //set XY of scroll pane to be about new imageview
+            //set XY of scroll pane to be about new imageview
         });
     }
 
-    public void PanningListener(Slider slider, ScrollPane scrlpn){
+    public void PanningListener(Slider slider, ScrollPane scrlpn) {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
             //find center XY on old zoom based on current XY of scrollpane and old width
@@ -195,7 +195,7 @@ class ShowNodesEdgesHelper {
 
     //MakeLine take 2 points (effectively) and draws a line from point to point
     //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-    public static Line MakeLine(Edge e){
+    static void MakeLine(Edge e) {
         double x1 = e.getStart().getLocation().getX();
         double y1 = e.getStart().getLocation().getY();
         double x2 = e.getEnd().getLocation().getX();
@@ -203,6 +203,7 @@ class ShowNodesEdgesHelper {
         int z = e.getStart().getLocation().getFloor();
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
+        assert Scrolly != null;
         Group group1 = (Group) Scrolly.getContent();
         ImageView Map1 = (ImageView) group1.getChildren().get(0);
 
@@ -217,16 +218,29 @@ class ShowNodesEdgesHelper {
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
-        if(e.isDisabled()) {
+        if (e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
-        return edge;
     }
 
-    public static Circle MakeCircle(Node node, Color color) {
+    void drawArrow(int x1, int y1, int x2, int y2) {
+        double dx = x2 - x1, dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int len = (int) Math.sqrt(dx * dx + dy * dy);
+
+        Transform transform = Transform.translate(x1, y1);
+        transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
+    //    gc.setTransform(new Affine(transform));
+
+//        gc.strokeLine(0, 0, len, 0);
+//        gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
+//                4);
+    }
+
+    static Circle MakeCircle(Node node, Color color) {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
@@ -234,6 +248,7 @@ class ShowNodesEdgesHelper {
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         //  System.out.println(Scrolly.getContent());
+        assert Scrolly != null;
         Group group1 = (Group) Scrolly.getContent();
 
         ImageView Map1 = (ImageView) group1.getChildren().get(0);
@@ -259,8 +274,8 @@ class ShowNodesEdgesHelper {
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
-        List<Circle> circles = new ArrayList<Circle>();
-        for (Node n : temp){
+        List<Circle> circles = new ArrayList<>();
+        for (Node n : temp) {
             Circle circle = ShowNodesEdgesHelper.MakeCircle(n, Color.RED);
             circles.add(circle);
         }
@@ -268,24 +283,22 @@ class ShowNodesEdgesHelper {
         return circles;
     }
 
-    static void showEdges(int currFloor) {
-     //   System.out.println("ShowEdges");
+    private static void showEdges(int currFloor) {
+        //   System.out.println("ShowEdges");
         //Desired Clear old lines
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
-        List<Edge> retEdges = new ArrayList<Edge>();
-        for (Edge e : edges){
+        for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
-                retEdges.add(e);
                 ShowNodesEdgesHelper.MakeLine(e);
             }
         }
     }
 
-    static List<Edge> getEdges(int currFloor){
+    static List<Edge> getEdges(int currFloor) {
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
-        List<Edge> retEdges = new ArrayList<Edge>();
+        List<Edge> retEdges = new ArrayList<>();
         for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
                 retEdges.add(e);
@@ -294,17 +307,18 @@ class ShowNodesEdgesHelper {
         return retEdges;
     }
 
-    static void resetDrawnShapeColors(int currFloor){
+    static void resetDrawnShapeColors(int currFloor) {
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+        assert Scrolly != null;
         Group group = (Group) Scrolly.getContent();
         List<javafx.scene.Node> DrawnObjects = group.getChildren();
-        for(int i=1;i<DrawnObjects.size();i++){
+        for (int i = 1; i < DrawnObjects.size(); i++) {
             try {
                 Circle circle = (Circle) DrawnObjects.get(i);
                 circle.fillProperty().setValue(Color.RED);
             }
             //found an edge instead
-            catch(Exception e){
+            catch (Exception e) {
                 Line line = (Line) DrawnObjects.get(i);
                 line.setStrokeWidth(1);
                 line.setStroke(Color.BLACK);
@@ -313,7 +327,7 @@ class ShowNodesEdgesHelper {
     }
 
     // takes the desired XY and zoom of a map, and applies it to the given
-    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr){
+    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr) {
         sldr.setValue(zoom);
         scrlpn.setVvalue(y);
         scrlpn.setHvalue(x);
