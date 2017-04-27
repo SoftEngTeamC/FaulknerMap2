@@ -446,7 +446,7 @@ public class HomeController extends Controller {
         });
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         //TODO fix fonts
-        deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
+        //deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
     }
 }
