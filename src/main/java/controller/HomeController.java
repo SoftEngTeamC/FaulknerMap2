@@ -15,9 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import model.Navigable;
 import pathfinding.Path;
 import textDirections.Step;
+import util.ImageViewPane;
 import util.MappedList;
 
 import java.net.URL;
@@ -63,7 +65,7 @@ public class HomeController extends Controller {
     private HBox Map_HBox;
 
     @FXML
-    private Pane imageContainer;
+    private StackPane imageContainer;
 
 
     //Content inside ScrollPane
@@ -121,7 +123,7 @@ public class HomeController extends Controller {
     private ObjectProperty<Integer> currentFloor = new SimpleObjectProperty<>();
 
     private void initializeMap() {
-        makeFloorImageView(1, imageContainer);
+        imageContainer.getChildren().add(makeFloorImageView(1, imageContainer));
 
         // Setup listeners for floor change
         FirstFloor_Button.setOnAction(event -> makeFloorImageView(1, imageContainer));
@@ -131,7 +133,21 @@ public class HomeController extends Controller {
         FifthFloor_Button.setOnAction(event -> makeFloorImageView(5, imageContainer));
         SixthFloor_Button.setOnAction(event -> makeFloorImageView(6, imageContainer));
         SeventhFloor_Button.setOnAction(event -> makeFloorImageView(7, imageContainer));
+    }
 
+
+
+    static void clipChildren(Region region, double arc) {
+
+        final Rectangle outputClip = new Rectangle();
+        outputClip.setArcWidth(arc);
+        outputClip.setArcHeight(arc);
+        region.setClip(outputClip);
+
+        region.layoutBoundsProperty().addListener((ov, oldValue, newValue) -> {
+            outputClip.setWidth(newValue.getWidth());
+            outputClip.setHeight(newValue.getHeight());
+        });
     }
 
     private List<String> images = new LinkedList<>(Arrays.asList(
@@ -144,7 +160,7 @@ public class HomeController extends Controller {
             "images/7_theseventhfloor.png"));
 
     private static final int MIN_PIXELS = 400;
-    private ImageView makeFloorImageView(int floor, Pane container) {
+    private ImageViewPane makeFloorImageView(int floor, StackPane container) {
         currentFloor.set(floor);
 
         Image floorImage = ImageProvider.getImage(images.get(floor - 1));
@@ -207,13 +223,13 @@ public class HomeController extends Controller {
             if (e.getClickCount() == 2) resetFloorView(floorView);
         });
 
-        floorView.fitWidthProperty().bind(container.widthProperty());
-        floorView.fitHeightProperty().bind(container.heightProperty());
+        // Wrap it in a ImageViewPane so it scales correctly
+        ImageViewPane floorViewPane = new ImageViewPane(floorView);
 
-        container.getChildren().clear();
-        container.getChildren().add(floorView);
+        floorViewPane.prefWidthProperty().bind(container.widthProperty());
+        floorViewPane.prefHeightProperty().bind(container.heightProperty());
 
-        return floorView;
+        return floorViewPane;
     }
 
     private void setViewport(ImageView floorView, Rectangle2D viewport) {
