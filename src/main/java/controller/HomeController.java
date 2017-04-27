@@ -16,17 +16,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import model.Edge;
 import model.Navigable;
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
 
+import java.net.InterfaceAddress;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
@@ -198,18 +199,6 @@ public class HomeController extends Controller {
         Map_ScrollPane.setVvalue((Yprime/(currHeight-Map_ScrollPane.getHeight()))-((Map_ScrollPane.getHeight()/currHeight)/2));
     }
 
-//    private void BuildMapGroup(Image map, Path path){
-//        MapImageView.setImage(map);
-//        Map_Slider.setMax(map.getWidth());
-//
-//        if (path.numNodes() < 1) {
-//            System.err.println("Can't display map because there is no path.");
-//            return;
-//        }
-//        for (MapNode node : path) MakeCircleInGroup(node);
-//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
-//    }
-
     private void ClearMapGroup(){
         Group group1 = (Group) Map_ScrollPane.getContent();
         group1.getChildren().remove(1, group1.getChildren().size());
@@ -237,6 +226,33 @@ public class HomeController extends Controller {
         MapGroup.getChildren().addAll(circle);
     }
 
+    public void MakeLineInGroup(Edge e){
+        double x1 = e.getStart().getLocation().getX();
+        double y1 = e.getStart().getLocation().getY();
+        double x2 = e.getEnd().getLocation().getX();
+        double y2 = e.getEnd().getLocation().getY();
+        int z = e.getStart().getLocation().getFloor();
+
+        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Line edge = new Line();
+        //the points are bound to the fit width property of the image and scaled by the initial image ratio
+        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        if(e.isDisabled()) {
+            edge.getStrokeDashArray().addAll(2d, 10d);
+        }
+
+        MapGroup.getChildren().add(edge);
+    }
+
     private void InitializeFloorButtons(){
         FirstFloor_Button.setOnMouseClicked(e -> {
             MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));ClearMapGroup();});
@@ -251,10 +267,40 @@ public class HomeController extends Controller {
         SixthFloor_Button.setOnMouseClicked(e -> {
             MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));ClearMapGroup();});
         SeventhFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));ClearMapGroup();});
+            MapImageView.setImage(ImageProvider.getImage("images/7_theseventhfloor.png"));ClearMapGroup();});
     }
 
-    //--------------------------------------------------------------------------------------------------
+    //-------------------------------------Path Finding----------------------------------------
+    private void BuildStepByStepButtons(){
+        Map_HBox.getChildren().remove(0,Map_HBox.getChildren().size());
+        for(int i =0; i<paths.size(); i++){
+            Button button = new Button();
+            button.setText(Integer.toString(i+1));
+            Map_HBox.getChildren().add(button);
+            button.setOnAction(e -> {
+                System.out.println("Pressed: "+ button.getText());
+                DisplayPath(paths.get(Integer.parseInt(button.getText())-1));
+            });
+        }
+    }
+
+    //This function takes a path and resets the Group in the Scrollpane to have the correct Image and circles
+    private void DisplayPath(Path path){
+        System.out.println("displayPath");
+        int floor = path.getNode(0).getLocation().getFloor();
+        MapImageView.setImage(ImageProvider.getImageByFloor(floor));
+        ClearMapGroup();
+        List<MapNode> NodesInPath = path.getPath();
+        for(MapNode N: NodesInPath){
+            MakeCircleInGroup(N);
+        }
+        for(Edge E : path.edges()){
+            MakeLineInGroup(E);
+        }
+    }
+
+
+
     private void initializeDirectory() {
         searchResultsView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
@@ -296,6 +342,7 @@ public class HomeController extends Controller {
                         start = dest;
                     }
                 }
+                BuildStepByStepButtons();
                 System.out.println(paths);
             }
         });

@@ -12,6 +12,9 @@ import static java.lang.Math.PI;
 
 
 public class MakeDirections {
+
+    //There is a variable p in this code. I have no idea what its for. This is A known bug.
+    public static double p;
     public static LinkedList<Step> getText(Path path){
         ResourceBundle bundle = MainController.getBundle();
         DecimalFormat pathFormat = new DecimalFormat("#.#");
@@ -119,7 +122,7 @@ public class MakeDirections {
                 break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        return output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
+        output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
                 " " + bundle.getString("arrived"));
         output = output2;
         TextDirectionSteps.add(new Step(output));
