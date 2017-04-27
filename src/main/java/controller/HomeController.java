@@ -3,16 +3,22 @@ package controller;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,10 +29,7 @@ import textDirections.Step;
 import util.MappedList;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
@@ -90,13 +93,6 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
-    ImageView MapImageView = new ImageView();
-    Group MapGroup = new Group();
-    //Center ScrollPane relative to Image Coordinates
-    double CenterX;
-    double CenterY;
-    boolean CenterLocked = false;
-
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> searchResultsView = new ListView<>(searchResults);
@@ -121,138 +117,128 @@ public class HomeController extends Controller {
     @FXML
     void initialize() {
         InitializeMap();
-        InitializeFloorButtons();
-        InitializeZoomListener();
-        Map_Slider.setValue(1000);
-        System.out.println(Map_Slider.getValue());
-        //PanToPoint(2000,2000);
-
         initializeDirectory();
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
     private void InitializeMap(){
-        Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
-        Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
-        MapImageView.setPreserveRatio(true);
 
-        Image MapPic = ImageProvider.getImage("images/1_thefirstfloor.png");
-        MapImageView.setImage(MapPic);
-        MapGroup.getChildren().add(MapImageView);
-        Map_ScrollPane.setContent(MapGroup);
-        Map_ScrollPane.setPannable(true);
-        Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_Slider.minProperty().bind(Map_Split.widthProperty());
-        Map_Slider.setMax(MapPic.getWidth());
-        MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
 
-    private void InitializeZoomListener(){
-        //This event is triggered when the Map Slider is moved
-        //It locks the center coordinate, and as it is zoomed it pans to the desired position
-        Map_Slider.valueProperty().addListener((original,oldValue, newValue) -> {
-            CenterLocked=true;
-            System.out.println("Zooming On: " + CenterX+", "+CenterY);
-            PanToPoint(CenterX,CenterY);
-            });
+    private List<String> images = new LinkedList<>(Arrays.asList(
+            "images/1_thefirstfloor.png",
+            "images/2_thesecondfloor.png",
+            "images/3_thethirdfloor.png",
+            "images/4_thefourthfloor.png",
+            "images/5_thefifthfloor.png",
+            "images/6_thesixthfloor.png",
+            "images/7_theseventhfloor.png"));
 
-        //This event is triggered when the mouse is released from the slider
-        Map_Slider.setOnMouseReleased(e->{CenterLocked=false;});
+    private static final int MIN_PIXELS = 10;
+    private ImageView makeFloorImageView(int floor, Region container) {
+        Image floorImage = ImageProvider.getImage(images.get(floor - 1));
+        ImageView floorView = new ImageView(floorImage);
+        floorView.setPreserveRatio(true);
 
-        //These events are triggered when the scrollpane view is panned
-        Map_ScrollPane.hvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
-        Map_ScrollPane.vvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
-    }
-    //This function is meant to be called whenever the user is panning around the map
-    //ie on click and drag, not on zoom, Controlled by CenterLocked Boolean
-    private void Panning(){
-        double Width = MapImageView.getImage().getWidth();
-        double Height = MapImageView.getImage().getHeight();
-        double ImageRatio = Height / Width;
-        double currWidth = MapImageView.getFitWidth();
-        double currHeight = currWidth * ImageRatio;
-        double ScrollX = Map_ScrollPane.getHvalue();
-        double ScrollY = Map_ScrollPane.getVvalue();
+        ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
-        double Xprime = ((ScrollX + ((Map_ScrollPane.getWidth() / currWidth) / 2)) * (currWidth - Map_ScrollPane.getWidth()));
-        double Yprime = ((ScrollY + ((Map_ScrollPane.getHeight() / currHeight) / 2)) * (currHeight - Map_ScrollPane.getHeight()));
+        floorView.setOnMousePressed(e -> {
+            // Record the location we first click for drag
+            Point2D mousePress = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
+            mouseDown.set(mousePress);
+        });
 
-        CenterX = Xprime / (currWidth / Width);
-        CenterY = Yprime / (currHeight / Height);
-        System.out.println(CenterX+", "+CenterY);
-    }
+        floorView.setOnMouseDragged(e -> {
+            Point2D dragPoint = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
+            shift(floorView, dragPoint.subtract(mouseDown.get()));
+            mouseDown.set(imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY())));
+        });
 
-    private void PanToPoint(double X, double Y){
-        System.out.println("Panning To Point");
-        double Width = MapImageView.getImage().getWidth();
-        double Height = MapImageView.getImage().getHeight();
-        double ImageRatio = Height/Width;
-        double currWidth = MapImageView.getFitWidth();
-        double currHeight = currWidth*ImageRatio;
-        double Xprime = X*(currWidth/Width);
-        double Yprime = Y*(currHeight/Height);
+        floorView.setOnScroll(e -> {
+            Rectangle2D viewport = floorView.getViewport();
+            double width = floorImage.getWidth();
+            double height = floorImage.getHeight();
+            double delta = e.getDeltaY();
+            double scale = clamp(Math.pow(1.01, delta),
+                    // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
+                    Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+                    // don't scale so that we're bigger than image dimensions
+                    Math.max(width / viewport.getWidth(), height / viewport.getHeight()));
 
-        Map_ScrollPane.setHvalue((Xprime/(currWidth-Map_ScrollPane.getWidth()))-((Map_ScrollPane.getWidth()/currWidth)/2));
-        Map_ScrollPane.setVvalue((Yprime/(currHeight-Map_ScrollPane.getHeight()))-((Map_ScrollPane.getHeight()/currHeight)/2));
-    }
+            Point2D mouse = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
+            double newWidth = viewport.getWidth() * scale;
+            double newHeight = viewport.getHeight() * scale;
+            // To keep the visual point under the mouse from moving, we need
+            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
+            // where x is the mouse X coordinate in the image
 
-//    private void BuildMapGroup(Image map, Path path){
-//        MapImageView.setImage(map);
-//        Map_Slider.setMax(map.getWidth());
-//
-//        if (path.numNodes() < 1) {
-//            System.err.println("Can't display map because there is no path.");
-//            return;
-//        }
-//        for (MapNode node : path) MakeCircleInGroup(node);
-//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
-//    }
+            // solving this for newViewportMinX gives
 
-    private void ClearMapGroup(){
-        Group group1 = (Group) Map_ScrollPane.getContent();
-        group1.getChildren().remove(1, group1.getChildren().size());
-    }
+            // newViewportMinX = x - (x - currentViewportMinX) * scale
 
-    private void MakeCircleInGroup (MapNode N){
-        //This function trusts that it is only being called to build circles on the displayed floor
-        double x = N.getLocation().getX();
-        double y = N.getLocation().getY();
+            // we then clamp this value so the image never scrolls out
+            // of the floorView
+            double newMinX = clamp(
+                    mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
+                    0,
+                    width - newWidth);
+            double newMinY = clamp(
+                    mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
+                    0,
+                    height - newHeight
+            );
 
-        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
-        // initial size of image and the image ratio
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
+            floorView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+        });
 
-        Circle circle = new Circle();
-        //These bind the center positions relative to the width property of the image
-        //the new center is calculated using the initial ratios
-        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
-        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Color.RED);
+        floorView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) resetFloorView(floorView);
+        });
 
-        MapGroup.getChildren().addAll(circle);
+        floorView.fitWidthProperty().bind(container.widthProperty());
+        floorView.fitHeightProperty().bind(container.heightProperty());
+
+        return floorView;
     }
 
-    private void InitializeFloorButtons(){
-        FirstFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));ClearMapGroup();});
-        SecondFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));ClearMapGroup();});
-        ThirdFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));ClearMapGroup();});
-        FourthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));ClearMapGroup();});
-        FifthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));ClearMapGroup();});
-        SixthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));ClearMapGroup();});
-        SeventhFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));ClearMapGroup();});
+    private void resetFloorView(ImageView floorView) {
+        double width = floorView.getImage().getWidth();
+        double height = floorView.getImage().getHeight();
+        floorView.setViewport(new Rectangle2D(0, 0, width, height));
     }
+
+    private void shift(ImageView floorView, Point2D delta) {
+        Rectangle2D viewport = floorView.getViewport();
+
+        double width = floorView.getImage().getWidth();
+        double height = floorView.getImage().getHeight();
+
+        double maxX = width - viewport.getWidth();
+        double maxY = height - viewport.getHeight();
+
+        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+        floorView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+    }
+
+    private double clamp(double val, double min, double max) {
+        return Math.max(min, Math.min(max, val));
+    }
+
+    private Point2D imageViewToImageCoordinate(ImageView floorView, Point2D floorViewCoordinates) {
+        // Transform mouse coordinates on the floorView to the pixel coordinates of the image.
+        double xProp = floorViewCoordinates.getX() / floorView.getBoundsInLocal().getWidth();
+        double yProp = floorViewCoordinates.getY() / floorView.getBoundsInLocal().getHeight();
+
+        Rectangle2D viewport = floorView.getViewport();
+        return new Point2D(
+                viewport.getMinX() + xProp*viewport.getWidth(),
+                viewport.getMinY() + yProp*viewport.getHeight()
+        );
+    }
+
 
     //--------------------------------------------------------------------------------------------------
     private void initializeDirectory() {

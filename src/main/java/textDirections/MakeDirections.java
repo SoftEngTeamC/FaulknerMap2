@@ -30,6 +30,8 @@ public class MakeDirections {
 
         MapNode currentNode, nextNode, afterNextNode;
 
+        double p = Math.PI;
+
         int i;
 
         double totalDistance = 0;
@@ -119,8 +121,6 @@ public class MakeDirections {
                 break;
         }
         DecimalFormat df = new DecimalFormat("#.#");
-        return output.concat(bundle.getString("forward") + df.format(Math.round(totalDistance)) +
-                " " + bundle.getString("arrived"));
         output = output2;
         TextDirectionSteps.add(new Step(output));
 
