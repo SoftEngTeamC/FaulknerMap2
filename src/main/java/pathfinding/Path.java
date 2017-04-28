@@ -44,6 +44,8 @@ public class Path implements Iterable<MapNode> {
         return path.get(i);
     }
 
+    public List<MapNode> getPath(){return path;}
+
     public List<Edge> edges() {
         EdgeService edgeService = new EdgeService();
 
@@ -99,5 +101,10 @@ public class Path implements Iterable<MapNode> {
     @Override
     public Iterator<MapNode> iterator() {
         return path.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return path.toString();
     }
 }

@@ -17,9 +17,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-/**
- * Created by Gina on 4/11/17.
- */
+
 public class AutocompletionlTextField extends TextField {
     //Local variables
     //entries to autocomplete

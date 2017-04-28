@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane fx:id="Home_MainSplit" dividerPositions="0.35618729096989965" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
+   <items>
+      <AnchorPane>
+         <children>
+            <VBox fx:id="Main_VBox" prefHeight="398.0" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fx:id="Logo_ImageView" fitHeight="58.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ScrollPane fx:id="Search_ScrollPane">
+                     <content>
+                        <VBox fx:id="Searching_VBox" />
+                     </content>
+                  </ScrollPane>
+                  <ButtonBar fx:id="Options_ButtonBar" prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button mnemonicParsing="false" text="Button" />
+                    </buttons>
+                  </ButtonBar>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#HandlePanicButton" text="Panic" />
+                        <Button mnemonicParsing="false" onAction="#HandleHelpButton" text="Help" />
+                        <Button fx:id="AdminToolButton" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Menu" />
+                        <MenuButton mnemonicParsing="false" text="Language">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
+                        <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" text="About" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <SplitPane fx:id="Map_Split" dividerPositions="0.871859296482412" orientation="VERTICAL" prefHeight="398.0" prefWidth="391.0">
+        <items>
+          <AnchorPane fx:id="Map_AnchorPane">
+               <children>
+                  <ScrollPane fx:id="Map_ScrollPane" pannable="true" prefHeight="344.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                  </ScrollPane>
+                  <Slider fx:id="Map_Slider" layoutX="362.0" layoutY="190.0" orientation="VERTICAL" prefHeight="107.0" prefWidth="14.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                  <ImageView fx:id="SnapToHome_ImageView" fitHeight="48.0" fitWidth="44.0" layoutX="331.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                  <VBox fx:id="FloorButtons_VBox" AnchorPane.bottomAnchor="125.0" AnchorPane.rightAnchor="10.0">
+                     <children>
+                        <Button fx:id="FirstFloor_Button" mnemonicParsing="false" text="1" />
+                        <Button fx:id="SecondFloor_Button" mnemonicParsing="false" text="2" />
+                        <Button fx:id="ThirdFloor_Button" mnemonicParsing="false" text="3" />
+                        <Button fx:id="FourthFloor_Button" mnemonicParsing="false" text="4" />
+                        <Button fx:id="FifthFloor_Button" mnemonicParsing="false" text="5" />
+                        <Button fx:id="SixthFloor_Button" mnemonicParsing="false" text="6" />
+                        <Button fx:id="SeventhFloor_Button" mnemonicParsing="false" text="7" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <HBox fx:id="Map_HBox" layoutY="4.0" prefHeight="63.0" prefWidth="390.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </items>
+</SplitPane>

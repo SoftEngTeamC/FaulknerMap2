@@ -230,7 +230,7 @@ public class MainController extends Controller implements Initializable {
                 TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
                         + "\n\n" + textDirections.MakeDirections.getText(path));
             } else {
-                TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+                //TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
             }
             DisplayMap(path);
         }
