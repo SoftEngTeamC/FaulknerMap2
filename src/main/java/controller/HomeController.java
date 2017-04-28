@@ -11,19 +11,28 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.*;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Affine;
 import model.Navigable;
 import pathfinding.Path;
 import textDirections.Step;
 import util.ImageViewPane;
 import util.MappedList;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
@@ -135,7 +144,17 @@ public class HomeController extends Controller {
         SeventhFloor_Button.setOnAction(event -> makeFloorImageView(7, imageContainer));
     }
 
+    private Canvas makeDrawPane(int floor, StackPane container) {
+        Image floorImage = ImageProvider.getImage(images.get(floor - 1));
+        Canvas canvas = new Canvas(floorImage.getWidth(), floorImage.getHeight());
 
+    }
+
+    private Affine canvasTransformFromViewport(Rectangle2D viewport, double width, double height) {
+        return new Affine(1, 0, 0, viewport.getMinX(),
+                0, 1, 0, viewport.getMinY(),
+                0, 0, 1, 0);
+    }
 
     static void clipChildren(Region region, double arc) {
 
