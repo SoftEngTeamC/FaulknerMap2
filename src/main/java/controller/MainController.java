@@ -182,6 +182,7 @@ public class MainController extends Controller implements Initializable {
     //-----------------------------------FUNCTIONS------------------------------------------
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
                                     HospitalService HS_Start, HospitalService HS_Dest) {
+
         Map map = new Map(nodeService.getAllNodes());
 
         Node nodeStart, nodeEnd;
@@ -332,7 +333,7 @@ public class MainController extends Controller implements Initializable {
             Date morningEnd = hours.getVisitingHoursMorningEnd();
 
             Date eveningStart = hours.getVisitingHoursEveningStart();
-            Date eveningEnd = hours.getVisitingHorusEveningEnd();
+            Date eveningEnd = hours.getVisitingHoursEveningEnd();
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
