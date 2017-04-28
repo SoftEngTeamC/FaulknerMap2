@@ -3,30 +3,32 @@ package controller;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import model.Edge;
+import model.Hours;
 import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
+import textDirections.MakeDirections;
 import textDirections.Step;
 import util.MappedList;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
@@ -52,8 +54,6 @@ public class HomeController extends Controller {
     @FXML
     private VBox Searching_VBox;
 
-    @FXML
-    private ButtonBar Options_ButtonBar;
 
     @FXML
     private SplitPane Map_Split;
@@ -90,6 +90,27 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
+    //buttons at the bottom
+    @FXML
+    private Button AboutUsButton;
+    @FXML
+    private Button AdminToolButton;
+
+    @FXML
+    private MenuItem english_button;
+    @FXML
+    private MenuItem spanish_button;
+    @FXML
+    private MenuItem french_button;
+    @FXML
+    private MenuItem japanese_button;
+    @FXML
+    private MenuItem chinese_button;
+    @FXML
+    private MenuItem portuguese_button;
+    @FXML
+    private MenuItem italian_button;
+
     ImageView MapImageView = new ImageView();
     Group MapGroup = new Group();
     //Center ScrollPane relative to Image Coordinates
@@ -108,9 +129,12 @@ public class HomeController extends Controller {
     private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::makeDestinationView);
     private Map<Navigable, HBox> destinationNodeCache = new HashMap<>();
 
+    private ObjectProperty<Navigable> selectedDestination = new SimpleObjectProperty<>();
     private TextField searchBox = new TextField();
 
     private Button addDestinationButton = new Button();
+    private Button DirectionButton = new Button();
+    private HBox addDestandDirectionButtons = new HBox();
 
     private TextField currentSearchField;
     private int currentDestinationIndex = -1;
@@ -118,16 +142,38 @@ public class HomeController extends Controller {
     private pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes());
     private ObservableList<Path> paths = FXCollections.observableArrayList();
 
+    private static ResourceBundle bundle;
+
+    private IntegerProperty currFloor = new SimpleIntegerProperty(1);
+    private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
+
     @FXML
     void initialize() {
+        bundle = resources;
         InitializeMap();
         InitializeFloorButtons();
         InitializeZoomListener();
-        Map_Slider.setValue(1000);
-        System.out.println(Map_Slider.getValue());
-        //PanToPoint(2000,2000);
-
         initializeDirectory();
+        Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
+        Logo_ImageView.setPreserveRatio(true);
+        Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
+
+        //Define actions on ShowTextDirections Button
+        DirectionButton.setText("Get Directions");
+        DirectionButton.setOnAction(e->{
+            showTextDirections();
+            //Update the Floor span for the New Paths
+            FloorSpan.set(PathSpansFloors());
+            //TODO Set current Location to first node in the path
+            //current location will be used to step through the directions one node at a time
+            currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
+            System.out.println("FloorSpan"+FloorSpan);
+
+            //TODO Display the Path on the Map and generate Steps
+        });
+        //Altering the add Destination and Directions Buttons HBox to have those buttons
+        addDestandDirectionButtons.getChildren().add(addDestinationButton);
+        addDestandDirectionButtons.getChildren().add(DirectionButton);
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -144,7 +190,7 @@ public class HomeController extends Controller {
         Map_ScrollPane.setPannable(true);
         Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_Slider.minProperty().bind(Map_Split.widthProperty());
+        Map_Slider.minProperty().bind(Map_AnchorPane.widthProperty());
         Map_Slider.setMax(MapPic.getWidth());
         MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
@@ -198,18 +244,6 @@ public class HomeController extends Controller {
         Map_ScrollPane.setVvalue((Yprime/(currHeight-Map_ScrollPane.getHeight()))-((Map_ScrollPane.getHeight()/currHeight)/2));
     }
 
-//    private void BuildMapGroup(Image map, Path path){
-//        MapImageView.setImage(map);
-//        Map_Slider.setMax(map.getWidth());
-//
-//        if (path.numNodes() < 1) {
-//            System.err.println("Can't display map because there is no path.");
-//            return;
-//        }
-//        for (MapNode node : path) MakeCircleInGroup(node);
-//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
-//    }
-
     private void ClearMapGroup(){
         Group group1 = (Group) Map_ScrollPane.getContent();
         group1.getChildren().remove(1, group1.getChildren().size());
@@ -237,25 +271,107 @@ public class HomeController extends Controller {
         MapGroup.getChildren().addAll(circle);
     }
 
-    private void InitializeFloorButtons(){
-        FirstFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));ClearMapGroup();});
-        SecondFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));ClearMapGroup();});
-        ThirdFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));ClearMapGroup();});
-        FourthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));ClearMapGroup();});
-        FifthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));ClearMapGroup();});
-        SixthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));ClearMapGroup();});
-        SeventhFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_theseventhfloor.png"));ClearMapGroup();});
+    public void MakeLineInGroup(Edge e){
+        double x1 = e.getStart().getLocation().getX();
+        double y1 = e.getStart().getLocation().getY();
+        double x2 = e.getEnd().getLocation().getX();
+        double y2 = e.getEnd().getLocation().getY();
+        int z = e.getStart().getLocation().getFloor();
+
+        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        Line edge = new Line();
+        //the points are bound to the fit width property of the image and scaled by the initial image ratio
+        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        if(e.isDisabled()) {
+            edge.getStrokeDashArray().addAll(2d, 10d);
+        }
+
+        MapGroup.getChildren().add(edge);
     }
 
-    //--------------------------------------------------------------------------------------------------
+    private void InitializeFloorButtons(){
+        FirstFloor_Button.setOnMouseClicked(e -> {currFloor.set(1);});
+        SecondFloor_Button.setOnMouseClicked(e -> {currFloor.set(2);});
+        ThirdFloor_Button.setOnMouseClicked(e -> {currFloor.set(3);});
+        FourthFloor_Button.setOnMouseClicked(e -> {currFloor.set(4);});
+        FifthFloor_Button.setOnMouseClicked(e -> {currFloor.set(5);});
+        SixthFloor_Button.setOnMouseClicked(e -> {currFloor.set(6);});
+        SeventhFloor_Button.setOnMouseClicked(e -> {currFloor.set(7);});
+
+        //Triggered anytime the currFloor Changes
+        //Updates what nodes are being displayed
+        currFloor.addListener(e->{
+            System.out.println("currFloorPropertyChanged");
+            System.out.println(currFloor);
+            System.out.println(currFloor.get());
+            System.out.println(ImageProvider.getImageByFloor(currFloor.get()));
+            //TODO changing the floor image is broken. I dont know why.
+            MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
+            ClearMapGroup();
+            //TODO Whatever Path portions are on this floor. Display those.
+        });
+
+        //whenever the floor span changes, update the floor buttons that are disabled
+        FloorSpan.addListener(new ListChangeListener<Integer>() {
+            @Override
+            public void onChanged(Change<? extends Integer> c){
+                System.out.println("FloorSpanProperty Changed");
+                for(int i=0; i<7; i++){
+                    Button B = (Button) FloorButtons_VBox.getChildren().get(i);
+                    B.setDisable(false);
+                    if(!FloorSpan.contains(i+1)){
+                        B.setDisable(true);
+                    }
+                }
+            }
+        });
+    }
+
+    //-------------------------------------Path Finding----------------------------------------
+
+    //This function takes a path and resets the Group in the Scrollpane to have the correct Image and circles
+    private void DisplayPath(Path path){
+        System.out.println("displayPath");
+        int floor = path.getNode(0).getLocation().getFloor();
+        MapImageView.setImage(ImageProvider.getImageByFloor(floor));
+        ClearMapGroup();
+        List<MapNode> NodesInPath = path.getPath();
+        for(MapNode N: NodesInPath){
+            MakeCircleInGroup(N);
+        }
+        for(Edge E : path.edges()){
+            MakeLineInGroup(E);
+        }
+    }
+
+    private ObservableList<Integer> PathSpansFloors(){
+        System.out.println("PathSpansFloors");
+        List<Integer> span = new ArrayList<Integer>();
+        Set<Integer> floors;
+        for(Path p: paths){
+            floors = p.floorsSpanned();
+            for(int i:floors){
+                if(!span.contains(i)){span.add(i);}
+            }
+        }
+        ObservableList<Integer> FloorsSpanned = FXCollections.observableList(span);
+        return FloorsSpanned;
+    }
+
+    //-----------------------------------------------------------
+
     private void initializeDirectory() {
+        Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Search_ScrollPane.setPrefHeight(1000);
         searchResultsView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
         searchResultsView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -296,10 +412,14 @@ public class HomeController extends Controller {
                         start = dest;
                     }
                 }
+                ClearMapGroup();
+                List<Integer> nums = new ArrayList<>();
+                nums.add(1);nums.add(2);nums.add(3);nums.add(4);nums.add(5);nums.add(6);nums.add(7);
+                ObservableList<Integer> AllFloors = FXCollections.observableList(nums);
+                FloorSpan.setValue(AllFloors);
                 System.out.println(paths);
             }
         });
-
         Searching_VBox = makeVBox();
         showSearch();
     }
@@ -322,7 +442,7 @@ public class HomeController extends Controller {
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
         currentSearchField = null;
     }
@@ -350,6 +470,19 @@ public class HomeController extends Controller {
         setCurrentSearchField(searchBox);
     }
 
+    private void showDestinationInfo() {
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
+        Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
+    }
+
+    private void showTextDirections(){
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
+        Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
+    }
 
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
@@ -377,13 +510,21 @@ public class HomeController extends Controller {
         TextField field = new TextField();
         field.setEditable(false);
         field.setText(location.toString() + " - " + location.getNode().getName());
+        field.setPrefWidth(700);
+        field.setMaxWidth(Region.USE_COMPUTED_SIZE);
         field.setOnMouseClicked(e -> {
-            if (currentSearchField == null) {
-                field.setEditable(true);
-                field.setText("");
-                search("");
-                showEditDestination(field);
-                currentDestinationIndex = destinations.indexOf(location);
+            if(e.getClickCount()>=2){
+                if (currentSearchField == null) {
+                    field.setEditable(true);
+                    field.setText("");
+                    search("");
+                    showEditDestination(field);
+                    currentDestinationIndex = destinations.indexOf(location);
+                }
+            }
+            if (currentDestinationIndex < 0) {
+                selectedDestination.set(location);
+                showDestinationInfo();
             }
         });
         return field;
@@ -401,5 +542,89 @@ public class HomeController extends Controller {
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
+    }
+
+    private TextArea MakeInfoTextArea(Navigable location) {
+        TextArea Info = new TextArea();
+        Info.setText(location.getInfo());
+        Info.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        Info.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        return Info;
+    }
+
+    private ListView<String> MakeTextDirectionsListView(List<Path> paths){
+        //Create List of all directions given List of Paths
+        List<String> TextDirections = new ArrayList<String>();
+        for(Path p: paths){
+            for(MapNode M : p.getPath()){
+                TextDirections.add(M.toString());
+            }
+        }
+        ListView<String> textdirs = new ListView<String>();
+        textdirs.setItems(FXCollections.observableList(TextDirections));
+        textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        textdirs.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        return textdirs;
+    }
+
+    // -------------------------------------------------- buttons ---------------------------------------------------------------------------------------
+
+    @FXML
+    public void OpenAboutUs() {
+        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+    }
+
+    @FXML
+    public void OpenAdminTool() {
+        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+    }
+
+    public void HandleHelpButton() {
+        Hours hours = hoursService.find(1L);
+        String message;
+        if (hours != null) {
+            Date morningStart = hours.getVisitingHoursMorningStart();
+            Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+            Date eveningStart = hours.getVisitingHoursEveningStart();
+            Date eveningEnd = hours.getVisitingHoursEveningEnd();
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+
+        } else {
+            Date morningStart = new Date(0, 0, 0, 9, 30);
+            Date morningEnd = new Date(0, 0, 0, 12, 0);
+
+            Date eveningStart = new Date(0, 0, 0, 14, 0);
+            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+        }
+        // <TODO> place the text somewhere
+//        StartInfo_TextArea.setText(message);
+    }
+
+    // <TODO> make this work
+    public void HandlePanicButton() {
+//
+//        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
+//        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
+//        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
+//
+//        FindandDisplayPath(HP_Start, null, null, HS_Dest);
     }
 }

@@ -85,4 +85,17 @@ public class HospitalProfessional implements Navigable {
     public String toString() {
         return name + (title.equals("") ? "" : " (" + title + ")");
     }
+
+    @Transient
+    public String getInfo(){
+        String info = "";
+        info = "Name: " + this.getName() + "\n";
+        info = info+ "Title: " + this.getTitle() + "\n";
+        info = info+ "Offices:\n";
+        for(Node N: this.getOffices()){
+            info = info + "   ";
+            info = info+N.getName()+"\n";
+        }
+        return info;
+    }
 }

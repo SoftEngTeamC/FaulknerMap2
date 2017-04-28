@@ -63,4 +63,16 @@ public class HospitalService implements Navigable {
         // TODO: make this robust
         return locations.get(1);
     }
+    @Transient
+    public String getInfo(){
+        String info="";
+        info = "Name:" + this.getName()+"\n";
+        info = "Locations: \n";
+        for(Node N: this.getLocations()){
+            info = info + "   ";
+            info = info+N.getName()+"\n";
+        }
+        return info;
+
+    }
 }
