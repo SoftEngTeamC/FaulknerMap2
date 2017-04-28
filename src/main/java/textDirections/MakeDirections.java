@@ -13,7 +13,7 @@ import static java.lang.Math.PI;
 
 public class MakeDirections {
 
-    //There is a variable p in this code. I have no idea what its for. This is A known bug.
+    //TEXT DIRECTIONS NEEDS TO BE REFACTORED TO RETURN LIST OF STRINGS
     public static double p;
     public static LinkedList<Step> getText(Path path){
         ResourceBundle bundle = MainController.getBundle();
