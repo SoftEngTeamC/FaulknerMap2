@@ -134,6 +134,8 @@ public class HomeController extends Controller {
     private TextField searchBox = new TextField();
 
     private Button addDestinationButton = new Button();
+    private Button DirectionButton = new Button();
+    private HBox addDestandDirectionButtons = new HBox();
 
     private TextField currentSearchField;
     private int currentDestinationIndex = -1;
@@ -154,6 +156,15 @@ public class HomeController extends Controller {
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
 
+        //Define actions on ShowTextDirections Button
+        DirectionButton.setText("Get Directions");
+        DirectionButton.setOnAction(e->{
+            showTextDirections();
+            //TODO Display the Path on the Map and generate Steps
+        });
+        //Altering the add Destination and Directions Buttons HBox to have those buttons
+        addDestandDirectionButtons.getChildren().add(addDestinationButton);
+        addDestandDirectionButtons.getChildren().add(DirectionButton);
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -372,7 +383,6 @@ public class HomeController extends Controller {
                 System.out.println(paths);
             }
         });
-
         Searching_VBox = makeVBox();
         showSearch();
     }
@@ -395,7 +405,7 @@ public class HomeController extends Controller {
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
         currentSearchField = null;
     }
@@ -426,14 +436,14 @@ public class HomeController extends Controller {
     private void showDestinationInfo() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
     }
 
     private void showTextDirections(){
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
-        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
     }
 
@@ -508,11 +518,11 @@ public class HomeController extends Controller {
     private ListView<String> MakeTextDirectionsListView(List<Path> paths){
         //Create List of all directions given List of Paths
         List<String> TextDirections = new ArrayList<String>();
-//        for(Path p: paths){
-//            for(String S: ){
-//                TextDirections.add(M.toString());
-//            }
-//        }
+        for(Path p: paths){
+            for(MapNode M : p.getPath()){
+                TextDirections.add(M.toString());
+            }
+        }
         ListView<String> textdirs = new ListView<String>();
         textdirs.setItems(FXCollections.observableList(TextDirections));
         textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
