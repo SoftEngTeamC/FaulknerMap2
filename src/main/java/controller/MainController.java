@@ -167,14 +167,19 @@ public class MainController extends Controller implements Initializable {
         }
 
         for(int i = 1; i < path.numNodes()-1; i++){
-            System.out.println(i);
+         //   System.out.println(i);
             ShowNodesEdgesHelper.MakeCircle(path.getNode(i).getModelNode(), Color.RED);
         }
         ShowNodesEdgesHelper.MakeCircle(path.getNode(0).getModelNode(), Color.BLUE);
         ShowNodesEdgesHelper.MakeCircle(path.getNode(path.numNodes()-1).getModelNode(), Color.BLUE);
 
-        for(Edge e : path.edges()) ShowNodesEdgesHelper.MakeLine(e);
-//        path.edges().stream().map(ShowNodesEdgesHelper::MakeLine);
+        String first = StartLocationField.getText();
+        String last = StartLocationField.getText();
+        for(Edge e : path.edges()) {
+            ShowNodesEdgesHelper.MakeLine(e);
+        }
+
+        //TODO: figure out start and end of path
 
         HideTabs(path);
     }

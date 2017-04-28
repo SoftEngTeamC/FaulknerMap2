@@ -309,6 +309,11 @@ intersectionB24	hallwayB21
 intersectionB25	intersectionB23
 intersectionB30	intersectionB31
 intersectionB30	Sagoff Breast Center Surgery
+hallwayB30	Sagoff Breast Center Surgery
+intersection513	hallway517
+intersection510	hallway517
+intersection510	Atrium Elevators 5
+Atrium Elevators 5	hallway517
 intersectionB32	intersectionB30
 intersectionB33	intersectionB31
 intersectionB40	intersectionB41
@@ -324,6 +329,7 @@ Patient Relations	hallway37
 Physical Therapy	hallway22
 Radiology	hallway12
 Sagoff Breast Imaging Diagnostic Center	intersectionB40
+Sagoff Breast Imaging Diagnostic Center	hallwayB40
 StairsB10	stairwellB20
 StairsB10	stairwellB30
 StairsB10	stairwellB40
