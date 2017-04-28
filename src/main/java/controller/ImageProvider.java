@@ -21,18 +21,25 @@ public class ImageProvider {
         switch(i) {
             case 1:
                 ImageName = "images/1_thefirstfloor.png";
+                break;
             case 2:
                 ImageName = "images/2_thesecondfloor.png";
+                break;
             case 3:
                 ImageName = "images/3_thethirdfloor.png";
+                break;
             case 4:
                 ImageName = "images/4_thefourthfloor.png";
+                break;
             case 5:
                 ImageName = "images/5_thefifthfloor.png";
+                break;
             case 6:
                 ImageName = "images/6_thesixthfloor.png";
+                break;
             case 7:
                 ImageName = "images/7_theseventhfloor.png";
+                break;
         }
         return getImage(ImageName);
     }
