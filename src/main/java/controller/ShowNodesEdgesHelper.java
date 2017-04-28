@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -7,8 +8,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 import model.Edge;
 import model.Node;
 import service.EdgeService;
@@ -34,8 +36,8 @@ class ShowNodesEdgesHelper {
     private static Slider SixthFloorSlider;
     private static Slider SeventhFloorSlider;
     private static TabPane FloorViewsTabPane;
+    private static Group group;
 
-    private static NodeService ns;
 
     ShowNodesEdgesHelper(ScrollPane FirstFloorScrollPane, ScrollPane SecondFloorScrollPane,
                          ScrollPane ThirdFloorScrollPane, ScrollPane FourthFloorScrollPane,
@@ -62,7 +64,6 @@ class ShowNodesEdgesHelper {
         ShowNodesEdgesHelper.SeventhFloorSlider = SeventhFloorSlider;
         ShowNodesEdgesHelper.FloorViewsTabPane = FloorViewsTabPane;
 
-        ns = new NodeService();
     }
 
     static void ClearOldPaths() {
@@ -107,8 +108,8 @@ class ShowNodesEdgesHelper {
         bindFloor(SeventhFloorScrollPane, SeventhFloorSlider, FloorViewsTabPane, "images/7_theseventhfloor.png");
     }
 
-    static void bindFloor(ScrollPane FloorScrollPane, Slider FloorSlider, TabPane FloorViewsTabPane,
-                          String url) {
+    private static void bindFloor(ScrollPane FloorScrollPane, Slider FloorSlider, TabPane FloorViewsTabPane,
+                                  String url) {
         FloorScrollPane.prefWidthProperty().bind(FloorViewsTabPane.widthProperty());
         FloorScrollPane.prefHeightProperty().bind(FloorViewsTabPane.heightProperty());
         ImageView FloorImageView = new ImageView();
@@ -125,22 +126,22 @@ class ShowNodesEdgesHelper {
         FloorSlider.minProperty().bind(FloorViewsTabPane.widthProperty());
         FloorImageView.fitWidthProperty().bind(FloorSlider.valueProperty());
         FloorSlider.setValue(FloorSlider.getMin() + ((FloorSlider.getMax() - FloorSlider.getMin()) * 0.25));
-        FloorScrollPane.setHvalue((FloorScrollPane.getHmax()+FloorScrollPane.getHmin()) / 2);
-        FloorScrollPane.setVvalue((FloorScrollPane.getVmax()+FloorScrollPane.getVmin()) / 2);
+        FloorScrollPane.setHvalue((FloorScrollPane.getHmax() + FloorScrollPane.getHmin()) / 2);
+        FloorScrollPane.setVvalue((FloorScrollPane.getVmax() + FloorScrollPane.getVmin()) / 2);
     }
 
-    public void ZoomListener(Slider slider, ScrollPane scrlpn){
+    public void ZoomListener(Slider slider, ScrollPane scrlpn) {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
-                //find center XY on old zoom based on current XY of scrollpane and old width
+            //find center XY on old zoom based on current XY of scrollpane and old width
 
-                //find center XY on Image relative to full image
+            //find center XY on Image relative to full image
 
-                //set XY of scroll pane to be about new imageview
+            //set XY of scroll pane to be about new imageview
         });
     }
 
-    public void PanningListener(Slider slider, ScrollPane scrlpn){
+    public void PanningListener(Slider slider, ScrollPane scrlpn) {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
             //find center XY on old zoom based on current XY of scrollpane and old width
@@ -195,7 +196,7 @@ class ShowNodesEdgesHelper {
 
     //MakeLine take 2 points (effectively) and draws a line from point to point
     //this line is bounded to the image such that resizing does not effect the relative position of the line and image
-    public static Line MakeLine(Edge e){
+    static void MakeLine(Edge e) {
         double x1 = e.getStart().getLocation().getX();
         double y1 = e.getStart().getLocation().getY();
         double x2 = e.getEnd().getLocation().getX();
@@ -203,7 +204,9 @@ class ShowNodesEdgesHelper {
         int z = e.getStart().getLocation().getFloor();
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
+        assert Scrolly != null;
         Group group1 = (Group) Scrolly.getContent();
+        group = group1;
         ImageView Map1 = (ImageView) group1.getChildren().get(0);
 
         double ImgW = Map1.getImage().getWidth();
@@ -211,22 +214,97 @@ class ShowNodesEdgesHelper {
         double ImgR = ImgH / ImgW;
 
         Line edge = new Line();
+
         //the points are bound to the fit width property of the image and scaled by the initial image ratio
         edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
         edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
-        if(e.isDisabled()) {
+        if (e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
         edge.setId(e.getId().toString());
         group1.getChildren().add(edge);
-        return edge;
     }
 
-    public static Circle MakeCircle(Node node, Color color) {
+    public static void arrow(Edge e) {
+
+        double arrowLength = 4;
+        double arrowWidth = 7;
+
+        double ex = e.getEnd().getLocation().getX();
+        double ey = e.getEnd().getLocation().getY();
+        double sx = e.getStart().getLocation().getX();
+        double sy = e.getStart().getLocation().getY();
+
+        Line arrow1 = new Line(0, 0, ex, ey);
+        Line arrow2 = new Line(0, 0, ex, ey);
+
+        arrow1.setEndX(ex);
+        arrow1.setEndY(ey);
+        arrow2.setEndX(ex);
+        arrow2.setEndY(ey);
+
+        if (ex == sx && ey == sy) {
+            // arrow parts of length 0
+            arrow1.setStartX(ex);
+            arrow1.setStartY(ey);
+            arrow2.setStartX(ex);
+            arrow2.setStartY(ey);
+        } else {
+            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
+            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+
+            double dx = (sx - ex) * factor;
+            double dy = (sy - ey) * factor;
+
+            double ox = (sx - ex) * factorO;
+            double oy = (sy - ey) * factorO;
+
+            arrow1.setStartX(ex + dx - oy);
+            arrow1.setStartY(ey + dy + ox);
+            arrow2.setStartX(ex + dx + oy);
+            arrow2.setStartY(ey + dy - ox);
+        }
+
+        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
+        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
+
+        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
+        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
+
+
+        double x1 = e.getEnd().getLocation().getX();
+        double y1 = e.getEnd().getLocation().getY();
+        double x2 = x1 + xdiff1;
+        double y2 = y1 + ydiff1;
+
+        double x3 = x1 + xdiff2;
+        double y3 = y1 + ydiff2;
+
+        ImageView Map1 = (ImageView) group.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
+        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
+
+        group.getChildren().addAll(arrow1, arrow2);
+
+    }
+
+    static Circle MakeCircle(Node node, Color color) {
         double x = node.getLocation().getX();
         double y = node.getLocation().getY();
         int z = node.getLocation().getFloor();
@@ -234,6 +312,7 @@ class ShowNodesEdgesHelper {
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(z);
 
         //  System.out.println(Scrolly.getContent());
+        assert Scrolly != null;
         Group group1 = (Group) Scrolly.getContent();
 
         ImageView Map1 = (ImageView) group1.getChildren().get(0);
@@ -259,8 +338,8 @@ class ShowNodesEdgesHelper {
         NodeService NS = new NodeService();
         ShowNodesEdgesHelper.ClearOldPaths();
         List<Node> temp = NS.getNodesByFloor(currFloor);
-        List<Circle> circles = new ArrayList<Circle>();
-        for (Node n : temp){
+        List<Circle> circles = new ArrayList<>();
+        for (Node n : temp) {
             Circle circle = ShowNodesEdgesHelper.MakeCircle(n, Color.RED);
             circles.add(circle);
         }
@@ -268,24 +347,22 @@ class ShowNodesEdgesHelper {
         return circles;
     }
 
-    static void showEdges(int currFloor) {
-     //   System.out.println("ShowEdges");
+    private static void showEdges(int currFloor) {
+        //   System.out.println("ShowEdges");
         //Desired Clear old lines
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
-        List<Edge> retEdges = new ArrayList<Edge>();
-        for (Edge e : edges){
+        for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
-                retEdges.add(e);
                 ShowNodesEdgesHelper.MakeLine(e);
             }
         }
     }
 
-    static List<Edge> getEdges(int currFloor){
+    static List<Edge> getEdges(int currFloor) {
         EdgeService es = new EdgeService();
         List<Edge> edges = es.getAllEdges();
-        List<Edge> retEdges = new ArrayList<Edge>();
+        List<Edge> retEdges = new ArrayList<>();
         for (Edge e : edges) {
             if (e.getStart().getLocation().getFloor() == currFloor) {
                 retEdges.add(e);
@@ -294,17 +371,18 @@ class ShowNodesEdgesHelper {
         return retEdges;
     }
 
-    static void resetDrawnShapeColors(int currFloor){
+    static void resetDrawnShapeColors(int currFloor) {
         ScrollPane Scrolly = ShowNodesEdgesHelper.checkScroll(currFloor);
+        assert Scrolly != null;
         Group group = (Group) Scrolly.getContent();
         List<javafx.scene.Node> DrawnObjects = group.getChildren();
-        for(int i=1;i<DrawnObjects.size();i++){
+        for (int i = 1; i < DrawnObjects.size(); i++) {
             try {
                 Circle circle = (Circle) DrawnObjects.get(i);
                 circle.fillProperty().setValue(Color.RED);
             }
             //found an edge instead
-            catch(Exception e){
+            catch (Exception e) {
                 Line line = (Line) DrawnObjects.get(i);
                 line.setStrokeWidth(1);
                 line.setStroke(Color.BLACK);
@@ -313,7 +391,7 @@ class ShowNodesEdgesHelper {
     }
 
     // takes the desired XY and zoom of a map, and applies it to the given
-    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr){
+    static void SetMapZoom(int x, int y, int zoom, ScrollPane scrlpn, Slider sldr) {
         sldr.setValue(zoom);
         scrlpn.setVvalue(y);
         scrlpn.setHvalue(x);

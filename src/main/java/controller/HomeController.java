@@ -20,9 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import model.Edge;
-import model.Navigable;
-import model.Node;
+import model.*;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
@@ -30,6 +28,7 @@ import util.MappedList;
 
 import java.net.InterfaceAddress;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,6 +93,27 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
+    //buttons at the bottom
+    @FXML
+    private Button AboutUsButton;
+    @FXML
+    private Button AdminToolButton;
+
+    @FXML
+    private MenuItem english_button;
+    @FXML
+    private MenuItem spanish_button;
+    @FXML
+    private MenuItem french_button;
+    @FXML
+    private MenuItem japanese_button;
+    @FXML
+    private MenuItem chinese_button;
+    @FXML
+    private MenuItem portuguese_button;
+    @FXML
+    private MenuItem italian_button;
+
     ImageView MapImageView = new ImageView();
     Group MapGroup = new Group();
     //Center ScrollPane relative to Image Coordinates
@@ -123,8 +143,11 @@ public class HomeController extends Controller {
     private pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes());
     private ObservableList<Path> paths = FXCollections.observableArrayList();
 
+    private static ResourceBundle bundle;
+
     @FXML
     void initialize() {
+        bundle = resources;
         InitializeMap();
         InitializeFloorButtons();
         InitializeZoomListener();
@@ -469,5 +492,66 @@ public class HomeController extends Controller {
         Info.setPrefWidth(Region.USE_COMPUTED_SIZE);
         Info.setPrefHeight(Region.USE_COMPUTED_SIZE);
         return Info;
+    }
+
+    // -------------------------------------------------- buttons ---------------------------------------------------------------------------------------
+
+    @FXML
+    public void OpenAboutUs() {
+        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+    }
+
+    @FXML
+    public void OpenAdminTool() {
+        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+    }
+
+    public void HandleHelpButton() {
+        Hours hours = hoursService.find(1L);
+        String message;
+        if (hours != null) {
+            Date morningStart = hours.getVisitingHoursMorningStart();
+            Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+            Date eveningStart = hours.getVisitingHoursEveningStart();
+            Date eveningEnd = hours.getVisitingHorusEveningEnd();
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+
+        } else {
+            Date morningStart = new Date(0, 0, 0, 9, 30);
+            Date morningEnd = new Date(0, 0, 0, 12, 0);
+
+            Date eveningStart = new Date(0, 0, 0, 14, 0);
+            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+        }
+        // <TODO> place the text somewhere
+//        StartInfo_TextArea.setText(message);
+    }
+
+    // <TODO> make this work
+    public void HandlePanicButton() {
+//
+//        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
+//        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
+//        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
+//
+//        FindandDisplayPath(HP_Start, null, null, HS_Dest);
     }
 }
