@@ -1,8 +1,10 @@
 package controller;
 
 
-//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -13,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -109,6 +112,7 @@ public class HomeController extends Controller {
     private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::makeDestinationView);
     private Map<Navigable, HBox> destinationNodeCache = new HashMap<>();
 
+    private ObjectProperty<Navigable> selectedDestination = new SimpleObjectProperty<>();
     private TextField searchBox = new TextField();
 
     private Button addDestinationButton = new Button();
@@ -124,8 +128,6 @@ public class HomeController extends Controller {
         InitializeMap();
         InitializeFloorButtons();
         InitializeZoomListener();
-        Map_Slider.setValue(1000);
-
         initializeDirectory();
     }
 
@@ -317,8 +319,7 @@ public class HomeController extends Controller {
         });
 
         addDestinationButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        //TODO Fix fonts
-        //addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
+        addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
         addDestinationButton.setOnAction(e -> {
             searchBox.setText("");
             search("");
@@ -396,6 +397,12 @@ public class HomeController extends Controller {
         setCurrentSearchField(searchBox);
     }
 
+    private void showDestinationInfo() {
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
+    }
 
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
@@ -424,12 +431,19 @@ public class HomeController extends Controller {
         field.setEditable(false);
         field.setText(location.toString() + " - " + location.getNode().getName());
         field.setOnMouseClicked(e -> {
-            if (currentSearchField == null) {
-                field.setEditable(true);
-                field.setText("");
-                search("");
-                showEditDestination(field);
-                currentDestinationIndex = destinations.indexOf(location);
+            if(e.getClickCount()>=2){
+                if (currentSearchField == null) {
+                    field.setEditable(true);
+                    field.setText("");
+                    search("");
+                    showEditDestination(field);
+                    currentDestinationIndex = destinations.indexOf(location);
+                }
+            } else {
+                if (currentDestinationIndex < 0) {
+                    selectedDestination.set(location);
+                    showDestinationInfo();
+                }
             }
         });
         return field;
@@ -445,8 +459,15 @@ public class HomeController extends Controller {
             else showDirections();
         });
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        //TODO fix fonts
-        //deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
+        deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
+    }
+
+    private TextArea MakeInfoTextArea(Navigable location) {
+        TextArea Info = new TextArea();
+        Info.setText(location.getInfo());
+        Info.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        Info.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        return Info;
     }
 }
