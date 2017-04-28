@@ -3,8 +3,7 @@ package controller;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -145,6 +144,9 @@ public class HomeController extends Controller {
 
     private static ResourceBundle bundle;
 
+    private IntegerProperty currFloor = new SimpleIntegerProperty(1);
+    private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
+
     @FXML
     void initialize() {
         bundle = resources;
@@ -160,6 +162,13 @@ public class HomeController extends Controller {
         DirectionButton.setText("Get Directions");
         DirectionButton.setOnAction(e->{
             showTextDirections();
+            //Update the Floor span for the New Paths
+            FloorSpan.set(PathSpansFloors());
+            //TODO Set current Location to first node in the path
+            //current location will be used to step through the directions one node at a time
+            currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
+            System.out.println("FloorSpan"+FloorSpan);
+
             //TODO Display the Path on the Map and generate Steps
         });
         //Altering the add Destination and Directions Buttons HBox to have those buttons
@@ -290,36 +299,44 @@ public class HomeController extends Controller {
     }
 
     private void InitializeFloorButtons(){
-        FirstFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/1_thefirstfloor.png"));ClearMapGroup();});
-        SecondFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/2_thesecondfloor.png"));ClearMapGroup();});
-        ThirdFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/3_thethirdfloor.png"));ClearMapGroup();});
-        FourthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/4_thefourthfloor.png"));ClearMapGroup();});
-        FifthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/5_thefifthfloor.png"));ClearMapGroup();});
-        SixthFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/6_thesixthfloor.png"));ClearMapGroup();});
-        SeventhFloor_Button.setOnMouseClicked(e -> {
-            MapImageView.setImage(ImageProvider.getImage("images/7_theseventhfloor.png"));ClearMapGroup();});
+        FirstFloor_Button.setOnMouseClicked(e -> {currFloor.set(1);});
+        SecondFloor_Button.setOnMouseClicked(e -> {currFloor.set(2);});
+        ThirdFloor_Button.setOnMouseClicked(e -> {currFloor.set(3);});
+        FourthFloor_Button.setOnMouseClicked(e -> {currFloor.set(4);});
+        FifthFloor_Button.setOnMouseClicked(e -> {currFloor.set(5);});
+        SixthFloor_Button.setOnMouseClicked(e -> {currFloor.set(6);});
+        SeventhFloor_Button.setOnMouseClicked(e -> {currFloor.set(7);});
+
+        //Triggered anytime the currFloor Changes
+        //Updates what nodes are being displayed
+        currFloor.addListener(e->{
+            System.out.println("currFloorPropertyChanged");
+            System.out.println(currFloor);
+            System.out.println(currFloor.get());
+            System.out.println(ImageProvider.getImageByFloor(currFloor.get()));
+            //TODO changing the floor image is broken. I dont know why.
+            MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
+            ClearMapGroup();
+            //TODO Whatever Path portions are on this floor. Display those.
+        });
+
+        //whenever the floor span changes, update the floor buttons that are disabled
+        FloorSpan.addListener(new ListChangeListener<Integer>() {
+            @Override
+            public void onChanged(Change<? extends Integer> c){
+                System.out.println("FloorSpanProperty Changed");
+                for(int i=0; i<7; i++){
+                    Button B = (Button) FloorButtons_VBox.getChildren().get(i);
+                    B.setDisable(false);
+                    if(!FloorSpan.contains(i+1)){
+                        B.setDisable(true);
+                    }
+                }
+            }
+        });
     }
 
     //-------------------------------------Path Finding----------------------------------------
-    private void BuildStepByStepButtons(){
-        Map_HBox.getChildren().remove(0,Map_HBox.getChildren().size());
-        for(int i =0; i<paths.size(); i++){
-            Button button = new Button();
-            button.setText(Integer.toString(i+1));
-            Map_HBox.getChildren().add(button);
-            button.setOnAction(e -> {
-                System.out.println("Pressed: "+ button.getText());
-                DisplayPath(paths.get(Integer.parseInt(button.getText())-1));
-                showTextDirections();
-            });
-        }
-    }
 
     //This function takes a path and resets the Group in the Scrollpane to have the correct Image and circles
     private void DisplayPath(Path path){
@@ -335,6 +352,22 @@ public class HomeController extends Controller {
             MakeLineInGroup(E);
         }
     }
+
+    private ObservableList<Integer> PathSpansFloors(){
+        System.out.println("PathSpansFloors");
+        List<Integer> span = new ArrayList<Integer>();
+        Set<Integer> floors;
+        for(Path p: paths){
+            floors = p.floorsSpanned();
+            for(int i:floors){
+                if(!span.contains(i)){span.add(i);}
+            }
+        }
+        ObservableList<Integer> FloorsSpanned = FXCollections.observableList(span);
+        return FloorsSpanned;
+    }
+
+    //-----------------------------------------------------------
 
     private void initializeDirectory() {
         Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -379,7 +412,11 @@ public class HomeController extends Controller {
                         start = dest;
                     }
                 }
-                BuildStepByStepButtons();
+                ClearMapGroup();
+                List<Integer> nums = new ArrayList<>();
+                nums.add(1);nums.add(2);nums.add(3);nums.add(4);nums.add(5);nums.add(6);nums.add(7);
+                ObservableList<Integer> AllFloors = FXCollections.observableList(nums);
+                FloorSpan.setValue(AllFloors);
                 System.out.println(paths);
             }
         });
