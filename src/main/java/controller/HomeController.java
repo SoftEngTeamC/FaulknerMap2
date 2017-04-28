@@ -1,8 +1,10 @@
 package controller;
 
 
-//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-//import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -13,20 +15,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.Edge;
+import model.Hours;
 import model.Navigable;
-import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
 
-import java.net.InterfaceAddress;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -91,6 +94,27 @@ public class HomeController extends Controller {
     @FXML
     private Button SeventhFloor_Button;
 
+    //buttons at the bottom
+    @FXML
+    private Button AboutUsButton;
+    @FXML
+    private Button AdminToolButton;
+
+    @FXML
+    private MenuItem english_button;
+    @FXML
+    private MenuItem spanish_button;
+    @FXML
+    private MenuItem french_button;
+    @FXML
+    private MenuItem japanese_button;
+    @FXML
+    private MenuItem chinese_button;
+    @FXML
+    private MenuItem portuguese_button;
+    @FXML
+    private MenuItem italian_button;
+
     ImageView MapImageView = new ImageView();
     Group MapGroup = new Group();
     //Center ScrollPane relative to Image Coordinates
@@ -109,6 +133,7 @@ public class HomeController extends Controller {
     private MappedList<javafx.scene.Node, Navigable> destinationNodes = new MappedList<>(destinations, this::makeDestinationView);
     private Map<Navigable, HBox> destinationNodeCache = new HashMap<>();
 
+    private ObjectProperty<Navigable> selectedDestination = new SimpleObjectProperty<>();
     private TextField searchBox = new TextField();
 
     private Button addDestinationButton = new Button();
@@ -119,13 +144,14 @@ public class HomeController extends Controller {
     private pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes());
     private ObservableList<Path> paths = FXCollections.observableArrayList();
 
+    private static ResourceBundle bundle;
+
     @FXML
     void initialize() {
+        bundle = resources;
         InitializeMap();
         InitializeFloorButtons();
         InitializeZoomListener();
-        Map_Slider.setValue(1000);
-
         initializeDirectory();
     }
 
@@ -317,8 +343,7 @@ public class HomeController extends Controller {
         });
 
         addDestinationButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        //TODO Fix fonts
-        //addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
+        addDestinationButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.PLUS));
         addDestinationButton.setOnAction(e -> {
             searchBox.setText("");
             search("");
@@ -396,6 +421,12 @@ public class HomeController extends Controller {
         setCurrentSearchField(searchBox);
     }
 
+    private void showDestinationInfo() {
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
+    }
 
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
@@ -424,12 +455,19 @@ public class HomeController extends Controller {
         field.setEditable(false);
         field.setText(location.toString() + " - " + location.getNode().getName());
         field.setOnMouseClicked(e -> {
-            if (currentSearchField == null) {
-                field.setEditable(true);
-                field.setText("");
-                search("");
-                showEditDestination(field);
-                currentDestinationIndex = destinations.indexOf(location);
+            if(e.getClickCount()>=2){
+                if (currentSearchField == null) {
+                    field.setEditable(true);
+                    field.setText("");
+                    search("");
+                    showEditDestination(field);
+                    currentDestinationIndex = destinations.indexOf(location);
+                }
+            } else {
+                if (currentDestinationIndex < 0) {
+                    selectedDestination.set(location);
+                    showDestinationInfo();
+                }
             }
         });
         return field;
@@ -445,8 +483,76 @@ public class HomeController extends Controller {
             else showDirections();
         });
         deleteButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        //TODO fix fonts
-        //deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
+        deleteButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
         return deleteButton;
+    }
+
+    private TextArea MakeInfoTextArea(Navigable location) {
+        TextArea Info = new TextArea();
+        Info.setText(location.getInfo());
+        Info.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        Info.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        return Info;
+    }
+
+    // -------------------------------------------------- buttons ---------------------------------------------------------------------------------------
+
+    @FXML
+    public void OpenAboutUs() {
+        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+    }
+
+    @FXML
+    public void OpenAdminTool() {
+        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+    }
+
+    public void HandleHelpButton() {
+        Hours hours = hoursService.find(1L);
+        String message;
+        if (hours != null) {
+            Date morningStart = hours.getVisitingHoursMorningStart();
+            Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+            Date eveningStart = hours.getVisitingHoursEveningStart();
+            Date eveningEnd = hours.getVisitingHoursEveningEnd();
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+
+        } else {
+            Date morningStart = new Date(0, 0, 0, 9, 30);
+            Date morningEnd = new Date(0, 0, 0, 12, 0);
+
+            Date eveningStart = new Date(0, 0, 0, 14, 0);
+            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+
+            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+
+            message = bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours;
+        }
+        // <TODO> place the text somewhere
+//        StartInfo_TextArea.setText(message);
+    }
+
+    // <TODO> make this work
+    public void HandlePanicButton() {
+//
+//        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
+//        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
+//        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
+//
+//        FindandDisplayPath(HP_Start, null, null, HS_Dest);
     }
 }

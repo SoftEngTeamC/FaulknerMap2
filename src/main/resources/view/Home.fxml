@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<SplitPane fx:id="Home_MainSplit" dividerPositions="0.35618729096989965" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
+
+<SplitPane fx:id="Home_MainSplit" dividerPositions="0.35618729096989965" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
    <items>
       <AnchorPane>
          <children>
@@ -20,6 +23,20 @@
                       <Button mnemonicParsing="false" text="Button" />
                     </buttons>
                   </ButtonBar>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#HandlePanicButton" text="Panic" />
+                        <Button mnemonicParsing="false" onAction="#HandleHelpButton" text="Help" />
+                        <Button fx:id="AdminToolButton" mnemonicParsing="false" onAction="#OpenAdminTool" text="Admin Menu" />
+                        <MenuButton mnemonicParsing="false" text="Language">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
+                        <Button fx:id="AboutUsButton" mnemonicParsing="false" onAction="#OpenAboutUs" text="About" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
