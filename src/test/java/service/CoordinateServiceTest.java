@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Sam on 4/27/2017.
  */
@@ -38,7 +36,7 @@ public class CoordinateServiceTest {
         int floor = 2;
         Coordinate locationA = new Coordinate(x, y, floor);
         String nameA = "testNodeA";
-        Node testNodeA = new Node(nameA, locationA);
+        testNodeA = new Node(nameA, locationA);
 
         // Create testNodeB
         double xB = 10;
@@ -46,7 +44,7 @@ public class CoordinateServiceTest {
         int floorB = 2;
         Coordinate locationB = new Coordinate(xB, yB, floorB);
         String nameB = "testNodeB";
-        Node testNodeB = new Node(nameB, locationB);
+        testNodeB = new Node(nameB, locationB);
 
         // Add coordinates to coordinate service
         coordinateService.persist(locationA);

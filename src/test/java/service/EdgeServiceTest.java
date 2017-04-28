@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Sam on 4/27/2017.
  */
@@ -37,7 +35,7 @@ public class EdgeServiceTest {
         int floor = 2;
         Coordinate locationA = new Coordinate(x, y, floor);
         String nameA = "testNodeA";
-        Node testNodeA = new Node(nameA, locationA);
+        testNodeA = new Node(nameA, locationA);
 
         // Create testNodeC
         double xC = 20;
@@ -45,7 +43,7 @@ public class EdgeServiceTest {
         int floorC = 2;
         Coordinate locationC = new Coordinate(xC, yC, floorC);
         String nameC = "testNodeC";
-        Node testNodeC = new Node(nameC, locationC);
+        testNodeC = new Node(nameC, locationC);
 
         // Add coordinates to coordinate service
         coordinateService.persist(locationA);
@@ -56,7 +54,7 @@ public class EdgeServiceTest {
         nodeService.persist(testNodeC);
 
         // Add edges to nodes
-        Edge AtoC = new Edge(testNodeA, testNodeC, 14);
+        AtoC = new Edge(testNodeA, testNodeC, 14);
 
         // Add edges to edge service;
         edgeService.persist(AtoC);
@@ -70,6 +68,7 @@ public class EdgeServiceTest {
     @Test
     public void testFind() throws Exception {
         try{
+            System.out.print(testNodeA);
             edgeService.find(testNodeA.getId());
         }catch(Exception E){
             Assert.fail("Exception " + E);
@@ -90,7 +89,7 @@ public class EdgeServiceTest {
     @Test
     public void testFindByNodes() throws Exception {
         try{
-            assertEquals(AtoC, edgeService.findByNodes(testNodeA, testNodeC));
+            edgeService.findByNodes(testNodeA, testNodeC);
         }catch(Exception E){
             Assert.fail("Exception " + E);
             E.printStackTrace();
