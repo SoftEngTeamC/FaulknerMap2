@@ -43,13 +43,6 @@ public class MapNodeTest {
     }
 
     @Test
-    public void testHeuristicCost() throws Exception {
-        MapNode a = new MapNode(new Coordinate(10,0,1));
-        MapNode b = new MapNode(new Coordinate(20, 0, 1));
-        //assertEquals(b.traversalCost(a), 10);
-    }
-
-    @Test
     public void distanceTo() throws Exception {
     }
 
