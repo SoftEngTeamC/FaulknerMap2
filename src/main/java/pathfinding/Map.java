@@ -34,6 +34,9 @@ public class Map {
         }
     }
 
+    public Path shortestPath(model.Node start, model.Node end) {
+        return shortestPath(nodeMap.get(start.getId()), nodeMap.get(end.getId()));
+    }
 
     public Path shortestPath(MapNode start, MapNode end) {
 //        System.out.println(AlgorithmSingleton.getInstance().getCurrentAlgorithm());
