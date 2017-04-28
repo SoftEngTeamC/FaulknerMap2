@@ -311,13 +311,22 @@ public class HomeController extends Controller {
         //Updates what nodes are being displayed
         currFloor.addListener(e->{
             System.out.println("currFloorPropertyChanged");
-            System.out.println(currFloor);
-            System.out.println(currFloor.get());
-            System.out.println(ImageProvider.getImageByFloor(currFloor.get()));
-            //TODO changing the floor image is broken. I dont know why.
             MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
             ClearMapGroup();
-            //TODO Whatever Path portions are on this floor. Display those.
+            List<Path> subPaths = new ArrayList<Path>();
+            //get a list of all subpaths deivided by floors
+            for(Path p: paths){
+                subPaths.addAll(p.groupedByFloor());
+            }
+            //if the subpath is on that floor, display that isb
+            for(Path p: subPaths){
+                if(p.floorsSpanned().contains(currFloor)){
+                    System.out.println("Trying to Display Path");
+                    DisplayPath(p);
+                }
+            }
+
+
         });
 
         //whenever the floor span changes, update the floor buttons that are disabled
