@@ -59,7 +59,7 @@ public class LoginStatusSingleton {
      * @return most recent memento
      */
     public LoginStatusMemento getMemento() {
-        return mentos.get(1);
+        return mentos.get(0);
     }
 
     /**
