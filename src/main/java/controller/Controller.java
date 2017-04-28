@@ -40,7 +40,7 @@ public class Controller {
     public void switchToMainScreen(Button button){
         Stage stage = (Stage) button.getScene().getWindow();
         try {
-            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
+            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Home.fxml"),
                     ResourceBundle.getBundle("Language", new Locale("en", "US")));
             stage.setTitle("Faulkner Kiosk");
             stage.getScene().setRoot(root);
