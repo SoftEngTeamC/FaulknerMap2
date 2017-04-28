@@ -18,9 +18,11 @@ import pathfinding.Path;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
-
 
 public class MainController extends Controller implements Initializable {
     @FXML
@@ -97,9 +99,16 @@ public class MainController extends Controller implements Initializable {
     private ArrayList<AutocompletionlTextField> midTexts = new ArrayList<>();
 
     private static ResourceBundle bundle;
+    DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+    LocalDateTime now = LocalDateTime.now();
+    Date nowDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("HAHAHA");
+        //System.out.println(dateFormat.format(cal.getTime()));
+        System.out.println(dateFormat.format(now));
+        //TODO: print NOW time on main screen
 
         english_button.setOnAction(event -> loadView(new Locale("en", "US")));
         spanish_button.setOnAction(event -> loadView(new Locale("es", "PR")));
@@ -187,6 +196,7 @@ public class MainController extends Controller implements Initializable {
     //-----------------------------------FUNCTIONS------------------------------------------
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
                                     HospitalService HS_Start, HospitalService HS_Dest) {
+
         Map map = new Map(nodeService.getAllNodes());
 
         Node nodeStart, nodeEnd;
@@ -262,6 +272,24 @@ public class MainController extends Controller implements Initializable {
         }
     }
 
+    /**
+     * Show warning message when searching for a path outside hospital operating hours
+     */
+    public void timeWarning(){
+        Hours hours = hoursService.find(1L);
+        Date morningStart = hours.getVisitingHoursMorningStart();
+        Date morningEnd = hours.getVisitingHoursMorningEnd();
+
+        Date eveningStart = hours.getVisitingHoursEveningStart();
+        Date eveningEnd = hours.getVisitingHoursEveningEnd();
+
+        if(!((nowDate.after(morningStart) && nowDate.before(morningEnd)) || (nowDate.after(eveningStart) && nowDate.before(eveningEnd)))){
+            System.out.println("Warning! Not hospital operating Hours!");
+            //TODO: print warning message on main page
+        }
+
+    }
+
 
     //--------------------------------------------EVENT HANDLERS--------------------------------------------------
 
@@ -311,6 +339,8 @@ public class MainController extends Controller implements Initializable {
             //Set Information Displays
 
             PopulateInformationDisplay(HP_Start, HP_Dest, HS_Start, HS_Dest);
+
+            timeWarning(); // Warining not good time after Generating Path!
 //
         } else {
             System.out.print("Give a Start and an End"); // TODO: make this meaningful in the gui
@@ -337,7 +367,7 @@ public class MainController extends Controller implements Initializable {
             Date morningEnd = hours.getVisitingHoursMorningEnd();
 
             Date eveningStart = hours.getVisitingHoursEveningStart();
-            Date eveningEnd = hours.getVisitingHorusEveningEnd();
+            Date eveningEnd = hours.getVisitingHoursEveningEnd();
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);

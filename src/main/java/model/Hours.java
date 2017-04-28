@@ -16,7 +16,7 @@ public class Hours {
     private Date visitingHoursMorningEnd;
 
     private Date visitingHoursEveningStart;
-    private Date visitingHorusEveningEnd;
+    private Date visitingHoursEveningEnd;
 
     public Hours() {
         // Left empty for hibernate
@@ -27,7 +27,7 @@ public class Hours {
         this.visitingHoursMorningStart = visitingHoursMorningStart;
         this.visitingHoursMorningEnd = visitingHoursMorningEnd;
         this.visitingHoursEveningStart = visitingHoursEveningStart;
-        this.visitingHorusEveningEnd = visitingHorusEveningEnd;
+        this.visitingHoursEveningEnd = visitingHorusEveningEnd;
     }
 
     @Id
@@ -82,12 +82,21 @@ public class Hours {
 
     @Column(name = "EVENING_END")
     @Temporal(TemporalType.TIMESTAMP)
-    public Date getVisitingHorusEveningEnd() {
-        return visitingHorusEveningEnd;
+    public Date getVisitingHoursEveningEnd() {
+        return visitingHoursEveningEnd;
     }
 
-    public void setVisitingHorusEveningEnd(Date visitingHorusEveningEnd) {
-        this.visitingHorusEveningEnd = visitingHorusEveningEnd;
+    public void setVisitingHoursEveningEnd(Date visitingHorusEveningEnd) {
+        this.visitingHoursEveningEnd = visitingHorusEveningEnd;
     }
-
+/*
+    public boolean isTimeInRange(){
+        Date currentTime = new Date();
+        if((currentTime.after(visitingHoursMorningStart) && currentTime.before(visitingHoursMorningEnd)) ||
+                (currentTime.after(visitingHoursEveningStart) && currentTime.before(visitingHoursEveningEnd))){
+            return true;
+        }
+        return false;
+    }
+*/
 }
