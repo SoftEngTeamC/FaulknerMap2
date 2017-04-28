@@ -9,20 +9,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.*;
 import pathfinding.MapNode;
 import pathfinding.Path;
+import textDirections.MakeDirections;
 import textDirections.Step;
 import util.MappedList;
 
@@ -150,6 +149,10 @@ public class HomeController extends Controller {
         InitializeFloorButtons();
         InitializeZoomListener();
         initializeDirectory();
+        Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
+        Logo_ImageView.setPreserveRatio(true);
+        Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
+
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -166,7 +169,7 @@ public class HomeController extends Controller {
         Map_ScrollPane.setPannable(true);
         Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_Slider.minProperty().bind(Map_Split.widthProperty());
+        Map_Slider.minProperty().bind(Map_AnchorPane.widthProperty());
         Map_Slider.setMax(MapPic.getWidth());
         MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
@@ -301,6 +304,7 @@ public class HomeController extends Controller {
             button.setOnAction(e -> {
                 System.out.println("Pressed: "+ button.getText());
                 DisplayPath(paths.get(Integer.parseInt(button.getText())-1));
+                showTextDirections();
             });
         }
     }
@@ -320,9 +324,9 @@ public class HomeController extends Controller {
         }
     }
 
-
-
     private void initializeDirectory() {
+        Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        Search_ScrollPane.setPrefHeight(1000);
         searchResultsView.setPlaceholder(new Label("No matches :("));
         // Only allow one destination to be selected at a time
         searchResultsView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -425,6 +429,13 @@ public class HomeController extends Controller {
         Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
     }
 
+    private void showTextDirections(){
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestinationButton);
+        Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
+    }
+
     private void setCurrentSearchField(TextField field) {
         currentSearchField = field;
         currentSearchField.textProperty()
@@ -451,6 +462,8 @@ public class HomeController extends Controller {
         TextField field = new TextField();
         field.setEditable(false);
         field.setText(location.toString() + " - " + location.getNode().getName());
+        field.setPrefWidth(700);
+        field.setMaxWidth(Region.USE_COMPUTED_SIZE);
         field.setOnMouseClicked(e -> {
             if(e.getClickCount()>=2){
                 if (currentSearchField == null) {
@@ -460,11 +473,10 @@ public class HomeController extends Controller {
                     showEditDestination(field);
                     currentDestinationIndex = destinations.indexOf(location);
                 }
-            } else {
-                if (currentDestinationIndex < 0) {
-                    selectedDestination.set(location);
-                    showDestinationInfo();
-                }
+            }
+            if (currentDestinationIndex < 0) {
+                selectedDestination.set(location);
+                showDestinationInfo();
             }
         });
         return field;
@@ -490,6 +502,21 @@ public class HomeController extends Controller {
         Info.setPrefWidth(Region.USE_COMPUTED_SIZE);
         Info.setPrefHeight(Region.USE_COMPUTED_SIZE);
         return Info;
+    }
+
+    private ListView<String> MakeTextDirectionsListView(List<Path> paths){
+        //Create List of all directions given List of Paths
+        List<String> TextDirections = new ArrayList<String>();
+//        for(Path p: paths){
+//            for(String S: ){
+//                TextDirections.add(M.toString());
+//            }
+//        }
+        ListView<String> textdirs = new ListView<String>();
+        textdirs.setItems(FXCollections.observableList(TextDirections));
+        textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        textdirs.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        return textdirs;
     }
 
     // -------------------------------------------------- buttons ---------------------------------------------------------------------------------------
