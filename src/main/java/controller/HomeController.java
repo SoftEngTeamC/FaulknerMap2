@@ -20,13 +20,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import model.*;
+import model.Edge;
+import model.Hours;
+import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
 import util.MappedList;
 
-import java.net.InterfaceAddress;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -514,7 +515,7 @@ public class HomeController extends Controller {
             Date morningEnd = hours.getVisitingHoursMorningEnd();
 
             Date eveningStart = hours.getVisitingHoursEveningStart();
-            Date eveningEnd = hours.getVisitingHorusEveningEnd();
+            Date eveningEnd = hours.getVisitingHoursEveningEnd();
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);

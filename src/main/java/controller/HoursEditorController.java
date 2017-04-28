@@ -83,7 +83,7 @@ public class HoursEditorController extends Controller {
             currentHours.setVisitingHoursMorningStart(newMorningStart);
             currentHours.setVisitingHoursMorningEnd(newMorningEnd);
             currentHours.setVisitingHoursEveningStart(newEveningStart);
-            currentHours.setVisitingHorusEveningEnd(newEveningEnd);
+            currentHours.setVisitingHoursEveningEnd(newEveningEnd);
 
             hoursService.merge(currentHours);
 

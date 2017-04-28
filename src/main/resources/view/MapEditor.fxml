@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import controller.AutocompletionlTextField?>
+<!--<?import controller.AutocompletionlTextField?>-->
 
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
@@ -62,8 +62,8 @@
                                        <VBox.margin>
                                           <Insets bottom="5.0" top="5.0" />
                                        </VBox.margin></Text>
-                                    <!--<TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0" />-->
-                                    <AutocompletionlTextField fx:id="editNode_addField" />
+                                    <TextField fx:id="editNode_addField" layoutX="17.0" layoutY="345.0" />
+                                    <!--<AutocompletionlTextField fx:id="editNode_addField" />-->
                                     <Button fx:id="editNode_addBtn" mnemonicParsing="false" onAction="#editNode_addBtnPressed" text="Add">
                                        <VBox.margin>
                                           <Insets top="5.0" />
