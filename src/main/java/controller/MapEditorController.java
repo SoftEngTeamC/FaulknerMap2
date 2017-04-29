@@ -208,6 +208,7 @@ public class MapEditorController extends Controller {
     }
 
     public void initialize() {
+        setButton(addNode_connectToNodeBtn);
         List<Node> nodes = nodeService.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for (Node n : nodes) {

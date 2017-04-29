@@ -1,5 +1,6 @@
 package controller;
 
+import Singleton.LoginStatusSingleton;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -24,7 +25,11 @@ public class Controller {
     protected TagService tagService = new TagService();
     protected HoursService hoursService = new HoursService();
 
-    public void switchScreen(String file, String title, Button b) {
+    public void setButton(Button b){
+        LoginStatusSingleton.getInstance().setButton(b);
+    }
+
+    public void switchScreen(String file, String title, Button b){
         try {
             Stage stage = (Stage) b.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
@@ -33,6 +38,7 @@ public class Controller {
             stage.show();
         } catch (IOException e) {
             System.err.println("Couldn't find file at " + file);
+            e.printStackTrace();
         }
 
     }

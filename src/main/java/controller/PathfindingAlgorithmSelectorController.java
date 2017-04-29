@@ -43,6 +43,8 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
 
     public void initialize(){
 
+        setButton(backBtn);
+
         //ensure only one dude is selected
         group = new ToggleGroup();
 

@@ -35,6 +35,7 @@ public class AddPersonController extends PersonController {
 
     @FXML
     public void initialize() {
+        setButton(addPersonBtn);
         super.initialize();
         successText.setVisible(false);
         errorText.setVisible(false);

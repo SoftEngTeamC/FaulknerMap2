@@ -28,6 +28,7 @@ public class EditPersonController extends PersonController {
 
     @FXML
     public void initialize() {
+        setButton(deleteBtn);
         super.initialize();
         updateText.setVisible(false);
         deletedText.setVisible(false);

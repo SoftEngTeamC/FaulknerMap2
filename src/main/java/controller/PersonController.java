@@ -25,6 +25,7 @@ public abstract class PersonController extends Controller {
     ObservableList<Node> availableLocations = FXCollections.observableArrayList();
 
     public void initialize() {
+        setButton(backBtn);
         currentLocationsListView.setItems(currentLocations);
         availableLocationsListView.setItems(availableLocations);
 

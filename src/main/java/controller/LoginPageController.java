@@ -1,14 +1,24 @@
 package controller;
 
+import Memento.LoginStatusEditor;
+import Memento.LoginStatusMemento;
+import Singleton.IdleMonitor;
+import Singleton.LoginStatusSingleton;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Guillermo on 4/15/17.
@@ -56,9 +66,30 @@ public class LoginPageController extends Controller{
         attempts++;
 
         if(username.getText().equals(UserName) && passwordField.getText().equals(Password)){
+
             displayerror.setVisible(false);
             displayerror1.setVisible(false);
             displayerror2.setVisible(false);
+
+            // interact with memento
+
+            try {
+                LoginStatusEditor originator = new LoginStatusEditor();
+                LoginStatusSingleton careTaker = LoginStatusSingleton.getInstance();
+                LoginStatusMemento memento = new LoginStatusMemento(false);
+                originator.setStatus(false);
+                careTaker.addMemento(originator.save());
+                IdleMonitor idleMonitor = new IdleMonitor(Duration.seconds(careTaker.getTimeout()), () -> {
+                }, careTaker.getMemento().getStatus());
+                Parent root = FXMLLoader.load(getClass().getResource("view/Home.fxml"),
+                        ResourceBundle.getBundle("Language", new Locale("en", "US")));
+                idleMonitor.register(root, Event.ANY);
+            } catch (Exception E){
+                System.out.println("couldn't idle monitor switch screen");
+            }
+
+
+            // switch screens
             switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", loginBtn);
         }
 

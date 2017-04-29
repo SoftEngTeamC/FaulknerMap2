@@ -43,6 +43,7 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void initialize() {
+        setButton(backBtn);
         //organize visual elements
         DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
         searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
