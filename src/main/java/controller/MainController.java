@@ -108,7 +108,6 @@ public class MainController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         stage = (Stage) AboutUsButton.getScene().getWindow();
-        System.out.println("HAHAHA");
         //System.out.println(dateFormat.format(cal.getTime()));
         System.out.println(dateFormat.format(now));
         //TODO: print NOW time on main screen
