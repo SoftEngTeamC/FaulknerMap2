@@ -11,6 +11,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import pathfinding.Map;
 import service.AlgorithmSingleton;
 
@@ -44,9 +45,9 @@ public class PathfindingAlgorithmSelectorController extends Controller {
 
     private int selected; // 0 is A*, 1 is bfs, 2 is dfs
 
+    private Stage stage;
 
     public void initialize() {
-
         setButton(backBtn);
 
         //ensure only one dude is selected
@@ -58,7 +59,10 @@ public class PathfindingAlgorithmSelectorController extends Controller {
         successText.setVisible(false);
 
         startIdleListener(Parent, backBtn);
+    }
 
+    private void setStage(){
+        stage = (Stage) backBtn.getScene().getWindow();
     }
 
     @FXML
@@ -97,11 +101,13 @@ public class PathfindingAlgorithmSelectorController extends Controller {
 
     @FXML
     void backBtnAction(ActionEvent event) {
-        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", stage);
     }
 
     @FXML
     void logoutBtnAction(ActionEvent event) {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 

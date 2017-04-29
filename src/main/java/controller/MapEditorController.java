@@ -18,6 +18,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import model.Coordinate;
 import model.Edge;
 import model.Node;
@@ -180,8 +181,6 @@ public class MapEditorController extends Controller {
 
     private static int currFloor;
 
-    private List<floorCircles> floorCircles;
-
     class floorCircles {
         int floor;
         List<Circle> circles;
@@ -191,6 +190,8 @@ public class MapEditorController extends Controller {
             this.circles = circles;
         }
     }
+
+    private Stage stage;
 
     public MapEditorController() {
     }
@@ -259,6 +260,10 @@ public class MapEditorController extends Controller {
         timeoutEditor_textField.textProperty().addListener((observable, oldValue, newValue) -> timeoutTextFieldChanged());
 
         startIdleListener(MapEditor_SplitPane, backBtn);
+    }
+
+    private void setStage(){
+        stage = (Stage) backBtn.getScene().getWindow();
     }
 
     //-------------------------------------------Listeners---------------------------------------------
@@ -704,13 +709,15 @@ public class MapEditorController extends Controller {
      * Back button action event handler. Opens the Admin page
      */
     public void back() {
-        switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Directory Editor", stage);
     }
 
     /**
      * Action event handler for logout button being pressed. Goes to main screen.
      */
     public void logout() {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 }

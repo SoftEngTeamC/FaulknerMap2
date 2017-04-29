@@ -3,6 +3,7 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 
 public class AboutUsController extends Controller{
@@ -14,9 +15,12 @@ public class AboutUsController extends Controller{
     @FXML
     private Button backbtn;
 
+    private Stage stage;
+
     @FXML
     public void OpenMeetTheGroup() {
-        switchScreen("view/MeetTheGroup.fxml", "Meet the Group", MeetTheTeamButton);
+        stage = (Stage) MeetTheTeamButton.getScene().getWindow();
+        switchScreen("view/MeetTheGroup.fxml", "Meet the Group", stage);
     }
 
     @FXML
