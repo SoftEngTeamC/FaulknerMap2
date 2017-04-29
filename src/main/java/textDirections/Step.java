@@ -1,9 +1,12 @@
 package textDirections;
 
 
+import java.util.ResourceBundle;
+
 public class Step {
     private String step;
     private Double distance;
+    private static ResourceBundle bundle;
 
     Step(TextualDirections.Direction direction, TextualDirections.Sharpness sharpness, Double distance) {
         this.distance = distance;
@@ -11,35 +14,35 @@ public class Step {
         String sharpnessModifier = "";
         switch (sharpness) {
             case SHARP:
-                sharpnessModifier = " sharp ";
+                sharpnessModifier = bundle.getString(" sharp ");
                 break;
             case NORMAL:
                 sharpnessModifier = "";
                 break;
             case SLIGHT:
-                sharpnessModifier = " slight ";
+                sharpnessModifier = bundle.getString(" slight ");
                 break;
         }
 
         String directionString = "";
         String commandString = "";
-        String distanceString = " and continue straight for " + distance.toString() + " feet.";
+        String distanceString = bundle.getString(" and continue straight for ") + distance.toString() + bundle.getString(" feet.");
         switch (direction) {
             case LEFT:
-                commandString = "Take a ";
-                directionString = "left turn";
+                commandString = bundle.getString("Take a ");
+                directionString = bundle.getString("left turn");
                 break;
             case RIGHT:
-                commandString = "Take a ";
-                directionString = "right turn";
+                commandString = bundle.getString("Take a ");
+                directionString = bundle.getString("right turn");
                 break;
             case STRAIGHT:
-                commandString = "Continue ";
-                directionString = "straight";
-                distanceString = " for " + distance.toString() + " feet.";
+                commandString = bundle.getString("Continue ");
+                directionString = bundle.getString("straight");
+                distanceString = bundle.getString(" for ") + distance.toString() + bundle.getString(" feet.");
                 break;
             case BACKWARDS:
-                directionString = "Turn around";
+                directionString = bundle.getString("Turn around");
                 break;
         }
 
