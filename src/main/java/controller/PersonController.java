@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import model.Node;
 
 public abstract class PersonController extends Controller {
@@ -20,11 +21,19 @@ public abstract class PersonController extends Controller {
     protected ListView<Node> currentLocationsListView;
     @FXML
     protected ListView<Node> availableLocationsListView;
+    @FXML
+    private AnchorPane DirectoryEditor_AnchorPane;
 
     ObservableList<Node> currentLocations = FXCollections.observableArrayList();
     ObservableList<Node> availableLocations = FXCollections.observableArrayList();
 
     public void initialize() {
+        startIdleListener(DirectoryEditor_AnchorPane, backBtn);
+        init();
+    }
+
+    public void init(){
+        setButton(backBtn);
         currentLocationsListView.setItems(currentLocations);
         availableLocationsListView.setItems(availableLocations);
 
@@ -54,7 +63,7 @@ public abstract class PersonController extends Controller {
     }
 
     @FXML
-    public void removeNodeBtnAction(){
+    public void removeNodeBtnAction() {
         Node n = currentLocationsListView.getSelectionModel().getSelectedItem();
         sendNodeToAvailable(n);
     }
@@ -72,6 +81,6 @@ public abstract class PersonController extends Controller {
 
     @FXML
     protected void back() {
-            switchScreen("view/DirectoryEditor.fxml","Directory Editor", backBtn);
+        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", backBtn);
     }
 }
