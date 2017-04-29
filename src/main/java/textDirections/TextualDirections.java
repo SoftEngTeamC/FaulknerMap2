@@ -18,16 +18,19 @@ public class TextualDirections {
         double c = A.distance(B);
 
         double radAngle = Math.acos((a*a + c*c - b*b) / (2*b*c));
-        return Math.toDegrees(radAngle);
+        double direction = (B.x - A.x) / (B.y + A.y) + (C.x - B.x) / (B.y + C.y);
+        return direction >= 0 ? Math.toDegrees(radAngle) : Math.toDegrees(radAngle) + 180;
+
+
     }
 
-    enum Direction { LEFT, RIGHT, STRAIGHT }
+    enum Direction { LEFT, RIGHT, STRAIGHT, BACKWARDS }
     static Direction angleToDirection(double angle) {
-        final double straightTolerance = 30;
-        if (angle > 0 && angle < 180 - straightTolerance / 2) {
-            return Direction.LEFT;
-        }
-        return Direction.STRAIGHT;
+        final double straightTolerance = 15;
+        if (angle > 180 - straightTolerance && angle < 180 + straightTolerance) return Direction.STRAIGHT;
+        if (angle < straightTolerance || angle > 360 - straightTolerance) return Direction.BACKWARDS;
+        if (angle > 0 && angle < 180) return Direction.LEFT;
+        return Direction.RIGHT;
     }
 
     enum Sharpness { SHARP, NORMAL, SLIGHT }
