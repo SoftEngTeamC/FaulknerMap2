@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -22,7 +21,6 @@ import model.Hours;
 import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
-import textDirections.MakeDirections;
 import textDirections.Step;
 import util.MappedList;
 
