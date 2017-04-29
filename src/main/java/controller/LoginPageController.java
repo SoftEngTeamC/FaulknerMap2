@@ -16,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Locale;
@@ -52,6 +53,8 @@ public class LoginPageController extends Controller {
     private String Password= "Admin";
     private int attempts =0;
 
+    private Stage stage;
+
     @FXML
     public void back() {
         switchToMainScreen(backBtn);
@@ -66,6 +69,10 @@ public class LoginPageController extends Controller {
         startIdleListener(LoginPageParent, loginBtn);
     }
 
+    private void setStage(){
+        stage = (Stage) loginBtn.getScene().getWindow();
+    }
+
     @FXML
     public void login() {
         attempts++;
@@ -77,7 +84,8 @@ public class LoginPageController extends Controller {
             displayerror2.setVisible(false);
 
             // switch screens
-            switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", loginBtn);
+            setStage();
+            switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", stage);
         }
 
         else if (attempts>=3){

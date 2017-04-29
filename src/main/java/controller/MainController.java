@@ -103,8 +103,11 @@ public class MainController extends Controller implements Initializable {
     LocalDateTime now = LocalDateTime.now();
     Date nowDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
+    private Stage stage;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        stage = (Stage) AboutUsButton.getScene().getWindow();
         System.out.println("HAHAHA");
         //System.out.println(dateFormat.format(cal.getTime()));
         System.out.println(dateFormat.format(now));
@@ -350,12 +353,12 @@ public class MainController extends Controller implements Initializable {
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() {
-        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+        switchScreen("view/LoginPage.fxml", "Login", stage);
     }
 
     @FXML
     public void OpenAboutUs() {
-        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+        switchScreen("view/AboutUs.fxml", "About Us", stage);
     }
 
     //--------------------Buttons that have language--------------------------//
