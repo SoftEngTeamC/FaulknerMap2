@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -23,7 +24,9 @@ import java.util.ResourceBundle;
 /**
  * Created by Guillermo on 4/15/17.
  */
-public class LoginPageController extends Controller{
+public class LoginPageController extends Controller {
+    @FXML
+    public AnchorPane LoginPageParent;
     @FXML
     private Button backBtn;
     @FXML
@@ -59,6 +62,8 @@ public class LoginPageController extends Controller{
         displayerror1.setVisible(false);
         displayerror2.setVisible(false);
         successText.setVisible(false);
+
+        startIdleListener(LoginPageParent, loginBtn);
     }
 
     @FXML
@@ -70,24 +75,6 @@ public class LoginPageController extends Controller{
             displayerror.setVisible(false);
             displayerror1.setVisible(false);
             displayerror2.setVisible(false);
-
-            // interact with memento
-
-            try {
-                LoginStatusEditor originator = new LoginStatusEditor();
-                LoginStatusSingleton careTaker = LoginStatusSingleton.getInstance();
-                LoginStatusMemento memento = new LoginStatusMemento(false);
-                originator.setStatus(false);
-                careTaker.addMemento(originator.save());
-                IdleMonitor idleMonitor = new IdleMonitor(Duration.seconds(careTaker.getTimeout()), () -> {
-                }, careTaker.getMemento().getStatus());
-                Parent root = FXMLLoader.load(getClass().getResource("view/Home.fxml"),
-                        ResourceBundle.getBundle("Language", new Locale("en", "US")));
-                idleMonitor.register(root, Event.ANY);
-            } catch (Exception E){
-                System.out.println("couldn't idle monitor switch screen");
-            }
-
 
             // switch screens
             switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", loginBtn);

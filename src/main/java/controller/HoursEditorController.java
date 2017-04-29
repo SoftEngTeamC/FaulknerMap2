@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import model.Hours;
 
 import java.text.ParseException;
@@ -44,6 +45,8 @@ public class HoursEditorController extends Controller {
     private ToggleGroup ampm3;
     @FXML
     private ToggleGroup ampm4;
+    @FXML
+    private AnchorPane Parent;
 
 
 
@@ -58,6 +61,8 @@ public class HoursEditorController extends Controller {
         addMinuteValidation(morningmin2);
         addMinuteValidation(eveningmin1);
         addMinuteValidation(eveningmin2);
+
+        startIdleListener(Parent, backBtn);
     }
 
     @FXML

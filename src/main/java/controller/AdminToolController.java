@@ -31,6 +31,7 @@ public class AdminToolController extends Controller{
         mapEditorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         editHoursBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+        startIdleListener(AdminTool_AnchorPane, algorithmSelectorBtn);
     }
 
     @FXML

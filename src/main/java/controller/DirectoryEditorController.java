@@ -65,6 +65,7 @@ public class DirectoryEditorController extends Controller {
         searchField.textProperty()
                 .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
 
+        startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
     }
 
     @FXML
@@ -98,7 +99,7 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void addPersonBtnCPressed() {
-        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+        switchScreen("view/AddPerson.fxml", "Add Person Menu", addPrsnBtn);
     }
 
 
