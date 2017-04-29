@@ -142,7 +142,7 @@ public class MainController extends Controller implements Initializable {
     public void loadView(Locale locale) {
         Stage stage = (Stage) MainSplitPane.getScene().getWindow();
         try {
-            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Main.fxml"),
+            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Home.fxml"),
                     ResourceBundle.getBundle("Language", locale));
             stage.setTitle("Faulkner Kiosk");
             stage.getScene().setRoot(root);

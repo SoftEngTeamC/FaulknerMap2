@@ -1,3 +1,4 @@
+import Singleton.EMFProvider;
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.processor.ObjectRowProcessor;
 import com.univocity.parsers.conversions.Conversions;

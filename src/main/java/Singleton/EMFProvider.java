@@ -1,4 +1,4 @@
-package service;
+package Singleton;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

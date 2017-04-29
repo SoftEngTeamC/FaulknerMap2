@@ -1,18 +1,15 @@
 import Memento.LoginStatusEditor;
 import Memento.LoginStatusMemento;
-import Singleton.IdleMonitor;
+import Memento.IdleMonitor;
 import Singleton.LoginStatusSingleton;
-import controller.MainController;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import service.EMFProvider;
+import Singleton.EMFProvider;
 
 import java.io.IOException;
 import java.util.Locale;

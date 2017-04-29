@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -17,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 import model.Edge;
 import model.Hours;
 import model.Navigable;
@@ -26,6 +28,7 @@ import textDirections.MakeDirections;
 import textDirections.Step;
 import util.MappedList;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -174,6 +177,14 @@ public class HomeController extends Controller {
         //Altering the add Destination and Directions Buttons HBox to have those buttons
         addDestandDirectionButtons.getChildren().add(addDestinationButton);
         addDestandDirectionButtons.getChildren().add(DirectionButton);
+
+        english_button.setOnAction(event -> loadView(new Locale("en", "US")));
+        spanish_button.setOnAction(event -> loadView(new Locale("es", "PR")));
+        french_button.setOnAction(event -> loadView(new Locale("fr", "FR")));
+        japanese_button.setOnAction(event -> loadView(new Locale("jp", "JP")));
+        chinese_button.setOnAction(event -> loadView(new Locale("zh", "CN")));
+        portuguese_button.setOnAction(event -> loadView(new Locale("pt", "BR")));
+        italian_button.setOnAction(event -> loadView(new Locale("it", "IT")));
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -626,5 +637,19 @@ public class HomeController extends Controller {
 //        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
 //
 //        FindandDisplayPath(HP_Start, null, null, HS_Dest);
+    }
+
+    public void loadView(Locale locale) {
+        Stage stage = (Stage) Home_MainSplit.getScene().getWindow();
+        try {
+            SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Home.fxml"),
+                    ResourceBundle.getBundle("Language", locale));
+            stage.setTitle("Faulkner Kiosk");
+            stage.getScene().setRoot(root);
+            stage.setFullScreen(true);
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

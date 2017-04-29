@@ -1,4 +1,4 @@
-package Singleton;
+package Memento;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
