@@ -376,17 +376,18 @@ public class MainController extends Controller implements Initializable {
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
             String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
 
+            System.out.println("");
             message = bundle.getString("helpMessage") + "\n\n" +
                     bundle.getString("operatingHours") + "\n" +
                     bundle.getString("morningHours") + morningHours + "\n" +
                     bundle.getString("eveningHours") + eveningHours;
 
         } else {
-            Date morningStart = new Date(0, 0, 0, 9, 30);
-            Date morningEnd = new Date(0, 0, 0, 12, 0);
+            Date morningStart = new Date();
+            Date morningEnd= new Date();
 
-            Date eveningStart = new Date(0, 0, 0, 14, 0);
-            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+            Date eveningStart= new Date();
+            Date eveningEnd= new Date();
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);

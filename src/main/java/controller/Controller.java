@@ -1,8 +1,8 @@
 package controller;
 
+import Memento.IdleMonitor;
 import Memento.LoginStatusEditor;
 import Memento.LoginStatusMemento;
-import Singleton.IdleMonitor;
 import Singleton.LoginStatusSingleton;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;

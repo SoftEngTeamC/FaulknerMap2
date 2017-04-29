@@ -1,9 +1,4 @@
 package controller;
-
-import Memento.LoginStatusEditor;
-import Memento.LoginStatusMemento;
-import Singleton.IdleMonitor;
-import Singleton.LoginStatusSingleton;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
