@@ -1,5 +1,6 @@
 package textDirections;
 
+import pathfinding.MapNode;
 import pathfinding.Path;
 
 import java.awt.*;
@@ -9,7 +10,23 @@ import java.util.List;
 
 public class TextualDirections {
     public static List<Step> pathSteps(Path path) {
-        return new LinkedList<>();
+        List<Step> steps = new LinkedList<>();
+        List<MapNode> nodes = path.nodes();
+        for (int i = 1; i < nodes.size() - 1; i++) {
+            Point.Double prevNode = nodes.get(i - 1).getModelNode().getPoint();
+            Point.Double currNode = nodes.get(i).getModelNode().getPoint();
+            Point.Double nextNode = nodes.get(i + 1).getModelNode().getPoint();
+
+            double angle = getAngle(prevNode, currNode, nextNode);
+
+            Direction direction = angleToDirection(angle);
+            Sharpness sharpness = angleSharpness(angle);
+
+            double distance = prevNode.distance(currNode) * MapNode.FEET_PER_PIXEL;
+
+            steps.add(new Step(direction, sharpness, distance));
+        }
+        return steps;
     }
 
     static double getAngle(Point.Double A, Point.Double B, Point.Double C) {

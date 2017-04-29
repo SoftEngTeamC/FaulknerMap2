@@ -66,7 +66,7 @@ public class Coordinate {
     }
 
     @Transient
-    public Point getPoint() {
-        return new Point((int) x, (int) y);
+    public Point.Double getPoint() {
+        return new Point.Double(x, y);
     }
 }

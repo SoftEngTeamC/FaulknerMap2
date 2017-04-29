@@ -77,7 +77,7 @@ public class Node {
     }
 
     @Transient
-    public Point getPoint() {
+    public Point.Double getPoint() {
         return location.getPoint();
     }
 }
