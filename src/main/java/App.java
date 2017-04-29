@@ -21,19 +21,6 @@ public class App extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("view/Home.fxml"),
                     ResourceBundle.getBundle("Language", new Locale("en", "US")));
-
-            LoginStatusEditor originator = new LoginStatusEditor();
-            LoginStatusSingleton careTaker = LoginStatusSingleton.getInstance();
-            LoginStatusMemento memento = new LoginStatusMemento(false);
-
-            originator.setStatus(false);
-            careTaker.addMemento(originator.save());
-
-            IdleMonitor idleMonitor = new IdleMonitor(Duration.seconds(careTaker.getTimeout()), () -> {
-            }, careTaker.getMemento().getStatus());
-            idleMonitor.register(root, Event.ANY);
-            idleMonitor.register(root, Event.ANY);
-
             primaryStage.setTitle("Faulkner Kiosk");
             Scene sc = new Scene(root, 800, 500);
             primaryStage.setScene(sc);

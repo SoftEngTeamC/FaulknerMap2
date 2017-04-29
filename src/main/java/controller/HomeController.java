@@ -9,6 +9,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -24,7 +25,6 @@ import model.Hours;
 import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
-import textDirections.MakeDirections;
 import textDirections.Step;
 import util.MappedList;
 
@@ -34,10 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HomeController extends Controller {
-
-    @FXML
-    private ResourceBundle resources;
+public class HomeController extends Controller  implements Initializable {
 
     @FXML
     private URL location;
@@ -150,8 +147,10 @@ public class HomeController extends Controller {
     private IntegerProperty currFloor = new SimpleIntegerProperty(1);
     private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
 
-    @FXML
-    void initialize() {
+    private Stage stage;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         bundle = resources;
         InitializeMap();
         InitializeFloorButtons();
@@ -162,15 +161,15 @@ public class HomeController extends Controller {
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
 
         //Define actions on ShowTextDirections Button
-        DirectionButton.setText("Get Directions");
-        DirectionButton.setOnAction(e->{
+        DirectionButton.setText(bundle.getString("getDirections"));
+        DirectionButton.setOnAction(e -> {
             showTextDirections();
             //Update the Floor span for the New Paths
             FloorSpan.set(PathSpansFloors());
             //TODO Set current Location to first node in the path
             //current location will be used to step through the directions one node at a time
             currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
-            System.out.println("FloorSpan"+FloorSpan);
+            System.out.println("FloorSpan" + FloorSpan);
 
             //TODO Display the Path on the Map and generate Steps
         });
@@ -187,9 +186,13 @@ public class HomeController extends Controller {
         italian_button.setOnAction(event -> loadView(new Locale("it", "IT")));
     }
 
+    private void setStage(){
+         stage = (Stage) AdminToolButton.getScene().getWindow();
+    }
+
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private void InitializeMap(){
+    private void InitializeMap() {
         Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
         Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
         MapImageView.setPreserveRatio(true);
@@ -206,25 +209,36 @@ public class HomeController extends Controller {
         MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
     }
 
-    private void InitializeZoomListener(){
+    private void InitializeZoomListener() {
         //This event is triggered when the Map Slider is moved
         //It locks the center coordinate, and as it is zoomed it pans to the desired position
-        Map_Slider.valueProperty().addListener((original,oldValue, newValue) -> {
-            CenterLocked=true;
-            System.out.println("Zooming On: " + CenterX+", "+CenterY);
-            PanToPoint(CenterX,CenterY);
-            });
+        Map_Slider.valueProperty().addListener((original, oldValue, newValue) -> {
+            CenterLocked = true;
+            System.out.println("Zooming On: " + CenterX + ", " + CenterY);
+            PanToPoint(CenterX, CenterY);
+        });
 
         //This event is triggered when the mouse is released from the slider
-        Map_Slider.setOnMouseReleased(e->{CenterLocked=false;});
+        Map_Slider.setOnMouseReleased(e -> {
+            CenterLocked = false;
+        });
 
         //These events are triggered when the scrollpane view is panned
-        Map_ScrollPane.hvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
-        Map_ScrollPane.vvalueProperty().addListener(e->{if(!CenterLocked) {Panning();}});
+        Map_ScrollPane.hvalueProperty().addListener(e -> {
+            if (!CenterLocked) {
+                Panning();
+            }
+        });
+        Map_ScrollPane.vvalueProperty().addListener(e -> {
+            if (!CenterLocked) {
+                Panning();
+            }
+        });
     }
+
     //This function is meant to be called whenever the user is panning around the map
     //ie on click and drag, not on zoom, Controlled by CenterLocked Boolean
-    private void Panning(){
+    private void Panning() {
         double Width = MapImageView.getImage().getWidth();
         double Height = MapImageView.getImage().getHeight();
         double ImageRatio = Height / Width;
@@ -238,29 +252,29 @@ public class HomeController extends Controller {
 
         CenterX = Xprime / (currWidth / Width);
         CenterY = Yprime / (currHeight / Height);
-        System.out.println(CenterX+", "+CenterY);
+        System.out.println(CenterX + ", " + CenterY);
     }
 
-    private void PanToPoint(double X, double Y){
+    private void PanToPoint(double X, double Y) {
         System.out.println("Panning To Point");
         double Width = MapImageView.getImage().getWidth();
         double Height = MapImageView.getImage().getHeight();
-        double ImageRatio = Height/Width;
+        double ImageRatio = Height / Width;
         double currWidth = MapImageView.getFitWidth();
-        double currHeight = currWidth*ImageRatio;
-        double Xprime = X*(currWidth/Width);
-        double Yprime = Y*(currHeight/Height);
+        double currHeight = currWidth * ImageRatio;
+        double Xprime = X * (currWidth / Width);
+        double Yprime = Y * (currHeight / Height);
 
-        Map_ScrollPane.setHvalue((Xprime/(currWidth-Map_ScrollPane.getWidth()))-((Map_ScrollPane.getWidth()/currWidth)/2));
-        Map_ScrollPane.setVvalue((Yprime/(currHeight-Map_ScrollPane.getHeight()))-((Map_ScrollPane.getHeight()/currHeight)/2));
+        Map_ScrollPane.setHvalue((Xprime / (currWidth - Map_ScrollPane.getWidth())) - ((Map_ScrollPane.getWidth() / currWidth) / 2));
+        Map_ScrollPane.setVvalue((Yprime / (currHeight - Map_ScrollPane.getHeight())) - ((Map_ScrollPane.getHeight() / currHeight) / 2));
     }
 
-    private void ClearMapGroup(){
+    private void ClearMapGroup() {
         Group group1 = (Group) Map_ScrollPane.getContent();
         group1.getChildren().remove(1, group1.getChildren().size());
     }
 
-    private void MakeCircleInGroup (MapNode N){
+    private void MakeCircleInGroup(MapNode N) {
         //This function trusts that it is only being called to build circles on the displayed floor
         double x = N.getLocation().getX();
         double y = N.getLocation().getY();
@@ -282,7 +296,7 @@ public class HomeController extends Controller {
         MapGroup.getChildren().addAll(circle);
     }
 
-    public void MakeLineInGroup(Edge e){
+    public void MakeLineInGroup(Edge e) {
         double x1 = e.getStart().getLocation().getX();
         double y1 = e.getStart().getLocation().getY();
         double x2 = e.getEnd().getLocation().getX();
@@ -302,25 +316,39 @@ public class HomeController extends Controller {
         edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
         edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
-        if(e.isDisabled()) {
+        if (e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
         MapGroup.getChildren().add(edge);
     }
 
-    private void InitializeFloorButtons(){
-        FirstFloor_Button.setOnMouseClicked(e -> {currFloor.set(1);});
-        SecondFloor_Button.setOnMouseClicked(e -> {currFloor.set(2);});
-        ThirdFloor_Button.setOnMouseClicked(e -> {currFloor.set(3);});
-        FourthFloor_Button.setOnMouseClicked(e -> {currFloor.set(4);});
-        FifthFloor_Button.setOnMouseClicked(e -> {currFloor.set(5);});
-        SixthFloor_Button.setOnMouseClicked(e -> {currFloor.set(6);});
-        SeventhFloor_Button.setOnMouseClicked(e -> {currFloor.set(7);});
+    private void InitializeFloorButtons() {
+        FirstFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(1);
+        });
+        SecondFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(2);
+        });
+        ThirdFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(3);
+        });
+        FourthFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(4);
+        });
+        FifthFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(5);
+        });
+        SixthFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(6);
+        });
+        SeventhFloor_Button.setOnMouseClicked(e -> {
+            currFloor.set(7);
+        });
 
         //Triggered anytime the currFloor Changes
         //Updates what nodes are being displayed
-        currFloor.addListener(e->{
+        currFloor.addListener(e -> {
             System.out.println("currFloorPropertyChanged");
             System.out.println(currFloor);
             System.out.println(currFloor.get());
@@ -334,12 +362,12 @@ public class HomeController extends Controller {
         //whenever the floor span changes, update the floor buttons that are disabled
         FloorSpan.addListener(new ListChangeListener<Integer>() {
             @Override
-            public void onChanged(Change<? extends Integer> c){
+            public void onChanged(Change<? extends Integer> c) {
                 System.out.println("FloorSpanProperty Changed");
-                for(int i=0; i<7; i++){
+                for (int i = 0; i < 7; i++) {
                     Button B = (Button) FloorButtons_VBox.getChildren().get(i);
                     B.setDisable(false);
-                    if(!FloorSpan.contains(i+1)){
+                    if (!FloorSpan.contains(i + 1)) {
                         B.setDisable(true);
                     }
                 }
@@ -350,28 +378,30 @@ public class HomeController extends Controller {
     //-------------------------------------Path Finding----------------------------------------
 
     //This function takes a path and resets the Group in the Scrollpane to have the correct Image and circles
-    private void DisplayPath(Path path){
+    private void DisplayPath(Path path) {
         System.out.println("displayPath");
         int floor = path.getNode(0).getLocation().getFloor();
         MapImageView.setImage(ImageProvider.getImageByFloor(floor));
         ClearMapGroup();
         List<MapNode> NodesInPath = path.getPath();
-        for(MapNode N: NodesInPath){
+        for (MapNode N : NodesInPath) {
             MakeCircleInGroup(N);
         }
-        for(Edge E : path.edges()){
+        for (Edge E : path.edges()) {
             MakeLineInGroup(E);
         }
     }
 
-    private ObservableList<Integer> PathSpansFloors(){
+    private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
         List<Integer> span = new ArrayList<Integer>();
         Set<Integer> floors;
-        for(Path p: paths){
+        for (Path p : paths) {
             floors = p.floorsSpanned();
-            for(int i:floors){
-                if(!span.contains(i)){span.add(i);}
+            for (int i : floors) {
+                if (!span.contains(i)) {
+                    span.add(i);
+                }
             }
         }
         ObservableList<Integer> FloorsSpanned = FXCollections.observableList(span);
@@ -413,7 +443,8 @@ public class HomeController extends Controller {
         destinations.addListener(new ListChangeListener<Navigable>() {
             @Override
             public void onChanged(Change<? extends Navigable> c) {
-                while (c.next()) {} // Apply all the changes
+                while (c.next()) {
+                } // Apply all the changes
                 ObservableList<? extends Navigable> dests = c.getList();
                 paths.clear();
                 if (c.getList().size() >= 2) {
@@ -425,7 +456,13 @@ public class HomeController extends Controller {
                 }
                 ClearMapGroup();
                 List<Integer> nums = new ArrayList<>();
-                nums.add(1);nums.add(2);nums.add(3);nums.add(4);nums.add(5);nums.add(6);nums.add(7);
+                nums.add(1);
+                nums.add(2);
+                nums.add(3);
+                nums.add(4);
+                nums.add(5);
+                nums.add(6);
+                nums.add(7);
                 ObservableList<Integer> AllFloors = FXCollections.observableList(nums);
                 FloorSpan.setValue(AllFloors);
                 System.out.println(paths);
@@ -488,7 +525,7 @@ public class HomeController extends Controller {
         Searching_VBox.getChildren().add(MakeInfoTextArea(selectedDestination.get()));
     }
 
-    private void showTextDirections(){
+    private void showTextDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
@@ -524,7 +561,7 @@ public class HomeController extends Controller {
         field.setPrefWidth(700);
         field.setMaxWidth(Region.USE_COMPUTED_SIZE);
         field.setOnMouseClicked(e -> {
-            if(e.getClickCount()>=2){
+            if (e.getClickCount() >= 2) {
                 if (currentSearchField == null) {
                     field.setEditable(true);
                     field.setText("");
@@ -563,11 +600,11 @@ public class HomeController extends Controller {
         return Info;
     }
 
-    private ListView<String> MakeTextDirectionsListView(List<Path> paths){
+    private ListView<String> MakeTextDirectionsListView(List<Path> paths) {
         //Create List of all directions given List of Paths
         List<String> TextDirections = new ArrayList<String>();
-        for(Path p: paths){
-            for(MapNode M : p.getPath()){
+        for (Path p : paths) {
+            for (MapNode M : p.getPath()) {
                 TextDirections.add(M.toString());
             }
         }
@@ -582,12 +619,14 @@ public class HomeController extends Controller {
 
     @FXML
     public void OpenAboutUs() {
-        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+        setStage();
+        switchScreen("view/AboutUs.fxml", "About Us", stage);
     }
 
     @FXML
     public void OpenAdminTool() {
-        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+        setStage();
+        switchScreen("view/LoginPage.fxml", "Login", stage);
     }
 
     public void HandleHelpButton() {

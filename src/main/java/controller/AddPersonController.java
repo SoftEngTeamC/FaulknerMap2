@@ -4,6 +4,7 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.HospitalProfessional;
 
@@ -11,7 +12,8 @@ import java.util.LinkedList;
 
 
 public class AddPersonController extends PersonController {
-
+    @FXML
+    public AnchorPane Parent;
     @FXML
     private Button addPersonBtn;
     @FXML
@@ -35,12 +37,14 @@ public class AddPersonController extends PersonController {
 
     @FXML
     public void initialize() {
-        super.initialize();
+        setButton(addPersonBtn);
+        super.init();
         successText.setVisible(false);
         errorText.setVisible(false);
         locationsSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             locationsSearchFieldKeyPressed();
         });
+        startIdleListener(Parent, addPersonBtn);
     }
 
     public void logoutBtnPressed() {

@@ -1,19 +1,28 @@
 package controller;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Created by Guillermo on 4/15/17.
  */
-public class LoginPageController extends Controller{
+public class LoginPageController extends Controller {
+    @FXML
+    public AnchorPane LoginPageParent;
     @FXML
     private Button backBtn;
     @FXML
@@ -39,6 +48,8 @@ public class LoginPageController extends Controller{
     private String Password= "Admin";
     private int attempts =0;
 
+    private Stage stage;
+
     @FXML
     public void back() {
         switchToMainScreen(backBtn);
@@ -49,6 +60,12 @@ public class LoginPageController extends Controller{
         displayerror1.setVisible(false);
         displayerror2.setVisible(false);
         successText.setVisible(false);
+
+        startIdleListener(LoginPageParent, loginBtn);
+    }
+
+    private void setStage(){
+        stage = (Stage) loginBtn.getScene().getWindow();
     }
 
     @FXML
@@ -56,10 +73,14 @@ public class LoginPageController extends Controller{
         attempts++;
 
         if(username.getText().equals(UserName) && passwordField.getText().equals(Password)){
+
             displayerror.setVisible(false);
             displayerror1.setVisible(false);
             displayerror2.setVisible(false);
-            switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", loginBtn);
+
+            // switch screens
+            setStage();
+            switchScreen("view/AdminToolMenu.fxml", "AdminToolMenu", stage);
         }
 
         else if (attempts>=3){
