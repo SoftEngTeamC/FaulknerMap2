@@ -5,6 +5,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -73,5 +74,10 @@ public class Node {
     @Override
     public String toString() {
         return name + " " + "(" + id.toString() + ")" + " " + location.toString();
+    }
+
+    @Transient
+    public Point.Double getPoint() {
+        return location.getPoint();
     }
 }

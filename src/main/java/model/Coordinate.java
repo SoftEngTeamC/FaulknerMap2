@@ -3,6 +3,7 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.awt.*;
 
 @Entity
 @Table(name = "COORDINATES")
@@ -62,5 +63,10 @@ public class Coordinate {
 
     public String toString(){
         return "Node Location: [" + x + "," + y + "," + floor + "]";
+    }
+
+    @Transient
+    public Point.Double getPoint() {
+        return new Point.Double(x, y);
     }
 }

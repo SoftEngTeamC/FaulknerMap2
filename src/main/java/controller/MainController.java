@@ -237,10 +237,10 @@ public class MainController extends Controller implements Initializable {
             DisplayMap(path);
         } else {
             if (destCount > 0) {
-                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
-                        + "\n\n" + textDirections.MakeDirections.getText(path));
+//                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
+//                        + "\n\n" + textDirections.TextualDirections.getText(path));
             } else {
-                //TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+                //TextDirectionsTextArea.setText(textDirections.TextualDirections.getText(path));
             }
             DisplayMap(path);
         }
