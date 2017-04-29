@@ -167,19 +167,7 @@ public class MapEditorController extends Controller {
     private Text ifUndoDisableText;
 
     @FXML
-    private Button dragNode1;
-    @FXML
-    private Button dragNode2;
-    @FXML
-    private Button dragNode3;
-    @FXML
-    private Button dragNode4;
-    @FXML
-    private Button dragNode5;
-    @FXML
-    private Button dragNode6;
-    @FXML
-    private Button dragNode7;
+    private SplitPane MapEditor_SplitPane;
 
     // Images
     private Image floor4Image;
@@ -208,6 +196,8 @@ public class MapEditorController extends Controller {
     }
 
     public void initialize() {
+        startIdleListener(MapEditor_SplitPane, backBtn);
+        setButton(addNode_connectToNodeBtn);
         List<Node> nodes = nodeService.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for (Node n : nodes) {
@@ -266,10 +256,9 @@ public class MapEditorController extends Controller {
         loginTimeout_errorText.setVisible(false);
         loginTimeout_SuccessText.setVisible(false);
 
-
-
         timeoutEditor_textField.textProperty().addListener((observable, oldValue, newValue) -> timeoutTextFieldChanged());
 
+        startIdleListener(MapEditor_SplitPane, backBtn);
     }
 
     //-------------------------------------------Listeners---------------------------------------------
