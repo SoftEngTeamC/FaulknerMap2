@@ -161,7 +161,7 @@ public class HomeController extends Controller  implements Initializable {
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
 
         //Define actions on ShowTextDirections Button
-        DirectionButton.setText("Get Directions");
+        DirectionButton.setText(bundle.getString("getDirections"));
         DirectionButton.setOnAction(e -> {
             showTextDirections();
             //Update the Floor span for the New Paths
