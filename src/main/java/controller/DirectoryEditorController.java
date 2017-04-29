@@ -43,6 +43,7 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void initialize() {
+        setButton(backBtn);
         //organize visual elements
         DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
         searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
@@ -64,6 +65,7 @@ public class DirectoryEditorController extends Controller {
         searchField.textProperty()
                 .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
 
+        startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
     }
 
     @FXML
@@ -97,7 +99,7 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void addPersonBtnCPressed() {
-        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+        switchScreen("view/AddPerson.fxml", "Add Person Menu", addPrsnBtn);
     }
 
 

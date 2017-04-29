@@ -25,11 +25,13 @@ public class AdminToolController extends Controller{
     private Button algorithmSelectorBtn;
 
     public void initialize(){
+        setButton(algorithmSelectorBtn);
         AdminTool_VBox.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty());
         editDirectoryBtn.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty().multiply(0.3));
         mapEditorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         editHoursBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
+        startIdleListener(AdminTool_AnchorPane, algorithmSelectorBtn);
     }
 
     @FXML

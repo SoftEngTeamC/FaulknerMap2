@@ -2,10 +2,12 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 
 
 public class AboutUsController extends Controller{
-
+    @FXML
+    public AnchorPane Parent;
     @FXML
     private Button MeetTheTeamButton;
 
@@ -20,5 +22,10 @@ public class AboutUsController extends Controller{
     @FXML
     public void back() {
         switchToMainScreen(MeetTheTeamButton);
+    }
+
+    @FXML
+    public void initialize(){
+        startIdleListener(Parent, MeetTheTeamButton);
     }
 }
