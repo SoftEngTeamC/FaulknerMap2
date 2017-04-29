@@ -40,6 +40,7 @@ public class DirectoryEditorController extends Controller {
 
     private ObservableList<HospitalProfessional> professionals;
 
+    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -68,14 +69,20 @@ public class DirectoryEditorController extends Controller {
         startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
     }
 
+    private void setStage(){
+        stage = (Stage)backBtn.getScene().getWindow();
+    }
+
     @FXML
     public void back() {
-        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", stage);
     }
 
     @FXML
     public void logout() {
-        switchToMainScreen(logoutBtn);
+        setStage();
+        switchToMainScreen(backBtn);
     }
 
     @FXML
@@ -99,7 +106,8 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void addPersonBtnCPressed() {
-        switchScreen("view/AddPerson.fxml", "Add Person Menu", addPrsnBtn);
+        setStage();
+        switchScreen("view/AddPerson.fxml", "Add Person Menu", stage);
     }
 
 

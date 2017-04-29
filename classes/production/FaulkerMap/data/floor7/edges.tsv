@@ -1,0 +1,52 @@
+start	end
+intersection71	intersection79
+intersection79	intersection71
+intersection72	intersection71
+intersection71	intersection72
+intersection710	intersection72
+intersection72	intersection710
+intersection79	intersection710
+intersection710	intersection79
+intersection73	intersection72
+intersection72	intersection73
+intersection711	intersection73
+intersection73	intersection711
+intersection712	intersection711
+intersection711	intersection712
+intersection74	intersection712
+intersection712	intersection74
+intersection73	intersection74
+intersection74	intersection73
+intersection75	intersection74
+intersection74	intersection75
+hallway72	intersection75
+intersection75	hallway72
+intersection715	hallway72
+hallway72	intersection715
+Hillside Elevators 1	hallway72
+hallway72	Hillside Elevators 1
+intersection717	intersection715
+intersection715	intersection717
+intersection716	intersection717
+intersection717	intersection716
+intersection76	intersection716
+intersection716	intersection76
+intersection75	intersection76
+intersection76	intersection75
+intersection76	Pain Management Center
+Pain Management Center	intersection76
+intersection76	intersection76
+intersection76	intersection76
+hallway70	hallway70
+hallway70	hallway70
+intersection77	intersection76
+intersection76	intersection77
+intersection713	intersection77
+intersection77	intersection713
+hallway71	intersection717
+intersection717	hallway71
+Human Resources	hallway71
+hallway71	Human Resources
+intersection78	intersection77
+intersection77  intersection78
+intersection714 intersection78

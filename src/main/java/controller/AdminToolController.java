@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-
+import javafx.stage.Stage;
 
 
 public class AdminToolController extends Controller{
@@ -24,6 +24,8 @@ public class AdminToolController extends Controller{
     @FXML
     private Button algorithmSelectorBtn;
 
+    private Stage stage;
+
     public void initialize(){
         setButton(algorithmSelectorBtn);
         AdminTool_VBox.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty());
@@ -33,28 +35,36 @@ public class AdminToolController extends Controller{
         algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         startIdleListener(AdminTool_AnchorPane, algorithmSelectorBtn);
     }
+    private void setStage(){
+        stage = (Stage)logoutBtn.getScene().getWindow();
+    }
 
     @FXML
     public void editMap() {
-        switchScreen("view/MapEditor.fxml", "Map Editor", mapEditorBtn);
+        setStage();
+        switchScreen("view/MapEditor.fxml", "Map Editor", stage);
     }
     @FXML
     public void editHours() {
-        switchScreen("view/HoursEditorScreen.fxml", "Directory Editor", editHoursBtn);
+        setStage();
+        switchScreen("view/HoursEditorScreen.fxml", "Directory Editor", stage);
     }
     @FXML
     public void editDirectory() {
-        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", editDirectoryBtn);
+        setStage();
+        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", stage);
     }
 
     @FXML
     public void logout() {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 
     @FXML
     public void algorithmSelectorBtnAction() {
-        switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", algorithmSelectorBtn);
+        setStage();
+        switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", stage);
     }
 
 }

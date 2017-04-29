@@ -57,9 +57,9 @@ public class Controller {
         LoginStatusSingleton.getInstance().setButton(b);
     }
 
-    public void switchScreen(String file, String title, Button b) {
+    public void switchScreen(String file, String title, Stage stage) {
         try {
-            Stage stage = (Stage) b.getScene().getWindow();
+//            Stage stage = (Stage) b.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(file));
             stage.setTitle(title);
             stage.getScene().setRoot(root);
