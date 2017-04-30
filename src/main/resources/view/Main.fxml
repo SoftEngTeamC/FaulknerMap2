@@ -21,7 +21,7 @@
 
 <?import javafx.scene.control.TextField?>
 <SplitPane fx:id="MainSplitPane" dividerPositions="0.33612040133779264" maxHeight="-Infinity" maxWidth="-Infinity"
-           minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+           minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@generalStyles.css"
            xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controller.MainController">
     <stylesheets>
