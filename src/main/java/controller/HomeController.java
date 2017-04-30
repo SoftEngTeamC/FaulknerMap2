@@ -179,8 +179,7 @@ public class HomeController extends Controller  implements Initializable {
             //TODO Set current Location to first node in the path
             //current location will be used to step through the directions one node at a time
             currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
-            System.out.println("FloorSpan" + FloorSpan);
-
+            DisplayPaths();
             //TODO Display the Path on the Map and generate Steps
         });
         //Altering the add Destination and Directions Buttons HBox to have those buttons
@@ -340,39 +339,18 @@ public class HomeController extends Controller  implements Initializable {
     }
 
     private void InitializeFloorButtons() {
-        FirstFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(1);
-        });
-        SecondFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(2);
-        });
-        ThirdFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(3);
-        });
-        FourthFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(4);
-        });
-        FifthFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(5);
-        });
-        SixthFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(6);
-        });
-        SeventhFloor_Button.setOnMouseClicked(e -> {
-            currFloor.set(7);
-        });
+        FirstFloor_Button.setOnMouseClicked(e -> {currFloor.set(1);});
+        SecondFloor_Button.setOnMouseClicked(e -> {currFloor.set(2);});
+        ThirdFloor_Button.setOnMouseClicked(e -> {currFloor.set(3);});
+        FourthFloor_Button.setOnMouseClicked(e -> {currFloor.set(4);});
+        FifthFloor_Button.setOnMouseClicked(e -> {currFloor.set(5);});
+        SixthFloor_Button.setOnMouseClicked(e -> {currFloor.set(6);});
+        SeventhFloor_Button.setOnMouseClicked(e -> {currFloor.set(7);});
 
         //Triggered anytime the currFloor Changes
         //Updates what nodes are being displayed
         currFloor.addListener(e -> {
-            System.out.println("currFloorPropertyChanged");
-            System.out.println(currFloor);
-            System.out.println(currFloor.get());
-            System.out.println(ImageProvider.getImageByFloor(currFloor.get()));
-            //TODO changing the floor image is broken. I dont know why.
-            MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
-            ClearMapGroup();
-            //TODO Whatever Path portions are on this floor. Display those.
+            DisplayPaths();
         });
 
         //whenever the floor span changes, update the floor buttons that are disabled
@@ -407,6 +385,31 @@ public class HomeController extends Controller  implements Initializable {
             MakeLineInGroup(E);
         }
     }
+
+    //This function displays all the paths on the floor you are currently on
+    private void DisplayPaths(){
+        System.out.println("currFloorPropertyChanged");
+        System.out.println("Paths: "+ paths);
+        MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
+        ClearMapGroup();
+        List<Path> subPaths = new ArrayList<Path>();
+        //get a list of all subpaths deivided by floors
+        System.out.println("paths: " + paths);
+        for(Path p: paths){
+            System.out.println("groupedByFloor: " + p.groupedByFloor());
+            subPaths.addAll(p.groupedByFloor());
+        }
+        //if the subpath is on that floor, display that ish
+        System.out.println("subPaths: "+ subPaths);
+        for(Path p: subPaths){
+            if(p.floorsSpanned().contains(currFloor.get())){
+                System.out.println("Path: "+ p);
+                DisplayPath(p);
+            }
+        }
+    }
+
+
 
     private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
