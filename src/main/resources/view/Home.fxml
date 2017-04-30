@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Polygon?>
 
 <SplitPane fx:id="Home_MainSplit" dividerPositions="0.34974958263772954" maxHeight="-Infinity" maxWidth="-Infinity"
-           minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0"
+           minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" stylesheets="@generalStyles.css"
            xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="controller.HomeController">
     <AnchorPane>
