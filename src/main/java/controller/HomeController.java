@@ -77,9 +77,6 @@ public class HomeController extends Controller {
     @FXML
     private HBox Map_HBox;
 
-    @FXML
-    private StackPane imageContainer;
-
 
     //Content inside ScrollPane
     @FXML
@@ -102,6 +99,9 @@ public class HomeController extends Controller {
     private Button SixthFloor_Button;
     @FXML
     private Button SeventhFloor_Button;
+
+    @FXML
+    private Pane mapContainer;
 
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
@@ -132,26 +132,13 @@ public class HomeController extends Controller {
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private ObjectProperty<Rectangle2D> currentViewport = new SimpleObjectProperty<>();
-    private ObjectProperty<Integer> currentFloor = new SimpleObjectProperty<>();
-
     private void initializeMap() {
-        imageContainer.getChildren().add(makeFloorImageView(1, imageContainer));
+        ImageViewPane map = new ImageViewPane(ImageProvider.getImage(images.get(0)));
+        map.prefHeightProperty().bind(mapContainer.heightProperty());
+        map.prefWidthProperty().bind(mapContainer.widthProperty());
+        mapContainer.getChildren().add(map);
 
-        // Setup listeners for floor change
-        FirstFloor_Button.setOnAction(event -> makeFloorImageView(1, imageContainer));
-        SecondFloor_Button.setOnAction(event -> makeFloorImageView(2, imageContainer));
-        ThirdFloor_Button.setOnAction(event -> makeFloorImageView(3, imageContainer));
-        FourthFloor_Button.setOnAction(event -> makeFloorImageView(4, imageContainer));
-        FifthFloor_Button.setOnAction(event -> makeFloorImageView(5, imageContainer));
-        SixthFloor_Button.setOnAction(event -> makeFloorImageView(6, imageContainer));
-        SeventhFloor_Button.setOnAction(event -> makeFloorImageView(7, imageContainer));
-    }
-
-    private Affine canvasTransformFromViewport(Rectangle2D viewport, double width, double height) {
-        return new Affine(1, 0, 0, viewport.getMinX(),
-                0, 1, 0, viewport.getMinY(),
-                0, 0, 1, 0);
+        map.toBack();
     }
 
     private List<String> images = new LinkedList<>(Arrays.asList(
@@ -162,126 +149,6 @@ public class HomeController extends Controller {
             "images/5_thefifthfloor.png",
             "images/6_thesixthfloor.png",
             "images/7_theseventhfloor.png"));
-
-    private static final int MIN_PIXELS = 400;
-    private ImageViewPane makeFloorImageView(int floor, StackPane container) {
-        currentFloor.set(floor);
-
-        Image floorImage = ImageProvider.getImage(images.get(floor - 1));
-        ImageView floorView = new ImageView(floorImage);
-        floorView.setPreserveRatio(true);
-        resetFloorView(floorView);
-
-        ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-
-        floorView.setOnMousePressed(e -> {
-            // Record the location we first click for drag
-            Point2D mousePress = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
-            mouseDown.set(mousePress);
-        });
-
-        floorView.setOnMouseDragged(e -> {
-            Point2D dragPoint = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
-            shift(floorView, dragPoint.subtract(mouseDown.get()));
-            mouseDown.set(imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY())));
-        });
-
-        floorView.setOnScroll(e -> {
-            Rectangle2D viewport = floorView.getViewport();
-            double width = floorImage.getWidth();
-            double height = floorImage.getHeight();
-            double delta = -e.getDeltaY();
-            double scale = clamp(Math.pow(1.01, delta),
-                    // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
-                    Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
-                    // don't scale so that we're bigger than image dimensions
-                    Math.max(width / viewport.getWidth(), height / viewport.getHeight()));
-
-            Point2D mouse = imageViewToImageCoordinate(floorView, new Point2D(e.getX(), e.getY()));
-            double newWidth = viewport.getWidth() * scale;
-            double newHeight = viewport.getHeight() * scale;
-            // To keep the visual point under the mouse from moving, we need
-            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-            // where x is the mouse X coordinate in the image
-
-            // solving this for newViewportMinX gives
-
-            // newViewportMinX = x - (x - currentViewportMinX) * scale
-
-            // we then clamp this value so the image never scrolls out
-            // of the floorView
-            double newMinX = clamp(
-                    mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
-                    0,
-                    width - newWidth);
-            double newMinY = clamp(
-                    mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
-                    0,
-                    height - newHeight
-            );
-
-            setViewport(floorView, new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
-        });
-
-        floorView.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) resetFloorView(floorView);
-        });
-
-        // Wrap it in a ImageViewPane so it scales correctly
-        ImageViewPane floorViewPane = new ImageViewPane(floorView);
-
-        floorViewPane.prefWidthProperty().bind(container.widthProperty());
-        floorViewPane.prefHeightProperty().bind(container.heightProperty());
-
-        return floorViewPane;
-    }
-
-    private void setViewport(ImageView floorView, Rectangle2D viewport) {
-        currentViewport.set(viewport);
-        floorView.setViewport(viewport);
-    }
-
-    private void resetFloorView(ImageView floorView) {
-        double width = floorView.getImage().getWidth();
-        double height = floorView.getImage().getHeight();
-        if (currentViewport.get() == null) {
-            setViewport(floorView, new Rectangle2D(0, 0, width, height));
-        } else {
-            setViewport(floorView, currentViewport.get());
-        }
-    }
-
-    private void shift(ImageView floorView, Point2D delta) {
-        Rectangle2D viewport = floorView.getViewport();
-
-        double width = floorView.getImage().getWidth();
-        double height = floorView.getImage().getHeight();
-
-        double maxX = width - viewport.getWidth();
-        double maxY = height - viewport.getHeight();
-
-        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
-        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
-
-        setViewport(floorView, new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
-    }
-
-    private double clamp(double val, double min, double max) {
-        return Math.max(min, Math.min(max, val));
-    }
-
-    private Point2D imageViewToImageCoordinate(ImageView floorView, Point2D floorViewCoordinates) {
-        // Transform mouse coordinates on the floorView to the pixel coordinates of the image.
-        double xProp = floorViewCoordinates.getX() / floorView.getBoundsInLocal().getWidth();
-        double yProp = floorViewCoordinates.getY() / floorView.getBoundsInLocal().getHeight();
-
-        Rectangle2D viewport = floorView.getViewport();
-        return new Point2D(
-                viewport.getMinX() + xProp*viewport.getWidth(),
-                viewport.getMinY() + yProp*viewport.getHeight()
-        );
-    }
-
 
     //--------------------------------------------------------------------------------------------------
     private void initializeDirectory() {
