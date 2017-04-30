@@ -6,10 +6,11 @@ import pathfinding.Path;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class TextualDirections {
-    public static List<Step> pathSteps(Path path) {
+    public static List<Step> pathSteps(Path path, ResourceBundle bundle) {
         List<Step> steps = new LinkedList<>();
         List<MapNode> nodes = path.nodes();
         for (int i = 1; i < nodes.size() - 1; i++) {
@@ -24,7 +25,7 @@ public class TextualDirections {
 
             double distance = prevNode.distance(currNode) * MapNode.FEET_PER_PIXEL;
 
-            steps.add(new Step(direction, sharpness, distance));
+            steps.add(new Step(direction, sharpness, distance, bundle));
         }
         return steps;
     }

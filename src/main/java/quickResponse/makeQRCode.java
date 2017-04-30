@@ -26,10 +26,10 @@ public class makeQRCode {
      * @param directions
      * @throws IOException
      */
-    public void buildQR(String directions) throws IOException, WriterException {
+    public static void buildQR(String directions) throws IOException, WriterException {
         //directions = "Successful"; //testing string
         String qrDisplayedText = directions;
-        String filePath = "~/src/main/resources/images/qr.png";  //The path the .png will be saved to
+        String filePath = "~/src/main/resources/images/";  //The path the .png will be saved to
         int size = 125;
         //String charset = "UTF-8";
         String fileType = "png";

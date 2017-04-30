@@ -1,6 +1,8 @@
 package textDirections;
 
 
+import controller.MainController;
+
 import java.util.ResourceBundle;
 
 public class Step {
@@ -8,8 +10,10 @@ public class Step {
     private Double distance;
     private static ResourceBundle bundle;
 
-    Step(TextualDirections.Direction direction, TextualDirections.Sharpness sharpness, Double distance) {
+    Step(TextualDirections.Direction direction, TextualDirections.Sharpness sharpness,
+         Double distance, ResourceBundle bundle) {
         this.distance = distance;
+        Step.bundle = bundle;
 
         String sharpnessModifier = "";
         switch (sharpness) {
