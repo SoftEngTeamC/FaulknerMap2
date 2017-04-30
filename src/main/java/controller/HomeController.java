@@ -470,7 +470,6 @@ public class HomeController extends Controller implements Initializable {
         }
     }
 
-
     private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
         List<Integer> span = new ArrayList<>();
