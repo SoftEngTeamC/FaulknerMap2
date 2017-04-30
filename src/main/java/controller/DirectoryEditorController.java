@@ -40,9 +40,11 @@ public class DirectoryEditorController extends Controller {
 
     private ObservableList<HospitalProfessional> professionals;
 
+    private Stage stage;
 
     @FXML
     public void initialize() {
+        setButton(backBtn);
         //organize visual elements
         DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
         searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
@@ -64,16 +66,23 @@ public class DirectoryEditorController extends Controller {
         searchField.textProperty()
                 .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
 
+        startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
+    }
+
+    private void setStage(){
+        stage = (Stage)backBtn.getScene().getWindow();
     }
 
     @FXML
     public void back() {
-        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", stage);
     }
 
     @FXML
     public void logout() {
-        switchToMainScreen(logoutBtn);
+        setStage();
+        switchToMainScreen(backBtn);
     }
 
     @FXML
@@ -97,7 +106,8 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void addPersonBtnCPressed() {
-        switchScreen("view/AddPerson.fxml", "Add person menu", addPrsnBtn);
+        setStage();
+        switchScreen("view/AddPerson.fxml", "Add Person Menu", stage);
     }
 
 

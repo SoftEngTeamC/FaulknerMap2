@@ -9,11 +9,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import pathfinding.Map;
 import service.AlgorithmSingleton;
 
-public class PathfindingAlgorithmSelectorController  extends Controller{
+public class PathfindingAlgorithmSelectorController extends Controller {
 
     @FXML
     private Button logoutBtn;
@@ -36,12 +38,17 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
     @FXML
     private Text successText;
 
+    @FXML
+    private AnchorPane Parent;
+
     ToggleGroup group;
 
     private int selected; // 0 is A*, 1 is bfs, 2 is dfs
 
+    private Stage stage;
 
-    public void initialize(){
+    public void initialize() {
+        setButton(backBtn);
 
         //ensure only one dude is selected
         group = new ToggleGroup();
@@ -51,6 +58,11 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
         // initialize the success text to be invisible
         successText.setVisible(false);
 
+        startIdleListener(Parent, backBtn);
+    }
+
+    private void setStage(){
+        stage = (Stage) backBtn.getScene().getWindow();
     }
 
     @FXML
@@ -58,19 +70,19 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
      * @author paul
      *
      */
-    public void submitBtnAction(){
+    public void submitBtnAction() {
 
         // init selected algorithm
-        if(aRadioButton.selectedProperty().getValue()){
+        if (aRadioButton.selectedProperty().getValue()) {
             selected = 0;
-        } else if (bfsRadioButton.selectedProperty().getValue()){
+        } else if (bfsRadioButton.selectedProperty().getValue()) {
             selected = 1;
-        } else if (dfsRadioButton.selectedProperty().getValue()){
+        } else if (dfsRadioButton.selectedProperty().getValue()) {
             selected = 2;
         } else selected = -1;
 
         // push
-        switch (selected){
+        switch (selected) {
             case 0: // A*
                 AlgorithmSingleton.getInstance().setCurrentAlgorithm(Map.algorithm.ASTAR);
                 break;
@@ -89,11 +101,13 @@ public class PathfindingAlgorithmSelectorController  extends Controller{
 
     @FXML
     void backBtnAction(ActionEvent event) {
-        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Admin tool menu", stage);
     }
 
     @FXML
     void logoutBtnAction(ActionEvent event) {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 

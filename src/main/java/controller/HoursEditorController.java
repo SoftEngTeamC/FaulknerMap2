@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import model.Hours;
 
 import java.text.ParseException;
@@ -44,10 +46,13 @@ public class HoursEditorController extends Controller {
     private ToggleGroup ampm3;
     @FXML
     private ToggleGroup ampm4;
+    @FXML
+    private AnchorPane Parent;
 
-
+    private Stage stage;
 
     public void initialize() {
+        setButton(backBtn);
         addHourValidation(morninghrs1);
         addHourValidation(morninghrs2);
         addHourValidation(eveninghrs1);
@@ -57,15 +62,23 @@ public class HoursEditorController extends Controller {
         addMinuteValidation(morningmin2);
         addMinuteValidation(eveningmin1);
         addMinuteValidation(eveningmin2);
+
+        startIdleListener(Parent, backBtn);
+    }
+
+    private void setStage(){
+        stage = (Stage) backBtn.getScene().getWindow();
     }
 
     @FXML
     public void back() {
-        switchScreen("view/AdminToolMenu.fxml", "Directory Editor", backBtn);
+        setStage();
+        switchScreen("view/AdminToolMenu.fxml", "Directory Editor", stage);
     }
 
     @FXML
     public void logout() {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 
