@@ -56,7 +56,7 @@ public class DataLoader {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            EMFProvider.getInstance().getEMFactory().close();
+            EMFProvider.getInstance().close();
         }
     }
 
