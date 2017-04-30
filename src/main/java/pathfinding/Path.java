@@ -81,6 +81,7 @@ public class Path implements Iterable<MapNode> {
         for (MapNode n : path) {
             floors.add(n.getLocation().getFloor());
         }
+        System.out.println("floorsSpans: "+floors);
         return floors;
     }
 
@@ -89,6 +90,23 @@ public class Path implements Iterable<MapNode> {
         Set<Integer> notFloors = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
         notFloors.removeAll(floors);
         return new HashSet<>(notFloors);
+    }
+
+    public List<Path> groupedByFloor() {
+        List<Path> subPaths = new LinkedList<>();
+        List<MapNode> currentSubPath = new LinkedList<>();
+        MapNode prevNode = null;
+        for (MapNode node : this.path) {
+            if (prevNode != null && node.getLocation().getFloor() != prevNode.getLocation().getFloor()){
+                subPaths.add(new Path(currentSubPath));
+                currentSubPath = new LinkedList<>();
+            } else {
+                currentSubPath.add(node);
+            }
+            prevNode = node;
+        }
+        subPaths.add(new Path(currentSubPath));
+        return subPaths;
     }
 
     /**
