@@ -198,4 +198,15 @@ public class NodeServiceTest {
             E.printStackTrace();
         }
     }
+
+    @Test
+    public void mergeTest() throws Exception {
+        try{
+            testNodeC.setName("Renamed");
+            nodeService.merge(testNodeC);
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
 }
