@@ -147,6 +147,8 @@ public class HomeController extends Controller  implements Initializable {
     private IntegerProperty currFloor = new SimpleIntegerProperty(1);
     private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
 
+    private Boolean SteppingThroughDirections = false;
+
     private Stage stage;
 
     @Override
@@ -166,25 +168,10 @@ public class HomeController extends Controller  implements Initializable {
         InitializeFloorButtons();
         InitializeZoomListener();
         initializeDirectory();
+        MakeGetDirectionsButton();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
-
-        //Define actions on ShowTextDirections Button
-        DirectionButton.setText(bundle.getString("getDirections"));
-        DirectionButton.setOnAction(e -> {
-            showTextDirections();
-            //Update the Floor span for the New Paths
-            FloorSpan.set(PathSpansFloors());
-            //TODO Set current Location to first node in the path
-            //current location will be used to step through the directions one node at a time
-            currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
-            DisplayPaths();
-            //TODO Display the Path on the Map and generate Steps
-        });
-        //Altering the add Destination and Directions Buttons HBox to have those buttons
-        addDestandDirectionButtons.getChildren().add(addDestinationButton);
-        addDestandDirectionButtons.getChildren().add(DirectionButton);
     }
 
     public void loadView(Locale locale) {
@@ -409,8 +396,6 @@ public class HomeController extends Controller  implements Initializable {
         }
     }
 
-
-
     private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
         List<Integer> span = new ArrayList<Integer>();
@@ -559,14 +544,14 @@ public class HomeController extends Controller  implements Initializable {
     }
 
     // ----------- Destination View Factories ------------ //
-    private HBox makeDestinationView(Navigable location) {
+    private HBox makeDestinationView(Navigable location){
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
         return destinationView;
     }
 
-    private HBox makeDestinationNodeElement(Navigable location) {
+    private HBox makeDestinationNodeElement(Navigable location){
         HBox container = new HBox();
         container.getChildren().add(makeDestinationField(location));
         container.getChildren().add(makeDeleteButton(location));
@@ -611,6 +596,37 @@ public class HomeController extends Controller  implements Initializable {
         return deleteButton;
     }
 
+    private void MakeGetDirectionsButton(){
+        //Define actions on ShowTextDirections Button
+        DirectionButton.setText(bundle.getString("getDirections"));
+        DirectionButton.setOnAction(e -> {
+            System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
+            if(SteppingThroughDirections){
+                DirectionButton.setText(bundle.getString("getOverview"));
+                FloorButtons_VBox.setVisible(false);
+                showTextDirections();
+                //Update the Floor span for the New Paths
+                FloorSpan.set(PathSpansFloors());
+
+
+                //TODO Set current Location to first node in the path
+                //current location will be used to step through the directions one node at a time
+                DisplayPaths();
+                //TODO Display the Path on the Map and generate Steps
+                SteppingThroughDirections = false;
+            }
+            else{
+                DirectionButton.setText(bundle.getString("getDirections"));
+                FloorButtons_VBox.setVisible(true);
+                FloorSpan.set(PathSpansFloors());
+                SteppingThroughDirections = true;
+            }
+        });
+        //Altering the add Destination and Directions Buttons HBox to have those buttons
+        addDestandDirectionButtons.getChildren().add(addDestinationButton);
+        addDestandDirectionButtons.getChildren().add(DirectionButton);
+    }
+
     private TextArea MakeInfoTextArea(Navigable location) {
         TextArea Info = new TextArea();
         Info.setText(location.getInfo());
@@ -631,6 +647,12 @@ public class HomeController extends Controller  implements Initializable {
         textdirs.setItems(FXCollections.observableList(TextDirections));
         textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
         textdirs.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        textdirs.selectionModelProperty().addListener(e ->{
+            //TODO GINA THIS IS WHERE I LEFT OFF. TRYING TO ACT WHEN THE SELECTION INDEX CHANGES
+            System.out.println("TextDirection#: "+textdirs.getSelectionModel());
+        });
+
         return textdirs;
     }
 
