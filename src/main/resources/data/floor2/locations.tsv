@@ -35,31 +35,46 @@ intersection27	2469	2067
 intersection28	2685	2070
 
 Food Services	2630	1464
+hallway28	2677	1464
 
 Matmang	2066	1472
+hallway29	2066	1492
 
 Pharm	2082	1556
+hallway210	2071	1556
 
 Morgue	2050	1654
+hallway211	2070	1654
 
 Censterile	2081	1692
+hallway212	2010	1692
 
 Bio Engineering	2086	1900
+hallway213	2070	1900
 
 Hazard Storage	2232	1968
+hallway214	2232	1984
 
 Security	2352	1968
+hallway215	2352	1982
 
 Censtrlsup	2504	1868
+hallway216	2504	1984
 
 Laundry	2366	1614
+hallway217	2366	1658
 
 OT	2692	1852
+hallway218	2679	1852
 
 HSKPG	2694	1806
+hallway219	2679	1806
 
 Facilities	2056	1864
+hallway220	2069	1864
 
 Mail	2578	1780
+hallway221	2578	1754
 
 Mech	1992	1986
+hallway222	2029	1986
