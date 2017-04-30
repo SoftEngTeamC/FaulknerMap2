@@ -26,8 +26,6 @@ public class NodeServiceTest {
     // Set Up and Tear Down
     @Before
     public void setUp() throws Exception {
-
-
         EMFProvider.getInstance().useTest();
         // Diagram
         // NodeB(10,20)---NodeC(20,20)
