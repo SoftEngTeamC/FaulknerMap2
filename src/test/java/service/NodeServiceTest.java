@@ -26,8 +26,6 @@ public class NodeServiceTest {
     // Set Up and Tear Down
     @Before
     public void setUp() throws Exception {
-
-
         EMFProvider.getInstance().useTest();
         // Diagram
         // NodeB(10,20)---NodeC(20,20)
@@ -195,6 +193,17 @@ public class NodeServiceTest {
 
         try{
             nodeService.getNodesByFloor(1);
+        }catch(Exception E){
+            Assert.fail("Exception " + E);
+            E.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mergeTest() throws Exception {
+        try{
+            testNodeC.setName("Renamed");
+            nodeService.merge(testNodeC);
         }catch(Exception E){
             Assert.fail("Exception " + E);
             E.printStackTrace();

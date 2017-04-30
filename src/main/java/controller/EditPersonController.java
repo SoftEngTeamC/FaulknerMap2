@@ -3,7 +3,9 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.HospitalProfessional;
 
@@ -22,13 +24,16 @@ public class EditPersonController extends PersonController {
     private Text updateText;
     @FXML
     private Text deletedText;
+    @FXML
+    private AnchorPane Parent;
 
     // Hospital professional on which we are editing
     private HospitalProfessional hp;
 
     @FXML
     public void initialize() {
-        super.initialize();
+        setButton(deleteBtn);
+        super.init();
         updateText.setVisible(false);
         deletedText.setVisible(false);
 
@@ -37,6 +42,8 @@ public class EditPersonController extends PersonController {
                 .addListener((observable, oldValue, newValue) -> updateBtn.setDisable(false));
         titleField.textProperty()
                 .addListener((observable, oldValue, newValue) -> updateBtn.setDisable(false));
+
+       startIdleListener(Parent, deleteBtn);
     }
 
     public void updateBtnPressed() {

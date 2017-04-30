@@ -37,6 +37,11 @@ public class EMFProvider {
         return myHelper;
     }
 
+    public void close() {
+        emf.close();
+        testEMF.close();
+    }
+
     public EntityManagerFactory getEMFactory() {
         if (useTestDB) return testEMF;
         return emf;

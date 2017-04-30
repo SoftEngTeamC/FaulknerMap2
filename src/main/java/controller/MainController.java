@@ -103,9 +103,11 @@ public class MainController extends Controller implements Initializable {
     LocalDateTime now = LocalDateTime.now();
     Date nowDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
 
+    private Stage stage;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("HAHAHA");
+        stage = (Stage) AboutUsButton.getScene().getWindow();
         //System.out.println(dateFormat.format(cal.getTime()));
         System.out.println(dateFormat.format(now));
         //TODO: print NOW time on main screen
@@ -237,10 +239,10 @@ public class MainController extends Controller implements Initializable {
             DisplayMap(path);
         } else {
             if (destCount > 0) {
-                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
-                        + "\n\n" + textDirections.MakeDirections.getText(path));
+//                TextDirectionsTextArea.setText(TextDirectionsTextArea.getText()
+//                        + "\n\n" + textDirections.TextualDirections.getText(path));
             } else {
-                //TextDirectionsTextArea.setText(textDirections.MakeDirections.getText(path));
+                //TextDirectionsTextArea.setText(textDirections.TextualDirections.getText(path));
             }
             DisplayMap(path);
         }
@@ -350,12 +352,12 @@ public class MainController extends Controller implements Initializable {
     //-------------------------------------SCREEN CHANGING FUNCTIONS---------------------------------------------------
     @FXML
     public void OpenAdminTool() {
-        switchScreen("view/LoginPage.fxml", "Login", AdminToolButton);
+        switchScreen("view/LoginPage.fxml", "Login", stage);
     }
 
     @FXML
     public void OpenAboutUs() {
-        switchScreen("view/AboutUs.fxml", "About Us", AboutUsButton);
+        switchScreen("view/AboutUs.fxml", "About Us", stage);
     }
 
     //--------------------Buttons that have language--------------------------//

@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import model.Node;
 
 public abstract class PersonController extends Controller {
@@ -20,11 +22,21 @@ public abstract class PersonController extends Controller {
     protected ListView<Node> currentLocationsListView;
     @FXML
     protected ListView<Node> availableLocationsListView;
+    @FXML
+    private AnchorPane DirectoryEditor_AnchorPane;
+
+    private Stage stage;
 
     ObservableList<Node> currentLocations = FXCollections.observableArrayList();
     ObservableList<Node> availableLocations = FXCollections.observableArrayList();
 
     public void initialize() {
+        startIdleListener(DirectoryEditor_AnchorPane, backBtn);
+        init();
+    }
+
+    void init(){
+        setButton(backBtn);
         currentLocationsListView.setItems(currentLocations);
         availableLocationsListView.setItems(availableLocations);
 
@@ -33,6 +45,10 @@ public abstract class PersonController extends Controller {
 
         availableLocationsListView.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> addNodeBtn.setDisable(newValue == null));
+    }
+
+    private void setStage(){
+        stage = (Stage) backBtn.getScene().getWindow();
     }
 
     private void sendNodeToCurrent(Node node) {
@@ -54,7 +70,7 @@ public abstract class PersonController extends Controller {
     }
 
     @FXML
-    public void removeNodeBtnAction(){
+    public void removeNodeBtnAction() {
         Node n = currentLocationsListView.getSelectionModel().getSelectedItem();
         sendNodeToAvailable(n);
     }
@@ -67,11 +83,13 @@ public abstract class PersonController extends Controller {
 
     @FXML
     protected void logout() {
+        setStage();
         switchToMainScreen(logoutBtn);
     }
 
     @FXML
     protected void back() {
-            switchScreen("view/DirectoryEditor.fxml","Directory Editor", backBtn);
+        setStage();
+        switchScreen("view/DirectoryEditor.fxml", "Directory Editor", stage);
     }
 }

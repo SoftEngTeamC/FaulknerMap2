@@ -61,6 +61,10 @@ public class Path implements Iterable<MapNode> {
         return edges;
     }
 
+    public List<MapNode> nodes() {
+        return path;
+    }
+
     public List<Edge> edgesOnFloor(int floor) {
         return edges().stream()
                 .filter(

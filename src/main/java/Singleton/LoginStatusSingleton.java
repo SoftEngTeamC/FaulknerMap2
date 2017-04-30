@@ -19,18 +19,21 @@ public class LoginStatusSingleton {
     // this is our list of mementos
     private ArrayList<LoginStatusMemento> mentos = new ArrayList<>();
 
+    // this is our reference to the current screen
+    private Button currentScreen;
+
     private LoginStatusSingleton(){
     }
 
     private static LoginStatusSingleton ourInstance;
     // init to 2 minutes
-    private static int timeout = 120;
+    private static int timeout = 3;
 
     static {
         if (ourInstance == null) {
             try {
                 ourInstance = new LoginStatusSingleton();
-                System.out.println("Created new idle singleton");
+//                System.out.println("Created new idle singleton");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -50,6 +53,7 @@ public class LoginStatusSingleton {
      * @param m
      */
     public void addMemento(LoginStatusMemento m) {
+//        System.out.println("adding memento");
         mentos.add(m);
     }
 
@@ -59,7 +63,11 @@ public class LoginStatusSingleton {
      * @return most recent memento
      */
     public LoginStatusMemento getMemento() {
-        return mentos.get(0);
+        if(mentos.size() < 1){
+            return new LoginStatusMemento(false);
+        } else {
+            return mentos.remove(mentos.size() - 1);
+        }
     }
 
     /**
@@ -79,6 +87,18 @@ public class LoginStatusSingleton {
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
+
+    // getters and setters for the button
+
+    public void setButton(Button b){
+        this.currentScreen = b;
+    }
+
+    public Button getButton(){
+        return this.currentScreen;
+    }
+
+
 
 
 }
