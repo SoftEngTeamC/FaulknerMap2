@@ -36,7 +36,6 @@ public class AddServiceController extends PersonController {
 
     @FXML
     public void initialize() {
-        setButton(addServiceBtn);
         super.init();
         successText.setVisible(false);
         errorText.setVisible(false);

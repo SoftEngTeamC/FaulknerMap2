@@ -7,7 +7,6 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
-
 public class TextualDirectionsTest {
     private Point.Double A, B, C, D, E, F;
 
@@ -31,6 +30,15 @@ public class TextualDirectionsTest {
     }
 
     @Test
+    public void angleToDirectionFromTriangle() throws Exception {
+        double ABC = TextualDirections.getAngle(A, B, C);
+        assertEquals(TextualDirections.Direction.LEFT, TextualDirections.angleToDirection(ABC));
+
+        double DEF = TextualDirections.getAngle(D, E, F);
+        assertEquals(TextualDirections.Direction.RIGHT, TextualDirections.angleToDirection(DEF));
+    }
+
+    @Test
     public void angleToDirection() throws Exception {
         assertEquals(TextualDirections.Direction.BACKWARDS, TextualDirections.angleToDirection(1));
         assertEquals(TextualDirections.Direction.LEFT, TextualDirections.angleToDirection(100));
@@ -46,14 +54,5 @@ public class TextualDirectionsTest {
         assertEquals(TextualDirections.Sharpness.SHARP, TextualDirections.angleSharpness(2));
         assertEquals(TextualDirections.Sharpness.NORMAL, TextualDirections.angleSharpness(90));
         assertEquals(TextualDirections.Sharpness.SLIGHT, TextualDirections.angleSharpness(170));
-    }
-
-    @Test
-    public void angleToDirectionFromTriangle() throws Exception {
-        double ABC = TextualDirections.getAngle(A, B, C);
-        assertEquals(TextualDirections.Direction.LEFT, TextualDirections.angleToDirection(ABC));
-
-        double DEF = TextualDirections.getAngle(D, E, F);
-        assertEquals(TextualDirections.Direction.RIGHT, TextualDirections.angleToDirection(DEF));
     }
 }
