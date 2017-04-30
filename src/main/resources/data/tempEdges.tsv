@@ -349,3 +349,56 @@ stairwellB31	stairwellB41
 Valet Parking	hallway19
 Valet Parking	Parking1
 Volunteer	intersection31
+
+Preor	hallway112
+intersection14 hallway112
+
+Or	hallway112
+
+Recovery	hallway113
+hallway113	intersection19
+
+intersection19	intersection14
+
+Pulmonary Lab	hallway114
+hallway114	intersection12
+
+Vascular Lab	hallway115
+hallway115	intersection12
+
+Linen	hallway116
+hallway116	intersection14
+hallway116	intersection19
+
+Mat Mgnt	hallway117
+hallway117	intersection14
+hallway117	intersection19
+
+Cardiology Rehap	hallway118
+hallway118	intersection12
+hallway118	intersection17
+
+Auditorium	hallway119
+hallway119	intersection10
+hallway119	intersection110
+
+Special Test	hallway120
+hallway120	intersection10
+hallway120	intersection12
+
+Ed	hallway121
+hallway121	intersection10
+
+Emt	hallway122
+hallway122	intersection111
+intersection111	intersection10
+
+Admit	hallway123
+hallway123	intersection110
+hallway123	intersection17
+
+Patient Center	hallway124
+hallway124	intersection110
+
+Mri/Ct	hallway125
+hallway125	intersection15
