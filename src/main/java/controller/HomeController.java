@@ -3,6 +3,9 @@ package controller;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -23,6 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Affine;
+import javafx.util.Duration;
 import model.Navigable;
 import pathfinding.Path;
 import textDirections.Step;
@@ -144,29 +148,10 @@ public class HomeController extends Controller {
         SeventhFloor_Button.setOnAction(event -> makeFloorImageView(7, imageContainer));
     }
 
-    private Canvas makeDrawPane(int floor, StackPane container) {
-        Image floorImage = ImageProvider.getImage(images.get(floor - 1));
-        Canvas canvas = new Canvas(floorImage.getWidth(), floorImage.getHeight());
-
-    }
-
     private Affine canvasTransformFromViewport(Rectangle2D viewport, double width, double height) {
         return new Affine(1, 0, 0, viewport.getMinX(),
                 0, 1, 0, viewport.getMinY(),
                 0, 0, 1, 0);
-    }
-
-    static void clipChildren(Region region, double arc) {
-
-        final Rectangle outputClip = new Rectangle();
-        outputClip.setArcWidth(arc);
-        outputClip.setArcHeight(arc);
-        region.setClip(outputClip);
-
-        region.layoutBoundsProperty().addListener((ov, oldValue, newValue) -> {
-            outputClip.setWidth(newValue.getWidth());
-            outputClip.setHeight(newValue.getHeight());
-        });
     }
 
     private List<String> images = new LinkedList<>(Arrays.asList(
