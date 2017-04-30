@@ -27,7 +27,7 @@ public class LoginStatusSingleton {
 
     private static LoginStatusSingleton ourInstance;
     // init to 2 minutes
-    private static int timeout = 3;
+    private static int timeout = 120;
 
     static {
         if (ourInstance == null) {

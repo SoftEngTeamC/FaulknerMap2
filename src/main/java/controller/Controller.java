@@ -85,7 +85,7 @@ public class Controller {
             stage.setFullScreen(true);
             stage.show();
             return root;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("cannot switch to main screen");
          //   ex.printStackTrace();
         }
