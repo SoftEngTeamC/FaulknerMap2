@@ -60,6 +60,7 @@ hallway215	2352	1982
 
 Censtrlsup	2504	1868
 hallway216	2504	1984
+hallway223	2670	1741
 
 Laundry	2366	1614
 hallway217	2366	1658
@@ -78,3 +79,11 @@ hallway221	2578	1754
 
 Mech	1992	1986
 hallway222	2029	1986
+
+SuitesIntersection20	2672	1341
+SuitesIntersection21	2672	1979
+SuitesIntersection22	2068	1987
+SuitesIntersection23	2068	1485
+SuitesIntersection24	2602	1341
+SuitesIntersection25	2602	1315
+CenstrlsupInternal	2496	1600
