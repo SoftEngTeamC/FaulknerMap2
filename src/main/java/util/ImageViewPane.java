@@ -80,7 +80,9 @@ public class ImageViewPane extends Region {
     public void setPath(Path path) {
         BooleanProperty initialized = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+//            System.out.println("new Value: " + newValue);
             if (!newValue && !initialized.get()) {
+//                System.out.println("INITIALIZED");
                 pathProperty.set(path);
                 initialized.set(true);
             }

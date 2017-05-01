@@ -158,7 +158,7 @@ public class HomeController extends Controller implements Initializable {
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
 
-        
+
 
     }
 
@@ -207,13 +207,18 @@ public class HomeController extends Controller implements Initializable {
     }
 
     private void displayPaths() {
-
+        mapView = new ImageViewPane(ImageProvider.getImageByFloor(paths.get(0).
+                groupedByFloor().get(0).getFloor()));
+        mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapView.setPath(paths.get(0).groupedByFloor().get(0));
+        mapView.toBack();
+        mapContainer.getChildren().clear();
+        mapContainer.getChildren().add(mapView);
         for (int floor : paths.get(0).floorsNotSpanned()) {
             floorButtons.get(floor-1).setDisable(true);
         }
 
-        System.out.println(paths.get(0).groupedByFloor().size());
         for (Path path : paths.get(0).groupedByFloor()) {
             int floor = path.getFloor();
             floorButtons.get(floor - 1).setDisable(false);
@@ -442,7 +447,15 @@ public class HomeController extends Controller implements Initializable {
     private Button makeDeleteButton(Navigable location) {
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
+            ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+            mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+            mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+            mapView.toBack();
+            mapContainer.getChildren().clear();
+            mapContainer.getChildren().add(mapView);
+
             destinations.remove(location);
+            clearFloorArray();
             destinationNodeCache.remove(location);
             currentDestinationIndex = -1;
             if (destinations.isEmpty()) showSearch();
@@ -457,8 +470,9 @@ public class HomeController extends Controller implements Initializable {
         //Define actions on ShowTextDirections Button
         DirectionButton.setText(bundle.getString("getDirections"));
         DirectionButton.setOnAction(e -> {
-            System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
+         //   System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
             if(SteppingThroughDirections){
+                System.out.println("in step through");
                 DirectionButton.setText(bundle.getString("getOverview"));
                 FloorButtons_VBox.setVisible(false);
                 showTextDirections();
@@ -471,12 +485,15 @@ public class HomeController extends Controller implements Initializable {
                 SteppingThroughDirections = false;
             }
             else{
+                System.out.println("not in step through");
                 //The Overview Of the Path should be the Text Directions
                 // also allowing navigability of all relevant floors as opposed to step through
                 DirectionButton.setText(bundle.getString("getDirections"));
                 FloorButtons_VBox.setVisible(true);
                 FloorSpan.set(PathSpansFloors());
                 SteppingThroughDirections = true;
+                showTextDirections();
+                displayPaths();
                 //If QRCode button Exists. Get Rid of it.
                 if(addDestandDirectionButtons.getChildren().size()>2){
                     addDestandDirectionButtons.getChildren().remove(2);
