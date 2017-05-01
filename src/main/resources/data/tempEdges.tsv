@@ -448,4 +448,63 @@ hallway223	SuitesIntersection21
 
 hallway222	SuitesIntersection22
 
-hallway28	Hillside Elevators
+hallway28	Hillside Elevators 2
+
+hallway312	hallway35
+hallway313	intersection321
+hallway313	intersection322
+hallway314	intersection322
+hallway314	intersection321
+
+hallway414	SuitesIntersection40
+hallway415	SuitesIntersection40
+hallway417	SuitesIntersection40
+hallway418	SuitesIntersection40
+hallway419	SuitesIntersection40
+hallway420	SuitesIntersection40
+hallway421	SuitesIntersection40
+hallway422	SuitesIntersection40
+hallway423	SuitesIntersection40
+hallway424	SuitesIntersection40
+hallway425	SuitesIntersection40
+hallway426	SuitesIntersection40
+hallway427	SuitesIntersection40
+hallway428	SuitesIntersection40
+hallway428	SuitesIntersection41
+hallway429	SuitesIntersection40
+hallway430	SuitesIntersection41
+hallway431	SuitesIntersection40
+hallway431	SuitesIntersection41
+hallway433	SuitesIntersection41
+
+SuitesIntersection41	Hillside Elevators 4
+
+hallway519	SuitesIntersection50
+hallway520	SuitesIntersection50
+hallway521	SuitesIntersection50
+hallway522	SuitesIntersection52
+hallway522	SuitesIntersection53
+hallway523	SuitesIntersection52
+hallway523	SuitesIntersection53
+hallway524	SuitesIntersection52
+hallway524	SuitesIntersection53
+hallway525	SuitesIntersection52
+hallway525	SuitesIntersection53
+
+SuitesIntersection53 Hillside Elevators 5
+
+hallway63	SuitesIntersection63
+hallway64	SuitesIntersection63
+hallway65	SuitesIntersection63
+hallway66	SuitesIntersection63
+hallway67	SuitesIntersection63
+hallway68	SuitesIntersection60
+hallway69	SuitesIntersection60
+
+SuitesIntersection60	SuitesIntersection61
+SuitesIntersection61	SuitesIntersection62
+SuitesIntersection62	SuitesIntersection63
+
+hallway73	SuitesIntersection70
+SuitesIntersection70	SuitesIntersection71
+SuitesIntersection71	hallway74

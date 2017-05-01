@@ -1,5 +1,7 @@
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -27,11 +29,6 @@ public class AdminToolController extends Controller{
     private Stage stage;
 
     public void initialize(){
-        AdminTool_VBox.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty());
-        editDirectoryBtn.prefWidthProperty().bind(AdminTool_AnchorPane.widthProperty().multiply(0.3));
-        mapEditorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
-        editHoursBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
-        algorithmSelectorBtn.prefWidthProperty().bind(editDirectoryBtn.widthProperty());
         startIdleListener(AdminTool_AnchorPane, algorithmSelectorBtn);
     }
     private void setStage(){
@@ -58,12 +55,20 @@ public class AdminToolController extends Controller{
     public void logout() {
         setStage();
         switchToMainScreen(logoutBtn);
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
     }
 
     @FXML
     public void algorithmSelectorBtnAction() {
         setStage();
         switchScreen("view/PathfindingChooseScreen.fxml", "Algorithm Selector", stage);
+    }
+
+    /**
+     * Goes back to main screen while still logged in.
+     */
+    public void backBtnAction(){
+        switchToMainScreen(editDirectoryBtn);
     }
 
 }

@@ -4,6 +4,8 @@
  */
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -105,6 +107,9 @@ public class PathfindingAlgorithmSelectorController extends Controller {
 
     @FXML
     void logoutBtnAction(ActionEvent event) {
+
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
+
         setStage();
         switchToMainScreen(logoutBtn);
     }
