@@ -9,6 +9,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HospitalServiceService extends AbstractService<HospitalService> {
@@ -60,20 +61,32 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
 
     public List<HospitalService> search(String s) {
         EntityManager manager = managerFactory.createEntityManager();
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
-        manager.getTransaction().begin();
-        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
-                .buildQueryBuilder().forEntity(HospitalService.class).get();
-        try {
-            org.apache.lucene.search.Query query = qb.keyword().wildcard().onFields("name").matching("*" + s +"*").createQuery();
-            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalService.class);
-            return JPAQuery.getResultList();
-        } catch (EmptyQueryException e) {
-            return getAllServices();
-        } finally {
-            manager.getTransaction().commit();
-            fullTextEntityManager.close();
+//        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
+//        manager.getTransaction().begin();
+//        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+//                .buildQueryBuilder().forEntity(HospitalService.class).get();
+        List<HospitalService> temp = new ArrayList<>();
+        for(HospitalService hs: getAllServices()){
+            if(hs.getName().toLowerCase().contains(s.toLowerCase())){
+                temp.add(hs);
+            }
         }
+        manager.close();
+        return temp;
+//        try {
+//            System.out.println("looking for service " + s);
+//            org.apache.lucene.search.Query query = qb.keyword().onFields("name").matching("*" + s +"*").createQuery();
+//            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalService.class);
+//            return JPAQuery.getResultList();
+//        } catch (EmptyQueryException e) {
+//            System.out.println("cant find service");
+//            e.printStackTrace();
+//            return getAllServices();
+//        } finally {
+//            System.out.println("done for service");
+//            manager.getTransaction().commit();
+//            fullTextEntityManager.close();
+//        }
     }
 
 }
