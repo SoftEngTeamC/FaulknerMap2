@@ -4,13 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -33,22 +28,7 @@ public class MapEditorController extends Controller {
     public void initialize() {
         setupFloorButtonListeners();
         showFloor(1);
-        currentMapView.selectedNode.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                showSelectedNode();
-            }
-            if (oldValue != null && newValue == null) {
-                showNodeSearch();
-            }
-        });
-        currentMapView.selectedEdge.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                showSelectedEdge();
-            }
-            if (oldValue != null && newValue == null) {
-                showNodeSearch();
-            }
-        });
+        addCurrentListeners();
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 searchResults.clear();
@@ -67,20 +47,33 @@ public class MapEditorController extends Controller {
         });
     }
 
-    private void setupFloorButtonListeners() {
-        floorButton1.setOnAction(makeFloorButtonEvent(1));
-        floorButton2.setOnAction(makeFloorButtonEvent(2));
-        floorButton3.setOnAction(makeFloorButtonEvent(3));
-        floorButton4.setOnAction(makeFloorButtonEvent(4));
-        floorButton5.setOnAction(makeFloorButtonEvent(5));
-        floorButton6.setOnAction(makeFloorButtonEvent(6));
-        floorButton7.setOnAction(makeFloorButtonEvent(7));
+    private void addCurrentListeners() {
+        currentMapView.selectedNode.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showSelectedNode();
+            }
+            if (newValue == null) {
+                showNodeSearch();
+            }
+        });
+        currentMapView.selectedEdge.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showSelectedEdge();
+            }
+            if (newValue == null) {
+                showNodeSearch();
+            }
+        });
     }
 
-    private EventHandler<ActionEvent> makeFloorButtonEvent(int floor) {
-        return event -> {
-            showFloor(floor);
-        };
+    private void setupFloorButtonListeners() {
+        floorButton1.setOnAction(e -> showFloor(1));
+        floorButton2.setOnAction(e -> showFloor(2));
+        floorButton3.setOnAction(e -> showFloor(3));
+        floorButton4.setOnAction(e -> showFloor(4));
+        floorButton5.setOnAction(e -> showFloor(5));
+        floorButton6.setOnAction(e -> showFloor(6));
+        floorButton7.setOnAction(e -> showFloor(7));
     }
 
     private IntegerProperty currentFloor = new SimpleIntegerProperty();
@@ -92,8 +85,10 @@ public class MapEditorController extends Controller {
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapContainer.getChildren().add(mapView);
+        mapView.wipe();
         mapView.showAllEdges(edgeService.getAllEdgesOnFloor(floor));
         mapView.showAllNodes(nodeService.getNodesByFloor(floor));
+        addCurrentListeners();
     }
 
     private ObservableList<Node> neighbors = FXCollections.observableArrayList();
@@ -114,16 +109,16 @@ public class MapEditorController extends Controller {
 
         HBox buttonBox = new HBox();
 
-        Button disableButton = new Button("Disable");
-        disableButton.setOnAction(e -> {
-            edge.setDisabled(true);
+        CheckBox disableBox = new CheckBox("Disabled");
+        disableBox.selectedProperty().set(edge.isDisabled());
+        disableBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            edge.setDisabled(newValue);
             edgeService.merge(edge);
             currentMapView.wipe();
             currentMapView.showAllNodes(nodeService.getNodesByFloor(currentFloor.get()));
             currentMapView.showAllEdges(edgeService.getAllEdgesOnFloor(currentFloor.get()));
-            showNodeSearch();
         });
-        buttonBox.getChildren().add(disableButton);
+        buttonBox.getChildren().add(disableBox);
 
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e -> {

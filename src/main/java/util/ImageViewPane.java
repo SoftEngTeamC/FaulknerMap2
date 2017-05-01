@@ -1,6 +1,5 @@
 package util;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import controller.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
@@ -20,9 +19,7 @@ import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class ImageViewPane extends Region {
@@ -247,13 +244,28 @@ public class ImageViewPane extends Region {
 
     private Circle makeNodeCircle(Node node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
-        Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
+        Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 2);
 
         nodeCircle.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
                 selectedNode.set(node);
             }
         });
+
+        //TODO : FIX DRAGGGGGINGGG
+//        ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+//
+//        nodeCircle.setOnMousePressed(e -> {
+//            Circle copy = new Circle(e.getX(), e.getY(), 3);
+//            getDrawPane().getChildren().add(copy);
+//        });
+//
+//        nodeCircle.setOnMouseDragged(e -> {
+//            Point2D dragPoint = new Point2D(e.getX(), e.getY());
+//            Point2D delta = dragPoint.subtract(mouseDown.get());
+//            nodeCircle.centerXProperty().set(delta.getX() + nodeCircle.getCenterX());
+//            nodeCircle.centerYProperty().set(delta.getY() + nodeCircle.getCenterY());
+//        });
 
         return nodeCircle;
     }
@@ -363,6 +375,11 @@ public class ImageViewPane extends Region {
         return new Point2D(coordinate.getX()*pixelRatio, coordinate.getY()*pixelRatio);
     }
 
+    private Point2D imageToImageViewCoordinate(Point2D point) {
+        double pixelRatio = getImageView().getBoundsInLocal().getWidth() / getImageView().getImage().getWidth();
+        return point.multiply(pixelRatio);
+    }
+
     private static Point2D imageToContainerCoordinate(ImageView floorView, Point2D imageCoordinates) {
         double xProp = floorView.getBoundsInLocal().getWidth() / floorView.getViewport().getWidth();
         double yProp = floorView.getBoundsInLocal().getHeight() / floorView.getViewport().getHeight();
@@ -381,12 +398,15 @@ public class ImageViewPane extends Region {
         getDrawPane().getChildren().clear();
     }
 
+    Map<Node, Circle> nodeCircleMap = new HashMap<>();
     public void showAllNodes(Collection<Node> nodes) {
+        nodeCircleMap.clear();
         BooleanProperty added = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !added.get()) {
                 for (Node node : nodes) {
                     Circle nodeCircle = makeNodeCircle(node);
+                    nodeCircleMap.put(node, nodeCircle);
                     getDrawPane().getChildren().add(nodeCircle);
                 }
                 added.set(true);
@@ -399,7 +419,8 @@ public class ImageViewPane extends Region {
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !added.get()) {
                 for (Edge edge : edges) {
-                    getDrawPane().getChildren().add(makeEdgeLine(edge));
+                    Line edgeLine = makeEdgeLine(edge);
+                    getDrawPane().getChildren().add(edgeLine);
                 }
                 added.set(true);
             }
