@@ -158,7 +158,6 @@ public class HomeController extends Controller implements Initializable {
         // make hours service
         HoursService hs = new HoursService();
         timeofdaywarning( hs.find(1L).getVisitingHoursMorningStart(),hs.find(1L).getVisitingHoursEveningEnd(),date);
-
     }
 
     void clearFloorArray() {

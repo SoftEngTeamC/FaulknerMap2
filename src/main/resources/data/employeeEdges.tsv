@@ -47,7 +47,7 @@ hallway128	SuitesIntersection16
 ORL	hallway28
 hallway28	SuitesIntersection25
 Suite21	hallway29
-hallway29	SuitesIntersection26
+hallway29	SuitesIntersection25
 Food Services	hallway210
 hallway210	SuitesIntersection20
 hallway210	SuitesIntersection21
@@ -73,7 +73,7 @@ Hazard Storage	hallway218
 hallway218	SuitesIntersection22
 hallway218	SuitesIntersection21
 
-Security	219
+Security	hallway219
 hallway219	SuitesIntersection22
 hallway219	SuitesIntersection21
 
@@ -86,7 +86,7 @@ hallway221	Censtrlsup
 
 hallway221	SuitesIntersection20
 
-Laundry	Hallway222
+Laundry	hallway222
 hallway222	SuitesIntersection21
 
 Physical Therapy	hallway223
@@ -110,7 +110,7 @@ hallway227	hallway221
 Mech	hallway228
 hallway228	SuitesIntersection22
 
-hallway28	Hillside Elevators 2
+hallway28	Hillside Elevators 21
 
 SuitesIntersection20	SuitesIntersection21
 SuitesIntersection21	SuitesIntersection22
@@ -145,7 +145,7 @@ hallway431	SuitesIntersection40
 hallway431	SuitesIntersection41
 hallway433	SuitesIntersection41
 
-SuitesIntersection41	Hillside Elevators 4
+SuitesIntersection41	Hillside Elevators 41
 
 hallway519	SuitesIntersection50
 hallway520	SuitesIntersection50
@@ -159,7 +159,7 @@ hallway524	SuitesIntersection53
 hallway525	SuitesIntersection52
 hallway525	SuitesIntersection53
 
-SuitesIntersection53 Hillside Elevators 5
+SuitesIntersection53 Hillside Elevators 51
 
 hallway63	SuitesIntersection63
 hallway64	SuitesIntersection63

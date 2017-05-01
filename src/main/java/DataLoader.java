@@ -53,6 +53,10 @@ public class DataLoader {
             loadServices("data/floor5/suites.tsv");
             loadServices("data/floor6/suites.tsv");
             loadServices("data/floor7/suites.tsv");
+            loadServices("data/belkinHouse/floor1/BelkinSuites1.tsv");
+            loadServices("data/belkinHouse/floor2/BelkinSuites2.tsv");
+            loadServices("data/belkinHouse/floor3/BelkinSuites3.tsv");
+            loadServices("data/belkinHouse/floor4/BelkinSuites4.tsv");
 
             loadEdges("data/tempEdges.tsv", false);
             loadEdges("data/employeeEdges.tsv", true);
@@ -160,7 +164,7 @@ public class DataLoader {
                     for (Object aRow : row) {
                         System.err.print(" " + aRow + " ");
                     }
-                    System.err.println();
+                    System.err.println(" while parsing line " + context.currentLine() + " in " + serviceFilePath);
                     return;
                 }
 
@@ -199,7 +203,7 @@ public class DataLoader {
                     for (Object aRow : row) {
                         System.err.print(" " + aRow + " ");
                     }
-                    System.err.println();
+                    System.err.println(" while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
 
