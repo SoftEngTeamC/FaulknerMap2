@@ -36,7 +36,6 @@ public abstract class ServiceController extends Controller {
     }
 
     void init(){
-        setButton(backBtn);
         currentLocationsListView.setItems(currentLocations);
         availableLocationsListView.setItems(availableLocations);
 

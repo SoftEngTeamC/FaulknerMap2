@@ -53,10 +53,6 @@ public class Controller {
         idleMonitor.register(parent, Event.ANY);
     }
 
-    public void setButton(Button b) {
-        LoginStatusSingleton.getInstance().setButton(b);
-    }
-
     public void switchScreen(String file, String title, Stage stage) {
         try {
 //            Stage stage = (Stage) b.getScene().getWindow();
@@ -86,7 +82,7 @@ public class Controller {
             stage.show();
             return root;
         } catch (Exception ex) {
-            System.out.println("cannot switch to main screen");
+//            System.out.println("cannot switch to main screen");
          //   ex.printStackTrace();
         }
         return null;

@@ -30,7 +30,6 @@ public class EditServiceController extends ServiceController {
 
     @FXML
     public void initialize() {
-        setButton(deleteBtn);
         super.init();
         updateText.setVisible(false);
         deletedText.setVisible(false);

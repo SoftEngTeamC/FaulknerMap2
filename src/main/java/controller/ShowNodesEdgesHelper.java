@@ -229,80 +229,80 @@ class ShowNodesEdgesHelper {
         group1.getChildren().add(edge);
     }
 
-    public static void arrow(Edge e) {
-
-        double arrowLength = 4;
-        double arrowWidth = 7;
-
-        double ex = e.getEnd().getLocation().getX();
-        double ey = e.getEnd().getLocation().getY();
-        double sx = e.getStart().getLocation().getX();
-        double sy = e.getStart().getLocation().getY();
-
-        Line arrow1 = new Line(0, 0, ex, ey);
-        Line arrow2 = new Line(0, 0, ex, ey);
-
-        arrow1.setEndX(ex);
-        arrow1.setEndY(ey);
-        arrow2.setEndX(ex);
-        arrow2.setEndY(ey);
-
-        if (ex == sx && ey == sy) {
-            // arrow parts of length 0
-            arrow1.setStartX(ex);
-            arrow1.setStartY(ey);
-            arrow2.setStartX(ex);
-            arrow2.setStartY(ey);
-        } else {
-            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
-            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
-
-            double dx = (sx - ex) * factor;
-            double dy = (sy - ey) * factor;
-
-            double ox = (sx - ex) * factorO;
-            double oy = (sy - ey) * factorO;
-
-            arrow1.setStartX(ex + dx - oy);
-            arrow1.setStartY(ey + dy + ox);
-            arrow2.setStartX(ex + dx + oy);
-            arrow2.setStartY(ey + dy - ox);
-        }
-
-        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
-        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
-
-        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
-        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
-
-
-        double x1 = e.getEnd().getLocation().getX();
-        double y1 = e.getEnd().getLocation().getY();
-        double x2 = x1 + xdiff1;
-        double y2 = y1 + ydiff1;
-
-        double x3 = x1 + xdiff2;
-        double y3 = y1 + ydiff2;
-
-        ImageView Map1 = (ImageView) group.getChildren().get(0);
-
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-
-        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
-        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
-
-        group.getChildren().addAll(arrow1, arrow2);
-
-    }
+//    public static void arrow(Edge e) {
+//
+//        double arrowLength = 4;
+//        double arrowWidth = 7;
+//
+//        double ex = e.getEnd().getLocation().getX();
+//        double ey = e.getEnd().getLocation().getY();
+//        double sx = e.getStart().getLocation().getX();
+//        double sy = e.getStart().getLocation().getY();
+//
+//        Line arrow1 = new Line(0, 0, ex, ey);
+//        Line arrow2 = new Line(0, 0, ex, ey);
+//
+//        arrow1.setEndX(ex);
+//        arrow1.setEndY(ey);
+//        arrow2.setEndX(ex);
+//        arrow2.setEndY(ey);
+//
+//        if (ex == sx && ey == sy) {
+//            // arrow parts of length 0
+//            arrow1.setStartX(ex);
+//            arrow1.setStartY(ey);
+//            arrow2.setStartX(ex);
+//            arrow2.setStartY(ey);
+//        } else {
+//            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
+//            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+//
+//            double dx = (sx - ex) * factor;
+//            double dy = (sy - ey) * factor;
+//
+//            double ox = (sx - ex) * factorO;
+//            double oy = (sy - ey) * factorO;
+//
+//            arrow1.setStartX(ex + dx - oy);
+//            arrow1.setStartY(ey + dy + ox);
+//            arrow2.setStartX(ex + dx + oy);
+//            arrow2.setStartY(ey + dy - ox);
+//        }
+//
+//        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
+//        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
+//
+//        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
+//        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
+//
+//
+//        double x1 = e.getEnd().getLocation().getX();
+//        double y1 = e.getEnd().getLocation().getY();
+//        double x2 = x1 + xdiff1;
+//        double y2 = y1 + ydiff1;
+//
+//        double x3 = x1 + xdiff2;
+//        double y3 = y1 + ydiff2;
+//
+//        ImageView Map1 = (ImageView) group.getChildren().get(0);
+//
+//        double ImgW = Map1.getImage().getWidth();
+//        double ImgH = Map1.getImage().getHeight();
+//        double ImgR = ImgH / ImgW;
+//
+//        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+//        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+//        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+//        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+//
+//        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+//        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+//        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
+//        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
+//
+//        group.getChildren().addAll(arrow1, arrow2);
+//
+//    }
 
     static Circle MakeCircle(Node node, Color color) {
         double x = node.getLocation().getX();

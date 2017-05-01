@@ -52,7 +52,6 @@ public class HoursEditorController extends Controller {
     private Stage stage;
 
     public void initialize() {
-        setButton(backBtn);
         addHourValidation(morninghrs1);
         addHourValidation(morninghrs2);
         addHourValidation(eveninghrs1);
