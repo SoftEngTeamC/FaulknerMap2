@@ -20,6 +20,7 @@ import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -155,6 +156,7 @@ public class ImageViewPane extends Region {
         pathProperty.addListener((observable, oldValue, newValue) -> {
             makePathCircles(newValue).forEach(circle -> getDrawPane().getChildren().add(circle));
             makeEdgeLines(newValue).forEach(line -> getDrawPane().getChildren().add(line));
+            makeArrows(newValue).forEach(line -> getDrawPane().getChildren().add(line));
         });
 
         this.imageViewProperty.set(new ImageView(image));
@@ -166,7 +168,7 @@ public class ImageViewPane extends Region {
 
     private Group makeArrow(Edge e) {
 
-        double arrowLength = 4;
+        double arrowLength = 3;
         double arrowWidth = 7;
 
         Point2D edgeStart = imageToImageViewCoordinate(e.getStart().getLocation());
@@ -235,11 +237,27 @@ public class ImageViewPane extends Region {
         return edgeLine;
     }
 
+    private List<Group> makeArrows(Path path){
+        List<Group> lines = new ArrayList<>();
+        String first;
+        for(int i = 0; i < path.numNodes()-1; i++){
+            first = path.getNode(i).getModelNode().getName();
+            if(first.equals(path.edges().get(i).getStart().getName())) {
+                lines.add(makeArrow(path.edges().get(i)));
+            } else {
+                Edge temp = new Edge(path.edges().get(i).getEnd(),
+                        path.edges().get(i).getStart(), path.edges().get(i).getStart().getLocation().getFloor());
+                lines.add(makeArrow(temp));
+            }
+        }
+        return lines;
+    }
+
     private List<Circle> makePathCircles(Path path) {
         List<Circle> circles = new LinkedList<>();
-        for (MapNode node : path) {
-            circles.add(makeNodeCircle(node));
-        }
+        circles.add(makeNodeCircle(path.getNode(0)));
+        circles.add(makeNodeCircle(path.getNode(path.numNodes()-1)));
+
         return circles;
     }
 

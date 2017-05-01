@@ -170,8 +170,17 @@ public class HomeController extends Controller implements Initializable {
         floorButtons.add(SixthFloor_Button);
         floorButtons.add(SeventhFloor_Button);
 
-        for (Button b : floorButtons) {
-            b.setDisable(false);
+        for (int i = 0; i < floorButtons.size();i++) {
+            floorButtons.get(i).setDisable(false);
+            int finalI = i;
+            floorButtons.get(i).setOnMouseClicked(event -> {
+                mapView = new ImageViewPane(ImageProvider.getImageByFloor(finalI +1));
+                mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+                mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+                mapView.toBack();
+                mapContainer.getChildren().clear();
+                mapContainer.getChildren().add(mapView);
+            });
         }
     }
 
@@ -228,7 +237,7 @@ public class HomeController extends Controller implements Initializable {
                 mapView.toBack();
                 mapContainer.getChildren().clear();
                 mapContainer.getChildren().add(mapView);
-                System.out.println(path.nodes());
+//                System.out.println(path.nodes());
             });
         }
     }
