@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.zxing.WriterException;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -19,6 +21,7 @@ import model.Hours;
 import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
+import quickResponse.QR;
 import textDirections.Step;
 import util.ImageViewPane;
 import util.MappedList;
@@ -128,6 +131,8 @@ public class HomeController extends Controller implements Initializable {
     private IntegerProperty currFloor = new SimpleIntegerProperty(1);
     private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
 
+    private Boolean SteppingThroughDirections = false;
+
     private Stage stage;
     private List<Button> floorButtons = new ArrayList<>();
 
@@ -148,25 +153,13 @@ public class HomeController extends Controller implements Initializable {
 
         initializeMap();
         initializeDirectory();
+        MakeGetDirectionsButton();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
 
-        //Define actions on ShowTextDirections Button
-        DirectionButton.setText(bundle.getString("getDirections"));
-        DirectionButton.setOnAction(e -> {
-            showTextDirections();
-            //Update the Floor span for the New Paths
-            FloorSpan.set(PathSpansFloors());
-            //TODO Set current Location to first node in the path
-            //current location will be used to step through the directions one node at a time
-            currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
-            displayPaths();
-            //TODO Display the Path on the Map and generate Steps
-        });
-        //Altering the add Destination and Directions Buttons HBox to have those buttons
-        addDestandDirectionButtons.getChildren().add(addDestinationButton);
-        addDestandDirectionButtons.getChildren().add(DirectionButton);
+        
+
     }
 
     private void clearFloorArray() {
@@ -372,6 +365,15 @@ public class HomeController extends Controller implements Initializable {
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
+        //Take List of Strings from Directions ListView and Pass it to Construct QR Code. Display QR
+        List<String> DirectionsList = new ArrayList<String>();
+        for(String S: MakeTextDirectionsListView(paths).getItems()){ DirectionsList.add(S.toString());}
+        if(addDestandDirectionButtons.getChildren().size()>2){
+            addDestandDirectionButtons.getChildren().remove(2);
+        }
+        addDestandDirectionButtons.getChildren().add(MakeQRButton(DirectionsList));
+
+        //Display Text Directions
         TextArea text = new TextArea();
         String str = "";
         for (Path p : paths) {
@@ -391,15 +393,22 @@ public class HomeController extends Controller implements Initializable {
         currentSearchField.requestFocus();
     }
 
-    // ----------- Destination View Factories ------------ //
-    private HBox makeDestinationView(Navigable location) {
+    private void showQRcode(List<String> directions){
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().addAll(destinationNodes);
+        Searching_VBox.getChildren().add(addDestandDirectionButtons);
+        Searching_VBox.getChildren().add(MakeQRImage(directions));
+    }
+
+    // ------------------------- Destination View Factories ----------------------------- //
+    private HBox makeDestinationView(Navigable location){
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
         return destinationView;
     }
 
-    private HBox makeDestinationNodeElement(Navigable location) {
+    private HBox makeDestinationNodeElement(Navigable location){
         HBox container = new HBox();
         container.getChildren().add(makeDestinationField(location));
         container.getChildren().add(makeDeleteButton(location));
@@ -444,6 +453,41 @@ public class HomeController extends Controller implements Initializable {
         return deleteButton;
     }
 
+    private void MakeGetDirectionsButton(){
+        //Define actions on ShowTextDirections Button
+        DirectionButton.setText(bundle.getString("getDirections"));
+        DirectionButton.setOnAction(e -> {
+            System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
+            if(SteppingThroughDirections){
+                DirectionButton.setText(bundle.getString("getOverview"));
+                FloorButtons_VBox.setVisible(false);
+                showTextDirections();
+                //Update the Floor span for the New Paths
+                FloorSpan.set(PathSpansFloors());
+                //TODO Set current Location to first node in the path
+                //current location will be used to step through the directions one node at a time
+                displayPaths();
+                //TODO Display the Path on the Map and generate Steps
+                SteppingThroughDirections = false;
+            }
+            else{
+                //The Overview Of the Path should be the Text Directions
+                // also allowing navigability of all relevant floors as opposed to step through
+                DirectionButton.setText(bundle.getString("getDirections"));
+                FloorButtons_VBox.setVisible(true);
+                FloorSpan.set(PathSpansFloors());
+                SteppingThroughDirections = true;
+                //If QRCode button Exists. Get Rid of it.
+                if(addDestandDirectionButtons.getChildren().size()>2){
+                    addDestandDirectionButtons.getChildren().remove(2);
+                }
+            }
+        });
+        //Altering the add Destination and Directions Buttons HBox to have those buttons
+        addDestandDirectionButtons.getChildren().add(addDestinationButton);
+        addDestandDirectionButtons.getChildren().add(DirectionButton);
+    }
+
     private TextArea MakeInfoTextArea(Navigable location) {
         TextArea Info = new TextArea();
         Info.setText(location.getInfo());
@@ -464,7 +508,39 @@ public class HomeController extends Controller implements Initializable {
         textdirs.setItems(FXCollections.observableList(TextDirections));
         textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
         textdirs.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        textdirs.selectionModelProperty().addListener(e ->{
+            //TODO GINA THIS IS WHERE I LEFT OFF. TRYING TO ACT WHEN THE SELECTION INDEX CHANGES
+            System.out.println("TextDirection#: "+textdirs.getSelectionModel());
+        });
+
         return textdirs;
+    }
+
+    private Button MakeQRButton(List<String> directions){
+        Button QRButton = new Button();
+        QRButton.setText(bundle.getString("QRdirections"));
+        QRButton.setOnAction(e -> {
+            showQRcode(directions);
+        });
+        return QRButton;
+    }
+
+    private ImageView MakeQRImage(List<String> directions){
+        ImageView QRImageView = new ImageView();
+        String Directs = "";
+        for(String S: directions){
+            Directs = Directs+S+"\n";
+        }
+        try {
+            Image QRImage = QR.buildQR(Directs);
+            QRImageView.setImage(QRImage);
+            QRImageView.setPreserveRatio(true);
+            QRImageView.setFitWidth(300);
+        } catch (Exception e){
+            System.out.println("Error with QR code");
+        }
+        return QRImageView;
     }
 
     // -------------------------------------------------- buttons ---------------------------------------------------------------------------------------

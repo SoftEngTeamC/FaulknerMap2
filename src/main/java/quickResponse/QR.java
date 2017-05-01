@@ -15,18 +15,20 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 /**
  * Created by sam on 4/21/17.
  */
-public class makeQRCode {
+public class QR {
     /**
      * @author sccoache
      *
      * @param directions
      * @throws IOException
      */
-    public static void buildQR(String directions) throws IOException, WriterException {
+    public static Image buildQR(String directions) throws IOException, WriterException {
         //directions = "Successful"; //testing string
         String qrDisplayedText = directions;
         String filePath = "~/src/main/resources/images/";  //The path the .png will be saved to
@@ -35,20 +37,14 @@ public class makeQRCode {
         String fileType = "png";
         File qrFile = new File(filePath);
 
-        buildImage(qrFile, qrDisplayedText, size, fileType);
+        return buildImage(qrFile, qrDisplayedText, size, fileType);
     }
 
     /**
      * @author: sccoache
      *
-     * @param qrFile
-     * @param text
-     * @param size
-     * @param fileType
-     * @throws IOException
-     * @throws WriterException
      */
-    private static void buildImage(File qrFile, String QRText, int size, String fileType) throws IOException,
+    private static Image buildImage(File qrFile, String QRText, int size, String fileType) throws IOException,
             WriterException {
 
         // Create the BitMatrix
@@ -60,11 +56,8 @@ public class makeQRCode {
         BitMatrix byteMatrix = null;
 
         // Attempts to encode the text directions as a byteMatrix
-        try {
             byteMatrix = qrCodeWriter.encode(QRText, BarcodeFormat.QR_CODE, size, size, hintMap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+
 
         // Define elements of the QR code for the BitMatrix
         int matrixWidth = byteMatrix.getWidth();
@@ -85,7 +78,7 @@ public class makeQRCode {
         }
 
         // Program outputs
-        //return image; //alternative way to gain access to the QR image
-        ImageIO.write(image, fileType, qrFile); //writes the QR to the given file of the given type
+        return SwingFXUtils.toFXImage(image, null); //alternative way to gain access to the QR image
+        //ImageIO.write(image, fileType, qrFile); //writes the QR to the given file of the given type
     }
 }
