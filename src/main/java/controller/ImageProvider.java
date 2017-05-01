@@ -20,40 +20,44 @@ public class ImageProvider {
 
     public static Image getEmployeeImageByFloor(int i){
         String ImageName = "";
-        switch (i){
+        switch(i) {
             case 1:
-                ImageName = "images/floor1.png";
+                ImageName = "images/Faulkner_Floor1.png";
                 break;
             case 2:
-                ImageName = "images/floor2.png";
+                ImageName = "images/Faulkner_Floor2.png";
                 break;
             case 3:
-                ImageName = "images/floor3.png";
+                ImageName = "images/Faulkner_Floor3.png";
                 break;
             case 4:
-                ImageName = "images/floor4.png";
+                ImageName = "images/Faulkner_Floor4.png";
                 break;
             case 5:
-                ImageName = "images/floor5.png";
+                ImageName = "images/Faulkner_Floor5.png";
                 break;
             case 6:
-                ImageName = "images/floor6.png";
+                ImageName = "images/Faulkner_Floor6.png";
                 break;
             case 7:
-                ImageName = "images/floor7.png";
+                ImageName = "images/Faulkner_Floor7.png";
                 break;
         }
         return getImage(ImageName);
     }
 
-    public static Image getImageByFloor(int i){
+    public static Image getImageByFloor(int i, boolean employee){
         // if admin, use the employee
-        if(LoginStatusSingleton.getInstance().getMemento().getStatus()){
-            getEmployeeImageByFloor(i);
+//        System.out.println("EMPLOYEE STATUS: " + LoginStatusSingleton.getInstance().getMemento().getStatus());
+//        if(LoginStatusSingleton.getInstance().getMemento().getStatus()){
+//            getEmployeeImageByFloor(i);
+//        }
+        if(employee){
+            return  getEmployeeImageByFloor(i);
         }
 
         String ImageName ="";
-        switch(i) {
+        switch (i){
             case 1:
                 ImageName = "images/1_thefirstfloor.png";
                 break;

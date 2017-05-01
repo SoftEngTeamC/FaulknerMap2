@@ -129,7 +129,7 @@ public class ImageViewPane extends Region {
     }
 
     public ImageViewPane(Path path) {
-        this(ImageProvider.getImageByFloor(path.getFloor()));
+        this(ImageProvider.getImageByFloor(path.getFloor(), false));
         pathProperty.setValue(path);
     }
 
