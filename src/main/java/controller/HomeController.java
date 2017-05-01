@@ -530,9 +530,18 @@ public class HomeController extends Controller implements Initializable {
     private ListView<String> MakeTextDirectionsListView(List<Path> paths) {
         //Create List of all directions given List of Paths
         List<String> TextDirections = new ArrayList<>();
-        for (Path p : paths) {
-            for (MapNode M : p.getPath()) {
-                TextDirections.add(M.toString());
+        if(paths.isEmpty() || paths.size() < 1){
+            TextDirections.add("You do not have access to this location");
+        } else {
+            for (Path p : paths) {
+                try {
+                    for (MapNode M : p.getPath()) {
+                        TextDirections.add(M.toString());
+                    }
+                } catch (Exception e){
+                    TextDirections.clear();
+                    TextDirections.add("You do not have access to this location");
+                }
             }
         }
         ListView<String> textdirs = new ListView<>();
