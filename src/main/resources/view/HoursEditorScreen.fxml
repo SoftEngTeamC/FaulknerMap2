@@ -124,7 +124,7 @@
              </ButtonBar>
              <Button fx:id="submitbtn" layoutX="357.0" layoutY="345.0" mnemonicParsing="false" onAction="#SubmitChanges" prefHeight="73.0" prefWidth="201.0" text="Submit Changes" textFill="#049e1b" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                  <font>
-                     <Font size="21.0" />
+                     <Font size="17.0" />
                  </font>
              </Button>
             <Text layoutX="335.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
