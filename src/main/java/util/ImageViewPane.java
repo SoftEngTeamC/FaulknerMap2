@@ -1,6 +1,5 @@
 package util;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import controller.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
@@ -12,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.Coordinate;
@@ -21,11 +19,9 @@ import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class ImageViewPane extends Region {
@@ -83,6 +79,9 @@ public class ImageViewPane extends Region {
     public void setPath(Path path) {
         pathProperty.set(path);
     }
+
+    public ObjectProperty<Node> selectedNode = new SimpleObjectProperty<>();
+    public ObjectProperty<Edge> selectedEdge = new SimpleObjectProperty<>();
 
 
     @Override
@@ -218,19 +217,9 @@ public class ImageViewPane extends Region {
         Point2D edgeEnd = imageToImageViewCoordinate(edge.getEnd().getLocation());
         Line edgeLine = new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
 
-        BooleanProperty selected = new SimpleBooleanProperty(false);
-
         edgeLine.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                selected.set(!selected.get());
-            }
-        });
-
-        selected.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                edgeLine.strokeWidthProperty().set(5);
-            } else {
-                edgeLine.strokeWidthProperty().set(3);
+                selectedEdge.set(edge);
             }
         });
 
@@ -248,19 +237,10 @@ public class ImageViewPane extends Region {
     private Circle makeNodeCircle(Node node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
         Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
-        BooleanProperty selected = new SimpleBooleanProperty(false);
-
-        selected.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                nodeCircle.fillProperty().setValue(Color.TEAL);
-            } else {
-                nodeCircle.fillProperty().setValue(Color.BLUE);
-            }
-        });
 
         nodeCircle.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                selected.setValue(!selected.get());
+                selectedNode.set(node);
             }
         });
 
@@ -273,12 +253,13 @@ public class ImageViewPane extends Region {
     }
 
 
-
     private static final int MIN_PIXELS = 400;
     private void setupImageViewListeners() {
         ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
         getImageView().setOnMousePressed(e -> {
+            selectedEdge.set(null);
+            selectedNode.set(null);
             Point2D mousePress = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
             mouseDown.set(mousePress);
         });
@@ -385,13 +366,15 @@ public class ImageViewPane extends Region {
         return Math.max(min, Math.min(max, val));
     }
 
+    public void wipe() {
+        getDrawPane().getChildren().clear();
+    }
+
     public void showAllNodes(Collection<Node> nodes) {
         BooleanProperty added = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !added.get()) {
-                getDrawPane().getChildren().clear();
                 for (Node node : nodes) {
-                    System.out.println("trying to add " + node);
                     Circle nodeCircle = makeNodeCircle(node);
                     getDrawPane().getChildren().add(nodeCircle);
                 }
@@ -407,7 +390,7 @@ public class ImageViewPane extends Region {
                 for (Edge edge : edges) {
                     getDrawPane().getChildren().add(makeEdgeLine(edge));
                 }
-                added.set(false);
+                added.set(true);
             }
         });
     }

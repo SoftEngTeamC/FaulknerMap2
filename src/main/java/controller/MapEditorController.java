@@ -1,16 +1,19 @@
 package controller;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Edge;
+import model.Node;
 import pathfinding.Map;
-import pathfinding.MapNode;
 import util.ImageViewPane;
 
 public class MapEditorController extends Controller {
@@ -19,15 +22,36 @@ public class MapEditorController extends Controller {
 
     @FXML private Button floorButton1, floorButton2, floorButton3, floorButton4, floorButton5, floorButton6, floorButton7;
 
-    private ObjectProperty<MapNode> selectedNode = new SimpleObjectProperty<>();
-    private ObjectProperty<Edge> selectedEdge = new SimpleObjectProperty<>();
-
     private Map map = new Map(nodeService.getAllNodes());
 
+    ImageViewPane currentMapView;
 
     @FXML
     public void initialize() {
         setupFloorButtonListeners();
+        showFloor(1);
+        currentMapView.selectedNode.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showSelectedNode();
+            }
+            if (oldValue != null && newValue == null) {
+                showNodeSearch();
+            }
+        });
+        currentMapView.selectedEdge.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                showSelectedEdge();
+            }
+            if (oldValue != null && newValue == null) {
+                showNodeSearch();
+            }
+        });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                searchResults.clear();
+                searchResults.addAll(nodeService.search(newValue));
+            }
+        });
     }
 
     private void setupFloorButtonListeners() {
@@ -42,41 +66,41 @@ public class MapEditorController extends Controller {
 
     private EventHandler<ActionEvent> makeFloorButtonEvent(int floor) {
         return event -> {
-            System.out.println("Button floor #" + floor);
-            clearSelections();
             showFloor(floor);
         };
     }
 
     private void showFloor(int floor) {
-        System.out.println("Showing floor #" + floor);
         mapContainer.getChildren().clear();
         ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
+        currentMapView = mapView;
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapContainer.getChildren().add(mapView);
-        mapView.showAllNodes(nodeService.getNodesByFloor(floor));
         mapView.showAllEdges(edgeService.getAllEdgesOnFloor(floor));
-    }
-
-    private void clearSelections() {
-        selectedEdge.set(null);
-        selectedNode.set(null);
+        mapView.showAllNodes(nodeService.getNodesByFloor(floor));
     }
 
 
     private void showSelectedNode() {
         leftContainer.getChildren().clear();
-        MapNode node = selectedNode.get();
+        Node node = currentMapView.selectedNode.get();
+        leftContainer.getChildren().add(new Label(node.getName()));
     }
 
     private void showSelectedEdge() {
         leftContainer.getChildren().clear();
-        Edge edge = selectedEdge.get();
+        Edge edge = currentMapView.selectedEdge.get();
+        leftContainer.getChildren().add(new Label(edge.getStart().getName() + "  < ---- >  " + edge.getEnd().getName()));
     }
 
+    private ObservableList<Node> searchResults = FXCollections.observableArrayList();
+    private ListView<Node> searchResultsView = new ListView<>(searchResults);
+    private TextField searchField = new TextField();
     private void showNodeSearch() {
         leftContainer.getChildren().clear();
+        leftContainer.getChildren().add(searchField);
+        leftContainer.getChildren().add(searchResultsView);
     }
 }
 
