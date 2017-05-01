@@ -320,8 +320,10 @@ public class HomeController extends Controller implements Initializable {
 
     private void search(String query) {
         List<? extends Navigable> results = professionalService.search(query);
+        List<? extends Navigable> results1 = serviceService.search(query);
         searchResults.clear();
         searchResults.addAll(results);
+        searchResults.addAll(results1);
         searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
     }
 
