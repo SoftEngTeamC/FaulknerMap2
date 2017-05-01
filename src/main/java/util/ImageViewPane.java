@@ -1,5 +1,6 @@
 package util;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import controller.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
@@ -16,11 +17,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.Coordinate;
 import model.Edge;
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
+import java.awt.*;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ImageViewPane extends Region {
@@ -91,6 +96,7 @@ public class ImageViewPane extends Region {
 
         Pane drawPane = getDrawPane();
         if (drawPane != null && imageView != null) {
+            //TODO: Fix this transform on rescale
             double aspect = imageView.getImage().getWidth() / imageView.getImage().getHeight();
             double viewAspect = imageView.getFitWidth() / imageView.getFitHeight();
             boolean isWidthConstrained = viewAspect < aspect;
@@ -134,6 +140,7 @@ public class ImageViewPane extends Region {
             }
             if (newDrawPane != null) {
                 getChildren().add(newDrawPane);
+                newDrawPane.setPickOnBounds(false);
             }
         });
 
@@ -146,7 +153,6 @@ public class ImageViewPane extends Region {
         getImageView().setPreserveRatio(true);
 
         this.drawPaneProperty.set(new Pane());
-        getDrawPane().setPickOnBounds(false);
         resetImageView();
     }
 
@@ -221,12 +227,10 @@ public class ImageViewPane extends Region {
         return circles;
     }
 
-
-    private Circle makeNodeCircle(MapNode node) {
+    private Circle makeNodeCircle(Node node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
         Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
-
-        BooleanProperty selected = new SimpleBooleanProperty();
+        BooleanProperty selected = new SimpleBooleanProperty(false);
 
         selected.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -242,9 +246,12 @@ public class ImageViewPane extends Region {
             }
         });
 
-        selected.set(false);
-
         return nodeCircle;
+    }
+
+
+    private Circle makeNodeCircle(MapNode node) {
+        return makeNodeCircle(node.getModelNode());
     }
 
 
@@ -358,5 +365,20 @@ public class ImageViewPane extends Region {
 
     private static double clamp(double val, double min, double max) {
         return Math.max(min, Math.min(max, val));
+    }
+
+    public void showAllNodes(Collection<Node> nodes) {
+        BooleanProperty added = new SimpleBooleanProperty(false);
+        needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !added.get()) {
+                getDrawPane().getChildren().clear();
+                for (Node node : nodes) {
+                    System.out.println("trying to add " + node);
+                    Circle nodeCircle = makeNodeCircle(node);
+                    getDrawPane().getChildren().add(nodeCircle);
+                }
+                added.set(true);
+            }
+        });
     }
 }

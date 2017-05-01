@@ -9,8 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Edge;
+import pathfinding.Map;
 import pathfinding.MapNode;
 import util.ImageViewPane;
+
+import java.util.Collection;
 
 public class MapEditorController extends Controller {
     @FXML private VBox leftContainer;
@@ -21,12 +24,15 @@ public class MapEditorController extends Controller {
     private ObjectProperty<MapNode> selectedNode = new SimpleObjectProperty<>();
     private ObjectProperty<Edge> selectedEdge = new SimpleObjectProperty<>();
 
+    private Map map = new Map(nodeService.getAllNodes());
+
+
     @FXML
     public void initialize() {
-        setupButtonListeners();
+        setupFloorButtonListeners();
     }
 
-    private void setupButtonListeners() {
+    private void setupFloorButtonListeners() {
         floorButton1.setOnAction(makeFloorButtonEvent(1));
         floorButton2.setOnAction(makeFloorButtonEvent(2));
         floorButton3.setOnAction(makeFloorButtonEvent(3));
@@ -38,14 +44,20 @@ public class MapEditorController extends Controller {
 
     private EventHandler<ActionEvent> makeFloorButtonEvent(int floor) {
         return event -> {
+            System.out.println("Button floor #" + floor);
             clearSelections();
             showFloor(floor);
         };
     }
 
     private void showFloor(int floor) {
+        System.out.println("Showing floor #" + floor);
         mapContainer.getChildren().clear();
-        mapContainer.getChildren().add(new ImageViewPane(ImageProvider.getImageByFloor(floor)));
+        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
+        mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+        mapContainer.getChildren().add(mapView);
+        mapView.showAllNodes(nodeService.getNodesByFloor(floor));
     }
 
     private void clearSelections() {
@@ -55,15 +67,17 @@ public class MapEditorController extends Controller {
 
 
     private void showSelectedNode() {
-
+        leftContainer.getChildren().clear();
+        MapNode node = selectedNode.get();
     }
 
     private void showSelectedEdge() {
-
+        leftContainer.getChildren().clear();
+        Edge edge = selectedEdge.get();
     }
 
     private void showNodeSearch() {
-
+        leftContainer.getChildren().clear();
     }
 }
 
