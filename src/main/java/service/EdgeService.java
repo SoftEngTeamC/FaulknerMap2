@@ -3,7 +3,6 @@ package service;
 import model.Edge;
 import model.Node;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class EdgeService extends AbstractService<Edge> {
 
     public List<Edge> getAllEdgesOnFloor(int floor) {
         EntityManager manager = this.managerFactory.createEntityManager();
-        List<Edge> edges = manager.createQuery("SELECT e FROM Edge e WHERE e.start.location.floor = :floor AND e.end.location.floor = :floor", Edge.class)
+        List<Edge> edges = manager.createQuery("SELECT e FROM Edge e WHERE e.start.location.floor = :floor OR e.end.location.floor = :floor", Edge.class)
                 .setParameter("floor", floor)
                 .getResultList();
         manager.close();

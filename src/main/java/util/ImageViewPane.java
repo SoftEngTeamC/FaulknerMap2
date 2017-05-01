@@ -22,7 +22,6 @@ import pathfinding.Path;
 import java.util.*;
 
 
-
 public class ImageViewPane extends Region {
 
     private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
@@ -272,20 +271,10 @@ public class ImageViewPane extends Region {
             }
         });
 
-        //TODO : FIX DRAGGGGGINGGG
-//        ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-//
-//        nodeCircle.setOnMousePressed(e -> {
-//            Circle copy = new Circle(e.getX(), e.getY(), 3);
-//            getDrawPane().getChildren().add(copy);
-//        });
-//
-//        nodeCircle.setOnMouseDragged(e -> {
-//            Point2D dragPoint = new Point2D(e.getX(), e.getY());
-//            Point2D delta = dragPoint.subtract(mouseDown.get());
-//            nodeCircle.centerXProperty().set(delta.getX() + nodeCircle.getCenterX());
-//            nodeCircle.centerYProperty().set(delta.getY() + nodeCircle.getCenterY());
-//        });
+        nodeCircle.setOnMouseDragged(e -> {
+            nodeCircle.centerXProperty().set(e.getX());
+            nodeCircle.centerYProperty().set(e.getY());
+        });
 
         return nodeCircle;
     }
@@ -327,11 +316,15 @@ public class ImageViewPane extends Region {
         });
 
         getImageView().setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) resetImageView();
+            if (e.getClickCount() == 2) {
+                Point2D clickOnMap = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
+                Point2D clickInContainer = imageToImageViewCoordinate(clickOnMap);
+                getDrawPane().getChildren().add(new Circle(clickInContainer.getX(), clickInContainer.getY(), 5));
+            }
         });
     }
 
-    private void zoom(double scale, double x, double y) {
+    public void zoom(double scale, double x, double y) {
         Rectangle2D viewport = getImageView().getViewport();
         scaleProperty.set(scale * scaleProperty.get());
         Point2D mouse = imageViewToImageCoordinate(getImageView(), new Point2D(x, y));
@@ -397,6 +390,11 @@ public class ImageViewPane extends Region {
         );
     }
 
+    private Point2D imageViewToImageCoordinate(Point2D ivc) {
+        double pixelRatio = getImageView().getImage().getWidth() / getImageView().getBoundsInLocal().getWidth();
+        return ivc.multiply(pixelRatio);
+    }
+
     private Point2D imageToImageViewCoordinate(Coordinate coordinate) {
         double pixelRatio = getImageView().getBoundsInLocal().getWidth() / getImageView().getImage().getWidth();
         return new Point2D(coordinate.getX()*pixelRatio, coordinate.getY()*pixelRatio);
@@ -425,31 +423,42 @@ public class ImageViewPane extends Region {
         getDrawPane().getChildren().clear();
     }
 
-    Map<Node, Circle> nodeCircleMap = new HashMap<>();
+    private Map<String, Circle> nodeCircleMap = new HashMap<>();
+    private BooleanProperty nodesAdded = new SimpleBooleanProperty(false);
     public void showAllNodes(Collection<Node> nodes) {
-        nodeCircleMap.clear();
-        BooleanProperty added = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && !added.get()) {
+            if (!newValue && !nodesAdded.get()) {
+                nodeCircleMap.clear();
                 for (Node node : nodes) {
                     Circle nodeCircle = makeNodeCircle(node);
-                    nodeCircleMap.put(node, nodeCircle);
+                    nodeCircleMap.put(node.getName(), nodeCircle);
                     getDrawPane().getChildren().add(nodeCircle);
                 }
-                added.set(true);
+                nodesAdded.set(true);
             }
         });
     }
 
+    private BooleanProperty edgesAdded = new SimpleBooleanProperty(false);
     public void showAllEdges(Collection<Edge> edges) {
-        BooleanProperty added = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && !added.get()) {
+            if (!newValue && !edgesAdded.get() && nodesAdded.get()) {
+                System.out.println(nodeCircleMap);
                 for (Edge edge : edges) {
                     Line edgeLine = makeEdgeLine(edge);
+
+                    if (nodeCircleMap.containsKey(edge.getStart().getName()) && nodeCircleMap.containsKey(edge.getEnd().getName())) {
+                        edgeLine.startXProperty().bind(nodeCircleMap.get(edge.getStart().getName()).centerXProperty());
+                        edgeLine.startYProperty().bind(nodeCircleMap.get(edge.getStart().getName()).centerYProperty());
+
+                        edgeLine.endXProperty().bind(nodeCircleMap.get(edge.getEnd().getName()).centerXProperty());
+                        edgeLine.endYProperty().bind(nodeCircleMap.get(edge.getEnd().getName()).centerYProperty());
+                    } else {
+                        System.out.println(edge + " didn't work.");
+                    }
                     getDrawPane().getChildren().add(edgeLine);
                 }
-                added.set(true);
+                edgesAdded.set(true);
             }
         });
     }
