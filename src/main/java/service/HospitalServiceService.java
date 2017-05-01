@@ -2,6 +2,7 @@ package service;
 
 
 import model.HospitalService;
+import org.hibernate.search.exception.EmptyQueryException;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -42,19 +43,37 @@ public class HospitalServiceService extends AbstractService<HospitalService> {
         return services;
     }
 
+//    public List<HospitalService> search(String s) {
+//        EntityManager manager = managerFactory.createEntityManager();
+//        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
+//        manager.getTransaction().begin();
+//        QueryBuilder qb = fullTextEntityManager.getSearchFactory()
+//                .buildQueryBuilder().forEntity(HospitalService.class).get();
+//        org.apache.lucene.search.Query query = qb.keyword().onFields("name").matching(s).createQuery();
+//        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalService.class);
+//
+//        List<HospitalService> result = JPAQuery.getResultList();
+//        manager.getTransaction().commit();
+//        manager.close();
+//        return result;
+//    }
+
     public List<HospitalService> search(String s) {
         EntityManager manager = managerFactory.createEntityManager();
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(manager);
         manager.getTransaction().begin();
         QueryBuilder qb = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder().forEntity(HospitalService.class).get();
-        org.apache.lucene.search.Query query = qb.keyword().onFields("title").matching(s).createQuery();
-        javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalService.class);
-
-        List<HospitalService> result = JPAQuery.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
-        return result;
+        try {
+            org.apache.lucene.search.Query query = qb.keyword().wildcard().onFields("name").matching("*" + s +"*").createQuery();
+            javax.persistence.Query JPAQuery = fullTextEntityManager.createFullTextQuery(query, HospitalService.class);
+            return JPAQuery.getResultList();
+        } catch (EmptyQueryException e) {
+            return getAllServices();
+        } finally {
+            manager.getTransaction().commit();
+            fullTextEntityManager.close();
+        }
     }
 
 }
