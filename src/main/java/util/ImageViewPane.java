@@ -296,6 +296,7 @@ public class ImageViewPane extends Region {
                 leLine.startXProperty().set(e.getX());
                 leLine.startYProperty().set(e.getY());
                 tempLine.set(leLine);
+                getDrawPane().getChildren().add(tempLine.get());
             }
         });
 
@@ -304,12 +305,14 @@ public class ImageViewPane extends Region {
                 nodeCircle.centerXProperty().set(e.getX());
                 nodeCircle.centerYProperty().set(e.getY());
             } else if (e.getButton() == MouseButton.SECONDARY && isEdgeDrag.get()) {
-                tempLine.get().startXProperty().set(e.getX());
-                tempLine.get().startYProperty().set(e.getY());
+                System.out.println("setting line end");
+                tempLine.get().endXProperty().set(e.getX());
+                tempLine.get().endYProperty().set(e.getY());
             }
         });
 
         nodeCircle.setOnMouseReleased(e -> {
+            getDrawPane().getChildren().remove(tempLine.get());
             isEdgeDrag.set(false);
             System.out.println("Releasing full drag.");
             Point2D newPoint = imageViewToImageCoordinate(new Point2D(e.getX(), e.getY()));
