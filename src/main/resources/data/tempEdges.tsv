@@ -492,3 +492,15 @@ hallway525	SuitesIntersection52
 hallway525	SuitesIntersection53
 
 SuitesIntersection53 Hillside Elevators 5
+
+hallway63	SuitesIntersection63
+hallway64	SuitesIntersection63
+hallway65	SuitesIntersection63
+hallway66	SuitesIntersection63
+hallway67	SuitesIntersection63
+hallway68	SuitesIntersection60
+hallway69	SuitesIntersection60
+
+SuitesIntersection60	SuitesIntersection61
+SuitesIntersection61	SuitesIntersection62
+SuitesIntersection62	SuitesIntersection63
