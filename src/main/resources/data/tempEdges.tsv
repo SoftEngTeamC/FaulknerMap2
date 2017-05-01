@@ -351,57 +351,69 @@ Valet Parking	Parking1
 Volunteer	intersection31
 
 Preor	hallway112
-intersection14 hallway112
 
 Or	hallway112
 
-Recovery	hallway113
-hallway113	intersection19
+Recovery	hallway112
+hallway112	SuitesIntersection18
+hallway112	SuitesIntersection17
 
-intersection19	intersection14
+Lab	hallway113
+hallway113	SuitesIntersection18
 
 Pulmonary Lab	hallway114
-hallway114	intersection12
+hallway114	SuitesIntersection14
 
 Vascular Lab	hallway115
-hallway115	intersection12
+hallway115	SuitesIntersection14
 
 Linen	hallway116
-hallway116	intersection14
-hallway116	intersection19
+hallway116	SuitesIntersection17
+hallway116	SuitesIntersection18
 
 Mat Mgnt	hallway117
-hallway117	intersection14
-hallway117	intersection19
+hallway117	SuitesIntersection17
+hallway117	SuitesIntersection18
 
-Cardiology Rehap	hallway118
-hallway118	intersection12
-hallway118	intersection17
+Center for Preoperative Evaluation (Employee)	hallway118
+hallway118	SuitesIntersection14
+hallway118	SuitesIntersection15
 
-Auditorium	hallway119
-hallway119	intersection10
-hallway119	intersection110
+Cardiology Rehab	hallway119
+hallway119	SuitesIntersection14
+hallway119	SuitesIntersection15
 
-Special Test	hallway120
-hallway120	intersection10
-hallway120	intersection12
+Blood Draw (Employee)	hallway120
+hallway120	SuitesIntersection10
+hallway120	SuitesIntersection12
 
-Ed	hallway121
-hallway121	intersection10
+Auditorium	hallway121
+hallway121	SuitesIntersection10
+hallway121	SuitesIntersection12
 
-Emt	hallway122
-hallway122	intersection111
-intersection111	intersection10
+Special Test	hallway122
+hallway122	SuitesIntersection10
+hallway122	SuitesIntersection14
 
-Admit	hallway123
-hallway123	intersection110
-hallway123	intersection17
+GI Endoscopy (Employee)	hallway123
+hallway123	SuitesIntersection14
 
-Patient Center	hallway124
-hallway124	intersection110
+Ed	hallway124
+hallway124	SuitesIntersection10
 
-Mri/Ct	hallway125
-hallway125	intersection15
+Emt	hallway125
+hallway125	SuitesIntersection13
+SuitesIntersection13	SuitesIntersection10
+
+Admit	hallway126
+hallway126	SuitesIntersection12
+hallway126	SuitesIntersection15
+
+Patient Center	hallway127
+hallway127	SuitesIntersection12
+
+Mri/Ct	hallway128
+hallway128	SuitesIntersection16
 
 hallway28	SuitesIntersection20
 hallway28	SuitesIntersection21
