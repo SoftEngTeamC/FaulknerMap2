@@ -29,3 +29,8 @@ faulknerDatabase
 target
 out
 indicies
+/.idea/encodings.xml
+/.idea/resourceBundles.xml
+/.idea/misc.xml
+/.idea/kotlinc.xml
+/classes/

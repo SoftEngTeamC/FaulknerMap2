@@ -19,15 +19,12 @@ public class LoginStatusSingleton {
     // this is our list of mementos
     private ArrayList<LoginStatusMemento> mentos = new ArrayList<>();
 
-    // this is our reference to the current screen
-    private Button currentScreen;
-
     private LoginStatusSingleton(){
     }
 
     private static LoginStatusSingleton ourInstance;
     // init to 2 minutes
-    private static int timeout = 3;
+    private static int timeout = 120;
 
     static {
         if (ourInstance == null) {
@@ -76,7 +73,7 @@ public class LoginStatusSingleton {
      * @return timeout: int
      */
     public int getTimeout() {
-        return this.timeout;
+        return timeout;
     }
 
     /**
@@ -85,20 +82,6 @@ public class LoginStatusSingleton {
      * @param timeout
      */
     public void setTimeout(int timeout) {
-        this.timeout = timeout;
+        LoginStatusSingleton.timeout = timeout;
     }
-
-    // getters and setters for the button
-
-    public void setButton(Button b){
-        this.currentScreen = b;
-    }
-
-    public Button getButton(){
-        return this.currentScreen;
-    }
-
-
-
-
 }

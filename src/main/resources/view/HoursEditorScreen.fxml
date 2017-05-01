@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane fx:id="Parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
+
+<AnchorPane fx:id="Parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HoursEditorController">
    <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -101,7 +103,7 @@
                      <RadioButton mnemonicParsing="false" selected="true" text="PM" toggleGroup="$ampm3" />
                  </buttons>
              </ButtonBar>
-             <TextField fx:id="eveninghrs2" alignment="CENTER" layoutX="389.0" layoutY="281.0" prefWidth="328.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+             <TextField fx:id="eveninghrs2" alignment="CENTER" layoutX="389.0" layoutY="281.0" prefHeight="50.0" prefWidth="146.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                  <font>
                      <Font size="15.0" />
                  </font>
@@ -122,7 +124,7 @@
              </ButtonBar>
              <Button fx:id="submitbtn" layoutX="357.0" layoutY="345.0" mnemonicParsing="false" onAction="#SubmitChanges" prefHeight="73.0" prefWidth="201.0" text="Submit Changes" textFill="#049e1b" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                  <font>
-                     <Font size="21.0" />
+                     <Font size="17.0" />
                  </font>
              </Button>
             <Text layoutX="335.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
@@ -196,6 +198,14 @@
                      <Font size="17.0" />
                  </font>
              </Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+               <font>
+                  <Font size="69.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="20.0" />
+               </GridPane.margin>
+            </Text>
          </children>
       </GridPane>
    </children>

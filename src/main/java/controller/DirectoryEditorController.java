@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -13,14 +12,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.HospitalProfessional;
+import model.HospitalService;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class DirectoryEditorController extends Controller {
+    @FXML
+    public TextField searchServiceField;
+    @FXML
+    public ListView<HospitalService> searchServiceList;
+    @FXML
+    public Button editServiceBtn;
+    @FXML
+    public Button addServiceBtn;
     @FXML
     private Button logoutBtn;
     @FXML
@@ -30,40 +36,44 @@ public class DirectoryEditorController extends Controller {
     @FXML
     private Button addPrsnBtn;
     @FXML
-    private TextField searchField;
+    private TextField searchPersonField;
     @FXML
-    private ListView<HospitalProfessional> searchList;
+    private ListView<HospitalProfessional> searchPersonList;
     @FXML
     private VBox DirectoryEditor_VBox;
     @FXML
     private AnchorPane DirectoryEditor_AnchorPane;
 
     private ObservableList<HospitalProfessional> professionals;
+    private ObservableList<HospitalService> services;
 
     private Stage stage;
 
     @FXML
     public void initialize() {
-        setButton(backBtn);
-        //organize visual elements
-        DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
-        searchField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
-        searchList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
-        searchList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
 
         List<HospitalProfessional> hp = professionalService.getAllProfessionals();
         professionals = FXCollections.observableArrayList(hp);
-        searchList.setItems(professionals);
+        searchPersonList.setItems(professionals);
+
+        List<HospitalService> hs = serviceService.getAllServices();
+        services = FXCollections.observableArrayList(hs);
+        searchServiceList.setItems(services);
 
         // disable the edit person button
         editPrsnBtn.setDisable(true);
+        editServiceBtn.setDisable(true);
 
         // add a listener to the listview
-        searchList.getSelectionModel().selectedItemProperty()
+        searchPersonList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> editPrsnBtn.setDisable(newValue == null));
+        searchServiceList.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> editServiceBtn.setDisable(newValue == null));
 
         // add a listener to the textfield being changed to fix the search lag
-        searchField.textProperty()
+        searchPersonField.textProperty()
+                .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
+        searchServiceField.textProperty()
                 .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
 
         startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
@@ -89,7 +99,7 @@ public class DirectoryEditorController extends Controller {
     public void editPersonBtnPressed() throws IOException {
 
         // get the current hospital professional that is selected in the list
-        HospitalProfessional hp = searchList.getSelectionModel().getSelectedItem();
+        HospitalProfessional hp = searchPersonList.getSelectionModel().getSelectedItem();
 
         // pass it to the next screen
         FXMLLoader loader = new FXMLLoader();
@@ -105,9 +115,34 @@ public class DirectoryEditorController extends Controller {
     }
 
     @FXML
+    public void editServiceBtnPressed() throws IOException {
+
+        // get the current hospital service that is selected in the list
+        HospitalService hs = searchServiceList.getSelectionModel().getSelectedItem();
+
+        // pass it to the next screen
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("view/EditServiceScreen.fxml"));
+        loader.load();
+        Parent p = loader.getRoot();
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        stage.getScene().setRoot(p);
+        EditServiceController controller = loader.getController();
+        controller.setSelectedUser(hs);
+        stage.show();
+
+    }
+
+    @FXML
     public void addPersonBtnCPressed() {
         setStage();
         switchScreen("view/AddPerson.fxml", "Add Person Menu", stage);
+    }
+
+    @FXML
+    public void addServiceBtnCPressed() {
+        setStage();
+        switchScreen("view/AddService.fxml", "Add Service Menu", stage);
     }
 
 

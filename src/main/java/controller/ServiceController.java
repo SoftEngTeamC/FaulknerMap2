@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Node;
 
-public abstract class PersonController extends Controller {
+public abstract class ServiceController extends Controller {
     @FXML
     protected Button backBtn;
     @FXML

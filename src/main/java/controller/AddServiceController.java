@@ -7,15 +7,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.HospitalProfessional;
+import model.HospitalService;
 
 import java.util.LinkedList;
 
 
-public class AddPersonController extends PersonController {
+public class AddServiceController extends PersonController {
     @FXML
     public AnchorPane Parent;
     @FXML
-    private Button addPersonBtn;
+    private Button addServiceBtn;
     @FXML
     private TextField nameField;
     @FXML
@@ -24,8 +25,6 @@ public class AddPersonController extends PersonController {
     private TextField idField;
     @FXML
     private Text warningText;
-    @FXML
-    private TextField titleField;
     @FXML
     private Text successField;
     @FXML
@@ -43,10 +42,7 @@ public class AddPersonController extends PersonController {
         locationsSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             locationsSearchFieldKeyPressed();
         });
-        startIdleListener(Parent, addPersonBtn);
-
-        // init the available locations list
-        locationsSearchFieldKeyPressed();
+        startIdleListener(Parent, addServiceBtn);
     }
 
     public void logoutBtnPressed() {
@@ -54,9 +50,9 @@ public class AddPersonController extends PersonController {
 
     }
 
-    public void addPersonBtnPressed() {
-        if(!(nameField.getText().isEmpty() || titleField.getText().isEmpty() || currentLocations.isEmpty())) {
-            professionalService.merge(new HospitalProfessional(nameField.getText(), titleField.getText(), new LinkedList<>(currentLocations)));
+    public void addServiceBtnPressed() {
+        if(!(nameField.getText().isEmpty() || currentLocations.isEmpty())) {
+            serviceService.merge(new HospitalService(nameField.getText(), new LinkedList<>(currentLocations)));
             successText.setVisible(true);
             errorText.setVisible(false);
         } else

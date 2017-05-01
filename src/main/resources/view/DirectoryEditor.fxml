@@ -1,56 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 <AnchorPane fx:id="DirectoryEditor_AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@generalStyles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DirectoryEditorController">
-    <children>
-        <VBox fx:id="DirectoryEditor_VBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Directory Editor">
-                    <font>
-                        <Font size="51.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="100.0" top="200.0" />
-                    </VBox.margin>
-                </Text>
-                <TextField fx:id="searchField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="41.0" prefWidth="516.0" promptText="Search">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </TextField>
-                <ListView fx:id="searchList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="518.0" />
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Button fx:id="editPrsnBtn" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="64.0" prefWidth="250.0" text="Edit Person">
-                            <font>
-                                <Font size="29.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets right="10.0" />
-                            </HBox.margin>
-                        </Button>
-                        <Button fx:id="addPrsnBtn" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="50.0" prefWidth="250.0" text="Add Person">
-                            <font>
-                                <Font size="29.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </Button>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="10.0" />
-                    </VBox.margin>
-                </HBox>
-            </children>
-        </VBox>
-        <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Button>
-    </children>
+   <children>
+       <HBox alignment="CENTER" layoutX="64.0" layoutY="257.0" prefHeight="100.0" prefWidth="200.0">
+          <children>
+              <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+                  <HBox.margin>
+                      <Insets right="15.0" />
+                  </HBox.margin>
+                 <children>
+                     <TextField fx:id="searchServiceField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="41.0" prefWidth="516.0" promptText="Search Service">
+                         <font>
+                             <Font size="18.0" />
+                         </font>
+                     </TextField>
+                     <ListView fx:id="searchServiceList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="480.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ListView>
+                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                         <VBox.margin>
+                             <Insets top="10.0" />
+                         </VBox.margin>
+                        <children>
+                            <Button fx:id="editServiceBtn" mnemonicParsing="false" onAction="#editServiceBtnPressed" prefHeight="64.0" prefWidth="250.0" text="Edit Service">
+                                <font>
+                                    <Font size="29.0" />
+                                </font>
+                                <HBox.margin>
+                                    <Insets right="10.0" />
+                                </HBox.margin>
+                            </Button>
+                            <Button fx:id="addServiceBtn" mnemonicParsing="false" onAction="#addServiceBtnCPressed" prefHeight="50.0" prefWidth="250.0" text="Add Service">
+                                <font>
+                                    <Font size="29.0" />
+                                </font>
+                                <HBox.margin>
+                                    <Insets left="10.0" />
+                                </HBox.margin>
+                            </Button>
+                        </children>
+                     </HBox>
+                 </children>
+              </VBox>
+              <VBox fx:id="DirectoryEditor_VBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+                  <HBox.margin>
+                      <Insets left="15.0" />
+                  </HBox.margin>
+                 <children>
+                     <TextField fx:id="searchPersonField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="41.0" prefWidth="516.0" promptText="Search Doctors">
+                         <font>
+                             <Font size="18.0" />
+                         </font>
+                     </TextField>
+                     <ListView fx:id="searchPersonList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="480.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ListView>
+                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                         <VBox.margin>
+                             <Insets top="10.0" />
+                         </VBox.margin>
+                        <children>
+                            <Button fx:id="editPrsnBtn" mnemonicParsing="false" onAction="#editPersonBtnPressed" prefHeight="64.0" prefWidth="250.0" text="Edit Person">
+                                <font>
+                                    <Font size="29.0" />
+                                </font>
+                                <HBox.margin>
+                                    <Insets right="10.0" />
+                                </HBox.margin>
+                            </Button>
+                            <Button fx:id="addPrsnBtn" mnemonicParsing="false" onAction="#addPersonBtnCPressed" prefHeight="50.0" prefWidth="250.0" text="Add Person">
+                                <font>
+                                    <Font size="29.0" />
+                                </font>
+                                <HBox.margin>
+                                    <Insets left="10.0" />
+                                </HBox.margin>
+                            </Button>
+                        </children>
+                     </HBox>
+                 </children>
+              </VBox>
+          </children>
+         <padding>
+            <Insets left="80.0" />
+         </padding>
+       </HBox>
+       <Button fx:id="backBtn" layoutX="34.0" layoutY="34.0" mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="100.0" text="Back" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
+           <font>
+               <Font size="18.0" />
+           </font>
+       </Button>
+       <Text layoutX="625.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Georgia;" text="Directory Editor" AnchorPane.rightAnchor="480.99755859375" AnchorPane.topAnchor="115.0791015625">
+           <font>
+               <Font size="51.0" />
+           </font>
+       </Text>
+   </children>
 </AnchorPane>

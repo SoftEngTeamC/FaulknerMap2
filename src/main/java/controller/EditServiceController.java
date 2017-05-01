@@ -3,21 +3,19 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.HospitalProfessional;
+import model.HospitalService;
 
-public class EditPersonController extends PersonController {
+public class EditServiceController extends ServiceController {
     @FXML
     private Button deleteBtn;
     @FXML
     private Button updateBtn;
     @FXML
     private TextField nameField;
-    @FXML
-    private TextField titleField;
     @FXML
     private TextField idField;
     @FXML
@@ -27,8 +25,8 @@ public class EditPersonController extends PersonController {
     @FXML
     private AnchorPane Parent;
 
-    // Hospital professional on which we are editing
-    private HospitalProfessional hp;
+    // Hospital service on which we are editing
+    private HospitalService hs;
 
     @FXML
     public void initialize() {
@@ -39,37 +37,33 @@ public class EditPersonController extends PersonController {
 
         nameField.textProperty()
                 .addListener((observable, oldValue, newValue) -> updateBtn.setDisable(false));
-        titleField.textProperty()
-                .addListener((observable, oldValue, newValue) -> updateBtn.setDisable(false));
 
        startIdleListener(Parent, deleteBtn);
     }
 
     public void updateBtnPressed() {
-        hp.setName(nameField.getText());
-        hp.setTitle(titleField.getText());
-        hp.setOffices(currentLocationsListView.getItems());
+        hs.setName(nameField.getText());
+        hs.setLocations(currentLocationsListView.getItems());
 
-        professionalService.merge(hp);
+        serviceService.merge(hs);
 
         updateText.setVisible(true);
 
     }
 
     public void deleteBtnPressed() {
-        professionalService.remove(hp);
+        serviceService.remove(hs);
         deletedText.setVisible(true);
 
     }
 
-    void setSelectedUser(HospitalProfessional hp) {
-        this.hp = hp;
+    void setSelectedUser(HospitalService hs) {
+        this.hs = hs;
 
-        nameField.setText(hp.getName());
-        titleField.setText(hp.getTitle());
-        idField.setText(hp.getId().toString());
+        nameField.setText(hs.getName());
+        idField.setText(hs.getId().toString());
 
-        currentLocations.addAll(hp.getOffices());
+        currentLocations.addAll(hs.getLocations());
         availableLocations.addAll(nodeService.getAllNodes());
         availableLocations.removeAll(currentLocations);
     }
