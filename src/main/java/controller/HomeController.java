@@ -1,20 +1,17 @@
 package controller;
 
-import com.google.zxing.WriterException;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Hours;
@@ -32,11 +29,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalTime;
-import java.text.DateFormat;
-
-import textDirections.TextualDirections.*;
 
 import static textDirections.TextualDirections.pathSteps;
 
@@ -339,7 +331,6 @@ public class HomeController extends Controller implements Initializable {
 
     private void showDirections() {
         Searching_VBox = makeVBox();
-        Searching_VBox.getChildren().clear();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
