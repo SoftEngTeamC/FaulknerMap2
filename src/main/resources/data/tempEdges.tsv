@@ -1,4 +1,4 @@
-start end
+start	end
 2B	intersection21
 3A	intersection325
 3C	hallway32
@@ -349,3 +349,103 @@ stairwellB31	stairwellB41
 Valet Parking	hallway19
 Valet Parking	Parking1
 Volunteer	intersection31
+
+Preor	hallway112
+intersection14 hallway112
+
+Or	hallway112
+
+Recovery	hallway113
+hallway113	intersection19
+
+intersection19	intersection14
+
+Pulmonary Lab	hallway114
+hallway114	intersection12
+
+Vascular Lab	hallway115
+hallway115	intersection12
+
+Linen	hallway116
+hallway116	intersection14
+hallway116	intersection19
+
+Mat Mgnt	hallway117
+hallway117	intersection14
+hallway117	intersection19
+
+Cardiology Rehap	hallway118
+hallway118	intersection12
+hallway118	intersection17
+
+Auditorium	hallway119
+hallway119	intersection10
+hallway119	intersection110
+
+Special Test	hallway120
+hallway120	intersection10
+hallway120	intersection12
+
+Ed	hallway121
+hallway121	intersection10
+
+Emt	hallway122
+hallway122	intersection111
+intersection111	intersection10
+
+Admit	hallway123
+hallway123	intersection110
+hallway123	intersection17
+
+Patient Center	hallway124
+hallway124	intersection110
+
+Mri/Ct	hallway125
+hallway125	intersection15
+
+hallway28	SuitesIntersection20
+hallway28	SuitesIntersection21
+
+hallway29	SuitesIntersection23
+
+hallway210	SuitesIntersection22
+hallway210	SuitesIntersection23
+
+hallway211	SuitesIntersection22
+hallway211	SuitesIntersection23
+
+hallway212	SuitesIntersection22
+hallway212	SuitesIntersection23
+
+hallway213	SuitesIntersection22
+hallway213	SuitesIntersection23
+
+hallway214	SuitesIntersection22
+hallway214	SuitesIntersection21
+
+hallway215	SuitesIntersection22
+hallway215	SuitesIntersection21
+
+hallway216	SuitesIntersection22
+hallway216	SuitesIntersection21
+
+CenstrlsupInternal	Censtrlsup
+hallway217	Censtrlsup
+
+hallway218	SuitesIntersection20
+hallway218	SuitesIntersection21
+
+hallway219	SuitesIntersection20
+hallway219	SuitesIntersection21
+
+hallway220	SuitesIntersection22
+hallway220	SuitesIntersection23
+
+hallway221	hallway223
+
+hallway223	SuitesIntersection20
+hallway223	SuitesIntersection21
+
+hallway222	SuitesIntersection22
+
+hallway28	Hillside Elevators

@@ -51,11 +51,6 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void initialize() {
-        //organize visual elements
-        DirectoryEditor_VBox.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty());
-        searchPersonField.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
-        searchPersonList.prefWidthProperty().bind(DirectoryEditor_AnchorPane.widthProperty().multiply(0.4));
-        searchPersonList.prefHeightProperty().bind(DirectoryEditor_AnchorPane.heightProperty().multiply(0.3));
 
         List<HospitalProfessional> hp = professionalService.getAllProfessionals();
         professionals = FXCollections.observableArrayList(hp);
