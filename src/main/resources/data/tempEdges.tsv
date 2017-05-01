@@ -504,3 +504,7 @@ hallway69	SuitesIntersection60
 SuitesIntersection60	SuitesIntersection61
 SuitesIntersection61	SuitesIntersection62
 SuitesIntersection62	SuitesIntersection63
+
+hallway73	SuitesIntersection70
+SuitesIntersection70	SuitesIntersection71
+SuitesIntersection71	hallway74
