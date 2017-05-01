@@ -83,26 +83,44 @@ hallway116	2664	1804
 Mat Mgnt	2644	1918
 hallway117	2664	1918
 
+Center for Preoperative Evaluation (Employee)	2534	1413
+hallway118	2516	1409
+
 Cardiology Rehab	2490	1570
-hallway118	2514	1570
+hallway119	2514	1570
+
+Blood Draw (Employee)	2373	1387
+hallway120	2372	1374
 
 Auditorium	2266	1514
-hallway119	2248	1514
+hallway121	2248	1514
 
 Special Test	2350	1654
-hallway120	2350	1675
+hallway122	2350	1675
+
+GI Endoscopy (Employee)	2497	1807
+hallway123	2515	1805
 
 Ed	2184	1654
-hallway121	2184	1673
+hallway124	2184	1673
 
 Emt	1964	1466
-hallway122	1980	1466
+hallway125	1980	1466
 
 Admit	2290	1326
-hallway123	2290	1339
+hallway126	2290	1339
 
 Patient Center	2210	1308
-hallway124	2210	1339
+hallway127	2210	1339
 
 Mri/Ct	2686	1330
-hallway125	2686	1349
+hallway128	2686	1349
+
+SuitesIntersection10	2250	1670
+SuitesIntersection12	2250	1350
+SuitesIntersection13	1980	1680
+SuitesIntersection14	2515	1680
+SuitesIntersection15	2515	1350
+SuitesIntersection16	2665	1350
+SuitesIntersection17	2665	1680
+SuitesIntersection18	2665	1975
