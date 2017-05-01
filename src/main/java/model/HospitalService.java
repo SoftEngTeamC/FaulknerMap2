@@ -1,6 +1,7 @@
 package model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
@@ -48,6 +49,7 @@ public class HospitalService implements Navigable {
         this.locations = locations;
     }
 
+    @Field
     @Column(name = "SERVICE_NAME")
     public String getName() {
         return name;
@@ -67,7 +69,7 @@ public class HospitalService implements Navigable {
     public String getInfo(){
         String info="";
         info = "Name:" + this.getName()+"\n";
-        info = "Locations: \n";
+        info += "Locations: \n";
         for(Node N: this.getLocations()){
             info = info + "   ";
             info = info+N.getName()+"\n";
