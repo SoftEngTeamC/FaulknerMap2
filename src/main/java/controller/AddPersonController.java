@@ -44,6 +44,9 @@ public class AddPersonController extends PersonController {
             locationsSearchFieldKeyPressed();
         });
         startIdleListener(Parent, addPersonBtn);
+
+        // init the available locations list
+        locationsSearchFieldKeyPressed();
     }
 
     public void logoutBtnPressed() {
