@@ -1,12 +1,13 @@
+name	location
 Cafe	Cafeteria
 Gift	Gift Shop
 Huvosaud	Auditorium
 FamPatRes	Patient Relations
 Chapel	Chapel
-Voluns	Volunteer
-Mech	Mech
-Suite31	3A
-Suite35	3B
-Suite36	3C
-Suite37	Suite37
-Suite38	Suite38
+Volunteer	Volunteer
+Mech 3	Mech 3
+Suite 31	3A
+Suite 35	3B
+Suite 36	3C
+Suite 37	Suite 37
+Suite 38	Suite 38

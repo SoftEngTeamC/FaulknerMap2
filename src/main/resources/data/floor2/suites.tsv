@@ -1,10 +1,11 @@
+name	location
 ORL	ORL
 Suite 21	Suite21
 Food Services	Food Services
 Matmang	Matmang
 Pharm	Pharm
 Morgue	Morgue
-Centerile	Centerile
+Censterile	Censterile
 Bio Engineering	Bio Engineering
 Psych Addiction	Outpatient Psych (Employee)
 Psych Inpatient	Inpatient Psych (Employee)
@@ -12,9 +13,9 @@ Hazard Storage	Hazard Storage
 Security	Security
 Censtrlsup	Censtrlsup
 Laundry	Laundry
-PT	Physical Therapy (Employee)
+Physical Therapy	Physical Therapy (Employee)
 OT	OT
 Housekeeping	Housekeeping
 Facilities	Facilities
 Mail	Mail
-Mech	Mech
+Mech 2	Mech 2

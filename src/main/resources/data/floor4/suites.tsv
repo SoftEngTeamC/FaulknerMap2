@@ -1,26 +1,27 @@
+name	location
 Plastics	Plastics
 Finance	Finance
 Spine	Spine
-DptSurgOff	Office of the Department of Surgery
-PatSafe	Patient Safe
-BPrimphys	Prime Physician B
+Office of the Department of Surgery	Office of the Department of Surgery
+Patient Safe	Patient Safe
+Prime Physician B	Prime Physician B
 Adminexe	Adminexe
 Conf	Conference
-Medlib	Medical Lib
+Medical Lib	Medical Rec
 DptMedOff	4N
-Radiology Administration Radiology Administration
-Case Mngmnt	Case Management
+Radiology Administration	Radiology Administration
+Case Management	Case Management
 Urology	Urology
 TynanConfCtr	Tynan Conference Center
-Medrec	Medical Rec
-Suite4349	4J
-Suite4995	Suite4995
-Suite4985/4990	Suite4985/4990
-Suite4970	Suite4970
-Suite4930/4935	Suite4930/4935
-Suite4950/4955	Suite4950/4955
+Medical Rec	Medical Rec
+Suite 4349	4J
+Suite 4995	Suite 4995
+Suite 4985/4990	Suite 4985/4990
+Suite 4970	Suite 4970
+Suite 4930/4935	Suite 4930/4935
+Suite 4950/4955	Suite 4950/4955
 Suite 48	4D
 Suite 47	4C
 Suite 45	4B
 Suite 43	4A
-Suite 40	Suite40
+Suite 40	Suite 40
