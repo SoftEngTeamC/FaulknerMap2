@@ -63,7 +63,7 @@ public class HospitalService implements Navigable {
     @Override
     public Node getNode() {
         // TODO: make this robust
-        return locations.get(1);
+        return locations.get(0);
     }
     @Transient
     public String getInfo(){

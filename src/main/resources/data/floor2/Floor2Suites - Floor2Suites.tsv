@@ -1,20 +1,20 @@
-ORL	2A
-Suite 21	2B
+ORL	ORL
+Suite 21	Suite21
 Food Services	Food Services
 Matmang	Matmang
 Pharm	Pharm
 Morgue	Morgue
 Centerile	Centerile
 Bio Engineering	Bio Engineering
-Psych Addiction	Outpatient Psych
-Psych Inpatient	Inpatient Psych
+Psych Addiction	Outpatient Psych (Employee)
+Psych Inpatient	Inpatient Psych (Employee)
 Hazard Storage	Hazard Storage
 Security	Security
 Censtrlsup	Censtrlsup
 Laundry	Laundry
-PT	Physical Therapy
+PT	Physical Therapy (Employee)
 OT	OT
-HSKPG	HSKPG
+Housekeeping	Housekeeping
 Facilities	Facilities
 Mail	Mail
 Mech	Mech

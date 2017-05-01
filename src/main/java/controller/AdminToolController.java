@@ -1,5 +1,7 @@
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -53,6 +55,7 @@ public class AdminToolController extends Controller{
     public void logout() {
         setStage();
         switchToMainScreen(logoutBtn);
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
     }
 
     @FXML
@@ -66,6 +69,11 @@ public class AdminToolController extends Controller{
      */
     public void backBtnAction(){
         switchToMainScreen(editDirectoryBtn);
+    }
+
+    public void pathFinding(){
+        setStage();
+        switchScreen("view/EmployeePathfinding.fxml", "Employee Pathfinding", stage);
     }
 
 }

@@ -22,6 +22,7 @@ import pathfinding.Path;
 import java.util.*;
 
 
+
 public class ImageViewPane extends Region {
 
     private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<>();
@@ -77,7 +78,9 @@ public class ImageViewPane extends Region {
     public void setPath(Path path) {
         BooleanProperty initialized = new SimpleBooleanProperty(false);
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+//            System.out.println("new Value: " + newValue);
             if (!newValue && !initialized.get()) {
+//                System.out.println("INITIALIZED");
                 pathProperty.set(path);
                 initialized.set(true);
             }
@@ -150,6 +153,7 @@ public class ImageViewPane extends Region {
         pathProperty.addListener((observable, oldValue, newValue) -> {
             makePathCircles(newValue).forEach(circle -> getDrawPane().getChildren().add(circle));
             makeEdgeLines(newValue).forEach(line -> getDrawPane().getChildren().add(line));
+            makeArrows(newValue).forEach(line -> getDrawPane().getChildren().add(line));
         });
 
         this.imageViewProperty.set(new ImageView(image));
@@ -161,7 +165,7 @@ public class ImageViewPane extends Region {
 
     private Group makeArrow(Edge e) {
 
-        double arrowLength = 4;
+        double arrowLength = 3;
         double arrowWidth = 7;
 
         Point2D edgeStart = imageToImageViewCoordinate(e.getStart().getLocation());
@@ -234,11 +238,27 @@ public class ImageViewPane extends Region {
         return edgeLine;
     }
 
+    private List<Group> makeArrows(Path path){
+        List<Group> lines = new ArrayList<>();
+        String first;
+        for(int i = 0; i < path.numNodes()-1; i++){
+            first = path.getNode(i).getModelNode().getName();
+            if(first.equals(path.edges().get(i).getStart().getName())) {
+                lines.add(makeArrow(path.edges().get(i)));
+            } else {
+                Edge temp = new Edge(path.edges().get(i).getEnd(),
+                        path.edges().get(i).getStart(), path.edges().get(i).getStart().getLocation().getFloor());
+                lines.add(makeArrow(temp));
+            }
+        }
+        return lines;
+    }
+
     private List<Circle> makePathCircles(Path path) {
         List<Circle> circles = new LinkedList<>();
-        for (MapNode node : path) {
-            circles.add(makeNodeCircle(node));
-        }
+        circles.add(makeNodeCircle(path.getNode(0)));
+        circles.add(makeNodeCircle(path.getNode(path.numNodes()-1)));
+
         return circles;
     }
 
@@ -298,41 +318,48 @@ public class ImageViewPane extends Region {
             double width = getImageView().getImage().getWidth();
             double height = getImageView().getImage().getHeight();
             double delta = -e.getDeltaY();
-            double scale = clamp(Math.pow(1.01, delta),
+            double scale = clamp(Math.pow(1.005, delta),
                     // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
                     Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
                     // don't scale so that we're bigger than image dimensions
                     Math.max(width / viewport.getWidth(), height / viewport.getHeight()));
-            scaleProperty.set(scale * scaleProperty.get());
-            Point2D mouse = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
-            double newWidth = viewport.getWidth() * scale;
-            double newHeight = viewport.getHeight() * scale;
-            // To keep the visual point under the mouse from moving, we need
-            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-            // where x is the mouse X coordinate in the image
-
-            // solving this for newViewportMinX gives
-
-            // newViewportMinX = x - (x - currentViewportMinX) * scale
-
-            // we then clamp this value so the image never scrolls out
-            // of the floorView
-            double newMinX = clamp(
-                    mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
-                    0,
-                    width - newWidth);
-            double newMinY = clamp(
-                    mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
-                    0,
-                    height - newHeight
-            );
-
-            setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            zoom(scale, e.getX(), e.getY());
         });
 
         getImageView().setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) resetImageView();
         });
+    }
+
+    private void zoom(double scale, double x, double y) {
+        Rectangle2D viewport = getImageView().getViewport();
+        scaleProperty.set(scale * scaleProperty.get());
+        Point2D mouse = imageViewToImageCoordinate(getImageView(), new Point2D(x, y));
+        double width = getImageView().getImage().getWidth();
+        double height = getImageView().getImage().getHeight();
+        double newWidth = viewport.getWidth() * scale;
+        double newHeight = viewport.getHeight() * scale;
+        // To keep the visual point under the mouse from moving, we need
+        // (x - newViewportMinX) / (x - currentViewportMinX) = scale
+        // where x is the mouse X coordinate in the image
+
+        // solving this for newViewportMinX gives
+
+        // newViewportMinX = x - (x - currentViewportMinX) * scale
+
+        // we then clamp this value so the image never scrolls out
+        // of the floorView
+        double newMinX = clamp(
+                mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
+                0,
+                width - newWidth);
+        double newMinY = clamp(
+                mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
+                0,
+                height - newHeight
+        );
+
+        setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
     }
 
 

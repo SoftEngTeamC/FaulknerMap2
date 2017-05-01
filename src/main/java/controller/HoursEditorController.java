@@ -1,5 +1,7 @@
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -77,6 +79,9 @@ public class HoursEditorController extends Controller {
 
     @FXML
     public void logout() {
+
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
+
         setStage();
         switchToMainScreen(logoutBtn);
     }

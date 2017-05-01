@@ -362,41 +362,41 @@ public class MainController extends Controller implements Initializable {
 
     //--------------------Buttons that have language--------------------------//
     public void HandleHelpButton() {
-        Hours hours = hoursService.find(1L);
-        String message;
-        if (hours != null) {
-            Date morningStart = hours.getVisitingHoursMorningStart();
-            Date morningEnd = hours.getVisitingHoursMorningEnd();
-
-            Date eveningStart = hours.getVisitingHoursEveningStart();
-            Date eveningEnd = hours.getVisitingHoursEveningEnd();
-
-            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
-            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
-            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
-
-            message = bundle.getString("helpMessage") + "\n\n" +
-                    bundle.getString("operatingHours") + "\n" +
-                    bundle.getString("morningHours") + morningHours + "\n" +
-                    bundle.getString("eveningHours") + eveningHours;
-
-        } else {
-            Date morningStart = new Date(0, 0, 0, 9, 30);
-            Date morningEnd = new Date(0, 0, 0, 12, 0);
-
-            Date eveningStart = new Date(0, 0, 0, 14, 0);
-            Date eveningEnd = new Date(0, 0, 0, 17, 45);
-
-            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
-            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
-            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
-
-            message = bundle.getString("helpMessage") + "\n\n" +
-                    bundle.getString("operatingHours") + "\n" +
-                    bundle.getString("morningHours") + morningHours + "\n" +
-                    bundle.getString("eveningHours") + eveningHours;
-        }
-        StartInfo_TextArea.setText(message);
+//        Hours hours = hoursService.find(1L);
+//        String message;
+//        if (hours != null) {
+//            Date morningStart = hours.getVisitingHoursMorningStart();
+//            Date morningEnd = hours.getVisitingHoursMorningEnd();
+//
+//            Date eveningStart = hours.getVisitingHoursEveningStart();
+//            Date eveningEnd = hours.getVisitingHoursEveningEnd();
+//
+//            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+//            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+//            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+//
+//            message = bundle.getString("helpMessage") + "\n\n" +
+//                    bundle.getString("operatingHours") + "\n" +
+//                    bundle.getString("morningHours") + morningHours + "\n" +
+//                    bundle.getString("eveningHours") + eveningHours;
+//
+//        } else {
+//            Date morningStart = new Date(0, 0, 0, 9, 30);
+//            Date morningEnd = new Date(0, 0, 0, 12, 0);
+//
+//            Date eveningStart = new Date(0, 0, 0, 14, 0);
+//            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+//
+//            SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
+//            String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
+//            String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
+//
+//            message = bundle.getString("helpMessage") + "\n\n" +
+//                    bundle.getString("operatingHours") + "\n" +
+//                    bundle.getString("morningHours") + morningHours + "\n" +
+//                    bundle.getString("eveningHours") + eveningHours;
+//        }
+//        StartInfo_TextArea.setText(message);
     }
 
     public void HandlePanicButton() {

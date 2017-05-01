@@ -1,6 +1,8 @@
 package controller;
 
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -46,6 +48,8 @@ public class AddServiceController extends PersonController {
     }
 
     public void logoutBtnPressed() {
+
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
         switchToMainScreen(logoutBtn);
 
     }

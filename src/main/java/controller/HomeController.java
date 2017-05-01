@@ -1,20 +1,17 @@
 package controller;
 
-import com.google.zxing.WriterException;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Hours;
@@ -22,6 +19,7 @@ import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import quickResponse.QR;
+import service.HoursService;
 import textDirections.Step;
 import util.ImageViewPane;
 import util.MappedList;
@@ -32,11 +30,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import textDirections.TextualDirections.*;
-
 import static textDirections.TextualDirections.pathSteps;
 
 public class HomeController extends Controller implements Initializable {
+    Date date = new Date();
 
     @FXML
     private SplitPane Home_MainSplit;
@@ -157,12 +154,13 @@ public class HomeController extends Controller implements Initializable {
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
-
-        
+        // make hours service
+        HoursService hs = new HoursService();
+        timeofdaywarning( hs.find(1L).getVisitingHoursMorningStart(),hs.find(1L).getVisitingHoursEveningEnd(),date);
 
     }
 
-    private void clearFloorArray() {
+    void clearFloorArray() {
         floorButtons.clear();
         floorButtons.add(FirstFloor_Button);
         floorButtons.add(SecondFloor_Button);
@@ -172,8 +170,17 @@ public class HomeController extends Controller implements Initializable {
         floorButtons.add(SixthFloor_Button);
         floorButtons.add(SeventhFloor_Button);
 
-        for (Button b : floorButtons) {
-            b.setDisable(false);
+        for (int i = 0; i < floorButtons.size();i++) {
+            floorButtons.get(i).setDisable(false);
+            int finalI = i;
+            floorButtons.get(i).setOnMouseClicked(event -> {
+                mapView = new ImageViewPane(ImageProvider.getImageByFloor(finalI +1));
+                mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+                mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+                mapView.toBack();
+                mapContainer.getChildren().clear();
+                mapContainer.getChildren().add(mapView);
+            });
         }
     }
 
@@ -197,7 +204,7 @@ public class HomeController extends Controller implements Initializable {
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private void initializeMap() {
+    void initializeMap() {
         ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
@@ -207,13 +214,18 @@ public class HomeController extends Controller implements Initializable {
     }
 
     private void displayPaths() {
-
+        mapView = new ImageViewPane(ImageProvider.getImageByFloor(paths.get(0).
+                groupedByFloor().get(0).getFloor()));
+        mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapView.setPath(paths.get(0).groupedByFloor().get(0));
+        mapView.toBack();
+        mapContainer.getChildren().clear();
+        mapContainer.getChildren().add(mapView);
         for (int floor : paths.get(0).floorsNotSpanned()) {
             floorButtons.get(floor-1).setDisable(true);
         }
 
-        System.out.println(paths.get(0).groupedByFloor().size());
         for (Path path : paths.get(0).groupedByFloor()) {
             int floor = path.getFloor();
             floorButtons.get(floor - 1).setDisable(false);
@@ -225,7 +237,7 @@ public class HomeController extends Controller implements Initializable {
                 mapView.toBack();
                 mapContainer.getChildren().clear();
                 mapContainer.getChildren().add(mapView);
-                System.out.println(path.nodes());
+//                System.out.println(path.nodes());
             });
         }
     }
@@ -247,7 +259,7 @@ public class HomeController extends Controller implements Initializable {
 
     //-----------------------------------------------------------
 
-    private void initializeDirectory() {
+    void initializeDirectory() {
         Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Search_ScrollPane.setPrefHeight(1000);
         searchResultsView.setPlaceholder(new Label("No matches :("));
@@ -309,8 +321,10 @@ public class HomeController extends Controller implements Initializable {
 
     private void search(String query) {
         List<? extends Navigable> results = professionalService.search(query);
+        List<? extends Navigable> results1 = serviceService.search(query);
         searchResults.clear();
         searchResults.addAll(results);
+        searchResults.addAll(results1);
         searchResults.removeIf(result -> destinations.stream().map(Object::toString).collect(Collectors.toList()).contains(result.toString()));
     }
 
@@ -322,11 +336,16 @@ public class HomeController extends Controller implements Initializable {
     }
 
     // --------------- View State Changers --------------- //
+    private BooleanProperty showWarning = new SimpleBooleanProperty(false);
+
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
+        Label warningLabel = new Label("The destination may not be open.");
+        warningLabel.visibleProperty().bind(showWarning);
+        Searching_VBox.getChildren().add(warningLabel);
         currentSearchField = null;
     }
 
@@ -401,7 +420,7 @@ public class HomeController extends Controller implements Initializable {
     }
 
     // ------------------------- Destination View Factories ----------------------------- //
-    private HBox makeDestinationView(Navigable location){
+    HBox makeDestinationView(Navigable location){
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
@@ -442,7 +461,15 @@ public class HomeController extends Controller implements Initializable {
     private Button makeDeleteButton(Navigable location) {
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
+            ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+            mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+            mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+            mapView.toBack();
+            mapContainer.getChildren().clear();
+            mapContainer.getChildren().add(mapView);
+
             destinations.remove(location);
+            clearFloorArray();
             destinationNodeCache.remove(location);
             currentDestinationIndex = -1;
             if (destinations.isEmpty()) showSearch();
@@ -453,12 +480,13 @@ public class HomeController extends Controller implements Initializable {
         return deleteButton;
     }
 
-    private void MakeGetDirectionsButton(){
+    void MakeGetDirectionsButton(){
         //Define actions on ShowTextDirections Button
         DirectionButton.setText(bundle.getString("getDirections"));
         DirectionButton.setOnAction(e -> {
-            System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
+         //   System.out.print("SteppingThroughDirections: "+SteppingThroughDirections);
             if(SteppingThroughDirections){
+                System.out.println("in step through");
                 DirectionButton.setText(bundle.getString("getOverview"));
                 FloorButtons_VBox.setVisible(false);
                 showTextDirections();
@@ -471,12 +499,15 @@ public class HomeController extends Controller implements Initializable {
                 SteppingThroughDirections = false;
             }
             else{
+                System.out.println("not in step through");
                 //The Overview Of the Path should be the Text Directions
                 // also allowing navigability of all relevant floors as opposed to step through
                 DirectionButton.setText(bundle.getString("getDirections"));
                 FloorButtons_VBox.setVisible(true);
                 FloorSpan.set(PathSpansFloors());
                 SteppingThroughDirections = true;
+                showTextDirections();
+                displayPaths();
                 //If QRCode button Exists. Get Rid of it.
                 if(addDestandDirectionButtons.getChildren().size()>2){
                     addDestandDirectionButtons.getChildren().remove(2);
@@ -560,6 +591,7 @@ public class HomeController extends Controller implements Initializable {
     public void HandleHelpButton() {
         Hours hours = hoursService.find(1L);
         String message;
+        TextArea text = new TextArea();
         if (hours != null) {
             Date morningStart = hours.getVisitingHoursMorningStart();
             Date morningEnd = hours.getVisitingHoursMorningEnd();
@@ -571,10 +603,14 @@ public class HomeController extends Controller implements Initializable {
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
             String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
 
-            message = bundle.getString("helpMessage") + "\n\n" +
+            text.setText(bundle.getString("helpMessage") + "\n\n" +
                     bundle.getString("operatingHours") + "\n" +
                     bundle.getString("morningHours") + morningHours + "\n" +
-                    bundle.getString("eveningHours") + eveningHours;
+                    bundle.getString("eveningHours") + eveningHours);
+//            message = bundle.getString("helpMessage") + "\n\n" +
+//                    bundle.getString("operatingHours") + "\n" +
+//                    bundle.getString("morningHours") + morningHours + "\n" +
+//                    bundle.getString("eveningHours") + eveningHours;
 
         } else {
             Date morningStart = new Date();
@@ -587,22 +623,58 @@ public class HomeController extends Controller implements Initializable {
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
             String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
 
+            text.setText(bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours);
             message = bundle.getString("helpMessage") + "\n\n" +
                     bundle.getString("operatingHours") + "\n" +
                     bundle.getString("morningHours") + morningHours + "\n" +
                     bundle.getString("eveningHours") + eveningHours;
         }
-        // <TODO> place the text somewhere
-//        StartInfo_TextArea.setText(message);
+
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(searchResultsView);
+        searchResultsView.getSelectionModel().clearSelection();
+        setCurrentSearchField(searchBox);
+        Searching_VBox.getChildren().add(text);
     }
 
     // <TODO> make this work
     public void HandlePanicButton() {
+
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(searchResultsView);
+        searchResultsView.getSelectionModel().clearSelection();
+        setCurrentSearchField(searchBox);
+        Searching_VBox.getChildren().add(new TextField(bundle.getString("panicMessage")));
 //
 //        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
 //        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
 //        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
 //
 //        FindandDisplayPath(HP_Start, null, null, HS_Dest);
+    }
+    public void timeofdaywarning(Date visitingHoursMorningStart, Date visitingHoursMorningEnd, Date date){
+            date.setYear(visitingHoursMorningEnd.getYear());
+            date.setMonth(visitingHoursMorningEnd.getMonth());
+            date.setDate(visitingHoursMorningEnd.getDate());
+        if (date.after(hoursService.find(1L).getVisitingHoursMorningStart()) &&
+                date.before(hoursService.find(1L).getVisitingHoursMorningEnd())){
+            System.out.println("works");
+            showWarning.set(false);
+        }
+        else if (date.after(hoursService.find(1L).getVisitingHoursEveningStart()) &&
+                date.before(hoursService.find(1L).getVisitingHoursEveningEnd())){
+            System.out.println("works");
+            showWarning.set(false);
+        }
+        else{
+            System.out.println("time is out of bounds");
+            showWarning.set(true);
+        }
+
     }
 }
