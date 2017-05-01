@@ -1,9 +1,6 @@
 package util;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -14,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import model.Coordinate;
 import pathfinding.MapNode;
 import service.NodeService;
 
@@ -71,9 +69,6 @@ public class ImageViewPane extends Region {
         return new Rectangle(rectangle2D.getMinX(), rectangle2D.getMinY(), rectangle2D.getWidth(), rectangle2D.getHeight());
     }
 
-    public void things() {
-        layoutChildren();
-    }
 
     @Override
     protected void layoutChildren() {
@@ -103,7 +98,7 @@ public class ImageViewPane extends Region {
             double yOffset = (imageView.getFitHeight() - imageView.getBoundsInLocal().getHeight()) / 2;
 
             // Get the top left corner of the viewport
-            Point2D topLeft = imageToImageViewCoordinate(imageView, new Point2D(0, 0));
+            Point2D topLeft = imageToContainerCoordinate(imageView, new Point2D(0, 0));
             layoutInArea(drawPane, topLeft.getX() + xOffset, topLeft.getY() + yOffset, drawPane.getWidth(), drawPane.getHeight(), 0, HPos.CENTER, VPos.CENTER);
         }
     }
@@ -138,11 +133,10 @@ public class ImageViewPane extends Region {
     }
 
     public void drawNode(MapNode node) {
-        double pixelRatio = getImageView().getBoundsInLocal().getWidth() / getImageView().getImage().getWidth();
-        System.out.println(pixelRatio);
-        double x = node.getLocation().getX() * pixelRatio;
-        double y = node.getLocation().getY() * pixelRatio;
-        Circle nodeCircle = new Circle(x, y, 10);
+        Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
+        Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
+
+        BooleanProperty selected = new SimpleBooleanProperty();
 
         getDrawPane().getChildren().add(nodeCircle);
     }
@@ -240,7 +234,12 @@ public class ImageViewPane extends Region {
         );
     }
 
-    private static Point2D imageToImageViewCoordinate(ImageView floorView, Point2D imageCoordinates) {
+    private Point2D imageToImageViewCoordinate(Coordinate coordinate) {
+        double pixelRatio = getImageView().getBoundsInLocal().getWidth() / getImageView().getImage().getWidth();
+        return new Point2D(coordinate.getX()*pixelRatio, coordinate.getY()*pixelRatio);
+    }
+
+    private static Point2D imageToContainerCoordinate(ImageView floorView, Point2D imageCoordinates) {
         double xProp = floorView.getBoundsInLocal().getWidth() / floorView.getViewport().getWidth();
         double yProp = floorView.getBoundsInLocal().getHeight() / floorView.getViewport().getHeight();
         Rectangle2D viewport = floorView.getViewport();
