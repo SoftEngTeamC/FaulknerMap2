@@ -29,6 +29,10 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,90) , 7, 0.0 , 2 , 3 );
 }
 
+.text-field {
+    -fx-max-width: 500px;
+}
+
 .menu-button {
     -fx-background-color: #0058a1;
     -fx-border-color: #2f3332;
