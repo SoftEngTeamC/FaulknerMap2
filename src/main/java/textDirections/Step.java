@@ -1,8 +1,6 @@
 package textDirections;
 
-
-import controller.MainController;
-
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class Step {
@@ -18,35 +16,36 @@ public class Step {
         String sharpnessModifier = "";
         switch (sharpness) {
             case SHARP:
-                sharpnessModifier = bundle.getString(" sharp ");
+                sharpnessModifier = bundle.getString("sharp") + " ";
                 break;
             case NORMAL:
                 sharpnessModifier = "";
                 break;
             case SLIGHT:
-                sharpnessModifier = bundle.getString(" slight ");
+                sharpnessModifier = bundle.getString("slight") + " ";
                 break;
         }
 
         String directionString = "";
         String commandString = "";
-        String distanceString = bundle.getString(" and continue straight for ") + distance.toString() + bundle.getString(" feet.");
+        String distanceString = " " + bundle.getString("andcontinuestraight") + " " +
+                getDistance() + " " + bundle.getString("feet");
         switch (direction) {
             case LEFT:
-                commandString = bundle.getString("Take a ");
-                directionString = bundle.getString("left turn");
+                commandString = bundle.getString("takeA");
+                directionString = bundle.getString("leftTurn");
                 break;
             case RIGHT:
-                commandString = bundle.getString("Take a ");
-                directionString = bundle.getString("right turn");
+                commandString = bundle.getString("takeA");
+                directionString = bundle.getString("rightTurn");
                 break;
             case STRAIGHT:
-                commandString = bundle.getString("Continue ");
+                commandString = bundle.getString("continue");
                 directionString = bundle.getString("straight");
-                distanceString = bundle.getString(" for ") + distance.toString() + bundle.getString(" feet.");
+                distanceString = bundle.getString("for") + getDistance() + bundle.getString("feet");
                 break;
             case BACKWARDS:
-                directionString = bundle.getString("Turn around");
+                directionString = bundle.getString("turnAround");
                 break;
         }
 
@@ -58,7 +57,8 @@ public class Step {
         return step;
     }
 
-    public Double getDistance() {
-        return distance;
+    public String getDistance() {
+        DecimalFormat df = new DecimalFormat("#.#");
+        return df.format(distance);
     }
 }
