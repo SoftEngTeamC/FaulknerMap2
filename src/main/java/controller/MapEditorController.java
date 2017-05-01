@@ -13,8 +13,6 @@ import pathfinding.Map;
 import pathfinding.MapNode;
 import util.ImageViewPane;
 
-import java.util.Collection;
-
 public class MapEditorController extends Controller {
     @FXML private VBox leftContainer;
     @FXML private Pane mapContainer;
@@ -58,6 +56,7 @@ public class MapEditorController extends Controller {
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapContainer.getChildren().add(mapView);
         mapView.showAllNodes(nodeService.getNodesByFloor(floor));
+        mapView.showAllEdges(edgeService.getAllEdgesOnFloor(floor));
     }
 
     private void clearSelections() {

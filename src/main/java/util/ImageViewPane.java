@@ -216,7 +216,25 @@ public class ImageViewPane extends Region {
     private Line makeEdgeLine(Edge edge) {
         Point2D edgeStart = imageToImageViewCoordinate(edge.getStart().getLocation());
         Point2D edgeEnd = imageToImageViewCoordinate(edge.getEnd().getLocation());
-        return new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
+        Line edgeLine = new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
+
+        BooleanProperty selected = new SimpleBooleanProperty(false);
+
+        edgeLine.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                selected.set(!selected.get());
+            }
+        });
+
+        selected.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                edgeLine.strokeWidthProperty().set(5);
+            } else {
+                edgeLine.strokeWidthProperty().set(3);
+            }
+        });
+
+        return edgeLine;
     }
 
     private List<Circle> makePathCircles(Path path) {
@@ -242,7 +260,7 @@ public class ImageViewPane extends Region {
 
         nodeCircle.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                selected.setValue(true);
+                selected.setValue(!selected.get());
             }
         });
 
@@ -378,6 +396,18 @@ public class ImageViewPane extends Region {
                     getDrawPane().getChildren().add(nodeCircle);
                 }
                 added.set(true);
+            }
+        });
+    }
+
+    public void showAllEdges(Collection<Edge> edges) {
+        BooleanProperty added = new SimpleBooleanProperty(false);
+        needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !added.get()) {
+                for (Edge edge : edges) {
+                    getDrawPane().getChildren().add(makeEdgeLine(edge));
+                }
+                added.set(false);
             }
         });
     }
