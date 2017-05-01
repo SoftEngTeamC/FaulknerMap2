@@ -24,7 +24,7 @@ public class MapEditorController extends Controller {
 
     private Map map = new Map(nodeService.getAllNodes());
 
-    ImageViewPane currentMapView;
+    private ImageViewPane currentMapView;
 
     @FXML
     public void initialize() {
@@ -50,6 +50,11 @@ public class MapEditorController extends Controller {
             if (newValue != null) {
                 searchResults.clear();
                 searchResults.addAll(nodeService.search(newValue));
+            }
+        });
+        searchResultsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                currentMapView.selectedNode.set(newValue);
             }
         });
     }
@@ -81,11 +86,15 @@ public class MapEditorController extends Controller {
         mapView.showAllNodes(nodeService.getNodesByFloor(floor));
     }
 
-
+    private ObservableList<Node> neighbors = FXCollections.observableArrayList();
+    private ListView<Node> neighborsView = new ListView<>(neighbors);
     private void showSelectedNode() {
         leftContainer.getChildren().clear();
         Node node = currentMapView.selectedNode.get();
+        neighbors.clear();
+        neighbors.addAll(nodeService.neighbors(node.getId()));
         leftContainer.getChildren().add(new Label(node.getName()));
+        leftContainer.getChildren().add(neighborsView);
     }
 
     private void showSelectedEdge() {
