@@ -71,4 +71,10 @@ public class Edge {
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
+
+    @Override
+    @Transient
+    public String toString() {
+        return getStart().toString() + " <-> " + getEnd().toString();
+    }
 }

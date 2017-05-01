@@ -420,7 +420,7 @@ public class HomeController extends Controller implements Initializable {
     }
 
     // ------------------------- Destination View Factories ----------------------------- //
-    HBox makeDestinationView(Navigable location){
+    private HBox makeDestinationView(Navigable location){
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
@@ -551,7 +551,7 @@ public class HomeController extends Controller implements Initializable {
 
         textdirs.selectionModelProperty().addListener(e ->{
             //TODO GINA THIS IS WHERE I LEFT OFF. TRYING TO ACT WHEN THE SELECTION INDEX CHANGES
-            System.out.println("TextDirection#: "+textdirs.getSelectionModel());
+            System.out.println("TextDirection#: "+ textdirs.getSelectionModel());
         });
 
         return textdirs;
