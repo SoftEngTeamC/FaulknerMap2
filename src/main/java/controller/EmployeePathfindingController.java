@@ -25,6 +25,7 @@ public class EmployeePathfindingController extends HomeController implements Ini
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        super.setEmployee(true);
         super.clearFloorArray();
         pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes(), false);
 

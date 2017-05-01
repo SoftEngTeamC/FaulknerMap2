@@ -1,5 +1,8 @@
 package controller;
 
+import Memento.LoginStatusEditor;
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
@@ -99,6 +102,8 @@ public class HomeController extends Controller implements Initializable {
     private ImageViewPane mapView;
 
 
+    private boolean employee;
+
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> searchResultsView = new ListView<>(searchResults);
@@ -136,9 +141,17 @@ public class HomeController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         bundle = resources;
 
+        LoginStatusEditor originator = new LoginStatusEditor();
+        LoginStatusSingleton careTaker = LoginStatusSingleton.getInstance();
+        LoginStatusMemento memento = new LoginStatusMemento(false);
+        originator.setStatus(memento.getStatus());
+        careTaker.addMemento(originator.save());
+
         pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes(), true);
 
         clearFloorArray();
+
+        setEmployee(false);
 
         english_button.setOnAction(event -> loadView(new Locale("en", "US")));
         spanish_button.setOnAction(event -> loadView(new Locale("es", "PR")));
@@ -160,6 +173,10 @@ public class HomeController extends Controller implements Initializable {
         timeofdaywarning( hs.find(1L).getVisitingHoursMorningStart(),hs.find(1L).getVisitingHoursEveningEnd(),date);
     }
 
+    public void setEmployee(boolean employee){
+        this.employee = employee;
+    }
+
     void clearFloorArray() {
         floorButtons.clear();
         floorButtons.add(FirstFloor_Button);
@@ -174,7 +191,7 @@ public class HomeController extends Controller implements Initializable {
             floorButtons.get(i).setDisable(false);
             int finalI = i;
             floorButtons.get(i).setOnMouseClicked(event -> {
-                mapView = new ImageViewPane(ImageProvider.getImageByFloor(finalI +1));
+                mapView = new ImageViewPane(ImageProvider.getImageByFloor(finalI +1, employee));
                 mapView.prefHeightProperty().bind(mapContainer.heightProperty());
                 mapView.prefWidthProperty().bind(mapContainer.widthProperty());
                 mapView.toBack();
@@ -205,7 +222,7 @@ public class HomeController extends Controller implements Initializable {
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
     void initializeMap() {
-        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1, employee));
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapContainer.getChildren().add(mapView);
@@ -215,7 +232,7 @@ public class HomeController extends Controller implements Initializable {
 
     private void displayPaths() {
         mapView = new ImageViewPane(ImageProvider.getImageByFloor(paths.get(0).
-                groupedByFloor().get(0).getFloor()));
+                groupedByFloor().get(0).getFloor(), employee));
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapView.setPath(paths.get(0).groupedByFloor().get(0));
@@ -230,7 +247,7 @@ public class HomeController extends Controller implements Initializable {
             int floor = path.getFloor();
             floorButtons.get(floor - 1).setDisable(false);
             floorButtons.get(floor - 1).setOnMouseClicked(event -> {
-                mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
+                mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor, employee));
                 mapView.prefHeightProperty().bind(mapContainer.heightProperty());
                 mapView.prefWidthProperty().bind(mapContainer.widthProperty());
                 mapView.setPath(path);
@@ -461,7 +478,7 @@ public class HomeController extends Controller implements Initializable {
     private Button makeDeleteButton(Navigable location) {
         Button deleteButton = new Button();
         deleteButton.setOnAction(e -> {
-            ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+            ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1, employee));
             mapView.prefHeightProperty().bind(mapContainer.heightProperty());
             mapView.prefWidthProperty().bind(mapContainer.widthProperty());
             mapView.toBack();

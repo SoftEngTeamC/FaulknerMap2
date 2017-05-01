@@ -83,7 +83,7 @@ public class MapEditorController extends Controller {
     private void showFloor(int floor) {
         currentFloor.set(floor);
         mapContainer.getChildren().clear();
-        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
+        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor, false));
         currentMapView = mapView;
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());

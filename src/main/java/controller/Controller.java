@@ -36,11 +36,11 @@ public class Controller {
         LoginStatusEditor originator = new LoginStatusEditor();
         LoginStatusSingleton careTaker = LoginStatusSingleton.getInstance();
         LoginStatusMemento memento = new LoginStatusMemento(true);
-//        System.out.println(memento.getStatus());
+        System.out.println(memento.getStatus());
 //        System.out.println(careTaker.getMemento().getStatus());
         originator.setStatus(memento.getStatus());
         careTaker.addMemento(originator.save());
-//        System.out.println(careTaker.getMemento().getStatus());
+        System.out.println(careTaker.getMemento().getStatus());
 //        System.out.println(originator.save().getStatus());
 
         idleMonitor = new IdleMonitor(Duration.seconds(careTaker.getTimeout()),
