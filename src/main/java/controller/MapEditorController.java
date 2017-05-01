@@ -11,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Edge;
 import model.Node;
-import pathfinding.Map;
 import util.ImageViewPane;
 
 public class MapEditorController extends Controller {
@@ -19,8 +18,6 @@ public class MapEditorController extends Controller {
     @FXML private Pane mapContainer;
 
     @FXML private Button floorButton1, floorButton2, floorButton3, floorButton4, floorButton5, floorButton6, floorButton7;
-
-    private Map map = new Map(nodeService.getAllNodes());
 
     private ImageViewPane currentMapView;
 
@@ -49,7 +46,14 @@ public class MapEditorController extends Controller {
 
     private void addCurrentListeners() {
         currentMapView.selectedNode.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
+            System.out.println(oldValue);
+            System.out.println(newValue);
+            if (newValue != null && oldValue != newValue) {
+                if (newValue.getLocation().getFloor() != currentFloor.get()) {
+                    currentFloor.set(newValue.getLocation().getFloor());
+                    showFloor(currentFloor.get());
+                    currentMapView.selectedNode.set(newValue);
+                }
                 showSelectedNode();
             }
             if (newValue == null) {
