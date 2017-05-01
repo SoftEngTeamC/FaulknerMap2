@@ -71,4 +71,9 @@ public class AdminToolController extends Controller{
         switchToMainScreen(editDirectoryBtn);
     }
 
+    public void pathFinding(){
+        setStage();
+        switchScreen("view/EmployeePathfinding.fxml", "Employee Pathfinding", stage);
+    }
+
 }

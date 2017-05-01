@@ -168,7 +168,7 @@ public class HomeController extends Controller implements Initializable {
 
     }
 
-    private void clearFloorArray() {
+    void clearFloorArray() {
         floorButtons.clear();
         floorButtons.add(FirstFloor_Button);
         floorButtons.add(SecondFloor_Button);
@@ -203,7 +203,7 @@ public class HomeController extends Controller implements Initializable {
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private void initializeMap() {
+    void initializeMap() {
         ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
         mapView.prefHeightProperty().bind(mapContainer.heightProperty());
         mapView.prefWidthProperty().bind(mapContainer.widthProperty());
@@ -258,7 +258,7 @@ public class HomeController extends Controller implements Initializable {
 
     //-----------------------------------------------------------
 
-    private void initializeDirectory() {
+    void initializeDirectory() {
         Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Search_ScrollPane.setPrefHeight(1000);
         searchResultsView.setPlaceholder(new Label("No matches :("));
@@ -413,7 +413,7 @@ public class HomeController extends Controller implements Initializable {
     }
 
     // ------------------------- Destination View Factories ----------------------------- //
-    private HBox makeDestinationView(Navigable location){
+    HBox makeDestinationView(Navigable location){
         if (destinationNodeCache.containsKey(location)) return destinationNodeCache.get(location);
         HBox destinationView = makeDestinationNodeElement(location);
         destinationNodeCache.put(location, destinationView);
@@ -473,7 +473,7 @@ public class HomeController extends Controller implements Initializable {
         return deleteButton;
     }
 
-    private void MakeGetDirectionsButton(){
+    void MakeGetDirectionsButton(){
         //Define actions on ShowTextDirections Button
         DirectionButton.setText(bundle.getString("getDirections"));
         DirectionButton.setOnAction(e -> {
