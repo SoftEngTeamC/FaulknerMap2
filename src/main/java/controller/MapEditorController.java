@@ -1,5 +1,6 @@
 package controller;
 
+import Memento.LoginStatusMemento;
 import Singleton.LoginStatusSingleton;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -716,6 +717,9 @@ public class MapEditorController extends Controller {
      * Action event handler for logout button being pressed. Goes to main screen.
      */
     public void logout() {
+
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
+
         setStage();
         switchToMainScreen(logoutBtn);
     }
