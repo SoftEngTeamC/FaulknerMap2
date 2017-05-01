@@ -18,6 +18,8 @@ import model.Edge;
 import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
+import service.CoordinateService;
+import service.NodeService;
 
 import java.util.*;
 
@@ -276,6 +278,14 @@ public class ImageViewPane extends Region {
             nodeCircle.centerYProperty().set(e.getY());
         });
 
+        nodeCircle.setOnMouseReleased(e -> {
+            Point2D newPoint = imageViewToImageCoordinate(new Point2D(e.getX(), e.getY()));
+            node.getLocation().setX(newPoint.getX());
+            node.getLocation().setY(newPoint.getY());
+            CoordinateService cs = new CoordinateService();
+            cs.merge(node.getLocation());
+        });
+
         return nodeCircle;
     }
 
@@ -318,8 +328,13 @@ public class ImageViewPane extends Region {
         getImageView().setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
                 Point2D clickOnMap = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
-                Point2D clickInContainer = imageToImageViewCoordinate(clickOnMap);
-                getDrawPane().getChildren().add(new Circle(clickInContainer.getX(), clickInContainer.getY(), 5));
+                NodeService nodeService = new NodeService();
+                CoordinateService coordinateService = new CoordinateService();
+                Coordinate location = new Coordinate(clickOnMap.getX(), clickOnMap.getY(), 1); // TODO FIX THIS YOU F UCK
+                coordinateService.persist(location);
+                Node newNode = new Node("new noodle", location);
+                nodeService.persist(newNode);
+                getDrawPane().getChildren().add(makeNodeCircle(newNode));
             }
         });
     }
@@ -443,7 +458,6 @@ public class ImageViewPane extends Region {
     public void showAllEdges(Collection<Edge> edges) {
         needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !edgesAdded.get() && nodesAdded.get()) {
-                System.out.println(nodeCircleMap);
                 for (Edge edge : edges) {
                     Line edgeLine = makeEdgeLine(edge);
 
