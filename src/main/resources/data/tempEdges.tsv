@@ -415,52 +415,86 @@ hallway127	SuitesIntersection12
 Mri/Ct	hallway128
 hallway128	SuitesIntersection16
 
-hallway28	SuitesIntersection20
-hallway28	SuitesIntersection21
+ORL	hallway28
+hallway28	SuitesIntersection25
 
-hallway29	SuitesIntersection23
+Suite21	hallway29
+hallway29	SuitesIntersection26
 
-hallway210	SuitesIntersection22
-hallway210	SuitesIntersection23
+Food Services	hallway210
+hallway210	SuitesIntersection20
+hallway210	SuitesIntersection21
 
-hallway211	SuitesIntersection22
+Matmang	hallway211
 hallway211	SuitesIntersection23
 
+Pharm	hallway212
 hallway212	SuitesIntersection22
 hallway212	SuitesIntersection23
 
+Morgue	hallway213
 hallway213	SuitesIntersection22
 hallway213	SuitesIntersection23
 
+Censterile	hallway214
 hallway214	SuitesIntersection22
-hallway214	SuitesIntersection21
+hallway214	SuitesIntersection23
 
+Bio Engineering	hallway215
 hallway215	SuitesIntersection22
-hallway215	SuitesIntersection21
+hallway215	SuitesIntersection23
 
-hallway216	SuitesIntersection22
-hallway216	SuitesIntersection21
+Outpatient Psych (Employee)	hallway216
+Inpatient Psych (Employee)	hallway216
 
-CenstrlsupInternal	Censtrlsup
-hallway217	Censtrlsup
-
-hallway218	SuitesIntersection20
+Hazard Storage	hallway218
+hallway218	SuitesIntersection22
 hallway218	SuitesIntersection21
 
-hallway219	SuitesIntersection20
+Security	219
+hallway219	SuitesIntersection22
 hallway219	SuitesIntersection21
 
+Censtrlsup	hallway220
 hallway220	SuitesIntersection22
-hallway220	SuitesIntersection23
+hallway220	SuitesIntersection21
 
-hallway221	hallway223
+CenstrlsupInternal	Censtrlsup
+hallway221	Censtrlsup
 
+hallway221	SuitesIntersection20
+
+Laundry	Hallway222
+hallway222	SuitesIntersection21
+
+Physical Therapy	hallway223
 hallway223	SuitesIntersection20
 hallway223	SuitesIntersection21
 
-hallway222	SuitesIntersection22
+OT	hallway224
+hallway224	SuitesIntersection20
+hallway224	SuitesIntersection21
+
+Housekeeping	hallway225
+hallway225	SuitesIntersection20
+hallway225	SuitesIntersection21
+
+hallway226	SuitesIntersection22
+hallway226	SuitesIntersection23
+
+Mail	hallway227
+hallway227	hallway221
+
+Mech	hallway228
+hallway228	SuitesIntersection22
 
 hallway28	Hillside Elevators 2
+
+SuitesIntersection20	SuitesIntersection21
+SuitesIntersection21	SuitesIntersection22
+SuitesIntersection22	SuitesIntersection23
+SuitesIntersection20	SuitesIntersection24
+SuitesIntersection24	SuitesIntersection25
 
 hallway312	hallway35
 hallway313	intersection321
