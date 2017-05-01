@@ -25,9 +25,9 @@ public class TextualDirections {
         DecimalFormat df = new DecimalFormat("#.#");
 
         if(nodes.get(0).getModelNode().getName().toLowerCase().contains("elevator")){
-            steps.add(bundle.getString("elevator") + nodes.get(1).getModelNode().getLocation().getFloor());
+            steps.add(bundle.getString("elevator") + " " + nodes.get(1).getModelNode().getLocation().getFloor());
         } else {
-            steps.add(bundle.getString("straight") +
+            steps.add(bundle.getString("continue") + " " + bundle.getString("straight") +
                     bundle.getString("for") + " " + df.format(distance) + " " + bundle.getString("feet"));
         }
 
@@ -45,7 +45,7 @@ public class TextualDirections {
 
             steps.add(new Step(direction, sharpness, distance, bundle).toString());
             if (nodes.get(i).getModelNode().getName().toLowerCase().contains("elevator")) {
-                steps.add(bundle.getString("elevator") + nodes.get(i + 1).getModelNode().getLocation().getFloor());
+                steps.add(bundle.getString("elevator") + " " + nodes.get(i + 1).getModelNode().getLocation().getFloor());
                 i ++;
             }
         }
