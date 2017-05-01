@@ -25,7 +25,7 @@ public class makeQRCodeTest {
     @Test
     public void buildQR() throws Exception {
         try{
-            makeQRCode.buildQR(Directions);
+            QR.buildQR(Directions);
         }catch(Exception E){
             //Assert.fail("Exception " + E);
             E.printStackTrace();

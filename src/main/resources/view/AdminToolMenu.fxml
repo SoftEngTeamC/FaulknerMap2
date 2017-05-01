@@ -24,7 +24,7 @@
                   <Insets bottom="50.0" top="150.0" />
                </VBox.margin>
                 </Text>
-                <Button fx:id="editDirectoryBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="82.0" mnemonicParsing="false" onAction="#editDirectory" prefHeight="82.0" prefWidth="225.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Database Editor">
+                <Button fx:id="editDirectoryBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="82.0" mnemonicParsing="false" onAction="#editDirectory" prefHeight="82.0" prefWidth="225.0" style="-fx-min-height: 100; -fx-max-height: 100;" text="Directory Editor">
                     <font>
                         <Font size="21.0" />
                     </font>
