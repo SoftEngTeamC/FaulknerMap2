@@ -120,7 +120,6 @@ public class HomeController extends Controller implements Initializable {
     private TextField currentSearchField;
     private int currentDestinationIndex = -1;
 
-    private pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes());
     private ObservableList<Path> paths = FXCollections.observableArrayList();
 
     private static ResourceBundle bundle;
@@ -137,6 +136,8 @@ public class HomeController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         bundle = resources;
 
+        pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes(), true);
+
         clearFloorArray();
 
         english_button.setOnAction(event -> loadView(new Locale("en", "US")));
@@ -149,7 +150,7 @@ public class HomeController extends Controller implements Initializable {
 
 
         initializeMap();
-        initializeDirectory();
+        initializeDirectory(map);
         MakeGetDirectionsButton();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
@@ -259,7 +260,7 @@ public class HomeController extends Controller implements Initializable {
 
     //-----------------------------------------------------------
 
-    void initializeDirectory() {
+    void initializeDirectory(pathfinding.Map map) {
         Search_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Search_ScrollPane.setPrefHeight(1000);
         searchResultsView.setPlaceholder(new Label("No matches :("));

@@ -199,7 +199,7 @@ public class MainController extends Controller implements Initializable {
     private void FindandDisplayPath(HospitalProfessional HP_Start, HospitalProfessional HP_Dest,
                                     HospitalService HS_Start, HospitalService HS_Dest) {
 
-        Map map = new Map(nodeService.getAllNodes());
+        Map map = new Map(nodeService.getAllNodes(), true);
 
         Node nodeStart, nodeEnd;
         if (HP_Start != null) {

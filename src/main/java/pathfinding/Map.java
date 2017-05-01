@@ -13,7 +13,7 @@ public class Map {
     public enum algorithm { BFS, DFS, ASTAR }
     private java.util.Map<Long, MapNode> nodeMap;
 
-    public Map(Collection<model.Node> nodes) {
+    public Map(Collection<model.Node> nodes, boolean disabled) {
         NodeService nodeService = new NodeService();
         EdgeService edgeService = new EdgeService();
         nodeMap = new HashMap<>();
@@ -26,9 +26,11 @@ public class Map {
                 if (n == null) continue;
                 MapNode neighbor = nodeMap.get(n.getId());
                 MapNode currentNode = nodeMap.get(id);
-                Edge maybeDisabledEdge = edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId()));
-                if (maybeDisabledEdge == null || maybeDisabledEdge.isDisabled()) continue;
-                if (neighbor == null || currentNode == null) continue;
+                if(disabled) {
+                    Edge maybeDisabledEdge = edgeService.findByNodes(nodeService.find(id), nodeService.find(n.getId()));
+                    if (maybeDisabledEdge == null || maybeDisabledEdge.isDisabled()) continue;
+                    if (neighbor == null || currentNode == null) continue;
+                }
                 currentNode.addNeighbor(neighbor);
             }
         }
