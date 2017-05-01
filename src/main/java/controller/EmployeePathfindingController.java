@@ -26,9 +26,10 @@ public class EmployeePathfindingController extends HomeController implements Ini
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.clearFloorArray();
+        pathfinding.Map map = new pathfinding.Map(nodeService.getAllNodes(), false);
 
         super.initializeMap();
-        super.initializeDirectory();
+        super.initializeDirectory(map);
         super.MakeGetDirectionsButton();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
