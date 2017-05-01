@@ -52,6 +52,13 @@ public class Map {
         return nodeMap.get(id);
     }
 
+    public Collection<MapNode> nodesOnFloor(int floor) {
+        System.out.println("ALl nodes on floor" + floor);
+        return nodeMap.values().stream()
+                .filter(mapNode -> mapNode.getLocation().getFloor() == floor)
+                .collect(Collectors.toList());
+    }
+
     public static Set<Integer> floorsInPath(List<MapNode> path) {
         Set<Integer> allFloors = new HashSet<>();
         allFloors.add(1);

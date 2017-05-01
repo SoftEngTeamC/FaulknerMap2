@@ -12,14 +12,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import model.Coordinate;
 import model.Edge;
+import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,6 +89,9 @@ public class ImageViewPane extends Region {
         });
     }
 
+    public ObjectProperty<Node> selectedNode = new SimpleObjectProperty<>();
+    public ObjectProperty<Edge> selectedEdge = new SimpleObjectProperty<>();
+
 
     @Override
     protected void layoutChildren() {
@@ -100,6 +104,7 @@ public class ImageViewPane extends Region {
 
         Pane drawPane = getDrawPane();
         if (drawPane != null && imageView != null) {
+            //TODO: Fix this transform on rescale
             double aspect = imageView.getImage().getWidth() / imageView.getImage().getHeight();
             double viewAspect = imageView.getFitWidth() / imageView.getFitHeight();
             boolean isWidthConstrained = viewAspect < aspect;
@@ -143,6 +148,7 @@ public class ImageViewPane extends Region {
             }
             if (newDrawPane != null) {
                 getChildren().add(newDrawPane);
+                newDrawPane.setPickOnBounds(false);
             }
         });
 
@@ -155,7 +161,6 @@ public class ImageViewPane extends Region {
         getImageView().setPreserveRatio(true);
 
         this.drawPaneProperty.set(new Pane());
-        getDrawPane().setPickOnBounds(false);
         resetImageView();
     }
 
@@ -219,7 +224,15 @@ public class ImageViewPane extends Region {
     private Line makeEdgeLine(Edge edge) {
         Point2D edgeStart = imageToImageViewCoordinate(edge.getStart().getLocation());
         Point2D edgeEnd = imageToImageViewCoordinate(edge.getEnd().getLocation());
-        return new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
+        Line edgeLine = new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
+
+        edgeLine.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                selectedEdge.set(edge);
+            }
+        });
+
+        return edgeLine;
     }
 
     private List<Circle> makePathCircles(Path path) {
@@ -230,32 +243,23 @@ public class ImageViewPane extends Region {
         return circles;
     }
 
-
-    private Circle makeNodeCircle(MapNode node) {
+    private Circle makeNodeCircle(Node node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
         Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
 
-        BooleanProperty selected = new SimpleBooleanProperty();
-
-        selected.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                nodeCircle.fillProperty().setValue(Color.TEAL);
-            } else {
-                nodeCircle.fillProperty().setValue(Color.BLUE);
-            }
-        });
-
         nodeCircle.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                selected.setValue(true);
+                selectedNode.set(node);
             }
         });
-
-        selected.set(false);
 
         return nodeCircle;
     }
 
+
+    private Circle makeNodeCircle(MapNode node) {
+        return makeNodeCircle(node.getModelNode());
+    }
 
 
     private static final int MIN_PIXELS = 400;
@@ -263,6 +267,8 @@ public class ImageViewPane extends Region {
         ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
         getImageView().setOnMousePressed(e -> {
+            selectedEdge.set(null);
+            selectedNode.set(null);
             Point2D mousePress = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
             mouseDown.set(mousePress);
         });
@@ -367,5 +373,34 @@ public class ImageViewPane extends Region {
 
     private static double clamp(double val, double min, double max) {
         return Math.max(min, Math.min(max, val));
+    }
+
+    public void wipe() {
+        getDrawPane().getChildren().clear();
+    }
+
+    public void showAllNodes(Collection<Node> nodes) {
+        BooleanProperty added = new SimpleBooleanProperty(false);
+        needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !added.get()) {
+                for (Node node : nodes) {
+                    Circle nodeCircle = makeNodeCircle(node);
+                    getDrawPane().getChildren().add(nodeCircle);
+                }
+                added.set(true);
+            }
+        });
+    }
+
+    public void showAllEdges(Collection<Edge> edges) {
+        BooleanProperty added = new SimpleBooleanProperty(false);
+        needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !added.get()) {
+                for (Edge edge : edges) {
+                    getDrawPane().getChildren().add(makeEdgeLine(edge));
+                }
+                added.set(true);
+            }
+        });
     }
 }

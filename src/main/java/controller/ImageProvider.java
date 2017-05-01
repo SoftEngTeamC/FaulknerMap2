@@ -2,6 +2,8 @@ package controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import Singleton.LoginStatusSingleton;
 import javafx.scene.image.Image;
 
 public class ImageProvider {
@@ -16,7 +18,40 @@ public class ImageProvider {
         return images.get(name);
     }
 
+    public static Image getEmployeeImageByFloor(int i){
+        String ImageName = "";
+        switch (i){
+            case 1:
+                ImageName = "images/floor1.png";
+                break;
+            case 2:
+                ImageName = "images/floor2.png";
+                break;
+            case 3:
+                ImageName = "images/floor3.png";
+                break;
+            case 4:
+                ImageName = "images/floor4.png";
+                break;
+            case 5:
+                ImageName = "images/floor5.png";
+                break;
+            case 6:
+                ImageName = "images/floor6.png";
+                break;
+            case 7:
+                ImageName = "images/floor7.png";
+                break;
+        }
+        return getImage(ImageName);
+    }
+
     public static Image getImageByFloor(int i){
+        // if admin, use the employee
+        if(LoginStatusSingleton.getInstance().getMemento().getStatus()){
+            getEmployeeImageByFloor(i);
+        }
+
         String ImageName ="";
         switch(i) {
             case 1:
