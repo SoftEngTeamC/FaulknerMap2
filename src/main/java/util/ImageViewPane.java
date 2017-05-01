@@ -284,41 +284,48 @@ public class ImageViewPane extends Region {
             double width = getImageView().getImage().getWidth();
             double height = getImageView().getImage().getHeight();
             double delta = -e.getDeltaY();
-            double scale = clamp(Math.pow(1.01, delta),
+            double scale = clamp(Math.pow(1.005, delta),
                     // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
                     Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
                     // don't scale so that we're bigger than image dimensions
                     Math.max(width / viewport.getWidth(), height / viewport.getHeight()));
-            scaleProperty.set(scale * scaleProperty.get());
-            Point2D mouse = imageViewToImageCoordinate(getImageView(), new Point2D(e.getX(), e.getY()));
-            double newWidth = viewport.getWidth() * scale;
-            double newHeight = viewport.getHeight() * scale;
-            // To keep the visual point under the mouse from moving, we need
-            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-            // where x is the mouse X coordinate in the image
-
-            // solving this for newViewportMinX gives
-
-            // newViewportMinX = x - (x - currentViewportMinX) * scale
-
-            // we then clamp this value so the image never scrolls out
-            // of the floorView
-            double newMinX = clamp(
-                    mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
-                    0,
-                    width - newWidth);
-            double newMinY = clamp(
-                    mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
-                    0,
-                    height - newHeight
-            );
-
-            setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            zoom(scale, e.getX(), e.getY());
         });
 
         getImageView().setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) resetImageView();
         });
+    }
+
+    private void zoom(double scale, double x, double y) {
+        Rectangle2D viewport = getImageView().getViewport();
+        scaleProperty.set(scale * scaleProperty.get());
+        Point2D mouse = imageViewToImageCoordinate(getImageView(), new Point2D(x, y));
+        double width = getImageView().getImage().getWidth();
+        double height = getImageView().getImage().getHeight();
+        double newWidth = viewport.getWidth() * scale;
+        double newHeight = viewport.getHeight() * scale;
+        // To keep the visual point under the mouse from moving, we need
+        // (x - newViewportMinX) / (x - currentViewportMinX) = scale
+        // where x is the mouse X coordinate in the image
+
+        // solving this for newViewportMinX gives
+
+        // newViewportMinX = x - (x - currentViewportMinX) * scale
+
+        // we then clamp this value so the image never scrolls out
+        // of the floorView
+        double newMinX = clamp(
+                mouse.getX() - scale*(mouse.getX() - viewport.getMinX()),
+                0,
+                width - newWidth);
+        double newMinY = clamp(
+                mouse.getY() - scale*(mouse.getY() - viewport.getMinY()),
+                0,
+                height - newHeight
+        );
+
+        setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
     }
 
 
