@@ -328,11 +328,16 @@ public class HomeController extends Controller implements Initializable {
     }
 
     // --------------- View State Changers --------------- //
+    private BooleanProperty showWarning = new SimpleBooleanProperty(false);
+
     private void showDirections() {
         Searching_VBox = makeVBox();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
+        Label warningLabel = new Label("The destination may not be open.");
+        warningLabel.visibleProperty().bind(showWarning);
+        Searching_VBox.getChildren().add(warningLabel);
         currentSearchField = null;
     }
 
@@ -618,13 +623,16 @@ public class HomeController extends Controller implements Initializable {
         if (date.after(hoursService.find(1L).getVisitingHoursMorningStart()) &&
                 date.before(hoursService.find(1L).getVisitingHoursMorningEnd())){
             System.out.println("works");
+            showWarning.set(false);
         }
         else if (date.after(hoursService.find(1L).getVisitingHoursEveningStart()) &&
                 date.before(hoursService.find(1L).getVisitingHoursEveningEnd())){
             System.out.println("works");
+            showWarning.set(false);
         }
         else{
             System.out.println("time is out of bounds");
+            showWarning.set(true);
         }
 
     }
