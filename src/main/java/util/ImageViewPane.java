@@ -1,5 +1,6 @@
 package util;
 
+import controller.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
@@ -9,11 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import model.Coordinate;
 import pathfinding.MapNode;
-import service.NodeService;
+import pathfinding.Path;
+
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class ImageViewPane extends Region {
@@ -65,8 +69,11 @@ public class ImageViewPane extends Region {
 
     private DoubleProperty scaleProperty = new SimpleDoubleProperty();
 
-    private static Rectangle toRectangle(Rectangle2D rectangle2D) {
-        return new Rectangle(rectangle2D.getMinX(), rectangle2D.getMinY(), rectangle2D.getWidth(), rectangle2D.getHeight());
+
+    private ObjectProperty<Path> pathProperty;
+
+    public void setPath(Path path) {
+        pathProperty.set(path);
     }
 
 
@@ -103,10 +110,12 @@ public class ImageViewPane extends Region {
         }
     }
 
-    private NodeService nodeService;
+    public ImageViewPane(Path path) {
+        this(ImageProvider.getImageByFloor(path.getFloor()));
+        pathProperty.setValue(path);
+    }
 
-    public ImageViewPane(Image image, NodeService nodeService) {
-        this.nodeService = nodeService;
+    public ImageViewPane(Image image) {
         imageViewProperty.addListener((prop, oldImageView, newImageView) -> {
             if (oldImageView != null) {
                 getChildren().remove(oldImageView);
@@ -124,6 +133,11 @@ public class ImageViewPane extends Region {
                 getChildren().add(newDrawPane);
             }
         });
+
+        pathProperty.addListener((observable, oldValue, newValue) -> {
+            pathCircles(newValue).forEach(circle -> getDrawPane().getChildren().add(circle));
+        });
+
         this.imageViewProperty.set(new ImageView(image));
         getImageView().setPreserveRatio(true);
 
@@ -132,14 +146,40 @@ public class ImageViewPane extends Region {
         resetImageView();
     }
 
-    public void drawNode(MapNode node) {
+    private List<Circle> pathCircles(Path path) {
+        List<Circle> circles = new LinkedList<>();
+        for (MapNode node : path) {
+            circles.add(makeNodeCircle(node));
+        }
+        return circles;
+    }
+
+
+    private Circle makeNodeCircle(MapNode node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
         Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 3);
 
         BooleanProperty selected = new SimpleBooleanProperty();
 
-        getDrawPane().getChildren().add(nodeCircle);
+        selected.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                nodeCircle.fillProperty().setValue(Color.TEAL);
+            } else {
+                nodeCircle.fillProperty().setValue(Color.BLUE);
+            }
+        });
+
+        nodeCircle.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                selected.setValue(true);
+            }
+        });
+
+        selected.set(false);
+
+        return nodeCircle;
     }
+
 
 
     private static final int MIN_PIXELS = 400;

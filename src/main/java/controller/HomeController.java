@@ -11,11 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import model.Edge;
@@ -24,6 +21,7 @@ import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
+import util.ImageViewPane;
 import util.MappedList;
 
 import java.io.IOException;
@@ -93,12 +91,8 @@ public class HomeController extends Controller implements Initializable {
     @FXML
     private MenuItem italian_button;
 
-    private ImageView MapImageView = new ImageView();
-    private static Group MapGroup = new Group();
-    //Center ScrollPane relative to Image Coordinates
-    private double CenterX;
-    private double CenterY;
-    private boolean CenterLocked = false;
+    @FXML
+    private Pane mapContainer;
 
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
@@ -144,9 +138,6 @@ public class HomeController extends Controller implements Initializable {
         italian_button.setOnAction(event -> loadView(new Locale("it", "IT")));
 
 
-        InitializeMap();
-        InitializeFloorButtons();
-        InitializeZoomListener();
         initializeDirectory();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
@@ -189,158 +180,37 @@ public class HomeController extends Controller implements Initializable {
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
-    private void InitializeMap() {
-        Map_ScrollPane.prefWidthProperty().bind(Map_AnchorPane.widthProperty());
-        Map_ScrollPane.prefHeightProperty().bind(Map_AnchorPane.heightProperty());
-        MapImageView.setPreserveRatio(true);
-
-        Image MapPic = ImageProvider.getImage("images/1_thefirstfloor.png");
-        MapImageView.setImage(MapPic);
-        MapGroup.getChildren().add(MapImageView);
-        Map_ScrollPane.setContent(MapGroup);
-        Map_ScrollPane.setPannable(true);
-        Map_ScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_ScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        Map_Slider.minProperty().bind(Map_AnchorPane.widthProperty());
-        Map_Slider.setMax(MapPic.getWidth());
-        MapImageView.fitWidthProperty().bind(Map_Slider.valueProperty());
+    private void initializeMap() {
+        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+        mapContainer.getChildren().add(mapView);
     }
 
-    private void InitializeZoomListener() {
-        //This event is triggered when the Map Slider is moved
-        //It locks the center coordinate, and as it is zoomed it pans to the desired position
-        Map_Slider.valueProperty().addListener((original, oldValue, newValue) -> {
-            CenterLocked = true;
-            System.out.println("Zooming On: " + CenterX + ", " + CenterY);
-            PanToPoint(CenterX, CenterY);
-        });
 
-        //This event is triggered when the mouse is released from the slider
-        Map_Slider.setOnMouseReleased(e -> CenterLocked = false);
 
-        //These events are triggered when the scrollpane view is panned
-        Map_ScrollPane.hvalueProperty().addListener(e -> {
-            if (!CenterLocked) {
-                Panning();
-            }
-        });
-        Map_ScrollPane.vvalueProperty().addListener(e -> {
-            if (!CenterLocked) {
-                Panning();
-            }
-        });
-    }
-
-    //This function is meant to be called whenever the user is panning around the map
-    //ie on click and drag, not on zoom, Controlled by CenterLocked Boolean
-    private void Panning() {
-        double Width = MapImageView.getImage().getWidth();
-        double Height = MapImageView.getImage().getHeight();
-        double ImageRatio = Height / Width;
-        double currWidth = MapImageView.getFitWidth();
-        double currHeight = currWidth * ImageRatio;
-        double ScrollX = Map_ScrollPane.getHvalue();
-        double ScrollY = Map_ScrollPane.getVvalue();
-
-        double Xprime = ((ScrollX + ((Map_ScrollPane.getWidth() / currWidth) / 2)) * (currWidth - Map_ScrollPane.getWidth()));
-        double Yprime = ((ScrollY + ((Map_ScrollPane.getHeight() / currHeight) / 2)) * (currHeight - Map_ScrollPane.getHeight()));
-
-        CenterX = Xprime / (currWidth / Width);
-        CenterY = Yprime / (currHeight / Height);
-        System.out.println(CenterX + ", " + CenterY);
-    }
-
-    private void PanToPoint(double X, double Y) {
-        System.out.println("Panning To Point");
-        double Width = MapImageView.getImage().getWidth();
-        double Height = MapImageView.getImage().getHeight();
-        double ImageRatio = Height / Width;
-        double currWidth = MapImageView.getFitWidth();
-        double currHeight = currWidth * ImageRatio;
-        double Xprime = X * (currWidth / Width);
-        double Yprime = Y * (currHeight / Height);
-
-        Map_ScrollPane.setHvalue((Xprime / (currWidth - Map_ScrollPane.getWidth())) - ((Map_ScrollPane.getWidth() / currWidth) / 2));
-        Map_ScrollPane.setVvalue((Yprime / (currHeight - Map_ScrollPane.getHeight())) - ((Map_ScrollPane.getHeight() / currHeight) / 2));
-    }
-
-    private void ClearMapGroup() {
-        Group group1 = (Group) Map_ScrollPane.getContent();
-        group1.getChildren().remove(1, group1.getChildren().size());
-    }
-
-    private void MakeCircleInGroup(MapNode N) {
-        //This function trusts that it is only being called to build circles on the displayed floor
-        double x = N.getLocation().getX();
-        double y = N.getLocation().getY();
-
-        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
-        // initial size of image and the image ratio
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
-
-        Circle circle = new Circle();
-        //These bind the center positions relative to the width property of the image
-        //the new center is calculated using the initial ratios
-        circle.centerXProperty().bind(Map1.fitWidthProperty().multiply(x / ImgW));
-        circle.centerYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply(y / ImgH));
-        circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
-        circle.fillProperty().setValue(Color.RED);
-
-        //MapGroup.getChildren().addAll(circle);
-    }
-
-    private void MakeLineInGroup(Edge e) {
+    private Line makeEdgeLine(Edge e) {
         double x1 = e.getStart().getLocation().getX();
         double y1 = e.getStart().getLocation().getY();
         double x2 = e.getEnd().getLocation().getX();
         double y2 = e.getEnd().getLocation().getY();
 
-        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+//        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
 
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
+//        double ImgW = Map1.getImage().getWidth();
+//        double ImgH = Map1.getImage().getHeight();
+//        double ImgR = ImgH / ImgW;
 
         Line edge = new Line();
         //the points are bound to the fit width property of the image and scaled by the initial image ratio
-        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+//        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+//        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+//        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+//        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
 
         if (e.isDisabled()) {
             edge.getStrokeDashArray().addAll(2d, 10d);
         }
 
-        MapGroup.getChildren().add(edge);
-    }
-
-    private void InitializeFloorButtons() {
-        FirstFloor_Button.setOnMouseClicked(e -> currFloor.set(1));
-        SecondFloor_Button.setOnMouseClicked(e -> currFloor.set(2));
-        ThirdFloor_Button.setOnMouseClicked(e -> currFloor.set(3));
-        FourthFloor_Button.setOnMouseClicked(e -> currFloor.set(4));
-        FifthFloor_Button.setOnMouseClicked(e -> currFloor.set(5));
-        SixthFloor_Button.setOnMouseClicked(e -> currFloor.set(6));
-        SeventhFloor_Button.setOnMouseClicked(e -> currFloor.set(7));
-
-        //Triggered anytime the currFloor Changes
-        //Updates what nodes are being displayed
-        currFloor.addListener(e -> DisplayPaths());
-
-        //whenever the floor span changes, update the floor buttons that are disabled
-        FloorSpan.addListener((ListChangeListener<Integer>) c -> {
-            System.out.println("FloorSpanProperty Changed");
-            for (int i = 0; i < 7; i++) {
-                Button B = (Button) FloorButtons_VBox.getChildren().get(i);
-                B.setDisable(false);
-                if (!FloorSpan.contains(i + 1)) {
-                    B.setDisable(true);
-                }
-            }
-        });
+        return edge;
     }
 
     //-------------------------------------Path Finding----------------------------------------
@@ -349,30 +219,30 @@ public class HomeController extends Controller implements Initializable {
     private void DisplayPath(Path path) {
         System.out.println("displayPath");
         int floor = path.getNode(0).getLocation().getFloor();
-        MapImageView.setImage(ImageProvider.getImageByFloor(floor));
-        ClearMapGroup();
+//        MapImageView.setImage(ImageProvider.getImageByFloor(floor));
+//        ClearMapGroup();
         List<MapNode> NodesInPath = path.getPath();
         for (MapNode N : NodesInPath) {
-            MakeCircleInGroup(N);
+//            MakeCircleInGroup(N);
         }
 
         String first;
         for (int i = 0; i < path.edges().size(); i++) {
             first  = path.getNode(i).getModelNode().getName();
             if(path.edges().get(i).getStart().getName().equals(first)){
-                arrow(path.edges().get(i));
+                makeArrow(path.edges().get(i));
             } else {
                 Edge temp = new Edge(path.edges().get(i).getEnd(), path.edges().get(i).getStart(),
                         path.edges().get(i).getStart().getLocation().getFloor());
-                arrow(temp);
+                makeArrow(temp);
             }
         }
         for (Edge E : path.edges()) {
-            MakeLineInGroup(E);
+            makeEdgeLine(E);
         }
     }
 
-    private static void arrow(Edge e) {
+    private static Group makeArrow(Edge e) {
 
         double arrowLength = 4;
         double arrowWidth = 7;
@@ -391,7 +261,7 @@ public class HomeController extends Controller implements Initializable {
         arrow2.setEndY(ey);
 
         if (ex == sx && ey == sy) {
-            // arrow parts of length 0
+            // makeArrow parts of length 0
             arrow1.setStartX(ex);
             arrow1.setStartY(ey);
             arrow2.setStartX(ex);
@@ -427,32 +297,24 @@ public class HomeController extends Controller implements Initializable {
         double x3 = x1 + xdiff2;
         double y3 = y1 + ydiff2;
 
-        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+//        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
 
-        double ImgW = Map1.getImage().getWidth();
-        double ImgH = Map1.getImage().getHeight();
-        double ImgR = ImgH / ImgW;
+//        double ImgW = Map1.getImage().getWidth();
+//        double ImgH = Map1.getImage().getHeight();
+//        double ImgR = ImgH / ImgW;
 
-        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-
-        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
-        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
-
-        MapGroup.getChildren().addAll(arrow1, arrow2);
-
+        Group arrow = new Group();
+        arrow.getChildren().add(arrow1);
+        arrow.getChildren().add(arrow2);
+        return arrow;
     }
 
     //This function displays all the paths on the floor you are currently on
     private void DisplayPaths() {
         System.out.println("currFloorPropertyChanged");
         System.out.println("Paths: " + paths);
-        MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
-        ClearMapGroup();
+//        MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
+//        ClearMapGroup();
         List<Path> subPaths = new ArrayList<>();
         //get a list of all subpaths deivided by floors
         System.out.println("paths: " + paths);
@@ -531,7 +393,7 @@ public class HomeController extends Controller implements Initializable {
                         start = dest;
                     }
                 }
-                ClearMapGroup();
+//                ClearMapGroup();
                 List<Integer> nums = new ArrayList<>();
                 nums.add(1);
                 nums.add(2);
