@@ -1,3 +1,4 @@
+name	location
 ORL	ORL
 Suite 21	Suite21
 Food Services	Food Services
@@ -12,9 +13,9 @@ Hazard Storage	Hazard Storage
 Security	Security
 Censtrlsup	Censtrlsup
 Laundry	Laundry
-PT	Physical Therapy (Employee)
+Physical Therapy	Physical Therapy (Employee)
 OT	OT
 Housekeeping	Housekeeping
 Facilities	Facilities
 Mail	Mail
-Mech	Mech
+Mech 2	Mech 2
