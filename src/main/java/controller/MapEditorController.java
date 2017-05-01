@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Edge;
@@ -57,6 +60,11 @@ public class MapEditorController extends Controller {
                 currentMapView.selectedNode.set(newValue);
             }
         });
+        neighborsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                currentMapView.selectedEdge.set(edgeService.findByNodes(currentMapView.selectedNode.get(), newValue));
+            }
+        });
     }
 
     private void setupFloorButtonListeners() {
@@ -75,7 +83,9 @@ public class MapEditorController extends Controller {
         };
     }
 
+    private IntegerProperty currentFloor = new SimpleIntegerProperty();
     private void showFloor(int floor) {
+        currentFloor.set(floor);
         mapContainer.getChildren().clear();
         ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
         currentMapView = mapView;
@@ -101,6 +111,32 @@ public class MapEditorController extends Controller {
         leftContainer.getChildren().clear();
         Edge edge = currentMapView.selectedEdge.get();
         leftContainer.getChildren().add(new Label(edge.getStart().getName() + "  < ---- >  " + edge.getEnd().getName()));
+
+        HBox buttonBox = new HBox();
+
+        Button disableButton = new Button("Disable");
+        disableButton.setOnAction(e -> {
+            edge.setDisabled(true);
+            edgeService.merge(edge);
+            currentMapView.wipe();
+            currentMapView.showAllNodes(nodeService.getNodesByFloor(currentFloor.get()));
+            currentMapView.showAllEdges(edgeService.getAllEdgesOnFloor(currentFloor.get()));
+            showNodeSearch();
+        });
+        buttonBox.getChildren().add(disableButton);
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e -> {
+            edgeService.remove(edge);
+            currentMapView.selectedEdge.set(null);
+            currentMapView.wipe();
+            currentMapView.showAllNodes(nodeService.getNodesByFloor(currentFloor.get()));
+            currentMapView.showAllEdges(edgeService.getAllEdgesOnFloor(currentFloor.get()));
+            showNodeSearch();
+        });
+        buttonBox.getChildren().add(deleteButton);
+
+        leftContainer.getChildren().add(buttonBox);
     }
 
     private ObservableList<Node> searchResults = FXCollections.observableArrayList();

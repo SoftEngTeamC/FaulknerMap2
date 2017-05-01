@@ -224,6 +224,10 @@ public class ImageViewPane extends Region {
         Point2D edgeEnd = imageToImageViewCoordinate(edge.getEnd().getLocation());
         Line edgeLine = new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
 
+        if (edge.isDisabled()) {
+            edgeLine.getStrokeDashArray().addAll(2d, 10d);
+        }
+
         edgeLine.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
                 selectedEdge.set(edge);
