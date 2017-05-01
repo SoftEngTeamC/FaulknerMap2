@@ -9,6 +9,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
@@ -19,6 +20,7 @@ import model.Node;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import service.CoordinateService;
+import service.EdgeService;
 import service.NodeService;
 
 import java.util.*;
@@ -263,6 +265,8 @@ public class ImageViewPane extends Region {
         return circles;
     }
 
+    private ObjectProperty<Node> startNode = new SimpleObjectProperty<>();
+    private ObjectProperty<Line> tempLine = new SimpleObjectProperty<>();
     private Circle makeNodeCircle(Node node) {
         Point2D drawLocation = imageToImageViewCoordinate(node.getLocation());
         Circle nodeCircle = new Circle(drawLocation.getX(), drawLocation.getY(), 2);
@@ -273,12 +277,41 @@ public class ImageViewPane extends Region {
             }
         });
 
+        nodeCircle.setOnMouseDragReleased(e -> {
+            System.out.println("creating edge");
+            EdgeService edgeService = new EdgeService();
+            Edge edge = new Edge(startNode.get(), node, 0);
+            edgeService.persist(edge);
+        });
+
+        BooleanProperty isEdgeDrag = new SimpleBooleanProperty(false);
+
+        nodeCircle.setOnDragDetected(e -> {
+            if (e.getButton() == MouseButton.SECONDARY) {
+                System.out.println("Starting full drag");
+                isEdgeDrag.set(true);
+                startFullDrag();
+                startNode.set(node);
+                Line leLine = new Line();
+                leLine.startXProperty().set(e.getX());
+                leLine.startYProperty().set(e.getY());
+                tempLine.set(leLine);
+            }
+        });
+
         nodeCircle.setOnMouseDragged(e -> {
-            nodeCircle.centerXProperty().set(e.getX());
-            nodeCircle.centerYProperty().set(e.getY());
+            if (e.getButton().equals(MouseButton.PRIMARY)) {
+                nodeCircle.centerXProperty().set(e.getX());
+                nodeCircle.centerYProperty().set(e.getY());
+            } else if (e.getButton() == MouseButton.SECONDARY && isEdgeDrag.get()) {
+                tempLine.get().startXProperty().set(e.getX());
+                tempLine.get().startYProperty().set(e.getY());
+            }
         });
 
         nodeCircle.setOnMouseReleased(e -> {
+            isEdgeDrag.set(false);
+            System.out.println("Releasing full drag.");
             Point2D newPoint = imageViewToImageCoordinate(new Point2D(e.getX(), e.getY()));
             node.getLocation().setX(newPoint.getX());
             node.getLocation().setY(newPoint.getY());
