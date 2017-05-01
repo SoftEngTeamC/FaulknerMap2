@@ -1,5 +1,7 @@
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -91,6 +93,9 @@ public class DirectoryEditorController extends Controller {
 
     @FXML
     public void logout() {
+
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
+
         setStage();
         switchToMainScreen(backBtn);
     }

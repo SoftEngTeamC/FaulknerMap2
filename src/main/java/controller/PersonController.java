@@ -1,5 +1,7 @@
 package controller;
 
+import Memento.LoginStatusMemento;
+import Singleton.LoginStatusSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -82,6 +84,8 @@ public abstract class PersonController extends Controller {
 
     @FXML
     protected void logout() {
+        LoginStatusSingleton.getInstance().addMemento(new LoginStatusMemento(false));
+
         setStage();
         switchToMainScreen(logoutBtn);
     }
