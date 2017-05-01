@@ -3,40 +3,25 @@ package controller;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.*;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Affine;
-import javafx.util.Duration;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import model.Navigable;
+import pathfinding.MapNode;
 import pathfinding.Path;
 import textDirections.Step;
 import util.ImageViewPane;
 import util.MappedList;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class HomeController extends Controller {
@@ -103,6 +88,8 @@ public class HomeController extends Controller {
     @FXML
     private Pane mapContainer;
 
+    private ImageViewPane mapView;
+
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
     private ListView<Navigable> searchResultsView = new ListView<>(searchResults);
@@ -133,12 +120,12 @@ public class HomeController extends Controller {
     //------------------------------------MAP FUNCTIONS----------------------------------------
 
     private void initializeMap() {
-        ImageViewPane map = new ImageViewPane(ImageProvider.getImage(images.get(0)));
-        map.prefHeightProperty().bind(mapContainer.heightProperty());
-        map.prefWidthProperty().bind(mapContainer.widthProperty());
-        mapContainer.getChildren().add(map);
-
-        map.toBack();
+        ImageViewPane mapView = new ImageViewPane(ImageProvider.getImage(images.get(0)), nodeService);
+        mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+        mapContainer.getChildren().add(mapView);
+        mapView.toBack();
+        this.mapView = mapView;
     }
 
     private List<String> images = new LinkedList<>(Arrays.asList(
@@ -189,6 +176,9 @@ public class HomeController extends Controller {
                     paths.add(map.shortestPath(start.getNode(), dest.getNode()));
                     start = dest;
                 }
+            }
+            for (Navigable dest : destinations) {
+                mapView.drawNode(new MapNode(dest.getNode()));
             }
         });
 

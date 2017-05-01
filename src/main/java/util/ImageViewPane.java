@@ -10,10 +10,12 @@ import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import pathfinding.MapNode;
+import service.NodeService;
 
 
 public class ImageViewPane extends Region {
@@ -69,6 +71,10 @@ public class ImageViewPane extends Region {
         return new Rectangle(rectangle2D.getMinX(), rectangle2D.getMinY(), rectangle2D.getWidth(), rectangle2D.getHeight());
     }
 
+    public void things() {
+        layoutChildren();
+    }
+
     @Override
     protected void layoutChildren() {
         ImageView imageView = imageViewProperty.get();
@@ -80,15 +86,19 @@ public class ImageViewPane extends Region {
 
         Pane drawPane = getDrawPane();
         if (drawPane != null && imageView != null) {
-            drawPane.scaleXProperty().set(1 / scaleProperty.get());
-            drawPane.scaleYProperty().set(1 / scaleProperty.get());
+            double aspect = imageView.getImage().getWidth() / imageView.getImage().getHeight();
+            double viewAspect = imageView.getFitWidth() / imageView.getFitHeight();
+            boolean isWidthConstrained = viewAspect < aspect;
+            boolean isHeightConstrained = viewAspect > aspect;
 
-            System.out.println(imageView.getFitWidth());
-            System.out.println(imageView.getFitHeight());
+            double widthScale = isWidthConstrained ? (imageView.getFitWidth() - imageView.getBoundsInLocal().getWidth()) / imageView.getFitWidth() : 0;
+            double heightScale = isHeightConstrained ? (imageView.getFitHeight() - imageView.getBoundsInLocal().getHeight()) / imageView.getFitHeight() : 0;
 
-            System.out.println(imageView.getBoundsInLocal());
-            System.out.println(imageView.getBoundsInParent());
+            double areaRatio = (imageView.getFitHeight() * imageView.getFitWidth()) / (imageView.getBoundsInLocal().getWidth() * imageView.getBoundsInLocal().getHeight());
 
+            double scaleFactor = 1 / (scaleProperty.get());
+            drawPane.scaleXProperty().set(scaleFactor);
+            drawPane.scaleYProperty().set(scaleFactor);
             double xOffset = (imageView.getFitWidth() - imageView.getBoundsInLocal().getWidth()) / 2;
             double yOffset = (imageView.getFitHeight() - imageView.getBoundsInLocal().getHeight()) / 2;
 
@@ -98,7 +108,10 @@ public class ImageViewPane extends Region {
         }
     }
 
-    public ImageViewPane(Image image) {
+    private NodeService nodeService;
+
+    public ImageViewPane(Image image, NodeService nodeService) {
+        this.nodeService = nodeService;
         imageViewProperty.addListener((prop, oldImageView, newImageView) -> {
             if (oldImageView != null) {
                 getChildren().remove(oldImageView);
@@ -120,15 +133,18 @@ public class ImageViewPane extends Region {
         getImageView().setPreserveRatio(true);
 
         this.drawPaneProperty.set(new Pane());
-//        getDrawPane().layoutXProperty().bind(getImageView().xProperty());
-//        getDrawPane().layoutYProperty().bind(getImageView().yProperty());
-        getDrawPane().getChildren().add(new Circle(300, 300, 20));
-        getDrawPane().getChildren().add(new Circle(200, 100, 14));
         getDrawPane().setPickOnBounds(false);
-
-        scaleProperty.set(1);
-
         resetImageView();
+    }
+
+    public void drawNode(MapNode node) {
+        double pixelRatio = getImageView().getBoundsInLocal().getWidth() / getImageView().getImage().getWidth();
+        System.out.println(pixelRatio);
+        double x = node.getLocation().getX() * pixelRatio;
+        double y = node.getLocation().getY() * pixelRatio;
+        Circle nodeCircle = new Circle(x, y, 10);
+
+        getDrawPane().getChildren().add(nodeCircle);
     }
 
 
@@ -191,6 +207,7 @@ public class ImageViewPane extends Region {
 
 
     private void resetImageView() {
+        scaleProperty.set(1);
         double width = getImageView().getImage().getWidth();
         double height = getImageView().getImage().getHeight();
         setViewport(new Rectangle2D(0, 0, width, height));
