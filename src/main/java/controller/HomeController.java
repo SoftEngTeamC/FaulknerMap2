@@ -31,6 +31,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import textDirections.TextualDirections.*;
+
+import static textDirections.TextualDirections.pathSteps;
 
 public class HomeController extends Controller implements Initializable {
 
@@ -358,8 +361,8 @@ public class HomeController extends Controller implements Initializable {
 
         String first;
         for (int i = 0; i < path.edges().size(); i++) {
-            first  = path.getNode(i).getModelNode().getName();
-            if(path.edges().get(i).getStart().getName().equals(first)){
+            first = path.getNode(i).getModelNode().getName();
+            if (path.edges().get(i).getStart().getName().equals(first)) {
                 arrow(path.edges().get(i));
             } else {
                 Edge temp = new Edge(path.edges().get(i).getEnd(), path.edges().get(i).getStart(),
@@ -517,33 +520,30 @@ public class HomeController extends Controller implements Initializable {
         search(""); // TODO: Populate the searchBox with hot spots
 
         // Recalculate the path
-        destinations.addListener(new ListChangeListener<Navigable>() {
-            @Override
-            public void onChanged(Change<? extends Navigable> c) {
-                while (c.next()) {
-                } // Apply all the changes
-                ObservableList<? extends Navigable> dests = c.getList();
-                paths.clear();
-                if (c.getList().size() >= 2) {
-                    Navigable start = dests.get(0);
-                    for (Navigable dest : dests.subList(1, dests.size())) {
-                        paths.add(map.shortestPath(start.getNode(), dest.getNode()));
-                        start = dest;
-                    }
+        destinations.addListener((ListChangeListener<Navigable>) c -> {
+            while (c.next()) {
+            } // Apply all the changes
+            ObservableList<? extends Navigable> dests = c.getList();
+            paths.clear();
+            if (c.getList().size() >= 2) {
+                Navigable start = dests.get(0);
+                for (Navigable dest : dests.subList(1, dests.size())) {
+                    paths.add(map.shortestPath(start.getNode(), dest.getNode()));
+                    start = dest;
                 }
-                ClearMapGroup();
-                List<Integer> nums = new ArrayList<>();
-                nums.add(1);
-                nums.add(2);
-                nums.add(3);
-                nums.add(4);
-                nums.add(5);
-                nums.add(6);
-                nums.add(7);
-                ObservableList<Integer> AllFloors = FXCollections.observableList(nums);
-                FloorSpan.setValue(AllFloors);
-                System.out.println(paths);
             }
+            ClearMapGroup();
+            List<Integer> nums = new ArrayList<>();
+            nums.add(1);
+            nums.add(2);
+            nums.add(3);
+            nums.add(4);
+            nums.add(5);
+            nums.add(6);
+            nums.add(7);
+            ObservableList<Integer> AllFloors = FXCollections.observableList(nums);
+            FloorSpan.setValue(AllFloors);
+            System.out.println(paths);
         });
         Searching_VBox = makeVBox();
         showSearch();
@@ -607,6 +607,16 @@ public class HomeController extends Controller implements Initializable {
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
+        TextArea text = new TextArea();
+        String str = "";
+        for(Path p: paths){
+            List<String> ls = pathSteps(p, bundle);
+            for(String s: ls){
+                str += s + "\n";
+            }
+            text.setText(str);
+        }
+        Searching_VBox.getChildren().add(text);
     }
 
     private void setCurrentSearchField(TextField field) {
@@ -679,13 +689,13 @@ public class HomeController extends Controller implements Initializable {
 
     private ListView<String> MakeTextDirectionsListView(List<Path> paths) {
         //Create List of all directions given List of Paths
-        List<String> TextDirections = new ArrayList<String>();
+        List<String> TextDirections = new ArrayList<>();
         for (Path p : paths) {
             for (MapNode M : p.getPath()) {
                 TextDirections.add(M.toString());
             }
         }
-        ListView<String> textdirs = new ListView<String>();
+        ListView<String> textdirs = new ListView<>();
         textdirs.setItems(FXCollections.observableList(TextDirections));
         textdirs.setPrefWidth(Region.USE_COMPUTED_SIZE);
         textdirs.setPrefHeight(Region.USE_COMPUTED_SIZE);

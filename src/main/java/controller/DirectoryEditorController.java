@@ -15,7 +15,7 @@ import model.HospitalProfessional;
 import model.HospitalService;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 
 public class DirectoryEditorController extends Controller {
@@ -77,9 +77,9 @@ public class DirectoryEditorController extends Controller {
 
         // add a listener to the textfield being changed to fix the search lag
         searchPersonField.textProperty()
-                .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
+                .addListener((observable, oldValue, newValue) -> textPersonFieldChanged(newValue));
         searchServiceField.textProperty()
-                .addListener((observable, oldValue, newValue) -> textFieldChanged(newValue));
+                .addListener((observable, oldValue, newValue) -> textServiceFieldChanged(newValue));
 
         startIdleListener(DirectoryEditor_AnchorPane, addPrsnBtn);
     }
@@ -159,9 +159,16 @@ public class DirectoryEditorController extends Controller {
      *
      */
     @FXML
-    public void textFieldChanged(String query) {
+    private void textPersonFieldChanged(String query) {
         professionals.clear();
         professionals.addAll(professionalService.search(query));
+
+    }
+
+    @FXML
+    private void textServiceFieldChanged(String query) {
+        services.clear();
+        services.addAll(serviceService.search(query));
 
     }
 
