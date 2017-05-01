@@ -1,5 +1,6 @@
 package util;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import controller.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
@@ -76,7 +77,13 @@ public class ImageViewPane extends Region {
     private ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
 
     public void setPath(Path path) {
-        pathProperty.set(path);
+        BooleanProperty initialized = new SimpleBooleanProperty(false);
+        needsLayoutProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !initialized.get()) {
+                pathProperty.set(path);
+                initialized.set(true);
+            }
+        });
     }
 
 
