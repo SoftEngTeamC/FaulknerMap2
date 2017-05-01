@@ -75,4 +75,9 @@ public class HospitalService implements Navigable {
         return info;
 
     }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }

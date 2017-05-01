@@ -1,6 +1,5 @@
 package controller;
 
-
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.*;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -34,10 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HomeController extends Controller  implements Initializable {
-
-    @FXML
-    private URL location;
+public class HomeController extends Controller implements Initializable {
 
     @FXML
     private SplitPane Home_MainSplit;
@@ -54,23 +49,13 @@ public class HomeController extends Controller  implements Initializable {
     @FXML
     private VBox Searching_VBox;
 
-
-    @FXML
-    private SplitPane Map_Split;
-
     @FXML
     private AnchorPane Map_AnchorPane;
 
     @FXML
     private ScrollPane Map_ScrollPane;
 
-    @FXML
-    private HBox Map_HBox;
-
-
     //Content inside ScrollPane
-    @FXML
-    private ImageView SnapToHome_ImageView;
     @FXML
     private Slider Map_Slider;
     @FXML
@@ -90,9 +75,6 @@ public class HomeController extends Controller  implements Initializable {
     @FXML
     private Button SeventhFloor_Button;
 
-    //buttons at the bottom
-    @FXML
-    private Button AboutUsButton;
     @FXML
     private Button AdminToolButton;
 
@@ -111,12 +93,12 @@ public class HomeController extends Controller  implements Initializable {
     @FXML
     private MenuItem italian_button;
 
-    ImageView MapImageView = new ImageView();
-    Group MapGroup = new Group();
+    private ImageView MapImageView = new ImageView();
+    private static Group MapGroup = new Group();
     //Center ScrollPane relative to Image Coordinates
-    double CenterX;
-    double CenterY;
-    boolean CenterLocked = false;
+    private double CenterX;
+    private double CenterY;
+    private boolean CenterLocked = false;
 
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
@@ -187,7 +169,7 @@ public class HomeController extends Controller  implements Initializable {
         addDestandDirectionButtons.getChildren().add(DirectionButton);
     }
 
-    public void loadView(Locale locale) {
+    private void loadView(Locale locale) {
         Stage stage = (Stage) Home_MainSplit.getScene().getWindow();
         try {
             SplitPane root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Home.fxml"),
@@ -201,8 +183,8 @@ public class HomeController extends Controller  implements Initializable {
         }
     }
 
-    private void setStage(){
-         stage = (Stage) AdminToolButton.getScene().getWindow();
+    private void setStage() {
+        stage = (Stage) AdminToolButton.getScene().getWindow();
     }
 
     //------------------------------------MAP FUNCTIONS----------------------------------------
@@ -234,9 +216,7 @@ public class HomeController extends Controller  implements Initializable {
         });
 
         //This event is triggered when the mouse is released from the slider
-        Map_Slider.setOnMouseReleased(e -> {
-            CenterLocked = false;
-        });
+        Map_Slider.setOnMouseReleased(e -> CenterLocked = false);
 
         //These events are triggered when the scrollpane view is panned
         Map_ScrollPane.hvalueProperty().addListener(e -> {
@@ -308,15 +288,14 @@ public class HomeController extends Controller  implements Initializable {
         circle.radiusProperty().bind(Map1.fitWidthProperty().multiply(10 / ImgW));
         circle.fillProperty().setValue(Color.RED);
 
-        MapGroup.getChildren().addAll(circle);
+        //MapGroup.getChildren().addAll(circle);
     }
 
-    public void MakeLineInGroup(Edge e) {
+    private void MakeLineInGroup(Edge e) {
         double x1 = e.getStart().getLocation().getX();
         double y1 = e.getStart().getLocation().getY();
         double x2 = e.getEnd().getLocation().getX();
         double y2 = e.getEnd().getLocation().getY();
-        int z = e.getStart().getLocation().getFloor();
 
         ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
 
@@ -339,31 +318,26 @@ public class HomeController extends Controller  implements Initializable {
     }
 
     private void InitializeFloorButtons() {
-        FirstFloor_Button.setOnMouseClicked(e -> {currFloor.set(1);});
-        SecondFloor_Button.setOnMouseClicked(e -> {currFloor.set(2);});
-        ThirdFloor_Button.setOnMouseClicked(e -> {currFloor.set(3);});
-        FourthFloor_Button.setOnMouseClicked(e -> {currFloor.set(4);});
-        FifthFloor_Button.setOnMouseClicked(e -> {currFloor.set(5);});
-        SixthFloor_Button.setOnMouseClicked(e -> {currFloor.set(6);});
-        SeventhFloor_Button.setOnMouseClicked(e -> {currFloor.set(7);});
+        FirstFloor_Button.setOnMouseClicked(e -> currFloor.set(1));
+        SecondFloor_Button.setOnMouseClicked(e -> currFloor.set(2));
+        ThirdFloor_Button.setOnMouseClicked(e -> currFloor.set(3));
+        FourthFloor_Button.setOnMouseClicked(e -> currFloor.set(4));
+        FifthFloor_Button.setOnMouseClicked(e -> currFloor.set(5));
+        SixthFloor_Button.setOnMouseClicked(e -> currFloor.set(6));
+        SeventhFloor_Button.setOnMouseClicked(e -> currFloor.set(7));
 
         //Triggered anytime the currFloor Changes
         //Updates what nodes are being displayed
-        currFloor.addListener(e -> {
-            DisplayPaths();
-        });
+        currFloor.addListener(e -> DisplayPaths());
 
         //whenever the floor span changes, update the floor buttons that are disabled
-        FloorSpan.addListener(new ListChangeListener<Integer>() {
-            @Override
-            public void onChanged(Change<? extends Integer> c) {
-                System.out.println("FloorSpanProperty Changed");
-                for (int i = 0; i < 7; i++) {
-                    Button B = (Button) FloorButtons_VBox.getChildren().get(i);
-                    B.setDisable(false);
-                    if (!FloorSpan.contains(i + 1)) {
-                        B.setDisable(true);
-                    }
+        FloorSpan.addListener((ListChangeListener<Integer>) c -> {
+            System.out.println("FloorSpanProperty Changed");
+            for (int i = 0; i < 7; i++) {
+                Button B = (Button) FloorButtons_VBox.getChildren().get(i);
+                B.setDisable(false);
+                if (!FloorSpan.contains(i + 1)) {
+                    B.setDisable(true);
                 }
             }
         });
@@ -381,39 +355,124 @@ public class HomeController extends Controller  implements Initializable {
         for (MapNode N : NodesInPath) {
             MakeCircleInGroup(N);
         }
+
+        String first;
+        for (int i = 0; i < path.edges().size(); i++) {
+            first  = path.getNode(i).getModelNode().getName();
+            if(path.edges().get(i).getStart().getName().equals(first)){
+                arrow(path.edges().get(i));
+            } else {
+                Edge temp = new Edge(path.edges().get(i).getEnd(), path.edges().get(i).getStart(),
+                        path.edges().get(i).getStart().getLocation().getFloor());
+                arrow(temp);
+            }
+        }
         for (Edge E : path.edges()) {
             MakeLineInGroup(E);
         }
     }
 
+    private static void arrow(Edge e) {
+
+        double arrowLength = 4;
+        double arrowWidth = 7;
+
+        double ex = e.getEnd().getLocation().getX();
+        double ey = e.getEnd().getLocation().getY();
+        double sx = e.getStart().getLocation().getX();
+        double sy = e.getStart().getLocation().getY();
+
+        Line arrow1 = new Line(0, 0, ex, ey);
+        Line arrow2 = new Line(0, 0, ex, ey);
+
+        arrow1.setEndX(ex);
+        arrow1.setEndY(ey);
+        arrow2.setEndX(ex);
+        arrow2.setEndY(ey);
+
+        if (ex == sx && ey == sy) {
+            // arrow parts of length 0
+            arrow1.setStartX(ex);
+            arrow1.setStartY(ey);
+            arrow2.setStartX(ex);
+            arrow2.setStartY(ey);
+        } else {
+            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
+            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+
+            double dx = (sx - ex) * factor;
+            double dy = (sy - ey) * factor;
+
+            double ox = (sx - ex) * factorO;
+            double oy = (sy - ey) * factorO;
+
+            arrow1.setStartX(ex + dx - oy);
+            arrow1.setStartY(ey + dy + ox);
+            arrow2.setStartX(ex + dx + oy);
+            arrow2.setStartY(ey + dy - ox);
+        }
+
+        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
+        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
+
+        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
+        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
+
+
+        double x1 = e.getEnd().getLocation().getX();
+        double y1 = e.getEnd().getLocation().getY();
+        double x2 = x1 + xdiff1;
+        double y2 = y1 + ydiff1;
+
+        double x3 = x1 + xdiff2;
+        double y3 = y1 + ydiff2;
+
+        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
+
+        double ImgW = Map1.getImage().getWidth();
+        double ImgH = Map1.getImage().getHeight();
+        double ImgR = ImgH / ImgW;
+
+        arrow1.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow1.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow1.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
+        arrow1.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
+
+        arrow2.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
+        arrow2.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
+        arrow2.endXProperty().bind(Map1.fitWidthProperty().multiply((x3 / ImgW)));
+        arrow2.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y3 / ImgH)));
+
+        MapGroup.getChildren().addAll(arrow1, arrow2);
+
+    }
+
     //This function displays all the paths on the floor you are currently on
-    private void DisplayPaths(){
+    private void DisplayPaths() {
         System.out.println("currFloorPropertyChanged");
-        System.out.println("Paths: "+ paths);
+        System.out.println("Paths: " + paths);
         MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
         ClearMapGroup();
-        List<Path> subPaths = new ArrayList<Path>();
+        List<Path> subPaths = new ArrayList<>();
         //get a list of all subpaths deivided by floors
         System.out.println("paths: " + paths);
-        for(Path p: paths){
+        for (Path p : paths) {
             System.out.println("groupedByFloor: " + p.groupedByFloor());
             subPaths.addAll(p.groupedByFloor());
         }
         //if the subpath is on that floor, display that ish
-        System.out.println("subPaths: "+ subPaths);
-        for(Path p: subPaths){
-            if(p.floorsSpanned().contains(currFloor.get())){
-                System.out.println("Path: "+ p);
+        System.out.println("subPaths: " + subPaths);
+        for (Path p : subPaths) {
+            if (p.floorsSpanned().contains(currFloor.get())) {
+                System.out.println("Path: " + p);
                 DisplayPath(p);
             }
         }
     }
 
-
-
     private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
-        List<Integer> span = new ArrayList<Integer>();
+        List<Integer> span = new ArrayList<>();
         Set<Integer> floors;
         for (Path p : paths) {
             floors = p.floorsSpanned();
@@ -423,8 +482,7 @@ public class HomeController extends Controller  implements Initializable {
                 }
             }
         }
-        ObservableList<Integer> FloorsSpanned = FXCollections.observableList(span);
-        return FloorsSpanned;
+        return FXCollections.observableList(span);
     }
 
     //-----------------------------------------------------------
@@ -668,11 +726,11 @@ public class HomeController extends Controller  implements Initializable {
                     bundle.getString("eveningHours") + eveningHours;
 
         } else {
-            Date morningStart = new Date(0, 0, 0, 9, 30);
-            Date morningEnd = new Date(0, 0, 0, 12, 0);
+            Date morningStart = new Date();
+            Date morningEnd = new Date();
 
-            Date eveningStart = new Date(0, 0, 0, 14, 0);
-            Date eveningEnd = new Date(0, 0, 0, 17, 45);
+            Date eveningStart = new Date();
+            Date eveningEnd = new Date();
 
             SimpleDateFormat hoursFormat = new SimpleDateFormat("h:mm a");
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);

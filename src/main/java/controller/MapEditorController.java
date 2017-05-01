@@ -198,7 +198,6 @@ public class MapEditorController extends Controller {
 
     public void initialize() {
         startIdleListener(MapEditor_SplitPane, backBtn);
-        setButton(addNode_connectToNodeBtn);
         List<Node> nodes = nodeService.getNodesByFloor(1);
         List<String> names = new ArrayList<>();
         for (Node n : nodes) {
