@@ -42,13 +42,12 @@ public class MapEditorController extends Controller {
                 currentMapView.selectedEdge.set(edgeService.findByNodes(currentMapView.selectedNode.get(), newValue));
             }
         });
+        showNodeSearch();
     }
 
     private void addCurrentListeners() {
         currentMapView.selectedNode.addListener((observable, oldValue, newValue) -> {
-            System.out.println(oldValue);
-            System.out.println(newValue);
-            if (newValue != null && oldValue != newValue) {
+            if (newValue != null) {
                 if (newValue.getLocation().getFloor() != currentFloor.get()) {
                     currentFloor.set(newValue.getLocation().getFloor());
                     showFloor(currentFloor.get());
