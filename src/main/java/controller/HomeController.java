@@ -22,6 +22,7 @@ import model.Navigable;
 import pathfinding.MapNode;
 import pathfinding.Path;
 import quickResponse.QR;
+import service.HoursService;
 import textDirections.Step;
 import util.ImageViewPane;
 import util.MappedList;
@@ -31,12 +32,16 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
+import java.text.DateFormat;
 
 import textDirections.TextualDirections.*;
 
 import static textDirections.TextualDirections.pathSteps;
 
 public class HomeController extends Controller implements Initializable {
+    Date date = new Date();
 
     @FXML
     private SplitPane Home_MainSplit;
@@ -157,8 +162,9 @@ public class HomeController extends Controller implements Initializable {
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
         Logo_ImageView.fitHeightProperty().bind(Main_VBox.heightProperty().multiply(0.1));
-
-
+        // make hours service
+        HoursService hs = new HoursService();
+        timeofdaywarning( hs.find(1L).getVisitingHoursMorningStart(),hs.find(1L).getVisitingHoursEveningEnd(),date);
 
     }
 
@@ -621,5 +627,22 @@ public class HomeController extends Controller implements Initializable {
 //        HospitalService HS_Dest = serviceService.findHospitalServiceByName("Emergency Department");
 //
 //        FindandDisplayPath(HP_Start, null, null, HS_Dest);
+    }
+    public void timeofdaywarning(Date visitingHoursMorningStart, Date visitingHoursMorningEnd, Date date){
+            date.setYear(visitingHoursMorningEnd.getYear());
+            date.setMonth(visitingHoursMorningEnd.getMonth());
+            date.setDate(visitingHoursMorningEnd.getDate());
+        if (date.after(hoursService.find(1L).getVisitingHoursMorningStart()) &&
+                date.before(hoursService.find(1L).getVisitingHoursMorningEnd())){
+            System.out.println("works");
+        }
+        else if (date.after(hoursService.find(1L).getVisitingHoursEveningStart()) &&
+                date.before(hoursService.find(1L).getVisitingHoursEveningEnd())){
+            System.out.println("works");
+        }
+        else{
+            System.out.println("time is out of bounds");
+        }
+
     }
 }

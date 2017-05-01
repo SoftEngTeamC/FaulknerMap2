@@ -60,7 +60,7 @@ public class Controller {
             stage.setTitle(title);
             stage.getScene().setRoot(root);
             stage.show();
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            System.err.println("Couldn't find file at " + file);
             e.printStackTrace();
         }
