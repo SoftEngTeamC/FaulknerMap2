@@ -589,7 +589,7 @@ public class HomeController extends Controller implements Initializable {
     public void HandleHelpButton() {
         Hours hours = hoursService.find(1L);
         String message;
-        TextField text = new TextField();
+        TextArea text = new TextArea();
         if (hours != null) {
             Date morningStart = hours.getVisitingHoursMorningStart();
             Date morningEnd = hours.getVisitingHoursMorningEnd();
