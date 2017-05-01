@@ -6,13 +6,16 @@ import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import model.Coordinate;
+import model.Edge;
 import pathfinding.MapNode;
 import pathfinding.Path;
 
@@ -70,7 +73,7 @@ public class ImageViewPane extends Region {
     private DoubleProperty scaleProperty = new SimpleDoubleProperty();
 
 
-    private ObjectProperty<Path> pathProperty;
+    private ObjectProperty<Path> pathProperty = new SimpleObjectProperty<>();
 
     public void setPath(Path path) {
         pathProperty.set(path);
@@ -135,7 +138,8 @@ public class ImageViewPane extends Region {
         });
 
         pathProperty.addListener((observable, oldValue, newValue) -> {
-            pathCircles(newValue).forEach(circle -> getDrawPane().getChildren().add(circle));
+            makePathCircles(newValue).forEach(circle -> getDrawPane().getChildren().add(circle));
+            makeEdgeLines(newValue).forEach(line -> getDrawPane().getChildren().add(line));
         });
 
         this.imageViewProperty.set(new ImageView(image));
@@ -146,7 +150,70 @@ public class ImageViewPane extends Region {
         resetImageView();
     }
 
-    private List<Circle> pathCircles(Path path) {
+    private Group makeArrow(Edge e) {
+
+        double arrowLength = 4;
+        double arrowWidth = 7;
+
+        Point2D edgeStart = imageToImageViewCoordinate(e.getStart().getLocation());
+        Point2D edgeEnd = imageToImageViewCoordinate(e.getEnd().getLocation());
+
+        double ex = edgeStart.getX();
+        double ey = edgeStart.getY();
+        double sx = edgeEnd.getX();
+        double sy = edgeEnd.getY();
+
+        Line arrow1 = new Line(0, 0, ex, ey);
+        Line arrow2 = new Line(0, 0, ex, ey);
+
+        arrow1.setEndX(ex);
+        arrow1.setEndY(ey);
+        arrow2.setEndX(ex);
+        arrow2.setEndY(ey);
+
+        if (ex == sx && ey == sy) {
+            // makeArrow parts of length 0
+            arrow1.setStartX(ex);
+            arrow1.setStartY(ey);
+            arrow2.setStartX(ex);
+            arrow2.setStartY(ey);
+        } else {
+            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
+            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+
+            double dx = (sx - ex) * factor;
+            double dy = (sy - ey) * factor;
+
+            double ox = (sx - ex) * factorO;
+            double oy = (sy - ey) * factorO;
+
+            arrow1.setStartX(ex + dx - oy);
+            arrow1.setStartY(ey + dy + ox);
+            arrow2.setStartX(ex + dx + oy);
+            arrow2.setStartY(ey + dy - ox);
+        }
+
+        Group arrow = new Group();
+        arrow.getChildren().add(arrow1);
+        arrow.getChildren().add(arrow2);
+        return arrow;
+    }
+
+    private List<Line> makeEdgeLines(Path path) {
+        List<Line> lines = new LinkedList<>();
+        for (Edge edge : path.edges()) {
+            lines.add(makeEdgeLine(edge));
+        }
+        return lines;
+    }
+
+    private Line makeEdgeLine(Edge edge) {
+        Point2D edgeStart = imageToImageViewCoordinate(edge.getStart().getLocation());
+        Point2D edgeEnd = imageToImageViewCoordinate(edge.getEnd().getLocation());
+        return new Line(edgeStart.getX(), edgeStart.getY(), edgeEnd.getX(), edgeEnd.getY());
+    }
+
+    private List<Circle> makePathCircles(Path path) {
         List<Circle> circles = new LinkedList<>();
         for (MapNode node : path) {
             circles.add(makeNodeCircle(node));

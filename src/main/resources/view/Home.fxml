@@ -56,7 +56,7 @@
         </VBox>
     </AnchorPane>
     <AnchorPane fx:id="Map_AnchorPane">
-      <Pane fx:id="mapContainer" prefHeight="200.0" prefWidth="200.0" />
+      <Pane fx:id="mapContainer" prefHeight="314.0" prefWidth="287.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
         <Slider fx:id="Map_Slider" layoutX="362.0" layoutY="190.0" orientation="VERTICAL" prefHeight="107.0" prefWidth="14.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
         <ImageView fx:id="SnapToHome_ImageView" fitHeight="48.0" fitWidth="44.0" layoutX="331.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
         <HBox fx:id="Map_HBox" fillHeight="false" layoutY="270.0" prefHeight="25.0" prefWidth="37.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">

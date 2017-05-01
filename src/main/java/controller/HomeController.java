@@ -9,13 +9,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import model.Edge;
 import model.Hours;
 import model.Navigable;
 import pathfinding.MapNode;
@@ -93,6 +90,8 @@ public class HomeController extends Controller implements Initializable {
 
     @FXML
     private Pane mapContainer;
+    private ImageViewPane mapView;
+
 
     //------------------------
     private ObservableList<Navigable> searchResults = FXCollections.observableArrayList();
@@ -138,6 +137,7 @@ public class HomeController extends Controller implements Initializable {
         italian_button.setOnAction(event -> loadView(new Locale("it", "IT")));
 
 
+        initializeMap();
         initializeDirectory();
         Logo_ImageView.setImage(ImageProvider.getImage("images/logo.png"));
         Logo_ImageView.setPreserveRatio(true);
@@ -152,7 +152,7 @@ public class HomeController extends Controller implements Initializable {
             //TODO Set current Location to first node in the path
             //current location will be used to step through the directions one node at a time
             currFloor.set(paths.get(0).getNode(0).getLocation().getFloor());
-            DisplayPaths();
+            displayPaths();
             //TODO Display the Path on the Map and generate Steps
         });
         //Altering the add Destination and Directions Buttons HBox to have those buttons
@@ -182,155 +182,17 @@ public class HomeController extends Controller implements Initializable {
 
     private void initializeMap() {
         ImageViewPane mapView = new ImageViewPane(ImageProvider.getImageByFloor(1));
+        mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapView.prefWidthProperty().bind(mapContainer.widthProperty());
         mapContainer.getChildren().add(mapView);
+        mapView.toBack();
+        this.mapView = mapView;
     }
 
-
-
-    private Line makeEdgeLine(Edge e) {
-        double x1 = e.getStart().getLocation().getX();
-        double y1 = e.getStart().getLocation().getY();
-        double x2 = e.getEnd().getLocation().getX();
-        double y2 = e.getEnd().getLocation().getY();
-
-//        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
-
-//        double ImgW = Map1.getImage().getWidth();
-//        double ImgH = Map1.getImage().getHeight();
-//        double ImgR = ImgH / ImgW;
-
-        Line edge = new Line();
-        //the points are bound to the fit width property of the image and scaled by the initial image ratio
-//        edge.startXProperty().bind(Map1.fitWidthProperty().multiply((x1 / ImgW)));
-//        edge.startYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y1 / ImgH)));
-//        edge.endXProperty().bind(Map1.fitWidthProperty().multiply((x2 / ImgW)));
-//        edge.endYProperty().bind(Map1.fitWidthProperty().multiply(ImgR).multiply((y2 / ImgH)));
-
-        if (e.isDisabled()) {
-            edge.getStrokeDashArray().addAll(2d, 10d);
-        }
-
-        return edge;
+    private void displayPaths() {
+        mapView.setPath(paths.get(0).groupedByFloor().get(0));
     }
 
-    //-------------------------------------Path Finding----------------------------------------
-
-    //This function takes a path and resets the Group in the Scrollpane to have the correct Image and circles
-    private void DisplayPath(Path path) {
-        System.out.println("displayPath");
-        int floor = path.getNode(0).getLocation().getFloor();
-//        MapImageView.setImage(ImageProvider.getImageByFloor(floor));
-//        ClearMapGroup();
-        List<MapNode> NodesInPath = path.getPath();
-        for (MapNode N : NodesInPath) {
-//            MakeCircleInGroup(N);
-        }
-
-        String first;
-        for (int i = 0; i < path.edges().size(); i++) {
-            first  = path.getNode(i).getModelNode().getName();
-            if(path.edges().get(i).getStart().getName().equals(first)){
-                makeArrow(path.edges().get(i));
-            } else {
-                Edge temp = new Edge(path.edges().get(i).getEnd(), path.edges().get(i).getStart(),
-                        path.edges().get(i).getStart().getLocation().getFloor());
-                makeArrow(temp);
-            }
-        }
-        for (Edge E : path.edges()) {
-            makeEdgeLine(E);
-        }
-    }
-
-    private static Group makeArrow(Edge e) {
-
-        double arrowLength = 4;
-        double arrowWidth = 7;
-
-        double ex = e.getEnd().getLocation().getX();
-        double ey = e.getEnd().getLocation().getY();
-        double sx = e.getStart().getLocation().getX();
-        double sy = e.getStart().getLocation().getY();
-
-        Line arrow1 = new Line(0, 0, ex, ey);
-        Line arrow2 = new Line(0, 0, ex, ey);
-
-        arrow1.setEndX(ex);
-        arrow1.setEndY(ey);
-        arrow2.setEndX(ex);
-        arrow2.setEndY(ey);
-
-        if (ex == sx && ey == sy) {
-            // makeArrow parts of length 0
-            arrow1.setStartX(ex);
-            arrow1.setStartY(ey);
-            arrow2.setStartX(ex);
-            arrow2.setStartY(ey);
-        } else {
-            double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
-            double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
-
-            double dx = (sx - ex) * factor;
-            double dy = (sy - ey) * factor;
-
-            double ox = (sx - ex) * factorO;
-            double oy = (sy - ey) * factorO;
-
-            arrow1.setStartX(ex + dx - oy);
-            arrow1.setStartY(ey + dy + ox);
-            arrow2.setStartX(ex + dx + oy);
-            arrow2.setStartY(ey + dy - ox);
-        }
-
-        double xdiff1 = arrow1.getStartX() - arrow1.getEndX();
-        double ydiff1 = arrow1.getStartY() - arrow1.getEndY();
-
-        double xdiff2 = arrow2.getStartX() - arrow2.getEndX();
-        double ydiff2 = arrow2.getStartY() - arrow2.getEndY();
-
-
-        double x1 = e.getEnd().getLocation().getX();
-        double y1 = e.getEnd().getLocation().getY();
-        double x2 = x1 + xdiff1;
-        double y2 = y1 + ydiff1;
-
-        double x3 = x1 + xdiff2;
-        double y3 = y1 + ydiff2;
-
-//        ImageView Map1 = (ImageView) MapGroup.getChildren().get(0);
-
-//        double ImgW = Map1.getImage().getWidth();
-//        double ImgH = Map1.getImage().getHeight();
-//        double ImgR = ImgH / ImgW;
-
-        Group arrow = new Group();
-        arrow.getChildren().add(arrow1);
-        arrow.getChildren().add(arrow2);
-        return arrow;
-    }
-
-    //This function displays all the paths on the floor you are currently on
-    private void DisplayPaths() {
-        System.out.println("currFloorPropertyChanged");
-        System.out.println("Paths: " + paths);
-//        MapImageView.setImage(ImageProvider.getImageByFloor(currFloor.get()));
-//        ClearMapGroup();
-        List<Path> subPaths = new ArrayList<>();
-        //get a list of all subpaths deivided by floors
-        System.out.println("paths: " + paths);
-        for (Path p : paths) {
-            System.out.println("groupedByFloor: " + p.groupedByFloor());
-            subPaths.addAll(p.groupedByFloor());
-        }
-        //if the subpath is on that floor, display that ish
-        System.out.println("subPaths: " + subPaths);
-        for (Path p : subPaths) {
-            if (p.floorsSpanned().contains(currFloor.get())) {
-                System.out.println("Path: " + p);
-                DisplayPath(p);
-            }
-        }
-    }
 
     private ObservableList<Integer> PathSpansFloors() {
         System.out.println("PathSpansFloors");
