@@ -6,11 +6,13 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Hours;
@@ -26,6 +28,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import textDirections.TextualDirections.*;
 
 import static textDirections.TextualDirections.pathSteps;
@@ -126,10 +129,13 @@ public class HomeController extends Controller implements Initializable {
     private ListProperty<Integer> FloorSpan = new SimpleListProperty<>();
 
     private Stage stage;
+    private List<Button> floorButtons = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bundle = resources;
+
+        clearFloorArray();
 
         english_button.setOnAction(event -> loadView(new Locale("en", "US")));
         spanish_button.setOnAction(event -> loadView(new Locale("es", "PR")));
@@ -163,6 +169,21 @@ public class HomeController extends Controller implements Initializable {
         addDestandDirectionButtons.getChildren().add(DirectionButton);
     }
 
+    private void clearFloorArray() {
+        floorButtons.clear();
+        floorButtons.add(FirstFloor_Button);
+        floorButtons.add(SecondFloor_Button);
+        floorButtons.add(ThirdFloor_Button);
+        floorButtons.add(FourthFloor_Button);
+        floorButtons.add(FifthFloor_Button);
+        floorButtons.add(SixthFloor_Button);
+        floorButtons.add(SeventhFloor_Button);
+
+        for (Button b : floorButtons) {
+            b.setDisable(false);
+        }
+    }
+
     private void loadView(Locale locale) {
         Stage stage = (Stage) Home_MainSplit.getScene().getWindow();
         try {
@@ -193,11 +214,31 @@ public class HomeController extends Controller implements Initializable {
     }
 
     private void displayPaths() {
+
         mapView.setPath(paths.get(0).groupedByFloor().get(0));
+        for (int floor : paths.get(0).floorsNotSpanned()) {
+            floorButtons.get(floor-1).setDisable(true);
+        }
+
+        System.out.println(paths.get(0).groupedByFloor().size());
+        for (Path path : paths.get(0).groupedByFloor()) {
+            int floor = path.getFloor();
+            floorButtons.get(floor - 1).setDisable(false);
+            floorButtons.get(floor - 1).setOnMouseClicked(event -> {
+                mapView = new ImageViewPane(ImageProvider.getImageByFloor(floor));
+                mapView.prefHeightProperty().bind(mapContainer.heightProperty());
+                mapView.prefWidthProperty().bind(mapContainer.widthProperty());
+                mapView.setPath(path);
+                mapView.toBack();
+                mapContainer.getChildren().clear();
+                mapContainer.getChildren().add(mapView);
+                System.out.println(path.nodes());
+            });
+        }
     }
 
+
     private ObservableList<Integer> PathSpansFloors() {
-        System.out.println("PathSpansFloors");
         List<Integer> span = new ArrayList<>();
         Set<Integer> floors;
         for (Path p : paths) {
@@ -333,9 +374,9 @@ public class HomeController extends Controller implements Initializable {
         Searching_VBox.getChildren().add(MakeTextDirectionsListView(paths));
         TextArea text = new TextArea();
         String str = "";
-        for(Path p: paths){
+        for (Path p : paths) {
             List<String> ls = pathSteps(p, bundle);
-            for(String s: ls){
+            for (String s : ls) {
                 str += s + "\n";
             }
             text.setText(str);
