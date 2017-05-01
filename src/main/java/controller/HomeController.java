@@ -337,6 +337,7 @@ public class HomeController extends Controller implements Initializable {
 
     private void showDirections() {
         Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().clear();
         Searching_VBox.getChildren().addAll(destinationNodes);
         Searching_VBox.getChildren().add(addDestandDirectionButtons);
         Searching_VBox.getChildren().add(stepsView);
@@ -588,6 +589,7 @@ public class HomeController extends Controller implements Initializable {
     public void HandleHelpButton() {
         Hours hours = hoursService.find(1L);
         String message;
+        TextField text = new TextField();
         if (hours != null) {
             Date morningStart = hours.getVisitingHoursMorningStart();
             Date morningEnd = hours.getVisitingHoursMorningEnd();
@@ -599,10 +601,14 @@ public class HomeController extends Controller implements Initializable {
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
             String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
 
-            message = bundle.getString("helpMessage") + "\n\n" +
+            text.setText(bundle.getString("helpMessage") + "\n\n" +
                     bundle.getString("operatingHours") + "\n" +
                     bundle.getString("morningHours") + morningHours + "\n" +
-                    bundle.getString("eveningHours") + eveningHours;
+                    bundle.getString("eveningHours") + eveningHours);
+//            message = bundle.getString("helpMessage") + "\n\n" +
+//                    bundle.getString("operatingHours") + "\n" +
+//                    bundle.getString("morningHours") + morningHours + "\n" +
+//                    bundle.getString("eveningHours") + eveningHours;
 
         } else {
             Date morningStart = new Date();
@@ -615,17 +621,33 @@ public class HomeController extends Controller implements Initializable {
             String morningHours = hoursFormat.format(morningStart) + " - " + hoursFormat.format(morningEnd);
             String eveningHours = hoursFormat.format(eveningStart) + " - " + hoursFormat.format(eveningEnd);
 
+            text.setText(bundle.getString("helpMessage") + "\n\n" +
+                    bundle.getString("operatingHours") + "\n" +
+                    bundle.getString("morningHours") + morningHours + "\n" +
+                    bundle.getString("eveningHours") + eveningHours);
             message = bundle.getString("helpMessage") + "\n\n" +
                     bundle.getString("operatingHours") + "\n" +
                     bundle.getString("morningHours") + morningHours + "\n" +
                     bundle.getString("eveningHours") + eveningHours;
         }
-        // <TODO> place the text somewhere
-//        StartInfo_TextArea.setText(message);
+
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(searchResultsView);
+        searchResultsView.getSelectionModel().clearSelection();
+        setCurrentSearchField(searchBox);
+        Searching_VBox.getChildren().add(text);
     }
 
     // <TODO> make this work
     public void HandlePanicButton() {
+
+        Searching_VBox = makeVBox();
+        Searching_VBox.getChildren().add(searchBox);
+        Searching_VBox.getChildren().add(searchResultsView);
+        searchResultsView.getSelectionModel().clearSelection();
+        setCurrentSearchField(searchBox);
+        Searching_VBox.getChildren().add(new TextField(bundle.getString("panicMessage")));
 //
 //        StartInfo_TextArea.setText(bundle.getString("panicMessage"));
 //        HospitalProfessional HP_Start = professionalService.findHospitalProfessionalByName("Floor 1 Kiosk");
