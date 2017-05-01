@@ -109,6 +109,10 @@ public class Path implements Iterable<MapNode> {
         return subPaths;
     }
 
+    public int getFloor() {
+        return path.get(0).getLocation().getFloor();
+    }
+
     /**
      * @return if the path is empty
      */
