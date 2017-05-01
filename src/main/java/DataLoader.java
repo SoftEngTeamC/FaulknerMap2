@@ -27,7 +27,6 @@ public class DataLoader {
             loadLocations("data/floor7/locations.tsv", 7);
             loadLocations("data/locationsTemp.tsv", 1);
 
-
             loadPeople("data/belkinHouse/floor1/people.tsv");
             loadPeople("data/floor1/kiosk.tsv");
             loadPeople("data/floor2/people.tsv");
@@ -47,9 +46,16 @@ public class DataLoader {
             loadServices("data/floor5/services.tsv");
             loadServices("data/floor6/services.tsv");
             loadServices("data/floor7/services.tsv");
+            loadServices("data/floor1/suites.tsv");
+            loadServices("data/floor2/suites.tsv");
+            loadServices("data/floor3/suites.tsv");
+            loadServices("data/floor4/suites.tsv");
+            loadServices("data/floor5/suites.tsv");
+            loadServices("data/floor6/suites.tsv");
+            loadServices("data/floor7/suites.tsv");
 
-
-            loadEdges("data/tempEdges.tsv");
+            loadEdges("data/tempEdges.tsv", false);
+            loadEdges("data/employeeEdges.tsv", true);
 
             loadHours("data/hours.tsv");
 
@@ -179,7 +185,7 @@ public class DataLoader {
         parser.parse(DataLoader.class.getClassLoader().getResourceAsStream(serviceFilePath));
     }
 
-    private static void loadEdges(String locationsFilePath) throws FileNotFoundException {
+    private static void loadEdges(String locationsFilePath, boolean disabled) throws FileNotFoundException {
         EdgeService edgeService = new EdgeService();
         NodeService nodeService = new NodeService();
 
@@ -211,7 +217,10 @@ public class DataLoader {
                     System.err.println("Couldn't find a node with name " + endName + " while parsing line " + context.currentLine() + " in " + locationsFilePath);
                     return;
                 }
-                edgeService.persist(new Edge(start, end, 0));
+
+                Edge temp = new Edge(start, end, 0);
+                temp.setDisabled(disabled);
+                edgeService.persist(temp);
             }
         };
         parserSettings.setProcessor(rowProcessor);

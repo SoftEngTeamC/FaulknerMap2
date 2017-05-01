@@ -1,0 +1,107 @@
+.tab-label {
+    -fx-text-fill: white;
+}
+
+.tab {
+    -fx-background-color: #0058a1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-open-tab-animation: NONE;
+}
+
+.tab:selected:top {
+    -fx-background-color: #0090ad;
+}
+
+.tab:hover {
+    -fx-background-color: #0090ad;
+}
+
+.button {
+    -fx-background-color: #0058a1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,90) , 7, 0.0 , 2 , 3 );
+}
+
+.text-field {
+    -fx-max-width: 500px;
+}
+
+.menu-button {
+    -fx-background-color: #0058a1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,90) , 7, 0.0 , 2 , 3 );
+}
+
+.menu-button .label {
+    -fx-text-fill: white;
+}
+
+.menu-item .label {
+    -fx-text-fill: black;
+}
+
+.menu-button .arrow-button .arrow {
+    -fx-background-color: white;
+    -fx-rotate: 180;
+    -fx-translate-y: 1;
+}
+
+.button:hover {
+    -fx-background-color: #0090ad;
+}
+
+.text-field {
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.slider {
+    -fx-color: #0058a1;
+}
+
+.list-view {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.text-area {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+.scroll-pane {
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-hbar-policy: ALWAYS;
+    -fx-visibility: true;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #0058a1;
+    -fx-border-color: #2f3332;
+    -fx-border-width: 1px;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,90) , 7, 0.0 , 2 , 3 );
+}
+

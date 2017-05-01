@@ -44,7 +44,9 @@ public class Path implements Iterable<MapNode> {
         return path.get(i);
     }
 
-    public List<MapNode> getPath(){return path;}
+    public List<MapNode> getPath() {
+        return path;
+    }
 
     public List<Edge> edges() {
         EdgeService edgeService = new EdgeService();
@@ -78,10 +80,17 @@ public class Path implements Iterable<MapNode> {
      */
     public Set<Integer> floorsSpanned() {
         Set<Integer> floors = new HashSet<>();
+        try {
+            if (path.isEmpty()) {
+                return floors;
+            }
+        } catch (Exception e) {
+            return floors;
+        }
         for (MapNode n : path) {
             floors.add(n.getLocation().getFloor());
         }
-        System.out.println("floorsSpans: "+floors);
+        System.out.println("floorsSpans: " + floors);
         return floors;
     }
 
@@ -97,7 +106,7 @@ public class Path implements Iterable<MapNode> {
         List<MapNode> currentSubPath = new LinkedList<>();
         MapNode prevNode = null;
         for (MapNode node : this.path) {
-            if (prevNode != null && node.getLocation().getFloor() != prevNode.getLocation().getFloor()){
+            if (prevNode != null && node.getLocation().getFloor() != prevNode.getLocation().getFloor()) {
                 subPaths.add(new Path(currentSubPath));
                 currentSubPath = new LinkedList<>();
             } else {

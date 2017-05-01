@@ -164,8 +164,8 @@ public class ImageViewPane extends Region {
 
     private Group makeArrow(Edge e) {
 
-        double arrowLength = 3;
-        double arrowWidth = 7;
+        double arrowLength = 5;
+        double arrowWidth = 1.1;
 
         Point2D edgeStart = imageToImageViewCoordinate(e.getStart().getLocation());
         Point2D edgeEnd = imageToImageViewCoordinate(e.getEnd().getLocation());
@@ -242,7 +242,7 @@ public class ImageViewPane extends Region {
         String first;
         for(int i = 0; i < path.numNodes()-1; i++){
             first = path.getNode(i).getModelNode().getName();
-            if(first.equals(path.edges().get(i).getStart().getName())) {
+            if(!first.equals(path.edges().get(i).getStart().getName())) {
                 lines.add(makeArrow(path.edges().get(i)));
             } else {
                 Edge temp = new Edge(path.edges().get(i).getEnd(),
