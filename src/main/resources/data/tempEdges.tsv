@@ -448,7 +448,7 @@ hallway223	SuitesIntersection21
 
 hallway222	SuitesIntersection22
 
-hallway28	Hillside Elevators
+hallway28	Hillside Elevators 2
 
 hallway312	hallway35
 hallway313	intersection321
@@ -477,7 +477,7 @@ hallway431	SuitesIntersection40
 hallway431	SuitesIntersection41
 hallway433	SuitesIntersection41
 
-SuitesIntersection41	Hillside Elevators
+SuitesIntersection41	Hillside Elevators 4
 
 hallway519	SuitesIntersection50
 hallway520	SuitesIntersection50
@@ -490,3 +490,5 @@ hallway524	SuitesIntersection52
 hallway524	SuitesIntersection53
 hallway525	SuitesIntersection52
 hallway525	SuitesIntersection53
+
+SuitesIntersection53 Hillside Elevators 5
